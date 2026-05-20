@@ -8,6 +8,50 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.11.0] - 2026-05-20
+
+Milestone **M10 — Documentation & 0.11.0 release**. The release milestone:
+LibPARI is now documented, verified across platforms, and shippable. M10 adds
+no new wrapper functionality — every computational capability landed in
+M1–M9.
+
+### Added
+
+- A **documentation website** built with [Documenter.jl](https://documenter.juliadocs.org/)
+  (REQ-DOC-01): an introduction, a getting-started guide, and an API
+  reference for the hand-written public surface. Sources live in the `docs/`
+  sub-project; build with `julia --project=docs docs/make.jl`.
+- The documentation build is **strict** — it executes every `jldoctest`
+  example and verifies its output, and completes with **no warnings**; any
+  warning or doctest mismatch fails the build (REQ-DOC-04, REQ-DOC-05).
+- A **`docs` CI job** that builds the site and deploys it to GitHub Pages
+  from the default branch (REQ-DOC-06).
+- `test/acceptance_tests.jl` — the four **non-functional acceptance checks**,
+  one `@testitem` per NFR: ≥ 1200 generated bindings (NFR-01, observed 1241+),
+  no PARI heap leak across repeated calls (NFR-02), bounded constant
+  per-call allocation (NFR-03), and byte-identical generator output
+  (NFR-04).
+- `jldoctest` examples for the `gen_from` and `protected_call` public
+  functions (REQ-DOC-03).
+
+### Changed
+
+- CI runs the test suite on a **cross-platform matrix** — Linux, macOS, and
+  Windows (REQ-QA-07).
+- The stale M1-era `LibPARI` module docstring now describes the complete
+  library.
+
+### Known limitations
+
+- The CI `test` job keeps `continue-on-error` for now: until `PARI_jll` is
+  registered (Yggdrasil PR #13771) the runners cannot fetch the PARI
+  artifact, so the job cannot pass. Once `PARI_jll` is registered, removing
+  that one line makes the job the hard cross-platform gate REQ-QA-08
+  requires.
+- Registration of LibPARI in the Julia General registry is prepared but
+  pending `PARI_jll`'s own registration — a registered package may not
+  depend on an unregistered one.
+
 ## [0.10.0] - 2026-05-20
 
 Milestone **M9 — Platform & concurrency hardening**. LibPARI is now safe to

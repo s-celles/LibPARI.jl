@@ -1,0 +1,58 @@
+```@meta
+CurrentModule = LibPARI
+```
+
+# LibPARI.jl
+
+A Julia wrapper for the [PARI/GP](https://pari.math.u-bordeaux.fr/)
+number-theory library.
+
+LibPARI embeds the PARI/GP C library in a Julia process and exposes it to
+Julia code in two complementary ways:
+
+- **Generated bindings** — over 1200 PARI functions, generated directly from
+  PARI's own machine-readable function database (`pari.desc`), reachable
+  through the `LibPARI.PARI` submodule. See [API reference](@ref).
+- **A hand-written core** — a [`Gen`](@ref) value type wrapping
+  every PARI object, idiomatic numeric operators, type conversions to and
+  from Julia numbers, a GP expression evaluator, and safe library lifecycle
+  and error handling.
+
+## What LibPARI gives you
+
+- **`Gen` is a Julia `Number`.** PARI objects are first-class Julia values:
+  build them from Julia integers, floats, and rationals, and use `+`, `-`,
+  `*`, `/`, `^`, and `==` directly.
+- **Exact arithmetic of arbitrary size.** PARI's bignum integers, rationals,
+  and reals, with conversions back to Julia's `BigInt` and fixed-width
+  integer types.
+- **The whole of GP, one string away.** [`gp_eval`](@ref)
+  evaluates any GP-language expression — the escape hatch for functions the
+  generated bindings do not cover.
+- **A safe C boundary.** Every PARI error becomes a catchable
+  [`PariError`](@ref); a PARI `longjmp` never unwinds past
+  Julia. PARI's transient stack is kept leak-free, and each `Gen` frees its
+  own storage.
+- **Thread-safe.** Every call into the PARI library is marshalled onto a
+  single dedicated worker task, so LibPARI is correct under multi-threaded
+  Julia.
+- **Type-stable and precompiled** — built to SciML inference standards, with
+  a precompilation workload for a fast first call.
+
+## Status
+
+LibPARI is at version `0.11.0`. The hand-written core (lifecycle, `Gen`,
+error handling, conversions, the numeric API, and the GP evaluator) and the
+generated binding layer are complete; the library is platform-correct and
+thread-safe.
+
+`LibPARI` depends on `PARI_jll`, which is not yet in the Julia General
+registry — see [Getting started](@ref) for how to resolve it in the
+meantime.
+
+## Contents
+
+```@contents
+Pages = ["getting-started.md", "api.md"]
+Depth = 2
+```

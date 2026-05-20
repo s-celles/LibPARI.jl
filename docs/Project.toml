@@ -1,0 +1,17 @@
+# Environment for the LibPARI documentation site (milestone M10).
+# Documenter is a documentation-build-time dependency only — it is NOT a
+# dependency of the LibPARI package itself.
+#
+# `LibPARI` is resolved by development path: the build always runs
+#     julia --project=docs -e 'using Pkg; \
+#         Pkg.develop(path = "."); Pkg.instantiate()'
+# first (no docs/Manifest.toml is committed — it is regenerated each build),
+# then:
+#     julia --project=docs docs/make.jl
+[deps]
+Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+LibPARI = "75bc234d-eb99-4f80-8816-cb1dc773483e"
+
+[compat]
+Documenter = "1"
+julia = "1.10"

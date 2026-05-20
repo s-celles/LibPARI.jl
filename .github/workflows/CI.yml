@@ -31,22 +31,30 @@ jobs:
           '
 
   test:
-    # M0 STUB: non-blocking until PARI_jll is registered (Yggdrasil PR
-    # #13771). Promoted to a hard, cross-platform gate in milestone M10
-    # (REQ-QA-07, REQ-QA-08).
-    name: Test (Julia ${{ matrix.version }})
-    runs-on: ubuntu-latest
+    # Cross-platform test gate (REQ-QA-07, REQ-QA-08). M10 delivers the full
+    # 3-OS matrix below — the suite runs on Linux, macOS, and Windows.
+    #
+    # `continue-on-error` is the ONE remaining PARI_jll-gated step: it stays
+    # until PARI_jll is registered (Yggdrasil PR #13771), because until then
+    # the `Resolve PARI_jll` step cannot fetch the artifact on the runners
+    # and the job cannot pass. Once PARI_jll is registered, delete the
+    # `continue-on-error` line and the job becomes the hard cross-platform
+    # gate REQ-QA-08 requires — a failure on any platform fails the build.
+    # Tracked in CHANGELOG [0.11.0].
+    name: Test (Julia ${{ matrix.version }} — ${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
     continue-on-error: true
     # The @testitem suite runs single-threaded: the TestItemRunner harness on
     # Julia 1.12 has a concurrent-compilation crash under multi-threaded
     # Julia. LibPARI's libpari calls are themselves thread-safe (M9 /
     # REQ-PLT-03) — verified by the separate multi-threaded concurrency step
-    # below.
+    # below, which runs on every platform.
     env:
       JULIA_NUM_THREADS: '1'
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-latest, macOS-latest, windows-latest]
         version: ['1.10', '1']
     steps:
       - uses: actions/checkout@v4
@@ -61,6 +69,8 @@ jobs:
         run: echo "PARI_jll resolution pending registration."
       - uses: julia-actions/julia-runtest@v1
       - name: Concurrency stress test (multi-threaded — M9 / REQ-PLT-03)
+        # `shell: bash` keeps this step identical on the Windows runner.
+        shell: bash
         run: |
           julia --project=. --color=yes --threads=auto -e '
             using Pkg
@@ -68,17 +78,46 @@ jobs:
             include("test/concurrency_tests.jl")
           '
 
+  docs:
+    # Build the Documenter.jl site and deploy it to GitHub Pages
+    # (REQ-DOC-01, REQ-DOC-06). The build is STRICT — any warning or
+    # doctest mismatch fails the job (REQ-DOC-04, REQ-DOC-05). `deploydocs`
+    # publishes only from the default branch and from tags.
+    name: Documentation
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: '1'
+      - uses: julia-actions/cache@v2
+      # PARI_jll is not yet registered — the same documented stub as the
+      # test job. `using LibPARI` in docs/make.jl needs the PARI artifact.
+      - name: Resolve PARI_jll (stub — pending Yggdrasil PR #13771)
+        run: echo "PARI_jll resolution pending registration."
+      # No docs/Manifest.toml is committed: LibPARI is dev-resolved here.
+      - name: Instantiate docs environment
+        run: |
+          julia --project=docs --color=yes -e '
+            using Pkg
+            Pkg.develop(PackageSpec(path = pwd()))
+            Pkg.instantiate()
+          '
+      - name: Build and deploy documentation
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DOCUMENTER_KEY: ${{ secrets.DOCUMENTER_KEY }}
+        run: julia --project=docs --color=yes docs/make.jl
+
 # ---------------------------------------------------------------------------
-# Placeholders completed in milestone M10:
+# Milestone M10 — done:
 #
-#   * Cross-platform matrix — add macOS and Windows runners (REQ-QA-07):
-#       runs-on: ${{ matrix.os }}
-#       strategy.matrix.os: [ubuntu-latest, macOS-latest, windows-latest]
+#   * Cross-platform matrix — the `test` job runs on ubuntu-latest,
+#     macOS-latest, and windows-latest (REQ-QA-07).
+#   * `docs` job — builds the Documenter.jl site strictly and deploys it to
+#     GitHub Pages from the default branch (REQ-DOC-01, REQ-DOC-06).
 #
-#   * docs job — build with Documenter.jl and deploy to GitHub Pages
-#     (REQ-DOC-01, REQ-DOC-06):
-#       docs:
-#         runs-on: ubuntu-latest
-#         steps: checkout -> setup-julia -> instantiate docs/ ->
-#                julia --project=docs docs/make.jl
+# One PARI_jll-gated step remains (see the `test` job header): once PARI_jll
+# is registered (Yggdrasil PR #13771), delete `continue-on-error` from the
+# `test` job to make it the hard gate REQ-QA-08 requires.
 # ---------------------------------------------------------------------------

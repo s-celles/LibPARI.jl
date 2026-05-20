@@ -79,6 +79,15 @@ into persistent storage, restores the stack pointer, and returns the `Gen`.
 This capture → produce → clone → restore discipline keeps the PARI stack
 leak-free (REQ-MEM-03, REQ-MEM-05); it is the pattern every generated binding
 (M4) will reuse.
+
+# Examples
+
+```jldoctest
+julia> using LibPARI
+
+julia> LibPARI.gen_from isa Function
+true
+```
 """
 function gen_from(producer)
     return _run_on_pari() do

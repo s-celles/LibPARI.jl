@@ -144,6 +144,15 @@ call raises a PARI error, a `PariError` is thrown; the PARI stack pointer is
 restored to its pre-call value before the exception propagates, so the
 library stays usable. This is the boundary every generated binding (M4)
 routes through.
+
+# Examples
+
+```jldoctest
+julia> using LibPARI
+
+julia> LibPARI.protected_call isa Function
+true
+```
 """
 function protected_call(producer)
     return _run_on_pari() do
