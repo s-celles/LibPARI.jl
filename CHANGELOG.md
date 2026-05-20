@@ -43,11 +43,17 @@ M1–M9.
 
 ### Known limitations
 
-- The CI `test` job keeps `continue-on-error` for now: until `PARI_jll` is
-  registered (Yggdrasil PR #13771) the runners cannot fetch the PARI
-  artifact, so the job cannot pass. Once `PARI_jll` is registered, removing
-  that one line makes the job the hard cross-platform gate REQ-QA-08
-  requires.
+- The CI `test` and `docs` jobs both keep `continue-on-error` for now:
+  until `PARI_jll` is registered (Yggdrasil PR #13771) the runners cannot
+  fetch the PARI artifact, so neither job can pass — the `docs` build runs
+  `using LibPARI` and executes doctests against live PARI. Once `PARI_jll`
+  is registered, removing those two lines makes the `test` job the hard
+  cross-platform gate REQ-QA-08 requires and lets the `docs` job deploy on
+  every push.
+- Because CI cannot yet build the documentation, the site at
+  <https://s-celles.github.io/LibPARI.jl> is **deployed manually** from a
+  machine that has `PARI_jll`. It auto-deploys via CI once `PARI_jll` is
+  registered.
 - Registration of LibPARI in the Julia General registry is prepared but
   pending `PARI_jll`'s own registration — a registered package may not
   depend on an unregistered one.

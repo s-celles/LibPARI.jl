@@ -83,8 +83,17 @@ jobs:
     # (REQ-DOC-01, REQ-DOC-06). The build is STRICT — any warning or
     # doctest mismatch fails the job (REQ-DOC-04, REQ-DOC-05). `deploydocs`
     # publishes only from the default branch and from tags.
+    #
+    # `continue-on-error`, like the `test` job: the docs build runs
+    # `using LibPARI` and executes doctests against live PARI, so it needs
+    # the PARI artifact and cannot pass until PARI_jll is registered
+    # (Yggdrasil PR #13771). Until then the site is deployed manually from a
+    # machine that has PARI_jll. Once PARI_jll is registered, delete this
+    # line — the job then builds and deploys on every push to the default
+    # branch.
     name: Documentation
     runs-on: ubuntu-latest
+    continue-on-error: true
     steps:
       - uses: actions/checkout@v4
       - uses: julia-actions/setup-julia@v2
