@@ -87,7 +87,8 @@ is `INITIALIZED`. Idempotent — a second invocation is a no-op. Registered with
 """
 function _close_libpari!()
     if _STATE[] == LibraryState.INITIALIZED
-        ccall((:pari_close, PARI_jll.libpari), Cvoid, ())
+        # `pari_close` must run on the PARI-owning thread — marshal it.
+        _run_on_pari(() -> ccall((:pari_close, PARI_jll.libpari), Cvoid, ()))
         _STATE[] = LibraryState.CLOSED
     end
     return nothing
@@ -108,6 +109,8 @@ PARI leaves Julia's signal handlers intact (research.md D10).
 function _init_libpari!(parisize::Integer, maxprime::Integer)
     _STATE[] == LibraryState.UNINITIALIZED || return nothing
     size = _validate_parisize(parisize)
+    # Bootstrap: this runs on the thread that becomes the PARI-owning thread
+    # (the worker is started just after, sticky to it) — no marshalling.
     ccall(
         (:pari_init_opts, PARI_jll.libpari),
         Cvoid,

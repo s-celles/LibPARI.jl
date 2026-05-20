@@ -8,6 +8,42 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.10.0] - 2026-05-20
+
+Milestone **M9 — Platform & concurrency hardening**. LibPARI is now safe to
+use from multi-threaded Julia.
+
+### Added
+
+- A dedicated **PARI worker task** that owns the library: every `libpari`
+  call is marshalled onto one sticky worker task and executed there. PARI's
+  working state (`avma`, the stack, the recursion-depth base) is
+  thread-local, so confining all `libpari` work to the single task that
+  initialized PARI makes concurrent use from any number of Julia threads
+  correct — no data race, no PARI stack corruption (REQ-PLT-03). `Gen`
+  results stay type-stable across the marshalling boundary, and `Gen`
+  finalization is marshalled to the worker too.
+- `test/concurrency_tests.jl` — a multi-threaded stress test, run as its own
+  step: `julia --project=. --threads=auto test/concurrency_tests.jl`.
+
+### Changed
+
+- LibPARI's hand-written code is confirmed free of platform-specific
+  assumptions, so it is correct on every platform `PARI_jll` provides an
+  artifact for (REQ-PLT-01).
+
+### Known limitations
+
+- The `@testitem` test suite runs **single-threaded**. This is no longer a
+  PARI limitation — LibPARI's `libpari` calls are thread-safe — but a
+  separate one: the TestItemRunner harness on Julia 1.12 crashes under the
+  multi-threaded concurrent compilation of the suite. M9's multi-threaded
+  correctness is instead verified by the dedicated
+  `test/concurrency_tests.jl` stress test, run as its own `--threads=auto`
+  step.
+- With the suite now reliably green, the `v0.2.0`–`v0.10.0` release tags
+  (deferred since M1) become createable; tagging is part of the M10 release.
+
 ## [0.9.0] - 2026-05-20
 
 Milestone **M8 — Type stability & precompilation**. SciML-grade inference and
@@ -273,7 +309,8 @@ wrapper code exists. No PARI functionality is exposed yet.
   it is resolved from a local development build. Registering LibPARI is
   therefore deferred to a later milestone.
 
-[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.9.0...HEAD
+[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.10.0...HEAD
+[0.10.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.6.0...v0.7.0

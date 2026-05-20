@@ -15,6 +15,7 @@ import PARI_jll
 using DocStringExtensions
 using PrecompileTools
 
+include("concurrency.jl")
 include("lifecycle.jl")
 include("gen.jl")
 include("errors.jl")
@@ -30,8 +31,11 @@ REQ-INI-03). Runs once, never during precompilation; reads the optional
 `LIBPARI_STACK_SIZE` configuration and delegates to `_init_libpari!`.
 """
 function __init__()
-    _init_libpari!(_configured_stack_size(), _DEFAULT_MAXPRIME)
-    _install_error_handlers!()
+    # A single dedicated worker task initializes PARI on itself and serves
+    # every libpari call (M9 / REQ-PLT-03). `_configured_stack_size` is read
+    # here, on the loading task, so an invalid `LIBPARI_STACK_SIZE` raises a
+    # catchable error at load (REQ-INI-06/07).
+    _start_pari_worker!(_configured_stack_size())
     return nothing
 end
 

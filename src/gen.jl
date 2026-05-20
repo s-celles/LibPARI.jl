@@ -46,7 +46,8 @@ mutable struct Gen <: Number
 
     function Gen(raw::Ptr{Clong})
         raw == C_NULL && throw(ArgumentError("cannot wrap a null GEN"))
-        g = new(_gclone(raw))
+        cloned = _run_on_pari(() -> _gclone(raw))
+        g = new(cloned)
         finalizer(_finalize!, g)
         return g
     end
@@ -61,7 +62,8 @@ end
 function _finalize!(g::Gen)
     if g.ptr != C_NULL
         if library_state() == LibraryState.INITIALIZED
-            _gunclone(g.ptr)
+            ptr = g.ptr
+            _enqueue_on_pari(() -> _gunclone(ptr))
         end
         g.ptr = C_NULL
     end
@@ -79,11 +81,13 @@ leak-free (REQ-MEM-03, REQ-MEM-05); it is the pattern every generated binding
 (M4) will reuse.
 """
 function gen_from(producer)
-    av = _avma()
-    raw = producer()::Ptr{Clong}
-    g = Gen(raw)            # the constructor clones `raw`
-    _set_avma(av)           # discard the transient stack
-    return g
+    return _run_on_pari() do
+        av = _avma()
+        raw = producer()::Ptr{Clong}
+        g = Gen(raw)        # the constructor clones `raw`
+        _set_avma(av)       # discard the transient stack
+        return g
+    end::Gen
 end
 
 # --- PARI value types ------------------------------------------------------

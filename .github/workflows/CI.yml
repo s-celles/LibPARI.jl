@@ -37,8 +37,11 @@ jobs:
     name: Test (Julia ${{ matrix.version }})
     runs-on: ubuntu-latest
     continue-on-error: true
-    # Single-threaded until M9 (REQ-PLT-03): PARI's state is thread-local
-    # and not yet safe under multi-threaded Julia.
+    # The @testitem suite runs single-threaded: the TestItemRunner harness on
+    # Julia 1.12 has a concurrent-compilation crash under multi-threaded
+    # Julia. LibPARI's libpari calls are themselves thread-safe (M9 /
+    # REQ-PLT-03) — verified by the separate multi-threaded concurrency step
+    # below.
     env:
       JULIA_NUM_THREADS: '1'
     strategy:
@@ -57,6 +60,13 @@ jobs:
       - name: Resolve PARI_jll (stub — pending Yggdrasil PR #13771)
         run: echo "PARI_jll resolution pending registration."
       - uses: julia-actions/julia-runtest@v1
+      - name: Concurrency stress test (multi-threaded — M9 / REQ-PLT-03)
+        run: |
+          julia --project=. --color=yes --threads=auto -e '
+            using Pkg
+            Pkg.instantiate()
+            include("test/concurrency_tests.jl")
+          '
 
 # ---------------------------------------------------------------------------
 # Placeholders completed in milestone M10:

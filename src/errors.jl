@@ -146,13 +146,15 @@ library stays usable. This is the boundary every generated binding (M4)
 routes through.
 """
 function protected_call(producer)
-    av = _avma()
-    try
-        return producer()
-    catch e
-        if e isa PariError
-            _set_avma(av)
+    return _run_on_pari() do
+        av = _avma()
+        try
+            return producer()
+        catch e
+            if e isa PariError
+                _set_avma(av)
+            end
+            rethrow(e)
         end
-        rethrow(e)
     end
 end
