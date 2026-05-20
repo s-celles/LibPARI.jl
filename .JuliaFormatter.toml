@@ -1,0 +1,3 @@
+# JuliaFormatter configuration for LibPARI.
+# Enforces an 80-column margin (REQ-QA-05; project constitution).
+margin = 80

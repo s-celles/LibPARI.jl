@@ -1,0 +1,28 @@
+name = "LibPARI"
+uuid = "75bc234d-eb99-4f80-8816-cb1dc773483e"
+authors = ["Sébastien Celles <s.celles@gmail.com>"]
+version = "0.5.0"
+
+[deps]
+DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
+PARI_jll = "84859880-2197-580f-a1bb-08b6236e0e08"
+
+[compat]
+Aqua = "0.8"
+DocStringExtensions = "0.9"
+JuliaFormatter = "1, 2"
+PARI_jll = "2.17"
+TOML = "< 0.0.1, 1"
+Test = "< 0.0.1, 1"
+TestItemRunner = "1"
+julia = "1.10"
+
+[extras]
+Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
+JuliaFormatter = "98e50ef6-434e-11e9-1051-2b60c6c9e899"
+TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+TestItemRunner = "f8b46487-2199-4994-9208-9a1283c18c0a"
+
+[targets]
+test = ["Aqua", "JuliaFormatter", "TOML", "Test", "TestItemRunner"]

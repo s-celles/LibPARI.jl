@@ -1,0 +1,11 @@
+# Environment for the LibPARI binding generator (milestone M4).
+# This is a development-time tool — it is NOT part of the shipped package.
+# Run:  julia --project=gen gen/generate.jl
+[deps]
+JuliaFormatter = "98e50ef6-434e-11e9-1051-2b60c6c9e899"
+PARI_jll = "84859880-2197-580f-a1bb-08b6236e0e08"
+
+[compat]
+JuliaFormatter = "1, 2"
+PARI_jll = "2.17"
+julia = "1.10"

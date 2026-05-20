@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  format:
+    # Hard gate from M0 onward: source must conform to JuliaFormatter.
+    name: Format check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: '1'
+      - name: Run JuliaFormatter in check mode
+        run: |
+          julia --color=yes --startup-file=no -e '
+            using Pkg
+            Pkg.add(name = "JuliaFormatter", version = "2")
+            using JuliaFormatter
+            ok = format(["src", "test"]; overwrite = false)
+            ok || error("Formatting check failed — run JuliaFormatter.")
+          '
+
+  test:
+    # M0 STUB: non-blocking until PARI_jll is registered (Yggdrasil PR
+    # #13771). Promoted to a hard, cross-platform gate in milestone M10
+    # (REQ-QA-07, REQ-QA-08).
+    name: Test (Julia ${{ matrix.version }})
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    # Single-threaded until M9 (REQ-PLT-03): PARI's state is thread-local
+    # and not yet safe under multi-threaded Julia.
+    env:
+      JULIA_NUM_THREADS: '1'
+    strategy:
+      fail-fast: false
+      matrix:
+        version: ['1.10', '1']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: julia-actions/setup-julia@v2
+        with:
+          version: ${{ matrix.version }}
+      - uses: julia-actions/cache@v2
+      # PARI_jll is not yet registered. Until it is, this step must obtain
+      # it (e.g. Pkg.develop of a published build). Left as a documented
+      # stub — see specs/001-m0-scaffolding-baseline/contracts/ci-pipeline.md
+      - name: Resolve PARI_jll (stub — pending Yggdrasil PR #13771)
+        run: echo "PARI_jll resolution pending registration."
+      - uses: julia-actions/julia-runtest@v1
+
+# ---------------------------------------------------------------------------
+# Placeholders completed in milestone M10:
+#
+#   * Cross-platform matrix — add macOS and Windows runners (REQ-QA-07):
+#       runs-on: ${{ matrix.os }}
+#       strategy.matrix.os: [ubuntu-latest, macOS-latest, windows-latest]
+#
+#   * docs job — build with Documenter.jl and deploy to GitHub Pages
+#     (REQ-DOC-01, REQ-DOC-06):
+#       docs:
+#         runs-on: ubuntu-latest
+#         steps: checkout -> setup-julia -> instantiate docs/ ->
+#                julia --project=docs docs/make.jl
+# ---------------------------------------------------------------------------
