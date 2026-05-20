@@ -8,6 +8,33 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-05-20
+
+Milestone **M7 — GP expression evaluator**. An escape hatch: evaluate an
+arbitrary GP-language expression string and get a `Gen` back.
+
+### Added
+
+- `gp_eval(s::AbstractString)` — evaluate a GP-language expression string
+  with PARI's GP engine, returning the result as a `Gen` (REQ-GP-01). It
+  reaches every PARI capability, including the GP-closure-argument functions
+  (`sum`, `prod`, `intnum`, …) that the generated bindings do not expose.
+  GP variable assignments persist across `gp_eval` calls — one shared GP
+  environment.
+- A syntactically invalid GP string raises a catchable `PariError` with
+  category `e_SYNTAX` describing the parse error; a runtime failure during
+  evaluation raises a `PariError` too (REQ-GP-02). The library stays usable
+  after a failed evaluation.
+
+### Known limitations
+
+- `gp_eval` is a developer escape hatch — it runs whatever GP code it is
+  given; it is not sandboxed.
+- Carried from M1: the test suite must run single-threaded
+  (`Pkg.test(julia_args=`--threads=1`)`) — PARI's state is thread-local.
+  Thread serialization is milestone M9 (REQ-PLT-03). The `v0.8.0` tag is
+  deferred (with `v0.2.0`–`v0.7.0`) until the suite is reliably green.
+
 ## [0.7.0] - 2026-05-20
 
 Milestone **M6 — Idiomatic numeric API**. `Gen` is now a first-class Julia
@@ -221,7 +248,8 @@ wrapper code exists. No PARI functionality is exposed yet.
   it is resolved from a local development build. Registering LibPARI is
   therefore deferred to a later milestone.
 
-[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.7.0...HEAD
+[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.8.0...HEAD
+[0.8.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.4.0...v0.5.0

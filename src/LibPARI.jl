@@ -19,6 +19,7 @@ include("gen.jl")
 include("errors.jl")
 include("conversions.jl")
 include("numeric.jl")
+include("evaluator.jl")
 include("bindings.jl")
 
 """
