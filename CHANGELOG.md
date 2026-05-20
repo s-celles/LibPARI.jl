@@ -8,6 +8,37 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-05-20
+
+Milestone **M6 — Idiomatic numeric API**. `Gen` is now a first-class Julia
+number: it computes with ordinary operators, mixes with Julia numbers, and
+compares with `==`.
+
+### Added
+
+- `Gen <: Number` — `Gen` is a subtype of Julia's `Number`.
+- Arithmetic operators `+`, `-`, `*`, `/`, `^` and unary `-` on `Gen`
+  operands, each computing the PARI result
+  (`gadd`/`gsub`/`gmul`/`gdiv`/`gpowgs`/`gpow`/`gneg`) and returning a
+  `Gen`. `/` is PARI's exact division — a rational result when the operands
+  do not divide evenly.
+- Mixed `Gen` / Julia-number arithmetic: the Julia operand is promoted to a
+  `Gen`, in either operand order, via `promote_rule` and `convert`.
+- Floating-point → `Gen` and rational → `Gen` construction — extending M5's
+  integer-only conversions — so promotion covers every Julia `Number`.
+- `==` on `Gen` values returns PARI's mathematical-equality result
+  (`gequal`); mixed `Gen`/number `==` works through promotion.
+
+### Known limitations
+
+- M6 delivers the operators of REQ-API-02 and the equality of REQ-API-04;
+  ordering comparisons (`<`, `<=`), integer-division operators, and a
+  consistent `hash` for `Gen` are not included.
+- Carried from M1: the test suite must run single-threaded
+  (`Pkg.test(julia_args=`--threads=1`)`) — PARI's state is thread-local.
+  Thread serialization is milestone M9 (REQ-PLT-03). The `v0.7.0` tag is
+  deferred (with `v0.2.0`–`v0.6.0`) until the suite is reliably green.
+
 ## [0.6.0] - 2026-05-20
 
 Milestone **M5 — Type conversions**. Julia integers and PARI `Gen` values now
@@ -190,7 +221,8 @@ wrapper code exists. No PARI functionality is exposed yet.
   it is resolved from a local development build. Registering LibPARI is
   therefore deferred to a later milestone.
 
-[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.6.0...HEAD
+[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.7.0...HEAD
+[0.7.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.3.0...v0.4.0

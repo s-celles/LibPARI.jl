@@ -41,7 +41,7 @@ julia> isconcretetype(LibPARI.Gen)
 true
 ```
 """
-mutable struct Gen
+mutable struct Gen <: Number
     ptr::Ptr{Clong}
 
     function Gen(raw::Ptr{Clong})
