@@ -8,6 +8,31 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.9.0] - 2026-05-20
+
+Milestone **M8 — Type stability & precompilation**. SciML-grade inference and
+a fast first call. M8 adds no new user-facing API — it hardens M0–M7.
+
+### Added
+
+- A type-stability audit — `test/inference_tests.jl` — with `@inferred`
+  checks over a representative generated binding of each return convention
+  and over every hand-written public function (the conversions, the
+  arithmetic operators and `==`, `gp_eval`, the lifecycle/introspection
+  API). The whole audited surface infers a concrete return type, never
+  `Any` (REQ-PERF-01, REQ-PERF-03).
+- A `PrecompileTools.jl` precompilation workload (`src/precompile.jl`) that
+  exercises a representative subset of the API while the package
+  precompiles, so the first call in a fresh session is fast (REQ-PERF-02).
+- `PrecompileTools` added as a package dependency.
+
+### Known limitations
+
+- Carried from M1: the test suite must run single-threaded
+  (`Pkg.test(julia_args=`--threads=1`)`) — PARI's state is thread-local.
+  Thread serialization is milestone M9 (REQ-PLT-03). The `v0.9.0` tag is
+  deferred (with `v0.2.0`–`v0.8.0`) until the suite is reliably green.
+
 ## [0.8.0] - 2026-05-20
 
 Milestone **M7 — GP expression evaluator**. An escape hatch: evaluate an
@@ -248,7 +273,8 @@ wrapper code exists. No PARI functionality is exposed yet.
   it is resolved from a local development build. Registering LibPARI is
   therefore deferred to a later milestone.
 
-[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.8.0...HEAD
+[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.9.0...HEAD
+[0.9.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.7.0...v0.8.0
 [0.7.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.6.0...v0.7.0
 [0.6.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.5.0...v0.6.0

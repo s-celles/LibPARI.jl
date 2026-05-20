@@ -1,17 +1,19 @@
 name = "LibPARI"
 uuid = "75bc234d-eb99-4f80-8816-cb1dc773483e"
 authors = ["Sébastien Celles <s.celles@gmail.com>"]
-version = "0.8.0"
+version = "0.9.0"
 
 [deps]
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
 PARI_jll = "84859880-2197-580f-a1bb-08b6236e0e08"
+PrecompileTools = "aea7be01-6a6a-4083-8856-8a6e6704d82a"
 
 [compat]
 Aqua = "0.8"
 DocStringExtensions = "0.9"
 JuliaFormatter = "1, 2"
 PARI_jll = "2.17"
+PrecompileTools = "1"
 TOML = "< 0.0.1, 1"
 Test = "< 0.0.1, 1"
 TestItemRunner = "1"
