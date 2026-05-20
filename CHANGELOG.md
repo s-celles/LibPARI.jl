@@ -8,6 +8,38 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-05-20
+
+Milestone **M5 — Type conversions**. Julia integers and PARI `Gen` values now
+convert into and out of each other, every `Gen` renders as text, and a
+conversion that cannot be exact fails loudly.
+
+### Added
+
+- `Gen(x::Integer)` and `convert(Gen, x)` — convert a Julia integer of any
+  magnitude to an integer-valued `Gen` (`stoi`/`utoi` for the machine-word
+  range, `strtoi` over a decimal string for arbitrary magnitude)
+  (REQ-CONV-01).
+- `BigInt(g::Gen)` — convert an integer-valued `Gen` to an exact Julia
+  `BigInt`, for integers of unbounded size (REQ-CONV-02).
+- `T(g::Gen)` and `convert(T, g)` for `T <: Integer` — convert a `Gen` to a
+  fixed-width Julia integer type.
+- Textual representation: `show`, `print`, `string`, and string interpolation
+  render any `Gen` exactly as PARI's own `GENtostr` does (REQ-CONV-03).
+- Lossy `Gen → Julia` integer conversion raises Julia's standard
+  `InexactError` — a non-integral value, or an integer outside a fixed-width
+  type's range, is rejected rather than silently truncated (REQ-CONV-04).
+
+### Known limitations
+
+- M5's value conversions are **integer-only**; rational and floating-point
+  conversion is deferred to a later milestone. The textual representation
+  covers every `Gen` regardless.
+- Carried from M1: the test suite must run single-threaded
+  (`Pkg.test(julia_args=`--threads=1`)`) — PARI's state is thread-local.
+  Thread serialization is milestone M9 (REQ-PLT-03). The `v0.6.0` tag is
+  deferred (with `v0.2.0`–`v0.5.0`) until the suite is reliably green.
+
 ## [0.5.0] - 2026-05-20
 
 Milestone **M4 — Binding generator & function invocation**. PARI's function
@@ -158,7 +190,8 @@ wrapper code exists. No PARI functionality is exposed yet.
   it is resolved from a local development build. Registering LibPARI is
   therefore deferred to a later milestone.
 
-[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.5.0...HEAD
+[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.6.0...HEAD
+[0.6.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.5.0...v0.6.0
 [0.5.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.4.0...v0.5.0
 [0.4.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.3.0...v0.4.0
 [0.3.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.2.0...v0.3.0

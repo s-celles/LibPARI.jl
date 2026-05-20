@@ -17,6 +17,7 @@ using DocStringExtensions
 include("lifecycle.jl")
 include("gen.jl")
 include("errors.jl")
+include("conversions.jl")
 include("bindings.jl")
 
 """

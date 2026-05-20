@@ -1,7 +1,7 @@
 name = "LibPARI"
 uuid = "75bc234d-eb99-4f80-8816-cb1dc773483e"
 authors = ["Sébastien Celles <s.celles@gmail.com>"]
-version = "0.5.0"
+version = "0.6.0"
 
 [deps]
 DocStringExtensions = "ffbed154-4ef7-542d-bbb7-c09d3a79fcae"
