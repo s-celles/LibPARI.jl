@@ -37,11 +37,12 @@ REQ-INI-03). Runs once, never during precompilation; reads the optional
 `LIBPARI_STACK_SIZE` configuration and delegates to `_init_libpari!`.
 """
 function __init__()
-    # A single dedicated worker task initializes PARI on itself and serves
-    # every libpari call (M9 / REQ-PLT-03). `_configured_stack_size` is read
-    # here, on the loading task, so an invalid `LIBPARI_STACK_SIZE` raises a
-    # catchable error at load (REQ-INI-06/07).
-    _start_pari_worker!(_configured_stack_size())
+    # Start the PARI worker pool — one sticky worker, with its own PARI
+    # context, per Julia OS thread — so concurrent libpari calls run in
+    # parallel (feature 013). `_configured_stack_size` is read here, on the
+    # loading task, so an invalid `LIBPARI_STACK_SIZE` raises a catchable
+    # error at load (REQ-INI-06/07).
+    _start_pari_worker_pool!(_configured_stack_size())
     # Register the hint shown when `serve_mcp` is called without the
     # optional MCP extension loaded (no-op for normal use).
     _register_mcp_hint()

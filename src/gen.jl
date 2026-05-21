@@ -13,8 +13,11 @@ _gclone(x::Ptr{Clong}) =
 _gunclone(x::Ptr{Clong}) =
     ccall((:gunclone, PARI_jll.libpari), Cvoid, (Ptr{Clong},), x)
 
-# Read PARI's transient-stack pointer `avma`.
-_avma() = unsafe_load(cglobal((:avma, PARI_jll.libpari), Culong))
+# Read PARI's transient-stack pointer `avma`. `avma` is a thread-local
+# variable, so it MUST be read through PARI's `get_avma` function — each
+# worker then reads its own context's `avma`. (Reading it via `cglobal`
+# would resolve one fixed address and corrupt every secondary context.)
+_avma() = ccall((:get_avma, PARI_jll.libpari), Culong, ())
 
 # Restore PARI's transient-stack pointer to `av`.
 _set_avma(av::Culong) =
@@ -46,7 +49,11 @@ mutable struct Gen <: Number
 
     function Gen(raw::Ptr{Clong})
         raw == C_NULL && throw(ArgumentError("cannot wrap a null GEN"))
-        cloned = _run_on_pari(() -> _gclone(raw))
+        # `gclone` splices PARI's process-global clone list — run it on the
+        # primary worker so the list is only ever touched by one thread.
+        # `raw` lives on the producing worker's stack, which stays stable
+        # (that worker is blocked awaiting this result).
+        cloned = _run_on_primary(() -> _gclone(raw))::Ptr{Clong}
         g = new(cloned)
         finalizer(_finalize!, g)
         return g
@@ -63,7 +70,9 @@ function _finalize!(g::Gen)
     if g.ptr != C_NULL
         if library_state() == LibraryState.INITIALIZED
             ptr = g.ptr
-            _enqueue_on_pari(() -> _gunclone(ptr))
+            # `gunclone` splices the process-global clone list — funnel it
+            # to the primary worker, the single thread that owns the list.
+            _enqueue_on_primary(() -> _gunclone(ptr))
         end
         g.ptr = C_NULL
     end

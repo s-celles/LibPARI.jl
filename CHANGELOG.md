@@ -8,6 +8,29 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- **Parallel `libpari` calls.** LibPARI now runs **one PARI context per
+  Julia OS thread** — PARI's per-thread context API (`pari_thread_*`),
+  behind a pool of sticky worker tasks, one pinned to each thread.
+  Concurrent `libpari` calls issued from different Julia threads execute in
+  parallel on multiple cores, instead of serializing onto the single
+  worker of milestone M9. Single-threaded behaviour is unchanged, and the
+  public API is unchanged.
+
+### Changed
+
+- PARI's transient-stack pointer `avma` is read through `get_avma()` (a
+  thread-local read, correct on every worker context); cloned-object
+  bookkeeping (`gclone` / `gunclone`) is funnelled to the primary worker,
+  since PARI's clone list is per-context.
+
+### Notes
+
+- Concurrent handling of **PARI errors** is not yet covered: error-raising
+  `libpari` calls issued from several threads at once are not concurrency-
+  safe. This is a known follow-up milestone — see `upstream-bugs.md`.
+
 ## [0.12.0] - 2026-05-21
 
 An **optional MCP connector** — the first feature beyond the M0–M10 roadmap.

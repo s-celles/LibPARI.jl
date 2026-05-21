@@ -87,9 +87,23 @@ is `INITIALIZED`. Idempotent — a second invocation is a no-op. Registered with
 """
 function _close_libpari!()
     if _STATE[] == LibraryState.INITIALIZED
-        # `pari_close` must run on the PARI-owning thread — marshal it.
-        _run_on_pari(() -> ccall((:pari_close, PARI_jll.libpari), Cvoid, ()))
+        # Mark CLOSED first: any `Gen` finalizer that runs during shutdown
+        # then skips its `gunclone` (no marshalling into a winding-down
+        # runtime).
         _STATE[] = LibraryState.CLOSED
+        # `pari_close` is invoked only when the primary is the sole PARI
+        # context (single-threaded Julia — the milestone-M1 path). With
+        # secondary worker contexts live, calling `pari_close` during
+        # Julia's own shutdown segfaults; the operating system reclaims
+        # every context and stack at process exit regardless, so it is
+        # skipped then.
+        nworkers =
+            isassigned(_PARI_WORKERS) ? count(!isnothing, _PARI_WORKERS[]) : 0
+        if nworkers <= 1
+            _run_on_primary(
+                () -> ccall((:pari_close, PARI_jll.libpari), Cvoid, ()),
+            )
+        end
     end
     return nothing
 end
