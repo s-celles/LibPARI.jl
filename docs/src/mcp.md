@@ -63,6 +63,51 @@ Every tool is robust: a malformed expression, an unknown function, or a PARI
 error (division by zero, a domain error) is returned to the client as a
 **structured error**, and the server keeps running.
 
+## Example prompts
+
+Once the connector is running and your MCP client is connected, just ask your
+AI assistant in plain English — it calls the PARI tools and reports the exact
+answer. Try prompts like these, from simple to advanced:
+
+**Basic arithmetic**
+
+- "What is 2 to the power of 100?"
+- "Compute 100 factorial."
+- "What is the greatest common divisor of 1071 and 462?"
+
+**Primes**
+
+- "Is 2^127 - 1 a prime number?"
+- "What is the next prime after one billion?"
+- "How many prime numbers are there below one million?"
+
+**Factorisation & number theory**
+
+- "Give me the prime factorisation of 2^67 - 1."
+- "What is Euler's totient of 1000000?"
+- "Compute the sum of the divisors of 360."
+- "How many divisors does 720 have?"
+
+**Polynomials & symbolic**
+
+- "Factor the polynomial x^4 - 1."
+- "Find the roots of x^3 - 2."
+
+**Modular & advanced**
+
+- "Compute 2 raised to the power 1000000, modulo 1000000007."
+- "What is the trace of Frobenius of the elliptic curve y^2 = x^3 + 1 at the prime 101?"
+
+**Exploring PARI**
+
+- "Which PARI functions deal with elliptic curves?"
+- "Show me the help for the nextprime function."
+- "What PARI functions are available for primality testing?"
+
+The assistant turns each request into a `pari_eval`, `pari_functions`, or
+`pari_help` call and answers with PARI's exact result. The next section shows
+the underlying tool calls.
+
 ## Quick examples
 
 A tour of PARI through the connector, from simple to advanced — every result
