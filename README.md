@@ -10,6 +10,16 @@ a `Gen` value type wrapping every PARI object, idiomatic numeric operators,
 conversions to and from Julia numbers, a GP expression evaluator, and safe
 library lifecycle and error handling.
 
+LibPARI.jl is an independent, community-maintained Julia interface to the PARI/GP computer algebra system. This project is not affiliated with, endorsed by, or maintained by the PARI Group or the PARI/GP development team.
+PARI/GP is developed by the PARI Group and distributed under the GNU General Public License. This wrapper merely calls into the official PARI library (distributed here via PARI_jll) and does not modify it.
+
+Bugs or feature requests concerning this Julia wrapper should be reported to this repository's issue tracker.
+Bugs or feature requests concerning PARI/GP itself should be directed to the official PARI/GP bug tracker or the pari-users mailing list.
+
+Any errors in the Julia interface, the high-level API, or its documentation are the responsibility of this project's maintainers, not of the PARI Group.
+
+Substantial portions of this code were generated with AI assistance and reviewed by the maintainer. See [topic ai-generated-code] for details.
+
 ## Documentation
 
 Full documentation — introduction, getting-started guide, and API reference —
