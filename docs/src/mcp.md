@@ -67,42 +67,51 @@ error (division by zero, a domain error) is returned to the client as a
 
 Once the connector is running and your MCP client is connected, just ask your
 AI assistant in plain English — it calls the PARI tools and reports the exact
-answer. Try prompts like these, from simple to advanced:
+answer.
+
+!!! tip "Name LibPARI in your prompt"
+    If your MCP client also has other computer-algebra servers connected
+    (for example a Giac/Xcas server), **name LibPARI explicitly** so the
+    assistant routes the request to this server. Say "LibPARI" (the server
+    is registered as `libpari`), or name a tool directly — `pari_eval`,
+    `pari_functions`, or `pari_help`. The prompts below all do this.
+
+Try prompts like these, from simple to advanced:
 
 **Basic arithmetic**
 
-- "What is 2 to the power of 100?"
-- "Compute 100 factorial."
-- "What is the greatest common divisor of 1071 and 462?"
+- "Using LibPARI, what is 2 to the power of 100?"
+- "With LibPARI, compute 100 factorial."
+- "Ask LibPARI for the greatest common divisor of 1071 and 462."
 
 **Primes**
 
-- "Is 2^127 - 1 a prime number?"
-- "What is the next prime after one billion?"
-- "How many prime numbers are there below one million?"
+- "Using LibPARI, is 2^127 - 1 a prime number?"
+- "With LibPARI, what is the next prime after one billion?"
+- "Using LibPARI, how many prime numbers are there below one million?"
 
 **Factorisation & number theory**
 
-- "Give me the prime factorisation of 2^67 - 1."
-- "What is Euler's totient of 1000000?"
-- "Compute the sum of the divisors of 360."
-- "How many divisors does 720 have?"
+- "Using LibPARI, give me the prime factorisation of 2^67 - 1."
+- "With LibPARI, what is Euler's totient of 1000000?"
+- "Ask LibPARI for the sum of the divisors of 360."
+- "Using LibPARI, how many divisors does 720 have?"
 
 **Polynomials & symbolic**
 
-- "Factor the polynomial x^4 - 1."
-- "Find the roots of x^3 - 2."
+- "Using LibPARI, factor the polynomial x^4 - 1."
+- "With LibPARI, find the roots of x^3 - 2."
 
 **Modular & advanced**
 
-- "Compute 2 raised to the power 1000000, modulo 1000000007."
-- "What is the trace of Frobenius of the elliptic curve y^2 = x^3 + 1 at the prime 101?"
+- "Using LibPARI, compute 2 raised to the power 1000000, modulo 1000000007."
+- "With LibPARI, what is the trace of Frobenius of the elliptic curve y^2 = x^3 + 1 at the prime 101?"
 
 **Exploring PARI**
 
-- "Which PARI functions deal with elliptic curves?"
-- "Show me the help for the nextprime function."
-- "What PARI functions are available for primality testing?"
+- "Using LibPARI, which PARI functions deal with elliptic curves?"
+- "With LibPARI, show me the help for the nextprime function."
+- "Use LibPARI's `pari_functions` tool to list what is available for primality testing."
 
 The assistant turns each request into a `pari_eval`, `pari_functions`, or
 `pari_help` call and answers with PARI's exact result. The next section shows
