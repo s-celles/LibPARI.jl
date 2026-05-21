@@ -24,6 +24,7 @@ include("concurrency.jl")
 include("lifecycle.jl")
 include("gen.jl")
 include("errors.jl")
+include("trap.jl")
 include("conversions.jl")
 include("numeric.jl")
 include("evaluator.jl")
@@ -37,6 +38,10 @@ REQ-INI-03). Runs once, never during precompilation; reads the optional
 `LIBPARI_STACK_SIZE` configuration and delegates to `_init_libpari!`.
 """
 function __init__()
+    # Build the concurrency-safe error-trap shim (feature 014). Best-effort:
+    # if no C compiler is available, error handling falls back to the
+    # milestone-M3 callback (single-threaded-safe).
+    _compile_and_load_trap!()
     # Start the PARI worker pool — one sticky worker, with its own PARI
     # context, per Julia OS thread — so concurrent libpari calls run in
     # parallel (feature 013). `_configured_stack_size` is read here, on the

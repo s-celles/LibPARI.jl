@@ -33,18 +33,19 @@ Julia code in two complementary ways:
   [`PariError`](@ref); a PARI `longjmp` never unwinds past
   Julia. PARI's transient stack is kept leak-free, and each `Gen` frees its
   own storage.
-- **Thread-safe.** Every call into the PARI library is marshalled onto a
-  single dedicated worker task, so LibPARI is correct under multi-threaded
-  Julia.
+- **Parallel and thread-safe.** Each Julia OS thread gets its own PARI
+  context, so concurrent calls into the PARI library run in parallel on
+  multiple cores — and a PARI error raised on any thread, even
+  simultaneously from many, is caught safely as a [`PariError`](@ref).
 - **Type-stable and precompiled** — built to SciML inference standards, with
   a precompilation workload for a fast first call.
 
 ## Status
 
-LibPARI is at version `0.11.0`. The hand-written core (lifecycle, `Gen`,
+LibPARI is at version `0.13.0`. The hand-written core (lifecycle, `Gen`,
 error handling, conversions, the numeric API, and the GP evaluator) and the
-generated binding layer are complete; the library is platform-correct and
-thread-safe.
+generated binding layer are complete; the library is platform-correct,
+parallel, and thread-safe.
 
 `LibPARI` depends on `PARI_jll`, which is not yet in the Julia General
 registry — see [Getting started](@ref) for how to resolve it in the

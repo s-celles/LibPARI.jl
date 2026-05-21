@@ -80,11 +80,53 @@ using LibPARI
         @test BigInt(LibPARI.Gen(7)) == 7   # library still healthy
     end
 
-    # NOTE — concurrent PARI *error* handling is a separate follow-up
-    # milestone: it needs the libpari call layer routed through a pure-C
-    # error trap (see upstream-bugs.md). Until then, PARI errors use the
-    # milestone-M3 callback, which is single-threaded-safe only — so a
-    # concurrent-error testset is deliberately not exercised here.
+    # --- CONCURRENT ERRORS (feature 014) ----------------------------------
+
+    @testset "PARI errors raised concurrently are caught safely" begin
+        # Half the tasks trigger a PARI error (1/0), half do valid work,
+        # interleaved across threads. Every error is caught as a `PariError`,
+        # every valid result is correct — no crash, no hang (FR-001..003).
+        errs = Threads.Atomic{Int}(0)
+        good = Threads.Atomic{Int}(0)
+        Threads.@threads for i = 1:400
+            if iseven(i)
+                try
+                    LibPARI.gp_eval("1/0")
+                catch e
+                    e isa LibPARI.PariError && Threads.atomic_add!(errs, 1)
+                end
+            else
+                BigInt(LibPARI.Gen(i)) == i && Threads.atomic_add!(good, 1)
+            end
+        end
+        @test errs[] == 200
+        @test good[] == 200
+    end
+
+    @testset "the library stays healthy after concurrent error bursts" begin
+        # Sustained bursts of concurrent errors interleaved with valid work,
+        # repeated — every context must stay usable afterward (FR-004).
+        for _ = 1:10
+            ok = Threads.Atomic{Int}(0)
+            Threads.@threads for i = 1:200
+                try
+                    if iseven(i)
+                        LibPARI.gp_eval("1/0")                     # error
+                    else
+                        d = LibPARI.PARI.nextprime(LibPARI.Gen(10_000 + i))
+                        LibPARI.gentype(d) === LibPARI.PariType.T_INT &&
+                            Threads.atomic_add!(ok, 1)
+                    end
+                catch e
+                    e isa LibPARI.PariError && Threads.atomic_add!(ok, 1)
+                end
+            end
+            @test ok[] == 200
+        end
+        # Every context is still usable after the bursts.
+        @test BigInt(LibPARI.Gen(2)^60) == big(2)^60
+        @test BigInt(LibPARI.gp_eval("factor(360)[1,1]")) == 2
+    end
 
     # --- PARALLELISM (feature 013) ----------------------------------------
 
@@ -94,9 +136,10 @@ using LibPARI
         # context per OS thread the spread run uses multiple cores and is
         # measurably faster; before feature 013 the two were equal (every
         # call serialized onto a single worker).
-        unit() = for _ = 1:120
-            LibPARI.gp_eval("factor(2^79 - 1)")
-        end
+        unit() =
+            for _ = 1:120
+                LibPARI.gp_eval("factor(2^79 - 1)")
+            end
 
         unit()                                   # warm up compilation
         t_serial = @elapsed for _ = 1:nt

@@ -35,22 +35,69 @@ end
 # base-10 digit string with `strtoi` (digits only — `strtoi` ignores a sign,
 # so a negative value is negated afterwards with `gneg`).
 function _integer_to_gen(x::Integer)
+    # Routed through the concurrency-safe error trap (feature 014): these
+    # PARI primitives can raise `e_STACK` on a pathological magnitude.
+    z = Clong(0)
     if typemin(Clong) <= x <= typemax(Clong)
-        return ccall((:stoi, PARI_jll.libpari), Ptr{Clong}, (Clong,), x % Clong)
-    elseif 0 <= x <= typemax(Culong)
-        return ccall(
-            (:utoi, PARI_jll.libpari),
+        return _trap_call(
             Ptr{Clong},
-            (Culong,),
-            x % Culong,
+            cglobal((:stoi, PARI_jll.libpari)),
+            1,
+            Clong(x % Clong),
+            z,
+            z,
+            z,
+            z,
+            z,
+            z,
+            z,
+        )
+    elseif 0 <= x <= typemax(Culong)
+        return _trap_call(
+            Ptr{Clong},
+            cglobal((:utoi, PARI_jll.libpari)),
+            1,
+            reinterpret(Clong, x % Culong),
+            z,
+            z,
+            z,
+            z,
+            z,
+            z,
+            z,
         )
     end
     s = string(x)
     negative = startswith(s, '-')
     digits = negative ? s[2:end] : s
-    t = ccall((:strtoi, PARI_jll.libpari), Ptr{Clong}, (Cstring,), digits)
+    cs = Base.cconvert(Cstring, digits)
+    t = GC.@preserve cs _trap_call(
+        Ptr{Clong},
+        cglobal((:strtoi, PARI_jll.libpari)),
+        1,
+        reinterpret(Clong, Base.unsafe_convert(Cstring, cs)),
+        z,
+        z,
+        z,
+        z,
+        z,
+        z,
+        z,
+    )
     return negative ?
-           ccall((:gneg, PARI_jll.libpari), Ptr{Clong}, (Ptr{Clong},), t) : t
+           _trap_call(
+        Ptr{Clong},
+        cglobal((:gneg, PARI_jll.libpari)),
+        1,
+        reinterpret(Clong, t),
+        z,
+        z,
+        z,
+        z,
+        z,
+        z,
+        z,
+    ) : t
 end
 
 """

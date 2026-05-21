@@ -8,6 +8,11 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.13.0] - 2026-05-21
+
+LibPARI is now **fully parallel** — concurrent `libpari` calls *and*
+concurrency-safe PARI error handling.
+
 ### Added
 
 - **Parallel `libpari` calls.** LibPARI now runs **one PARI context per
@@ -15,8 +20,16 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   behind a pool of sticky worker tasks, one pinned to each thread.
   Concurrent `libpari` calls issued from different Julia threads execute in
   parallel on multiple cores, instead of serializing onto the single
-  worker of milestone M9. Single-threaded behaviour is unchanged, and the
-  public API is unchanged.
+  worker of milestone M9. Single-threaded behaviour and the public API are
+  unchanged.
+- **Concurrency-safe PARI error handling.** A PARI error raised on any
+  thread — including simultaneously from many threads — is caught as a
+  catchable `PariError`, with no crash, hang, or corruption. Every
+  error-prone call path (the generated bindings, the GP evaluator, the
+  conversion layer) routes through a small per-thread C error trap. The
+  trap is optional: where no C compiler is available LibPARI degrades
+  gracefully to the single-threaded-safe path — installation never fails
+  and no new hard prerequisite is introduced.
 
 ### Changed
 
@@ -24,12 +37,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   thread-local read, correct on every worker context); cloned-object
   bookkeeping (`gclone` / `gunclone`) is funnelled to the primary worker,
   since PARI's clone list is per-context.
-
-### Notes
-
-- Concurrent handling of **PARI errors** is not yet covered: error-raising
-  `libpari` calls issued from several threads at once are not concurrency-
-  safe. This is a known follow-up milestone — see `upstream-bugs.md`.
+- The generated bindings, the GP evaluator, and the conversion layer call
+  `libpari` through the concurrency-safe error trap instead of a raw
+  `ccall`. The `PariError` type, the error model, and the public API are
+  unchanged.
 
 ## [0.12.0] - 2026-05-21
 

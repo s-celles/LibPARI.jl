@@ -324,6 +324,65 @@ ctypes_tuple(args) =
     isempty(args) ? "()" :
     "(" * join((a.ctype for a in args), ", ") * (length(args) == 1 ? ",)" : ")")
 
+# The trap shim's argument-count ceiling (mirrors `_TRAP_MAXARGS` in
+# src/trap.jl). A binding with more arguments falls back to a raw `ccall`.
+const TRAP_MAXARGS = 8
+
+# Marshal one argument to a pointer-sized `Clong` expression for the trap
+# shim. Returns `nothing` for a `Cstring` (handled with a preserve block).
+function clong_arg(a::Arg)
+    t = a.ctype
+    if t == "Ptr{Clong}"
+        return "reinterpret(Clong, Ptr{Clong}($(a.cexpr)))"
+    elseif t == "Clong"
+        return a.cexpr
+    elseif t == "Culong"
+        return "reinterpret(Clong, $(a.cexpr))"
+    elseif t == "Ref{Ptr{Clong}}"
+        return "reinterpret(Clong, " *
+               "Base.unsafe_convert(Ptr{Ptr{Clong}}, $(a.cexpr)))"
+    else
+        return nothing   # Cstring — see `trap_call_expr`
+    end
+end
+
+# Build the concurrency-safe `_trap_call(...)` expression for a binding, or
+# `nothing` if it has more arguments than the trap shim supports (feature
+# 014). Every PARI argument is passed as a pointer-sized integer; `Cstring`
+# arguments are kept alive across the call with `GC.@preserve`.
+function trap_call_expr(cname, cret, args)
+    length(args) > TRAP_MAXARGS && return nothing
+    clongs = String[]
+    cstr_lets = String[]
+    cstr_keep = String[]
+    csi = 0
+    for a in args
+        ce = clong_arg(a)
+        if ce === nothing               # Cstring
+            csi += 1
+            lv = "_cs$(csi)"
+            push!(cstr_lets, "$lv = Base.cconvert(Cstring, $(a.cexpr))")
+            push!(cstr_keep, lv)
+            push!(
+                clongs,
+                "reinterpret(Clong, Base.unsafe_convert(Cstring, $lv))",
+            )
+        else
+            push!(clongs, ce)
+        end
+    end
+    while length(clongs) < TRAP_MAXARGS
+        push!(clongs, "Clong(0)")
+    end
+    fnptr = "cglobal((:$(cname), LibPARI.PARI_jll.libpari))"
+    inner =
+        "LibPARI._trap_call($cret, $fnptr, $(length(args)), " *
+        join(clongs, ", ") * ")"
+    isempty(cstr_lets) && return inner
+    return "let " * join(cstr_lets, ", ") * "; GC.@preserve " *
+           join(cstr_keep, " ") * " " * inner * "; end"
+end
+
 "Emit the Julia source for one binding. Returns a String."
 function emit_binding(cname, fname, ret, args, help)
     params = String[a.param for a in args if a.param != ""]
@@ -338,9 +397,15 @@ function emit_binding(cname, fname, ret, args, help)
         ret == :gen ? "Ptr{Clong}" :
         ret == :long ? "Clong" :
         ret == :int ? "Cint" : ret == :ulong ? "Culong" : "Cvoid"
-    call =
-        "ccall((:$(cname), LibPARI.PARI_jll.libpari), $cret, " *
-        "$crange, $cargs)"
+    # The `libpari` call routes through the concurrency-safe error trap
+    # (feature 014). A binding with more arguments than the trap shim
+    # supports falls back to a raw `ccall` (milestone-M3 error handling).
+    call = trap_call_expr(cname, cret, args)
+    if call === nothing
+        call =
+            "ccall((:$(cname), LibPARI.PARI_jll.libpari), $cret, " *
+            "$crange, $cargs)"
+    end
 
     doc = "\"$(escdoc(isempty(help) ? "$fname (PARI)" : help))\"\n"
     body = IOBuffer()

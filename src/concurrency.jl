@@ -212,8 +212,7 @@ function _run_on_primary(f)
         return f()
     end
     primary = _PARI_WORKERS[][_PARI_PRIMARY[]]
-    if primary === nothing || current_task() === primary ||
-       istaskdone(primary)
+    if primary === nothing || current_task() === primary || istaskdone(primary)
         return f()
     end
     reply = Channel{Tuple{Bool,Any}}(1)
@@ -237,8 +236,7 @@ function _enqueue_on_primary(f)
         return nothing
     end
     primary = _PARI_WORKERS[][_PARI_PRIMARY[]]
-    if primary === nothing || current_task() === primary ||
-       istaskdone(primary)
+    if primary === nothing || current_task() === primary || istaskdone(primary)
         f()
     else
         put!(

@@ -27,7 +27,22 @@ true
 function gp_eval(s::AbstractString)
     return protected_call() do
         gen_from() do
-            ccall((:gp_read_str, PARI_jll.libpari), Ptr{Clong}, (Cstring,), s)
+            # Route through the concurrency-safe error trap (feature 014):
+            # a syntax/runtime error in the GP string is caught per-thread.
+            cs = Base.cconvert(Cstring, s)
+            GC.@preserve cs _trap_call(
+                Ptr{Clong},
+                cglobal((:gp_read_str, PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Base.unsafe_convert(Cstring, cs)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end

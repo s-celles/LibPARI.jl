@@ -12,11 +12,18 @@ import ..LibPARI
 function gnot(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gnot, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gnot, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -26,11 +33,18 @@ end
 function glength(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:glength, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:glength, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -40,11 +54,18 @@ end
 function gtranslength(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:gtranslength, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gtranslength, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -54,11 +75,18 @@ end
 function pari_get_hist(; x1::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:pari_get_hist, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:pari_get_hist, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -68,11 +96,18 @@ end
 function pari_histtime(; x1::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:pari_histtime, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:pari_histtime, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -82,11 +117,18 @@ end
 function gneg(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gneg, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gneg, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -96,11 +138,18 @@ end
 function mpcatalan(; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mpcatalan, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:mpcatalan, LibPARI.PARI_jll.libpari)),
+                1,
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -110,12 +159,18 @@ end
 function gtocol0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gtocol0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gtocol0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -125,12 +180,18 @@ end
 function gtocolrev0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gtocolrev0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gtocolrev0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -139,7 +200,19 @@ end
 "DEBUGLEVEL (PARI)"
 function DEBUGLEVEL()
     LibPARI.protected_call() do
-        ccall((:DEBUGLEVEL, LibPARI.PARI_jll.libpari), Cvoid, ())
+        LibPARI._trap_call(
+            Cvoid,
+            cglobal((:DEBUGLEVEL, LibPARI.PARI_jll.libpari)),
+            0,
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+        )
     end
     return nothing
 end
@@ -148,11 +221,18 @@ end
 function mpeuler(; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mpeuler, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:mpeuler, LibPARI.PARI_jll.libpari)),
+                1,
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -162,7 +242,19 @@ end
 function gen_I()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:gen_I, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:gen_I, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -171,11 +263,21 @@ end
 function gtolist(; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gtolist, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                (x1 === nothing ? C_NULL : x1.ptr),
+                cglobal((:gtolist, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -185,11 +287,21 @@ end
 function gtomap(; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gtomap, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                (x1 === nothing ? C_NULL : x1.ptr),
+                cglobal((:gtomap, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -199,11 +311,21 @@ end
 function gtomat(; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gtomat, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                (x1 === nothing ? C_NULL : x1.ptr),
+                cglobal((:gtomat, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -213,12 +335,18 @@ end
 function gmodulo(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gmodulo, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gmodulo, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -228,7 +356,19 @@ end
 function ggrando()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:ggrando, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:ggrando, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -237,7 +377,19 @@ end
 function mppi(; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:mppi, LibPARI.PARI_jll.libpari), Ptr{Clong}, (Clong,), prec)
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:mppi, LibPARI.PARI_jll.libpari)),
+                1,
+                prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -246,12 +398,18 @@ end
 function gtopoly(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gtopoly, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gtopoly, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -261,12 +419,18 @@ end
 function gtopolyrev(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gtopolyrev, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gtopolyrev, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -276,13 +440,24 @@ end
 function Qfb0(x1::LibPARI.Gen; x2 = nothing, x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:Qfb0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:Qfb0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -297,14 +472,21 @@ function Ser0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:Ser0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:Ser0, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
                 seriesprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -314,11 +496,21 @@ end
 function gtoset(; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gtoset, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                (x1 === nothing ? C_NULL : x1.ptr),
+                cglobal((:gtoset, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -328,11 +520,18 @@ end
 function pari_strchr(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:pari_strchr, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:pari_strchr, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -342,12 +541,18 @@ end
 function gtovec0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gtovec0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gtovec0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -357,12 +562,18 @@ end
 function gtovecrev0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gtovecrev0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gtovecrev0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -372,12 +583,18 @@ end
 function gtovecsmall0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gtovecsmall0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gtovecsmall0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -387,12 +604,18 @@ end
 function vecrange(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:vecrange, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:vecrange, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -402,11 +625,18 @@ end
 function mpfact(x1::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mpfact, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:mpfact, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -416,12 +646,18 @@ end
 function gne(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gne, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gne, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -431,11 +667,18 @@ end
 function mpprimorial(x1::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mpprimorial, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:mpprimorial, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -446,12 +689,18 @@ function gmode(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:gmode, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ref{Ptr{Clong}}, Ptr{Clong}),
-            out1,
-            x1.ptr,
+            cglobal((:gmode, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -464,12 +713,18 @@ end
 function gmod(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gmod, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gmod, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -479,12 +734,18 @@ end
 function deriv(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:deriv, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:deriv, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -494,13 +755,18 @@ end
 function derivn(x1::LibPARI.Gen, x2::Integer; x3::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:derivn, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:derivn, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -511,12 +777,18 @@ function gmule(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:gmule, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ref{Ptr{Clong}}, Ptr{Clong}),
-            out1,
-            x1.ptr,
+            cglobal((:gmule, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -529,12 +801,18 @@ end
 function gmul(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gmul, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gmul, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -545,11 +823,18 @@ function gadd1e()
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:gadd1e, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ref{Ptr{Clong}},),
-            out1,
+            cglobal((:gadd1e, LibPARI.PARI_jll.libpari)),
+            1,
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -563,12 +848,18 @@ function gadde(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:gadde, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ref{Ptr{Clong}}, Ptr{Clong}),
-            out1,
-            x1.ptr,
+            cglobal((:gadde, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -581,12 +872,18 @@ end
 function gadd(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gadd, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gadd, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -597,11 +894,18 @@ function gsub1e()
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:gsub1e, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ref{Ptr{Clong}},),
-            out1,
+            cglobal((:gsub1e, LibPARI.PARI_jll.libpari)),
+            1,
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -615,12 +919,18 @@ function gsube(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:gsube, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ref{Ptr{Clong}}, Ptr{Clong}),
-            out1,
-            x1.ptr,
+            cglobal((:gsube, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -633,12 +943,18 @@ end
 function gsub(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gsub, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gsub, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -648,11 +964,18 @@ end
 function member_a1(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_a1, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_a1, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -662,11 +985,18 @@ end
 function member_a2(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_a2, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_a2, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -676,11 +1006,18 @@ end
 function member_a3(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_a3, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_a3, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -690,11 +1027,18 @@ end
 function member_a4(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_a4, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_a4, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -704,11 +1048,18 @@ end
 function member_a6(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_a6, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_a6, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -718,11 +1069,18 @@ end
 function member_area(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_area, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_area, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -732,11 +1090,18 @@ end
 function member_b2(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_b2, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_b2, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -746,11 +1111,18 @@ end
 function member_b4(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_b4, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_b4, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -760,11 +1132,18 @@ end
 function member_b6(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_b6, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_b6, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -774,11 +1153,18 @@ end
 function member_b8(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_b8, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_b8, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -788,11 +1174,18 @@ end
 function member_bid(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_bid, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_bid, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -802,11 +1195,18 @@ end
 function member_bnf(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_bnf, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_bnf, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -816,11 +1216,18 @@ end
 function member_c4(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_c4, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_c4, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -830,11 +1237,18 @@ end
 function member_c6(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_c6, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_c6, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -844,11 +1258,18 @@ end
 function member_clgp(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_clgp, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_clgp, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -858,11 +1279,18 @@ end
 function member_codiff(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_codiff, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_codiff, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -872,11 +1300,18 @@ end
 function member_cyc(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_cyc, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_cyc, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -886,11 +1321,18 @@ end
 function member_diff(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_diff, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_diff, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -900,11 +1342,18 @@ end
 function member_disc(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_disc, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_disc, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -914,11 +1363,18 @@ end
 function member_e(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_e, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_e, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -928,11 +1384,18 @@ end
 function member_eta(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_eta, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_eta, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -942,11 +1405,18 @@ end
 function member_f(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_f, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_f, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -956,11 +1426,18 @@ end
 function member_fu(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_fu, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_fu, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -970,11 +1447,18 @@ end
 function member_gen(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_gen, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_gen, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -984,11 +1468,18 @@ end
 function member_group(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_group, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_group, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -998,11 +1489,18 @@ end
 function member_index(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_index, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_index, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1012,11 +1510,18 @@ end
 function member_j(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_j, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_j, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1026,11 +1531,18 @@ end
 function member_mod(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_mod, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_mod, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1040,11 +1552,18 @@ end
 function member_nf(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_nf, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_nf, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1054,11 +1573,18 @@ end
 function member_no(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_no, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_no, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1068,11 +1594,18 @@ end
 function member_normfu(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_normfu, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_normfu, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1082,11 +1615,18 @@ end
 function member_omega(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_omega, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_omega, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1096,11 +1636,18 @@ end
 function member_orders(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_orders, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_orders, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1110,11 +1657,18 @@ end
 function member_p(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_p, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_p, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1124,11 +1678,18 @@ end
 function member_pol(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_pol, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_pol, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1138,11 +1699,18 @@ end
 function member_polabs(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_polabs, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_polabs, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1152,11 +1720,18 @@ end
 function member_r1(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_r1, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_r1, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1166,11 +1741,18 @@ end
 function member_r2(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_r2, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_r2, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1180,11 +1762,18 @@ end
 function member_reg(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_reg, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_reg, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1194,11 +1783,18 @@ end
 function member_roots(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_roots, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_roots, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1208,11 +1804,18 @@ end
 function member_sign(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_sign, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_sign, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1222,11 +1825,18 @@ end
 function member_t2(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_t2, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_t2, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1236,11 +1846,18 @@ end
 function member_tate(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_tate, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_tate, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1250,11 +1867,18 @@ end
 function member_tu(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_tu, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_tu, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1264,11 +1888,18 @@ end
 function member_zk(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_zk, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_zk, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1278,11 +1909,18 @@ end
 function member_zkst(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:member_zkst, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:member_zkst, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1293,12 +1931,18 @@ function gdive(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:gdive, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ref{Ptr{Clong}}, Ptr{Clong}),
-            out1,
-            x1.ptr,
+            cglobal((:gdive, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -1311,12 +1955,18 @@ end
 function gdiv(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gdiv, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gdiv, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1327,12 +1977,18 @@ function gshiftle(x1::Integer)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:gshiftle, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ref{Ptr{Clong}}, Clong),
-            out1,
+            cglobal((:gshiftle, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
             Clong(x1),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -1345,12 +2001,18 @@ end
 function gshift(x1::LibPARI.Gen, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gshift, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gshift, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1360,12 +2022,18 @@ end
 function gle(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gle, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gle, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1375,12 +2043,18 @@ end
 function glt(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:glt, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:glt, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1390,12 +2064,18 @@ end
 function gidentical(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:gidentical, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Cint,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gidentical, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -1405,12 +2085,18 @@ end
 function geq(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:geq, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:geq, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1420,12 +2106,18 @@ end
 function gge(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gge, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gge, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1436,12 +2128,18 @@ function gshiftre(x1::Integer)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:gshiftre, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ref{Ptr{Clong}}, Clong),
-            out1,
+            cglobal((:gshiftre, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
             Clong(x1),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -1454,12 +2152,18 @@ end
 function gshift_right(x1::LibPARI.Gen, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gshift_right, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gshift_right, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1469,12 +2173,18 @@ end
 function ggt(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ggt, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ggt, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1489,14 +2199,21 @@ function F2xq_log_Coppersmith_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:F2xq_log_Coppersmith_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
+                cglobal((
+                    :F2xq_log_Coppersmith_worker,
+                    LibPARI.PARI_jll.libpari,
+                )),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
-                x3.ptr,
-                x4.ptr,
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1511,14 +2228,21 @@ function Flxq_log_Coppersmith_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:Flxq_log_Coppersmith_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
+                cglobal((
+                    :Flxq_log_Coppersmith_worker,
+                    LibPARI.PARI_jll.libpari,
+                )),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
-                x3.ptr,
-                x4.ptr,
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1528,13 +2252,18 @@ end
 function FpM_ratlift_worker(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:FpM_ratlift_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:FpM_ratlift_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1553,27 +2282,18 @@ function Fp_log_sieve_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:Fp_log_sieve_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (
-                    Clong,
-                    Clong,
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                ),
+                cglobal((:Fp_log_sieve_worker, LibPARI.PARI_jll.libpari)),
+                8,
                 Clong(x1),
                 Clong(x2),
-                x3.ptr,
-                x4.ptr,
-                x5.ptr,
-                x6.ptr,
-                x7.ptr,
-                x8.ptr,
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x5.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x6.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x7.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x8.ptr)),
             )
         end
     end
@@ -1587,13 +2307,18 @@ function QM_charpoly_ZX_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:QM_charpoly_ZX_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:QM_charpoly_ZX_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1608,14 +2333,18 @@ function QXQ_div_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:QXQ_div_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:QXQ_div_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1625,13 +2354,18 @@ end
 function QXQ_inv_worker(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:QXQ_inv_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:QXQ_inv_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1641,12 +2375,18 @@ end
 function RgM_ZM_mul_worker(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:RgM_ZM_mul_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:RgM_ZM_mul_worker, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1656,12 +2396,18 @@ end
 function ZM_det_worker(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ZM_det_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ZM_det_worker, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1671,13 +2417,18 @@ end
 function ZM_gauss_worker(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ZM_gauss_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:ZM_gauss_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1687,12 +2438,18 @@ end
 function ZM_inv_worker(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ZM_inv_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ZM_inv_worker, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1702,12 +2459,18 @@ end
 function ZM_ker_worker(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ZM_ker_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ZM_ker_worker, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1717,13 +2480,18 @@ end
 function ZM_mul_worker(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ZM_mul_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:ZM_mul_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1733,12 +2501,18 @@ end
 function ZM_sqr_worker(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ZM_sqr_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ZM_sqr_worker, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1753,14 +2527,18 @@ function ZXQX_composedsum_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ZXQX_composedsum_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:ZXQX_composedsum_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1776,15 +2554,18 @@ function ZXQX_resultant_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ZXQX_resultant_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
-                x5.ptr,
+                cglobal((:ZXQX_resultant_worker, LibPARI.PARI_jll.libpari)),
+                5,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x5.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1799,14 +2580,18 @@ function ZXQ_minpoly_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ZXQ_minpoly_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:ZXQ_minpoly_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 Clong(x4),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1822,15 +2607,18 @@ function ZX_ZXY_resultant_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ZX_ZXY_resultant_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
-                x5.ptr,
+                cglobal((:ZX_ZXY_resultant_worker, LibPARI.PARI_jll.libpari)),
+                5,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x5.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1844,13 +2632,18 @@ function ZX_composedsum_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ZX_composedsum_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:ZX_composedsum_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1865,14 +2658,18 @@ function ZX_gcd_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ZX_gcd_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:ZX_gcd_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1887,14 +2684,18 @@ function ZX_resultant_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ZX_resultant_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:ZX_resultant_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1904,13 +2705,18 @@ end
 function ZabM_inv_worker(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ZabM_inv_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:ZabM_inv_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1926,15 +2732,18 @@ function matslice0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matslice0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong, Clong, Clong),
-                x1.ptr,
+                cglobal((:matslice0, LibPARI.PARI_jll.libpari)),
+                5,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
                 Clong(x4),
                 Clong(x5),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1944,13 +2753,18 @@ end
 function vecslice0(x1::LibPARI.Gen, x3::Integer; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:vecslice0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:vecslice0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1961,12 +2775,18 @@ function gdivrounde(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:gdivrounde, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ref{Ptr{Clong}}, Ptr{Clong}),
-            out1,
-            x1.ptr,
+            cglobal((:gdivrounde, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -1979,12 +2799,18 @@ end
 function gdivround(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gdivround, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gdivround, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -1995,12 +2821,18 @@ function gdivente(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:gdivente, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ref{Ptr{Clong}}, Ptr{Clong}),
-            out1,
-            x1.ptr,
+            cglobal((:gdivente, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -2013,12 +2845,18 @@ end
 function gdivent(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gdivent, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gdivent, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2028,13 +2866,18 @@ end
 function gpow(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gpow, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gpow, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2044,12 +2887,18 @@ end
 function gpowgs(x1::LibPARI.Gen, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gpowgs, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gpowgs, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2064,14 +2913,18 @@ function aprcl_step4_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:aprcl_step4_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Culong, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                Culong(x1),
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:aprcl_step4_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Culong(x1)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2087,15 +2940,18 @@ function aprcl_step6_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:aprcl_step6_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
+                cglobal((:aprcl_step6_worker, LibPARI.PARI_jll.libpari)),
+                5,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
-                x3.ptr,
-                x4.ptr,
-                x5.ptr,
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x5.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2112,23 +2968,18 @@ function chinese_unit_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:chinese_unit_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                ),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
-                x5.ptr,
-                x6.ptr,
+                cglobal((:chinese_unit_worker, LibPARI.PARI_jll.libpari)),
+                6,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x5.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x6.ptr)),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2138,7 +2989,19 @@ end
 function sd_TeXstyle()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_TeXstyle, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_TeXstyle, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2147,7 +3010,19 @@ end
 function sd_breakloop()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_breakloop, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_breakloop, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2156,7 +3031,19 @@ end
 function sd_colors()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_colors, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_colors, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2165,7 +3052,19 @@ end
 function sd_compatible()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_compatible, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_compatible, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2174,7 +3073,19 @@ end
 function sd_datadir()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_datadir, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_datadir, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2183,7 +3094,19 @@ end
 function sd_debug()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_debug, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_debug, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2192,7 +3115,19 @@ end
 function sd_debugfiles()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_debugfiles, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_debugfiles, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2201,7 +3136,19 @@ end
 function sd_debugmem()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_debugmem, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_debugmem, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2210,7 +3157,19 @@ end
 function sd_echo()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_echo, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_echo, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2219,10 +3178,18 @@ end
 function sd_factor_add_primes()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:sd_factor_add_primes, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (),
+                cglobal((:sd_factor_add_primes, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2232,7 +3199,19 @@ end
 function sd_factor_proven()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_factor_proven, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_factor_proven, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2241,7 +3220,19 @@ end
 function sd_factorlimit()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_factorlimit, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_factorlimit, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2250,7 +3241,19 @@ end
 function sd_format()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_format, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_format, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2259,7 +3262,19 @@ end
 function sd_graphcolormap()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_graphcolormap, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_graphcolormap, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2268,7 +3283,19 @@ end
 function sd_graphcolors()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_graphcolors, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_graphcolors, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2277,7 +3304,19 @@ end
 function sd_help()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_help, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_help, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2286,7 +3325,19 @@ end
 function sd_histfile()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_histfile, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_histfile, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2295,7 +3346,19 @@ end
 function sd_histsize()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_histsize, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_histsize, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2304,7 +3367,19 @@ end
 function sd_lines()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_lines, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_lines, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2313,7 +3388,19 @@ end
 function sd_linewrap()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_linewrap, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_linewrap, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2322,7 +3409,19 @@ end
 function sd_log()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_log, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_log, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2331,7 +3430,19 @@ end
 function sd_logfile()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_logfile, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_logfile, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2340,7 +3451,19 @@ end
 function sd_nbthreads()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_nbthreads, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_nbthreads, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2349,10 +3472,18 @@ end
 function sd_new_galois_format()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:sd_new_galois_format, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (),
+                cglobal((:sd_new_galois_format, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2362,7 +3493,19 @@ end
 function sd_output()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_output, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_output, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2371,7 +3514,19 @@ end
 function sd_parisize()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_parisize, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_parisize, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2380,7 +3535,19 @@ end
 function sd_parisizemax()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_parisizemax, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_parisizemax, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2389,7 +3556,19 @@ end
 function sd_path()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_path, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_path, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2398,7 +3577,19 @@ end
 function sd_plothsizes()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_plothsizes, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_plothsizes, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2407,7 +3598,19 @@ end
 function sd_prettyprinter()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_prettyprinter, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_prettyprinter, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2416,7 +3619,19 @@ end
 function sd_primelimit()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_primelimit, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_primelimit, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2425,7 +3640,19 @@ end
 function sd_prompt()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_prompt, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_prompt, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2434,7 +3661,19 @@ end
 function sd_prompt_cont()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_prompt_cont, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_prompt_cont, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2443,7 +3682,19 @@ end
 function sd_psfile()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_psfile, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_psfile, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2452,7 +3703,19 @@ end
 function sd_readline()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_readline, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_readline, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2461,10 +3724,18 @@ end
 function sd_realbitprecision()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:sd_realbitprecision, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (),
+                cglobal((:sd_realbitprecision, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2474,7 +3745,19 @@ end
 function sd_realprecision()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_realprecision, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_realprecision, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2483,7 +3766,19 @@ end
 function sd_recover()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_recover, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_recover, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2492,7 +3787,19 @@ end
 function sd_secure()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_secure, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_secure, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2501,10 +3808,18 @@ end
 function sd_seriesprecision()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:sd_seriesprecision, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (),
+                cglobal((:sd_seriesprecision, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2514,7 +3829,19 @@ end
 function sd_simplify()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_simplify, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_simplify, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2523,7 +3850,19 @@ end
 function sd_sopath()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_sopath, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_sopath, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2532,7 +3871,19 @@ end
 function sd_strictargs()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_strictargs, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_strictargs, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2541,7 +3892,19 @@ end
 function sd_strictmatch()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_strictmatch, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_strictmatch, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2550,7 +3913,19 @@ end
 function sd_threadsize()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_threadsize, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_threadsize, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2559,7 +3934,19 @@ end
 function sd_threadsizemax()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_threadsizemax, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_threadsizemax, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2568,7 +3955,19 @@ end
 function sd_timer()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:sd_timer, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:sd_timer, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -2583,15 +3982,18 @@ function derivfun0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:derivfun0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:derivfun0, LibPARI.PARI_jll.libpari)),
+                5,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 Clong(x4),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2608,23 +4010,18 @@ function dirartin_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:dirartin_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (
-                    Ptr{Clong},
-                    Culong,
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                ),
-                x1.ptr,
-                Culong(x2),
-                x3.ptr,
-                x4.ptr,
-                x5.ptr,
-                x6.ptr,
+                cglobal((:dirartin_worker, LibPARI.PARI_jll.libpari)),
+                6,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Culong(x2)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x5.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x6.ptr)),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2634,13 +4031,18 @@ end
 function direllnf_worker(x1::LibPARI.Gen, x2::Integer, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:direllnf_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Culong, Ptr{Clong}),
-                x1.ptr,
-                Culong(x2),
-                x3.ptr,
+                cglobal((:direllnf_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Culong(x2)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2655,14 +4057,18 @@ function direllsympow_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:direllsympow_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Culong, Ptr{Clong}, Culong),
-                x1.ptr,
-                Culong(x2),
-                x3.ptr,
-                Culong(x4),
+                cglobal((:direllsympow_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Culong(x2)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Culong(x4)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2672,13 +4078,18 @@ end
 function dirgenus2_worker(x1::LibPARI.Gen, x2::Integer, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:dirgenus2_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Ptr{Clong}),
-                x1.ptr,
+                cglobal((:dirgenus2_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
-                x3.ptr,
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2693,14 +4104,18 @@ function dirhgm_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:dirhgm_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Culong, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                Culong(x2),
-                x3.ptr,
-                x4.ptr,
+                cglobal((:dirhgm_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Culong(x2)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2710,11 +4125,18 @@ end
 function ecpp_ispsp_worker(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ecpp_ispsp_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:ecpp_ispsp_worker, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2724,13 +4146,18 @@ end
 function ecpp_sqrt_worker(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ecpp_sqrt_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:ecpp_sqrt_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2745,14 +4172,18 @@ function ecpp_step2_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ecpp_step2_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:ecpp_step2_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 Clong(x4),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2768,15 +4199,18 @@ function eisker_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:eisker_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
-                x5.ptr,
+                cglobal((:eisker_worker, LibPARI.PARI_jll.libpari)),
+                5,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x5.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2792,15 +4226,18 @@ function ellQ_factorback_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellQ_factorback_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Culong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
-                Culong(x5),
+                cglobal((:ellQ_factorback_worker, LibPARI.PARI_jll.libpari)),
+                5,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Culong(x5)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2810,13 +4247,21 @@ end
 function eval_mnemonic(x1::LibPARI.Gen, x2::AbstractString)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:eval_mnemonic, LibPARI.PARI_jll.libpari),
-                Clong,
-                (Ptr{Clong}, Cstring),
-                x1.ptr,
-                x2,
-            ),
+            let _cs1 = Base.cconvert(Cstring, x2);
+                GC.@preserve _cs1 LibPARI._trap_call(
+                    Clong,
+                    cglobal((:eval_mnemonic, LibPARI.PARI_jll.libpari)),
+                    2,
+                    reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                    reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                );
+            end,
         )
     end
 end
@@ -2825,12 +4270,18 @@ end
 function factor_Aurifeuille(x1::LibPARI.Gen, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:factor_Aurifeuille, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:factor_Aurifeuille, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2840,12 +4291,18 @@ end
 function factor_Aurifeuille_prime(x1::LibPARI.Gen, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:factor_Aurifeuille_prime, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:factor_Aurifeuille_prime, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2855,11 +4312,18 @@ end
 function ginv(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ginv, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:ginv, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2869,12 +4333,18 @@ end
 function lerch_worker(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lerch_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:lerch_worker, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2892,25 +4362,18 @@ function lfuninit_theta2_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfuninit_theta2_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (
-                    Clong,
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                ),
+                cglobal((:lfuninit_theta2_worker, LibPARI.PARI_jll.libpari)),
+                7,
                 Clong(x1),
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
-                x5.ptr,
-                x6.ptr,
-                x7.ptr,
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x5.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x6.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x7.ptr)),
+                Clong(0),
             )
         end
     end
@@ -2968,15 +4431,18 @@ function nflist_A462_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_A462_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
-                x5.ptr,
+                cglobal((:nflist_A462_worker, LibPARI.PARI_jll.libpari)),
+                5,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x5.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -2991,14 +4457,18 @@ function nflist_A46S46P_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_A46S46P_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:nflist_A46S46P_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3013,14 +4483,18 @@ function nflist_A4S4_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_A4S4_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:nflist_A4S4_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3035,14 +4509,18 @@ function nflist_C32C4_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_C32C4_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:nflist_C32C4_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3057,14 +4535,18 @@ function nflist_C32D4_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_C32D4_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:nflist_C32D4_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3079,14 +4561,18 @@ function nflist_C3C3_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_C3C3_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:nflist_C3C3_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3096,12 +4582,18 @@ end
 function nflist_C3_worker(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_C3_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:nflist_C3_worker, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3116,14 +4608,18 @@ function nflist_C4vec_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_C4vec_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:nflist_C4vec_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3133,12 +4629,18 @@ end
 function nflist_C5_worker(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_C5_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:nflist_C5_worker, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3154,15 +4656,18 @@ function nflist_C6_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_C6_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
-                x5.ptr,
+                cglobal((:nflist_C6_worker, LibPARI.PARI_jll.libpari)),
+                5,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x5.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3172,13 +4677,18 @@ end
 function nflist_C9_worker(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_C9_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nflist_C9_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3188,13 +4698,18 @@ end
 function nflist_CL_worker(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_CL_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nflist_CL_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3209,14 +4724,18 @@ function nflist_D4_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_D4_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:nflist_D4_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3231,14 +4750,18 @@ function nflist_D612_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_D612_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:nflist_D612_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3248,13 +4771,18 @@ end
 function nflist_D9_worker(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_D9_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nflist_D9_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3271,23 +4799,18 @@ function nflist_DL_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_DL_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                ),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
-                x5.ptr,
-                x6.ptr,
+                cglobal((:nflist_DL_worker, LibPARI.PARI_jll.libpari)),
+                6,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x5.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x6.ptr)),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3302,14 +4825,18 @@ function nflist_Mgen_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_Mgen_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:nflist_Mgen_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3325,15 +4852,18 @@ function nflist_S32_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_S32_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
-                x5.ptr,
+                cglobal((:nflist_S32_worker, LibPARI.PARI_jll.libpari)),
+                5,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x5.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3343,13 +4873,18 @@ end
 function nflist_S36_worker(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_S36_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nflist_S36_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3359,13 +4894,18 @@ end
 function nflist_S3C3_worker(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_S3C3_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nflist_S3C3_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3375,12 +4915,18 @@ end
 function nflist_S3I_worker(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_S3I_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:nflist_S3I_worker, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3390,12 +4936,18 @@ end
 function nflist_S3R_worker(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_S3R_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:nflist_S3R_worker, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3411,15 +4963,18 @@ function nflist_S462_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_S462_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
-                x5.ptr,
+                cglobal((:nflist_S462_worker, LibPARI.PARI_jll.libpari)),
+                5,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x5.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3434,14 +4989,18 @@ function nflist_S46M_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_S46M_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:nflist_S46M_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3456,14 +5015,18 @@ function nflist_V4_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nflist_V4_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:nflist_V4_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3479,15 +5042,21 @@ function nxMV_polint_center_tree_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nxMV_polint_center_tree_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
-                x5.ptr,
+                cglobal((
+                    :nxMV_polint_center_tree_worker,
+                    LibPARI.PARI_jll.libpari,
+                )),
+                5,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x5.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3497,12 +5066,18 @@ end
 function parapply_slice_worker(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:parapply_slice_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:parapply_slice_worker, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3512,11 +5087,18 @@ end
 function pareval_worker(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:pareval_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:pareval_worker, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3526,12 +5108,18 @@ end
 function parfor_worker(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:parfor_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:parfor_worker, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3541,13 +5129,18 @@ end
 function parsqf_worker(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:parsqf_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:parsqf_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3562,14 +5155,18 @@ function parsum_slice_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:parsum_slice_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:parsum_slice_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3586,23 +5183,18 @@ function parsumprimefun_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:parsumprimefun_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                ),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
-                x5.ptr,
-                x6.ptr,
+                cglobal((:parsumprimefun_worker, LibPARI.PARI_jll.libpari)),
+                6,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x5.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x6.ptr)),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3619,23 +5211,21 @@ function partmap_reverse_frac_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:partmap_reverse_frac_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Ptr{Clong},
-                    Clong,
-                ),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
-                x5.ptr,
+                cglobal((
+                    :partmap_reverse_frac_worker,
+                    LibPARI.PARI_jll.libpari,
+                )),
+                6,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x5.ptr)),
                 Clong(x6),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3645,12 +5235,18 @@ end
 function parvector_worker(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:parvector_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:parvector_worker, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3660,13 +5256,18 @@ end
 function polclass_worker(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polclass_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:polclass_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3682,15 +5283,21 @@ function nmV_polint_center_tree_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nmV_polint_center_tree_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
-                x5.ptr,
+                cglobal((
+                    :nmV_polint_center_tree_worker,
+                    LibPARI.PARI_jll.libpari,
+                )),
+                5,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x5.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3748,11 +5355,21 @@ end
 function primecertisvalid_ecpp_worker(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:primecertisvalid_ecpp_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((
+                    :primecertisvalid_ecpp_worker,
+                    LibPARI.PARI_jll.libpari,
+                )),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3767,14 +5384,18 @@ function ramanujantau_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ramanujantau_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:ramanujantau_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3790,15 +5411,18 @@ function serh_worker(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:serh_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
-                x5.ptr,
+                cglobal((:serh_worker, LibPARI.PARI_jll.libpari)),
+                5,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x5.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3808,13 +5432,18 @@ end
 function taugen_n_worker(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:taugen_n_worker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:taugen_n_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3824,11 +5453,18 @@ end
 function gp_call(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gp_call, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gp_call, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3838,12 +5474,18 @@ end
 function gp_call2(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gp_call2, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gp_call2, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3853,12 +5495,18 @@ end
 function gp_callprec(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gp_callprec, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gp_callprec, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3868,11 +5516,18 @@ end
 function gp_callbool(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:gp_callbool, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gp_callbool, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -3882,11 +5537,18 @@ end
 function gp_callvoid(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:gp_callvoid, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gp_callvoid, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -3896,11 +5558,18 @@ end
 function gtrans(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gtrans, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gtrans, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3910,12 +5579,18 @@ end
 function gabs(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gabs, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gabs, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3925,12 +5600,18 @@ end
 function gacos(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gacos, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gacos, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3940,12 +5621,18 @@ end
 function gacosh(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gacosh, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gacosh, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3954,13 +5641,21 @@ end
 "addhelp(sym,str): add/change help message for the symbol sym."
 function addhelp(x1::AbstractString, x2::AbstractString)
     LibPARI.protected_call() do
-        ccall(
-            (:addhelp, LibPARI.PARI_jll.libpari),
-            Cvoid,
-            (Cstring, Cstring),
-            x1,
-            x2,
-        )
+        let _cs1 = Base.cconvert(Cstring, x1), _cs2 = Base.cconvert(Cstring, x2);
+            GC.@preserve _cs1 _cs2 LibPARI._trap_call(
+                Cvoid,
+                cglobal((:addhelp, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                reinterpret(Clong, Base.unsafe_convert(Cstring, _cs2)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            );
+        end
     end
     return nothing
 end
@@ -3969,11 +5664,21 @@ end
 function addprimes(; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:addprimes, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                (x1 === nothing ? C_NULL : x1.ptr),
+                cglobal((:addprimes, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3983,13 +5688,18 @@ end
 function agm(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:agm, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:agm, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -3999,12 +5709,18 @@ end
 function airy(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:airy, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:airy, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4014,13 +5730,21 @@ end
 function algadd(x2::LibPARI.Gen, x3::LibPARI.Gen; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algadd, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                (x1 === nothing ? C_NULL : x1.ptr),
-                x2.ptr,
-                x3.ptr,
+                cglobal((:algadd, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4030,12 +5754,18 @@ end
 function algalgtobasis(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algalgtobasis, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:algalgtobasis, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4045,11 +5775,18 @@ end
 function algaut(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algaut, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:algaut, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4059,11 +5796,18 @@ end
 function algb(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algb, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:algb, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4073,11 +5817,18 @@ end
 function algbasis(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algbasis, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:algbasis, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4087,12 +5838,18 @@ end
 function algbasistoalg(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algbasistoalg, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:algbasistoalg, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4102,11 +5859,18 @@ end
 function algcenter(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algcenter, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:algcenter, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4116,13 +5880,18 @@ end
 function alg_centralproj(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:alg_centralproj, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:alg_centralproj, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4132,11 +5901,18 @@ end
 function algchar(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algchar, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:algchar, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4146,11 +5922,18 @@ end
 function algdegree(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:algdegree, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:algdegree, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -4160,13 +5943,18 @@ end
 function algdep0(x1::LibPARI.Gen, x2::Integer; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algdep0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:algdep0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4176,12 +5964,18 @@ end
 function algdim(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:algdim, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:algdim, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -4191,11 +5985,18 @@ end
 function algdisc(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algdisc, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:algdisc, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4205,13 +6006,21 @@ end
 function algdivl(x2::LibPARI.Gen, x3::LibPARI.Gen; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algdivl, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                (x1 === nothing ? C_NULL : x1.ptr),
-                x2.ptr,
-                x3.ptr,
+                cglobal((:algdivl, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4221,13 +6030,21 @@ end
 function algdivr(x2::LibPARI.Gen, x3::LibPARI.Gen; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algdivr, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                (x1 === nothing ? C_NULL : x1.ptr),
-                x2.ptr,
-                x3.ptr,
+                cglobal((:algdivr, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4237,12 +6054,21 @@ end
 function alggroup(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:alggroup, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:alggroup, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4253,13 +6079,18 @@ function alggroupcenter(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:alggroupcenter, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            (x2 === nothing ? C_NULL : x2.ptr),
-            out1,
+            cglobal((:alggroupcenter, LibPARI.PARI_jll.libpari)),
+            3,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr))),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -4272,12 +6103,21 @@ end
 function alghasse(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:alghasse, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:alghasse, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4287,11 +6127,18 @@ end
 function alghassef(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:alghassef, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:alghassef, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4301,11 +6148,18 @@ end
 function alghassei(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:alghassei, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:alghassei, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4315,12 +6169,21 @@ end
 function algindex(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:algindex, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:algindex, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -4330,12 +6193,21 @@ end
 function alginv(x2::LibPARI.Gen; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:alginv, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                (x1 === nothing ? C_NULL : x1.ptr),
-                x2.ptr,
+                cglobal((:alginv, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4345,11 +6217,18 @@ end
 function alginvbasis(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:alginvbasis, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:alginvbasis, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4359,11 +6238,18 @@ end
 function algiscommutative(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:algiscommutative, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Cint,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:algiscommutative, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -4373,12 +6259,21 @@ end
 function algisdivision(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:algisdivision, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Cint,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:algisdivision, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -4389,14 +6284,18 @@ function algisdivl(x2::LibPARI.Gen, x3::LibPARI.Gen; x1 = nothing)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:algisdivl, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Cint,
-            (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            (x1 === nothing ? C_NULL : x1.ptr),
-            x2.ptr,
-            x3.ptr,
-            out1,
+            cglobal((:algisdivl, LibPARI.PARI_jll.libpari)),
+            4,
+            reinterpret(Clong, Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr))),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = Int(r)
         o1 = LibPARI.Gen(out1[])
@@ -4410,13 +6309,18 @@ function algisinv(x2::LibPARI.Gen; x1 = nothing)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:algisinv, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Cint,
-            (Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            (x1 === nothing ? C_NULL : x1.ptr),
-            x2.ptr,
-            out1,
+            cglobal((:algisinv, LibPARI.PARI_jll.libpari)),
+            3,
+            reinterpret(Clong, Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr))),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = Int(r)
         o1 = LibPARI.Gen(out1[])
@@ -4429,12 +6333,21 @@ end
 function algisramified(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:algisramified, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Cint,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:algisramified, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -4444,11 +6357,18 @@ end
 function algissemisimple(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:algissemisimple, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Cint,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:algissemisimple, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -4458,12 +6378,18 @@ end
 function algissimple(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:algissimple, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Cint,
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:algissimple, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -4473,12 +6399,21 @@ end
 function algissplit(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:algissplit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Cint,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:algissplit, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -4489,14 +6424,18 @@ function alglatadd(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:alglatadd, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
-            x3.ptr,
-            out1,
+            cglobal((:alglatadd, LibPARI.PARI_jll.libpari)),
+            4,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -4510,14 +6449,18 @@ function alglatcontains(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:alglatcontains, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Cint,
-            (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
-            x3.ptr,
-            out1,
+            cglobal((:alglatcontains, LibPARI.PARI_jll.libpari)),
+            4,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = Int(r)
         o1 = LibPARI.Gen(out1[])
@@ -4530,13 +6473,18 @@ end
 function alglatelement(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:alglatelement, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:alglatelement, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4546,13 +6494,18 @@ end
 function alglatindex(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:alglatindex, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:alglatindex, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4563,14 +6516,18 @@ function alglatinter(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:alglatinter, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
-            x3.ptr,
-            out1,
+            cglobal((:alglatinter, LibPARI.PARI_jll.libpari)),
+            4,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -4587,13 +6544,18 @@ function alglatlefttransporter(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:alglatlefttransporter, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:alglatlefttransporter, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4603,13 +6565,18 @@ end
 function alglatmul(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:alglatmul, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:alglatmul, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4623,13 +6590,18 @@ function alglatrighttransporter(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:alglatrighttransporter, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:alglatrighttransporter, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4640,14 +6612,18 @@ function alglatsubset(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:alglatsubset, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Cint,
-            (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
-            x3.ptr,
-            out1,
+            cglobal((:alglatsubset, LibPARI.PARI_jll.libpari)),
+            4,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = Int(r)
         o1 = LibPARI.Gen(out1[])
@@ -4660,12 +6636,18 @@ end
 function algmakeintegral(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algmakeintegral, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:algmakeintegral, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4675,13 +6657,21 @@ end
 function algmul(x2::LibPARI.Gen, x3::LibPARI.Gen; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algmul, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                (x1 === nothing ? C_NULL : x1.ptr),
-                x2.ptr,
-                x3.ptr,
+                cglobal((:algmul, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4691,11 +6681,18 @@ end
 function algmultable(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algmultable, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:algmultable, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4705,12 +6702,21 @@ end
 function algneg(x2::LibPARI.Gen; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algneg, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                (x1 === nothing ? C_NULL : x1.ptr),
-                x2.ptr,
+                cglobal((:algneg, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4720,13 +6726,21 @@ end
 function algpoleval(x2::LibPARI.Gen, x3::LibPARI.Gen; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algpoleval, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                (x1 === nothing ? C_NULL : x1.ptr),
-                x2.ptr,
-                x3.ptr,
+                cglobal((:algpoleval, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4736,13 +6750,21 @@ end
 function algpow(x2::LibPARI.Gen, x3::LibPARI.Gen; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algpow, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                (x1 === nothing ? C_NULL : x1.ptr),
-                x2.ptr,
-                x3.ptr,
+                cglobal((:algpow, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4752,11 +6774,18 @@ end
 function algprimesubalg(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algprimesubalg, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:algprimesubalg, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4766,13 +6795,18 @@ end
 function alg_quotient(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:alg_quotient, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:alg_quotient, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4782,11 +6816,18 @@ end
 function algradical(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algradical, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:algradical, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4796,11 +6837,18 @@ end
 function algramifiedplaces(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algramifiedplaces, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:algramifiedplaces, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4810,12 +6858,21 @@ end
 function algrandom(x2::LibPARI.Gen; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algrandom, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                (x1 === nothing ? C_NULL : x1.ptr),
-                x2.ptr,
+                cglobal((:algrandom, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4825,11 +6882,18 @@ end
 function algrelmultable(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algrelmultable, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:algrelmultable, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4839,12 +6903,18 @@ end
 function algsimpledec(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algsimpledec, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:algsimpledec, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4854,12 +6924,18 @@ end
 function algsplit(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algsplit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:algsplit, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4869,11 +6945,18 @@ end
 function algsplittingdata(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algsplittingdata, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:algsplittingdata, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4883,11 +6966,18 @@ end
 function algsplittingfield(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algsplittingfield, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:algsplittingfield, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4897,12 +6987,21 @@ end
 function algsqr(x2::LibPARI.Gen; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algsqr, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                (x1 === nothing ? C_NULL : x1.ptr),
-                x2.ptr,
+                cglobal((:algsqr, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4912,13 +7011,21 @@ end
 function algsub(x2::LibPARI.Gen, x3::LibPARI.Gen; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algsub, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                (x1 === nothing ? C_NULL : x1.ptr),
-                x2.ptr,
-                x3.ptr,
+                cglobal((:algsub, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4928,12 +7035,18 @@ end
 function algsubalg(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algsubalg, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:algsubalg, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4943,12 +7056,21 @@ end
 function algtableinit(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algtableinit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:algtableinit, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4958,13 +7080,18 @@ end
 function algtensor(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 3)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algtensor, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:algtensor, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -4974,11 +7101,18 @@ end
 function algtype(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:algtype, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:algtype, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -4987,13 +7121,21 @@ end
 "alias(newsym,sym): defines the symbol newsym as an alias for the symbol\nsym."
 function alias0(x1::AbstractString, x2::AbstractString)
     LibPARI.protected_call() do
-        ccall(
-            (:alias0, LibPARI.PARI_jll.libpari),
-            Cvoid,
-            (Cstring, Cstring),
-            x1,
-            x2,
-        )
+        let _cs1 = Base.cconvert(Cstring, x1), _cs2 = Base.cconvert(Cstring, x2);
+            GC.@preserve _cs1 _cs2 LibPARI._trap_call(
+                Cvoid,
+                cglobal((:alias0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                reinterpret(Clong, Base.unsafe_convert(Cstring, _cs2)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            );
+        end
     end
     return nothing
 end
@@ -5001,11 +7143,18 @@ end
 "allocatemem({s=0}): allocates a new stack of s bytes. doubles the\nstack if s is omitted."
 function gp_allocatemem(; x1 = nothing)
     LibPARI.protected_call() do
-        ccall(
-            (:gp_allocatemem, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Ptr{Clong},),
-            (x1 === nothing ? C_NULL : x1.ptr),
+            cglobal((:gp_allocatemem, LibPARI.PARI_jll.libpari)),
+            1,
+            reinterpret(Clong, Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr))),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -5015,12 +7164,18 @@ end
 function apply0(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:apply0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:apply0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5030,12 +7185,18 @@ end
 function garg(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:garg, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:garg, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5045,11 +7206,18 @@ end
 function arity0(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:arity0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:arity0, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5059,12 +7227,18 @@ end
 function gasin(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gasin, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gasin, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5074,12 +7248,18 @@ end
 function gasinh(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gasinh, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gasinh, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5089,13 +7269,21 @@ end
 function asympnum0(x1::LibPARI.Gen; x2 = nothing, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:asympnum0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:asympnum0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5110,14 +7298,21 @@ function asympnumraw0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:asympnumraw0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:asympnumraw0, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5127,12 +7322,18 @@ end
 function gatan(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gatan, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gatan, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5142,12 +7343,18 @@ end
 function gatanh(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gatanh, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gatanh, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5157,11 +7364,18 @@ end
 function bernfrac(x1::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bernfrac, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:bernfrac, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5171,12 +7385,21 @@ end
 function bernpol_eval(x1::Integer; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bernpol_eval, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Ptr{Clong}),
+                cglobal((:bernpol_eval, LibPARI.PARI_jll.libpari)),
+                2,
                 Clong(x1),
-                (x2 === nothing ? C_NULL : x2.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5186,12 +7409,18 @@ end
 function bernreal(x1::Integer; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bernreal, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Clong),
+                cglobal((:bernreal, LibPARI.PARI_jll.libpari)),
+                2,
                 Clong(x1),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5201,11 +7430,18 @@ end
 function bernvec(x1::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bernvec, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:bernvec, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5215,13 +7451,18 @@ end
 function hbessel1(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hbessel1, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:hbessel1, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5231,13 +7472,18 @@ end
 function hbessel2(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hbessel2, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:hbessel2, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5247,13 +7493,18 @@ end
 function ibessel(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ibessel, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ibessel, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5263,13 +7514,18 @@ end
 function jbessel(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:jbessel, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:jbessel, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5279,13 +7535,18 @@ end
 function jbesselh(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:jbesselh, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:jbesselh, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5295,13 +7556,18 @@ end
 function besseljzero(x1::LibPARI.Gen; x2::Integer = 1, bitprec::Integer = 128)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:besseljzero, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:besseljzero, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5311,13 +7577,18 @@ end
 function kbessel(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:kbessel, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:kbessel, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5327,13 +7598,18 @@ end
 function ybessel(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ybessel, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ybessel, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5343,13 +7619,18 @@ end
 function besselyzero(x1::LibPARI.Gen; x2::Integer = 1, bitprec::Integer = 128)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:besselyzero, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:besselyzero, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5359,12 +7640,21 @@ end
 function bestappr(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bestappr, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:bestappr, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5374,13 +7664,18 @@ end
 function bestapprPade0(x1::LibPARI.Gen; x2::Integer = -1, x3::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bestapprPade0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:bestapprPade0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5395,14 +7690,21 @@ function bestapprnf(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bestapprnf, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:bestapprnf, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5412,12 +7714,18 @@ end
 function gcdext0(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gcdext0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gcdext0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5427,13 +7735,18 @@ end
 function polresultantext0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polresultantext0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:polresultantext0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5443,11 +7756,18 @@ end
 function bigomega(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:bigomega, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:bigomega, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -5457,11 +7777,18 @@ end
 function binaire(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:binaire, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:binaire, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5471,12 +7798,21 @@ end
 function binomial0(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:binomial0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:binomial0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5486,12 +7822,18 @@ end
 function gbitand(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gbitand, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gbitand, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5501,12 +7843,18 @@ end
 function gbitneg(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gbitneg, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gbitneg, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5516,12 +7864,18 @@ end
 function gbitnegimply(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gbitnegimply, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gbitnegimply, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5531,12 +7885,18 @@ end
 function gbitor(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gbitor, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gbitor, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5546,12 +7906,21 @@ end
 function bitprecision00(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bitprecision00, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:bitprecision00, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5561,12 +7930,18 @@ end
 function gbittest(x1::LibPARI.Gen, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gbittest, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gbittest, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5576,12 +7951,18 @@ end
 function gbitxor(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gbitxor, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gbitxor, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5591,12 +7972,18 @@ end
 function bnfcertify0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:bnfcertify0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:bnfcertify0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -5606,12 +7993,18 @@ end
 function decodemodule(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:decodemodule, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:decodemodule, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5626,14 +8019,21 @@ function bnfinit0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnfinit0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:bnfinit0, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5643,13 +8043,18 @@ end
 function bnfisintnorm0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnfisintnorm0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:bnfisintnorm0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5659,13 +8064,18 @@ end
 function bnfisnorm(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnfisnorm, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:bnfisnorm, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5675,13 +8085,18 @@ end
 function bnfisprincipal0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnfisprincipal0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:bnfisprincipal0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5691,13 +8106,18 @@ end
 function bnfissunit(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnfissunit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:bnfissunit, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5707,13 +8127,21 @@ end
 function bnfisunit0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnfisunit0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:bnfisunit0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5723,12 +8151,18 @@ end
 function bnflog(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnflog, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:bnflog, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5738,13 +8172,18 @@ end
 function bnflogdegree(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnflogdegree, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:bnflogdegree, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5754,12 +8193,18 @@ end
 function bnflogef(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnflogef, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:bnflogef, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5769,11 +8214,18 @@ end
 function bnfnarrow(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnfnarrow, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:bnfnarrow, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5783,11 +8235,18 @@ end
 function signunits(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:signunits, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:signunits, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5797,13 +8256,18 @@ end
 function bnfsunit(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnfsunit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:bnfsunit, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5813,12 +8277,21 @@ end
 function bnfunits(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnfunits, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:bnfunits, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5828,13 +8301,21 @@ end
 function bnrchar(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnrchar, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:bnrchar, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5844,13 +8325,24 @@ end
 function bnrclassno0(x1::LibPARI.Gen; x2 = nothing, x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnrclassno0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:bnrclassno0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5860,12 +8352,18 @@ end
 function bnrclassnolist(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnrclassnolist, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:bnrclassnolist, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5875,12 +8373,18 @@ end
 function bnrcompositum(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnrcompositum, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:bnrcompositum, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5890,12 +8394,18 @@ end
 function bnrconductorofchar(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnrconductorofchar, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:bnrconductorofchar, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5905,13 +8415,21 @@ end
 function bnrdisclist0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnrdisclist0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:bnrdisclist0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5921,13 +8439,18 @@ end
 function bnrgaloisapply(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnrgaloisapply, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:bnrgaloisapply, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5937,12 +8460,18 @@ end
 function bnrgaloismatrix(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnrgaloismatrix, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:bnrgaloismatrix, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5957,14 +8486,21 @@ function bnrinitmod(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnrinitmod, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:bnrinitmod, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
-                (x4 === nothing ? C_NULL : x4.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x4 === nothing ? C_NULL : x4.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -5974,13 +8510,24 @@ end
 function bnrisconductor0(x1::LibPARI.Gen; x2 = nothing, x3 = nothing)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:bnrisconductor0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:bnrisconductor0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -5990,13 +8537,18 @@ end
 function bnrisgalois(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:bnrisgalois, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:bnrisgalois, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -6006,13 +8558,18 @@ end
 function bnrisprincipal(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnrisprincipal, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:bnrisprincipal, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6022,12 +8579,18 @@ end
 function bnrmap(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnrmap, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:bnrmap, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6042,14 +8605,18 @@ function bnrrootnumber(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnrrootnumber, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:bnrrootnumber, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6059,13 +8626,21 @@ end
 function bnrstark(x1::LibPARI.Gen; x2 = nothing, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnrstark, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:bnrstark, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6075,12 +8650,21 @@ end
 function bnrstarkunit(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bnrstarkunit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:bnrstarkunit, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6090,11 +8674,18 @@ end
 function break0(; x1::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:break0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:break0, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6103,7 +8694,19 @@ end
 "breakpoint(): interrupt the program and enter the breakloop. The program\ncontinues when the breakloop is exited."
 function pari_breakpoint()
     LibPARI.protected_call() do
-        ccall((:pari_breakpoint, LibPARI.PARI_jll.libpari), Cvoid, ())
+        LibPARI._trap_call(
+            Cvoid,
+            cglobal((:pari_breakpoint, LibPARI.PARI_jll.libpari)),
+            0,
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+        )
     end
     return nothing
 end
@@ -6112,12 +8715,18 @@ end
 function call0(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:call0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:call0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6127,11 +8736,18 @@ end
 function gceil(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gceil, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gceil, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6141,12 +8757,18 @@ end
 function centerlift0(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:centerlift0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:centerlift0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6156,11 +8778,18 @@ end
 function characteristic(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:characteristic, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:characteristic, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6170,12 +8799,18 @@ end
 function charconj0(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:charconj0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:charconj0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6185,13 +8820,18 @@ end
 function chardiv0(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:chardiv0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:chardiv0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6206,14 +8846,21 @@ function chareval(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:chareval, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                (x4 === nothing ? C_NULL : x4.ptr),
+                cglobal((:chareval, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x4 === nothing ? C_NULL : x4.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6223,12 +8870,21 @@ end
 function chargalois(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:chargalois, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:chargalois, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6238,12 +8894,18 @@ end
 function charker0(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:charker0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:charker0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6253,13 +8915,18 @@ end
 function charmul0(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:charmul0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:charmul0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6269,12 +8936,18 @@ end
 function charorder0(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:charorder0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:charorder0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6284,13 +8957,18 @@ end
 function charpow0(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:charpow0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:charpow0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6300,12 +8978,21 @@ end
 function chinese(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:chinese, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:chinese, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6315,12 +9002,18 @@ end
 function cmp_universal(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:cmp_universal, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Cint,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:cmp_universal, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -6330,12 +9023,18 @@ end
 function compo(x1::LibPARI.Gen, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:compo, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:compo, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6345,12 +9044,21 @@ end
 function gconcat(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gconcat, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:gconcat, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6360,11 +9068,18 @@ end
 function gconj(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gconj, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gconj, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6374,12 +9089,18 @@ end
 function conjvec(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:conjvec, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:conjvec, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6389,12 +9110,21 @@ end
 function content0(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:content0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:content0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6404,13 +9134,18 @@ end
 function contfraceval(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:contfraceval, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:contfraceval, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6420,12 +9155,18 @@ end
 function contfracinit(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:contfracinit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:contfracinit, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6435,12 +9176,18 @@ end
 function contfracpnqn(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:contfracpnqn, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:contfracpnqn, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6450,12 +9197,18 @@ end
 function core0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:core0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:core0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6465,12 +9218,18 @@ end
 function coredisc0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:coredisc0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:coredisc0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6480,12 +9239,18 @@ end
 function gcos(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gcos, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gcos, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6495,12 +9260,18 @@ end
 function gcosh(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gcosh, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gcosh, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6510,12 +9281,18 @@ end
 function gcotan(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gcotan, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gcotan, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6525,12 +9302,18 @@ end
 function gcotanh(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gcotanh, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gcotanh, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6539,7 +9322,19 @@ end
 "dbg_down({n=1}): (break loop) go down n frames. Cancel a previous dbg_up."
 function dbg_down(; x1::Integer = 1)
     LibPARI.protected_call() do
-        ccall((:dbg_down, LibPARI.PARI_jll.libpari), Cvoid, (Clong,), Clong(x1))
+        LibPARI._trap_call(
+            Cvoid,
+            cglobal((:dbg_down, LibPARI.PARI_jll.libpari)),
+            1,
+            Clong(x1),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+        )
     end
     return nothing
 end
@@ -6548,7 +9343,19 @@ end
 function dbg_err()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:dbg_err, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:dbg_err, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -6556,7 +9363,19 @@ end
 "dbg_up({n=1}): (break loop) go up n frames, which allows to inspect data\nof the parent function."
 function dbg_up(; x1::Integer = 1)
     LibPARI.protected_call() do
-        ccall((:dbg_up, LibPARI.PARI_jll.libpari), Cvoid, (Clong,), Clong(x1))
+        LibPARI._trap_call(
+            Cvoid,
+            cglobal((:dbg_up, LibPARI.PARI_jll.libpari)),
+            1,
+            Clong(x1),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+        )
     end
     return nothing
 end
@@ -6564,12 +9383,18 @@ end
 "dbg_x(A,{n}): print inner structure of A, complete if n is omitted, up to\nlevel n otherwise. Intended for debugging."
 function dbgGEN(x1::LibPARI.Gen; x2::Integer = -1)
     LibPARI.protected_call() do
-        ccall(
-            (:dbgGEN, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Ptr{Clong}, Clong),
-            x1.ptr,
+            cglobal((:dbgGEN, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
             Clong(x2),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -6579,12 +9404,21 @@ end
 function denominator(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:denominator, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:denominator, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6599,14 +9433,18 @@ function diffop0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:diffop0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:diffop0, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 Clong(x4),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6616,12 +9454,21 @@ end
 function digits(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:digits, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:digits, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6631,12 +9478,18 @@ end
 function dilog(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:dilog, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:dilog, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6646,12 +9499,18 @@ end
 function dirdiv(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:dirdiv, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:dirdiv, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6661,12 +9520,18 @@ end
 function dirmul(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:dirmul, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:dirmul, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6676,13 +9541,18 @@ end
 function dirpowers(x1::Integer, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:dirpowers, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Ptr{Clong}, Clong),
+                cglobal((:dirpowers, LibPARI.PARI_jll.libpari)),
+                3,
                 Clong(x1),
-                x2.ptr,
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6692,12 +9562,18 @@ end
 function dirzetak(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:dirzetak, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:dirzetak, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6707,12 +9583,18 @@ end
 function divisors0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:divisors0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:divisors0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6722,13 +9604,18 @@ end
 function divisorslenstra(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:divisorslenstra, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:divisorslenstra, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6738,13 +9625,18 @@ end
 function divrem(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:divrem, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:divrem, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6754,13 +9646,21 @@ end
 function veceint1(x1::LibPARI.Gen; x2 = nothing, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:veceint1, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:veceint1, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6770,12 +9670,18 @@ end
 function ell2cover(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ell2cover, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:ell2cover, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6785,12 +9691,18 @@ end
 function ellE(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellE, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:ellE, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6800,12 +9712,18 @@ end
 function ellK(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellK, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:ellK, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6815,13 +9733,18 @@ end
 function ellL1(x1::LibPARI.Gen; x2::Integer = 0, bitprec::Integer = 128)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellL1, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:ellL1, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6831,13 +9754,18 @@ end
 function elladd(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:elladd, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:elladd, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6847,12 +9775,18 @@ end
 function akell(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:akell, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:akell, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6862,12 +9796,18 @@ end
 function ellan(x1::LibPARI.Gen, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellan, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:ellan, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6877,13 +9817,21 @@ end
 function ellanalyticrank(x1::LibPARI.Gen; x2 = nothing, bitprec::Integer = 128)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellanalyticrank, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:ellanalyticrank, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6893,12 +9841,21 @@ end
 function ellap(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellap, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:ellap, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6913,14 +9870,18 @@ function bilhell(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:bilhell, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:bilhell, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6930,12 +9891,18 @@ end
 function ellbsd(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellbsd, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:ellbsd, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6945,12 +9912,21 @@ end
 function ellcard(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellcard, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:ellcard, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6960,12 +9936,18 @@ end
 function ellchangecurve(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellchangecurve, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellchangecurve, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6975,12 +9957,18 @@ end
 function ellchangepoint(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellchangepoint, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellchangepoint, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -6990,12 +9978,18 @@ end
 function ellchangepointinv(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellchangepointinv, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellchangepointinv, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7005,11 +9999,18 @@ end
 function ellconvertname(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellconvertname, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:ellconvertname, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7019,13 +10020,18 @@ end
 function elldivpol(x1::LibPARI.Gen, x2::Integer; x3::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:elldivpol, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:elldivpol, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7040,14 +10046,18 @@ function elleisnum(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:elleisnum, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong, Clong),
-                x1.ptr,
+                cglobal((:elleisnum, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7057,12 +10067,18 @@ end
 function elleta(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:elleta, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:elleta, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7076,13 +10092,18 @@ function ellformaldifferential(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellformaldifferential, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:ellformaldifferential, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 seriesprec,
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7096,13 +10117,18 @@ function ellformalexp(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellformalexp, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:ellformalexp, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 seriesprec,
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7116,13 +10142,18 @@ function ellformallog(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellformallog, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:ellformallog, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 seriesprec,
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7136,13 +10167,18 @@ function ellformalpoint(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellformalpoint, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:ellformalpoint, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 seriesprec,
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7152,13 +10188,18 @@ end
 function ellformalw(x1::LibPARI.Gen; seriesprec::Integer = 16, x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellformalw, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:ellformalw, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 seriesprec,
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7168,11 +10209,18 @@ end
 function ellfromeqn(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellfromeqn, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:ellfromeqn, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7182,11 +10230,18 @@ end
 function ellfromj(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellfromj, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:ellfromj, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7196,11 +10251,18 @@ end
 function ellgenerators(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellgenerators, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:ellgenerators, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7210,11 +10272,18 @@ end
 function ellglobalred(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellglobalred, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:ellglobalred, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7224,11 +10293,18 @@ end
 function ellheegner(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellheegner, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:ellheegner, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7243,14 +10319,24 @@ function ellheight0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellheight0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:ellheight0, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7260,13 +10346,18 @@ end
 function ellheightmatrix(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellheightmatrix, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellheightmatrix, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7276,11 +10367,18 @@ end
 function ellidentify(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellidentify, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:ellidentify, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7290,13 +10388,21 @@ end
 function ellinit(x1::LibPARI.Gen; x2 = nothing, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellinit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:ellinit, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7307,12 +10413,18 @@ function ellintegralmodel(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:ellintegralmodel, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            out1,
+            cglobal((:ellintegralmodel, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -7325,11 +10437,18 @@ end
 function elliscm(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:elliscm, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:elliscm, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -7340,14 +10459,18 @@ function ellisdivisible(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:ellisdivisible, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Clong,
-            (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
-            x3.ptr,
-            out1,
+            cglobal((:ellisdivisible, LibPARI.PARI_jll.libpari)),
+            4,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = Int(r)
         o1 = LibPARI.Gen(out1[])
@@ -7360,12 +10483,18 @@ end
 function ellisisom(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellisisom, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellisisom, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7381,15 +10510,18 @@ function ellisogeny(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellisogeny, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Clong, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellisogeny, LibPARI.PARI_jll.libpari)),
+                5,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
                 Clong(x4),
                 Clong(x5),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7399,12 +10531,18 @@ end
 function ellisogenyapply(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellisogenyapply, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellisogenyapply, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7414,13 +10552,18 @@ end
 function ellisomat(x1::LibPARI.Gen; x2::Integer = 0, x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellisomat, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:ellisomat, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7430,12 +10573,18 @@ end
 function ellisoncurve(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellisoncurve, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellisoncurve, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7445,11 +10594,18 @@ end
 function ellisotree(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellisotree, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:ellisotree, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7459,12 +10615,21 @@ end
 function ellissupersingular(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:ellissupersingular, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Cint,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:ellissupersingular, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -7474,12 +10639,18 @@ end
 function jell(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:jell, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:jell, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7489,12 +10660,21 @@ end
 function elllocalred(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:elllocalred, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:elllocalred, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7504,14 +10684,21 @@ end
 function elllog(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen; x4 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:elllog, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                (x4 === nothing ? C_NULL : x4.ptr),
+                cglobal((:elllog, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x4 === nothing ? C_NULL : x4.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7526,14 +10713,21 @@ function elllseries(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:elllseries, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:elllseries, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7543,11 +10737,18 @@ end
 function ellmaninconstant(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellmaninconstant, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:ellmaninconstant, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7557,11 +10758,18 @@ end
 function ellminimaldisc(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellminimaldisc, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:ellminimaldisc, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7572,12 +10780,18 @@ function ellminimalmodel(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:ellminimalmodel, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            out1,
+            cglobal((:ellminimalmodel, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -7590,12 +10804,18 @@ end
 function ellminimaltwist0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellminimaltwist0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:ellminimaltwist0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7605,11 +10825,18 @@ end
 function ellmoddegree(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellmoddegree, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:ellmoddegree, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7619,13 +10846,18 @@ end
 function ellmodulareqn(x1::Integer; x2::Integer = -1, x3::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellmodulareqn, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Clong, Clong),
+                cglobal((:ellmodulareqn, LibPARI.PARI_jll.libpari)),
+                3,
                 Clong(x1),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7635,13 +10867,18 @@ end
 function ellmul(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellmul, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:ellmul, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7651,12 +10888,18 @@ end
 function ellneg(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellneg, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellneg, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7666,12 +10909,18 @@ end
 function ellnonsingularmultiple(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellnonsingularmultiple, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellnonsingularmultiple, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7681,13 +10930,21 @@ end
 function ellorder(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellorder, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:ellorder, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7697,13 +10954,18 @@ end
 function ellordinate(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellordinate, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellordinate, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7718,14 +10980,21 @@ function ellpadicbsd(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellpadicbsd, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellpadicbsd, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
-                (x4 === nothing ? C_NULL : x4.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x4 === nothing ? C_NULL : x4.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7735,13 +11004,18 @@ end
 function ellpadicfrobenius(x1::LibPARI.Gen, x2::Integer, x3::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellpadicfrobenius, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Culong, Clong),
-                x1.ptr,
-                Culong(x2),
+                cglobal((:ellpadicfrobenius, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Culong(x2)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7757,15 +11031,21 @@ function ellpadicheight0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellpadicheight0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellpadicheight0, LibPARI.PARI_jll.libpari)),
+                5,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
-                x4.ptr,
-                (x5 === nothing ? C_NULL : x5.ptr),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x5 === nothing ? C_NULL : x5.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7780,14 +11060,18 @@ function ellpadicheightmatrix(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellpadicheightmatrix, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellpadicheightmatrix, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
-                x4.ptr,
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7802,14 +11086,18 @@ function ellpadiclambdamu(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellpadiclambdamu, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong, Clong),
-                x1.ptr,
+                cglobal((:ellpadiclambdamu, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
                 Clong(x4),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7824,14 +11112,18 @@ function ellpadiclog(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellpadiclog, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellpadiclog, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
-                x4.ptr,
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7846,14 +11138,18 @@ function ellpadicregulator(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellpadicregulator, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellpadicregulator, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
-                x4.ptr,
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7863,13 +11159,18 @@ end
 function ellpadics2(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellpadics2, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellpadics2, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7879,13 +11180,18 @@ end
 function ellperiods(x1::LibPARI.Gen; x2::Integer = 0, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellperiods, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:ellperiods, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7895,13 +11201,18 @@ end
 function zell(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:zell, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:zell, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7916,14 +11227,21 @@ function ellrank(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellrank, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:ellrank, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7933,12 +11251,18 @@ end
 function ellrankinit(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellrankinit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:ellrankinit, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7948,13 +11272,18 @@ end
 function ellratpoints(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellratpoints, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellratpoints, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -7964,12 +11293,21 @@ end
 function ellrootno(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:ellrootno, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:ellrootno, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -7984,14 +11322,18 @@ function ellsaturation(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellsaturation, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ellsaturation, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8001,12 +11343,18 @@ end
 function ellsea(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellsea, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:ellsea, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8016,11 +11364,18 @@ end
 function ellsearch(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellsearch, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:ellsearch, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8030,13 +11385,18 @@ end
 function ellsub(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellsub, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:ellsub, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8046,11 +11406,18 @@ end
 function ellsupersingularj(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellsupersingularj, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:ellsupersingularj, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8060,11 +11427,18 @@ end
 function elltamagawa(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:elltamagawa, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:elltamagawa, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8074,12 +11448,18 @@ end
 function elltaniyama(x1::LibPARI.Gen; seriesprec::Integer = 16)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:elltaniyama, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:elltaniyama, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 seriesprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8094,14 +11474,18 @@ function elltatepairing(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:elltatepairing, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:elltatepairing, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8111,11 +11495,18 @@ end
 function elltors(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:elltors, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:elltors, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8125,12 +11516,18 @@ end
 function elltrace(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:elltrace, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:elltrace, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8140,12 +11537,21 @@ end
 function elltwist(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:elltwist, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:elltwist, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8156,12 +11562,18 @@ function ellweilcurve(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:ellweilcurve, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            out1,
+            cglobal((:ellweilcurve, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -8179,14 +11591,18 @@ function ellweilpairing(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellweilpairing, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:ellweilpairing, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8196,13 +11612,18 @@ end
 function ellxn(x1::LibPARI.Gen, x2::Integer; x3::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellxn, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:ellxn, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8212,13 +11633,21 @@ end
 function ellzeta(x1::LibPARI.Gen; x2 = nothing, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ellzeta, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:ellzeta, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8228,13 +11657,18 @@ end
 function pointell(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:pointell, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:pointell, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8244,12 +11678,18 @@ end
 function gerfc(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gerfc, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gerfc, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8259,11 +11699,18 @@ end
 function errname(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:errname, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:errname, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8273,13 +11720,18 @@ end
 function eta0(x1::LibPARI.Gen; x2::Integer = 0, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:eta0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:eta0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8289,11 +11741,18 @@ end
 function eulerfrac(x1::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:eulerfrac, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:eulerfrac, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8303,12 +11762,18 @@ end
 function eulerianpol(x1::Integer; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:eulerianpol, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Clong),
+                cglobal((:eulerianpol, LibPARI.PARI_jll.libpari)),
+                2,
                 Clong(x1),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8318,11 +11783,18 @@ end
 function eulerphi(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:eulerphi, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:eulerphi, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8332,12 +11804,18 @@ end
 function eulerpol(x1::Integer; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:eulerpol, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Clong),
+                cglobal((:eulerpol, LibPARI.PARI_jll.libpari)),
+                2,
                 Clong(x1),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8347,12 +11825,18 @@ end
 function eulerreal(x1::Integer; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:eulerreal, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Clong),
+                cglobal((:eulerreal, LibPARI.PARI_jll.libpari)),
+                2,
                 Clong(x1),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8362,11 +11846,18 @@ end
 function eulervec(x1::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:eulervec, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:eulervec, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8376,12 +11867,18 @@ end
 function gexp(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gexp, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gexp, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8391,12 +11888,18 @@ end
 function gexpm1(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gexpm1, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gexpm1, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8406,11 +11909,18 @@ end
 function gpexponent(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gpexponent, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gpexponent, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8419,7 +11929,19 @@ end
 "exportall(): declare all current dynamic variables as exported variables."
 function exportall()
     LibPARI.protected_call() do
-        ccall((:exportall, LibPARI.PARI_jll.libpari), Cvoid, ())
+        LibPARI._trap_call(
+            Cvoid,
+            cglobal((:exportall, LibPARI.PARI_jll.libpari)),
+            0,
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+        )
     end
     return nothing
 end
@@ -8428,12 +11950,21 @@ end
 function gpextern(x1::AbstractString)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gpextern, LibPARI.PARI_jll.libpari),
-                Ptr{Clong},
-                (Cstring,),
-                x1,
-            )
+            let _cs1 = Base.cconvert(Cstring, x1);
+                GC.@preserve _cs1 LibPARI._trap_call(
+                    Ptr{Clong},
+                    cglobal((:gpextern, LibPARI.PARI_jll.libpari)),
+                    1,
+                    reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                );
+            end
         end
     end
 end
@@ -8442,12 +11973,21 @@ end
 function externstr(x1::AbstractString)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:externstr, LibPARI.PARI_jll.libpari),
-                Ptr{Clong},
-                (Cstring,),
-                x1,
-            )
+            let _cs1 = Base.cconvert(Cstring, x1);
+                GC.@preserve _cs1 LibPARI._trap_call(
+                    Ptr{Clong},
+                    cglobal((:externstr, LibPARI.PARI_jll.libpari)),
+                    1,
+                    reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                );
+            end
         end
     end
 end
@@ -8456,12 +11996,21 @@ end
 function factor0(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:factor0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:factor0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8471,12 +12020,21 @@ end
 function factorback2(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:factorback2, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:factorback2, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8486,12 +12044,18 @@ end
 function factmod(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:factmod, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:factmod, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8501,13 +12065,24 @@ end
 function factorff(x1::LibPARI.Gen; x2 = nothing, x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:factorff, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:factorff, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8517,12 +12092,18 @@ end
 function mpfactr(x1::Integer; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mpfactr, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Clong),
+                cglobal((:mpfactr, LibPARI.PARI_jll.libpari)),
+                2,
                 Clong(x1),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8532,12 +12113,18 @@ end
 function factorint(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:factorint, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:factorint, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8547,12 +12134,21 @@ end
 function factormodDDF(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:factormodDDF, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:factormodDDF, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8562,12 +12158,21 @@ end
 function factormodSQF(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:factormodSQF, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:factormodSQF, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8582,14 +12187,18 @@ function factormodcyclo(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:factormodcyclo, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Ptr{Clong}, Clong, Clong),
+                cglobal((:factormodcyclo, LibPARI.PARI_jll.libpari)),
+                4,
                 Clong(x1),
-                x2.ptr,
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
                 Clong(x4),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8599,12 +12208,18 @@ end
 function polfnf(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polfnf, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:polfnf, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8614,13 +12229,18 @@ end
 function factorpadic(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:factorpadic, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:factorpadic, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8630,12 +12250,18 @@ end
 function ffcompomap(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ffcompomap, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ffcompomap, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8645,12 +12271,18 @@ end
 function ffembed(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ffembed, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ffembed, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8660,13 +12292,18 @@ end
 function ffextend(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ffextend, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ffextend, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8676,12 +12313,18 @@ end
 function fffrobenius(x1::LibPARI.Gen; x2::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:fffrobenius, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:fffrobenius, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8691,12 +12334,18 @@ end
 function ffgen(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ffgen, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:ffgen, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8706,13 +12355,18 @@ end
 function ffinit(x1::LibPARI.Gen, x2::Integer; x3::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ffinit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:ffinit, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8722,11 +12376,18 @@ end
 function ffinvmap(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ffinvmap, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:ffinvmap, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8736,13 +12397,21 @@ end
 function fflog(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:fflog, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:fflog, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8752,12 +12421,18 @@ end
 function ffmap(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ffmap, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ffmap, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8767,12 +12442,18 @@ end
 function ffmaprel(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ffmaprel, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ffmaprel, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8782,13 +12463,18 @@ end
 function ffnbirred0(x1::LibPARI.Gen, x2::Integer; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ffnbirred0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:ffnbirred0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8798,12 +12484,21 @@ end
 function fforder(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:fforder, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:fforder, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8814,12 +12509,18 @@ function ffprimroot(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:ffprimroot, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            out1,
+            cglobal((:ffprimroot, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -8832,12 +12533,18 @@ end
 function FFT(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:FFT, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:FFT, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8847,12 +12554,18 @@ end
 function FFTinv(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:FFTinv, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:FFTinv, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8862,11 +12575,18 @@ end
 function fibo(x1::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:fibo, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:fibo, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8875,11 +12595,18 @@ end
 "fileclose(n): close the file descriptor n."
 function gp_fileclose(x1::Integer)
     LibPARI.protected_call() do
-        ccall(
-            (:gp_fileclose, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Clong,),
+            cglobal((:gp_fileclose, LibPARI.PARI_jll.libpari)),
+            1,
             Clong(x1),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -8889,12 +12616,21 @@ end
 function gp_fileextern(x1::AbstractString)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:gp_fileextern, LibPARI.PARI_jll.libpari),
-                Clong,
-                (Cstring,),
-                x1,
-            ),
+            let _cs1 = Base.cconvert(Cstring, x1);
+                GC.@preserve _cs1 LibPARI._trap_call(
+                    Clong,
+                    cglobal((:gp_fileextern, LibPARI.PARI_jll.libpari)),
+                    1,
+                    reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                );
+            end,
         )
     end
 end
@@ -8902,11 +12638,18 @@ end
 "fileflush({n}): flush the file descriptor n (all descriptors to output\nstreams if n is omitted)."
 function gp_fileflush0(; x1 = nothing)
     LibPARI.protected_call() do
-        ccall(
-            (:gp_fileflush0, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Ptr{Clong},),
-            (x1 === nothing ? C_NULL : x1.ptr),
+            cglobal((:gp_fileflush0, LibPARI.PARI_jll.libpari)),
+            1,
+            reinterpret(Clong, Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr))),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -8916,13 +12659,23 @@ end
 function gp_fileopen(x1::AbstractString; x2::AbstractString = "r")
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:gp_fileopen, LibPARI.PARI_jll.libpari),
-                Clong,
-                (Cstring, Cstring),
-                x1,
-                x2,
-            ),
+            let _cs1 = Base.cconvert(Cstring, x1),
+                _cs2 = Base.cconvert(Cstring, x2);
+
+                GC.@preserve _cs1 _cs2 LibPARI._trap_call(
+                    Clong,
+                    cglobal((:gp_fileopen, LibPARI.PARI_jll.libpari)),
+                    2,
+                    reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                    reinterpret(Clong, Base.unsafe_convert(Cstring, _cs2)),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                );
+            end,
         )
     end
 end
@@ -8931,11 +12684,18 @@ end
 function gp_fileread(x1::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gp_fileread, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:gp_fileread, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8945,11 +12705,18 @@ end
 function gp_filereadstr(x1::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gp_filereadstr, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:gp_filereadstr, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -8958,13 +12725,21 @@ end
 "filewrite(n,s): write the string s to file attached to descriptor n,\nending with a newline. The file must have been opened with fileopen in\n\"w\" or \"a\" mode."
 function gp_filewrite(x1::Integer, x2::AbstractString)
     LibPARI.protected_call() do
-        ccall(
-            (:gp_filewrite, LibPARI.PARI_jll.libpari),
-            Cvoid,
-            (Clong, Cstring),
-            Clong(x1),
-            x2,
-        )
+        let _cs1 = Base.cconvert(Cstring, x2);
+            GC.@preserve _cs1 LibPARI._trap_call(
+                Cvoid,
+                cglobal((:gp_filewrite, LibPARI.PARI_jll.libpari)),
+                2,
+                Clong(x1),
+                reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            );
+        end
     end
     return nothing
 end
@@ -8972,13 +12747,21 @@ end
 "filewrite1(n,s): write the string s to file number n without ending with newline."
 function gp_filewrite1(x1::Integer, x2::AbstractString)
     LibPARI.protected_call() do
-        ccall(
-            (:gp_filewrite1, LibPARI.PARI_jll.libpari),
-            Cvoid,
-            (Clong, Cstring),
-            Clong(x1),
-            x2,
-        )
+        let _cs1 = Base.cconvert(Cstring, x2);
+            GC.@preserve _cs1 LibPARI._trap_call(
+                Cvoid,
+                cglobal((:gp_filewrite1, LibPARI.PARI_jll.libpari)),
+                2,
+                Clong(x1),
+                reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            );
+        end
     end
     return nothing
 end
@@ -8987,11 +12770,18 @@ end
 function gfloor(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gfloor, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gfloor, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9001,12 +12791,18 @@ end
 function fold0(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:fold0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:fold0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9016,11 +12812,18 @@ end
 function gfrac(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gfrac, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gfrac, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9030,12 +12833,21 @@ end
 function fromdigits(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:fromdigits, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:fromdigits, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9045,13 +12857,18 @@ end
 function galoischardet(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:galoischardet, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:galoischardet, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9061,13 +12878,18 @@ end
 function galoischarpoly(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:galoischarpoly, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:galoischarpoly, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9077,11 +12899,18 @@ end
 function galoischartable(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:galoischartable, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:galoischartable, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9091,11 +12920,18 @@ end
 function galoisconjclasses(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:galoisconjclasses, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:galoisconjclasses, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9105,12 +12941,18 @@ end
 function galoisexport(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:galoisexport, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:galoisexport, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9125,14 +12967,18 @@ function galoisfixedfield(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:galoisfixedfield, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:galoisfixedfield, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
                 Clong(x4),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9142,12 +12988,18 @@ end
 function galoisgetgroup(x1::Integer; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:galoisgetgroup, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Clong),
+                cglobal((:galoisgetgroup, LibPARI.PARI_jll.libpari)),
+                2,
                 Clong(x1),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9157,12 +13009,18 @@ end
 function galoisgetname(x1::Integer, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:galoisgetname, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Clong),
+                cglobal((:galoisgetname, LibPARI.PARI_jll.libpari)),
+                2,
                 Clong(x1),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9172,13 +13030,18 @@ end
 function galoisgetpol(x1::Integer; x2::Integer = 0, x3::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:galoisgetpol, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Clong, Clong),
+                cglobal((:galoisgetpol, LibPARI.PARI_jll.libpari)),
+                3,
                 Clong(x1),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9188,11 +13051,18 @@ end
 function galoisidentify(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:galoisidentify, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:galoisidentify, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9202,12 +13072,21 @@ end
 function galoisinit(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:galoisinit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:galoisinit, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9217,12 +13096,18 @@ end
 function galoisisabelian(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:galoisisabelian, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:galoisisabelian, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9232,12 +13117,18 @@ end
 function galoisisnormal(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:galoisisnormal, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:galoisisnormal, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -9247,12 +13138,18 @@ end
 function galoispermtopol(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:galoispermtopol, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:galoispermtopol, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9262,12 +13159,21 @@ end
 function galoissplittinginit(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:galoissplittinginit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:galoissplittinginit, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9277,13 +13183,18 @@ end
 function galoissubfields(x1::LibPARI.Gen; x2::Integer = 0, x3::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:galoissubfields, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:galoissubfields, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9293,11 +13204,18 @@ end
 function galoissubgroups(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:galoissubgroups, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:galoissubgroups, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9307,12 +13225,18 @@ end
 function ggamma(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ggamma, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:ggamma, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9322,12 +13246,18 @@ end
 function ggammah(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ggammah, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:ggammah, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9342,14 +13272,18 @@ function gammamellininv(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gammamellininv, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gammamellininv, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9363,13 +13297,18 @@ function gammamellininvinit(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gammamellininvinit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:gammamellininvinit, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9379,12 +13318,21 @@ end
 function ggcd0(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ggcd0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:ggcd0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9394,12 +13342,21 @@ end
 function gcharalgebraic(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gcharalgebraic, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:gcharalgebraic, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9409,12 +13366,18 @@ end
 function gchar_conductor(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gchar_conductor, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gchar_conductor, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9424,12 +13387,18 @@ end
 function gcharduallog(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gcharduallog, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gcharduallog, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9444,14 +13413,18 @@ function gchareval(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gchareval, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:gchareval, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 Clong(x4),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9466,14 +13439,18 @@ function gchar_identify(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gchar_identify, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:gchar_identify, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9483,13 +13460,18 @@ end
 function gcharinit(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gcharinit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gcharinit, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9500,13 +13482,18 @@ function gcharisalgebraic(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:gcharisalgebraic, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Cint,
-            (Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
-            out1,
+            cglobal((:gcharisalgebraic, LibPARI.PARI_jll.libpari)),
+            3,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = Int(r)
         o1 = LibPARI.Gen(out1[])
@@ -9525,15 +13512,18 @@ function gcharlocal(
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:gcharlocal, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
-            x3.ptr,
+            cglobal((:gcharlocal, LibPARI.PARI_jll.libpari)),
+            5,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
             prec,
-            out1,
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -9546,13 +13536,18 @@ end
 function gcharlog(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gcharlog, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gcharlog, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9562,12 +13557,18 @@ end
 function gcharnewprec(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gcharnewprec, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gcharnewprec, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9577,12 +13578,18 @@ end
 function genus2igusa(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:genus2igusa, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:genus2igusa, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9592,12 +13599,21 @@ end
 function genus2red(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:genus2red, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:genus2red, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9606,7 +13622,21 @@ end
 "getabstime(): milliseconds of CPU time since startup."
 function getabstime()
     return LibPARI.protected_call() do
-        Int(ccall((:getabstime, LibPARI.PARI_jll.libpari), Clong, ()))
+        Int(
+            LibPARI._trap_call(
+                Clong,
+                cglobal((:getabstime, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            ),
+        )
     end
 end
 
@@ -9614,7 +13644,19 @@ end
 function getcache()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:getcache, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:getcache, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -9623,12 +13665,21 @@ end
 function gp_getenv(x1::AbstractString)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gp_getenv, LibPARI.PARI_jll.libpari),
-                Ptr{Clong},
-                (Cstring,),
-                x1,
-            )
+            let _cs1 = Base.cconvert(Cstring, x1);
+                GC.@preserve _cs1 LibPARI._trap_call(
+                    Ptr{Clong},
+                    cglobal((:gp_getenv, LibPARI.PARI_jll.libpari)),
+                    1,
+                    reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                );
+            end
         end
     end
 end
@@ -9637,7 +13688,19 @@ end
 function getheap()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:getheap, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:getheap, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -9646,11 +13709,18 @@ end
 function getlocalbitprec(; bitprec::Integer = 128)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:getlocalbitprec, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Clong,),
+                cglobal((:getlocalbitprec, LibPARI.PARI_jll.libpari)),
+                1,
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -9660,11 +13730,18 @@ end
 function getlocalprec(; prec::Integer = 4)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:getlocalprec, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Clong,),
+                cglobal((:getlocalprec, LibPARI.PARI_jll.libpari)),
+                1,
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -9674,7 +13751,19 @@ end
 function getrand()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:getrand, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:getrand, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -9682,14 +13771,42 @@ end
 "getstack(): current value of stack pointer avma."
 function getstack()
     return LibPARI.protected_call() do
-        Int(ccall((:getstack, LibPARI.PARI_jll.libpari), Clong, ()))
+        Int(
+            LibPARI._trap_call(
+                Clong,
+                cglobal((:getstack, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            ),
+        )
     end
 end
 
 "gettime(): milliseconds of CPU time used since the last call to gettime."
 function gettime()
     return LibPARI.protected_call() do
-        Int(ccall((:gettime, LibPARI.PARI_jll.libpari), Clong, ()))
+        Int(
+            LibPARI._trap_call(
+                Clong,
+                cglobal((:gettime, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            ),
+        )
     end
 end
 
@@ -9697,7 +13814,19 @@ end
 function getwalltime()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:getwalltime, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:getwalltime, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -9706,12 +13835,18 @@ end
 function ghalfgcd(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ghalfgcd, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:ghalfgcd, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9721,11 +13856,18 @@ end
 function hammingweight(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:hammingweight, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:hammingweight, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -9735,12 +13877,21 @@ end
 function harmonic0(x1::Integer; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:harmonic0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Culong, Ptr{Clong}),
-                Culong(x1),
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:harmonic0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Culong(x1)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9750,11 +13901,18 @@ end
 function hgmalpha(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hgmalpha, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:hgmalpha, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9764,11 +13922,18 @@ end
 function hgmbydegree(x1::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hgmbydegree, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:hgmbydegree, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9778,13 +13943,18 @@ end
 function hgmcoef(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hgmcoef, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:hgmcoef, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9794,13 +13964,18 @@ end
 function hgmcoefs(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hgmcoefs, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:hgmcoefs, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9810,11 +13985,18 @@ end
 function hgmcyclo(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hgmcyclo, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:hgmcyclo, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9825,14 +14007,18 @@ function hgmeulerfactor(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::Integer)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:hgmeulerfactor, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ptr{Clong}, Clong, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
+            cglobal((:hgmeulerfactor, LibPARI.PARI_jll.libpari)),
+            4,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
             Clong(x3),
-            out1,
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -9845,11 +14031,18 @@ end
 function hgmgamma(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hgmgamma, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:hgmgamma, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9859,12 +14052,21 @@ end
 function hgminit(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hgminit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:hgminit, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9874,11 +14076,18 @@ end
 function hgmissymmetrical(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:hgmissymmetrical, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:hgmissymmetrical, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -9888,11 +14097,18 @@ end
 function hgmparams(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hgmparams, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:hgmparams, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9902,11 +14118,18 @@ end
 function hgmtwist(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hgmtwist, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:hgmtwist, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9916,13 +14139,21 @@ end
 function hilbert(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:hilbert, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:hilbert, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -9932,12 +14163,18 @@ end
 function hyperellchangecurve(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hyperellchangecurve, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:hyperellchangecurve, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9947,11 +14184,18 @@ end
 function hyperellcharpoly(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hyperellcharpoly, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:hyperellcharpoly, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9961,11 +14205,18 @@ end
 function hyperelldisc(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hyperelldisc, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:hyperelldisc, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -9975,12 +14226,18 @@ end
 function hyperellisoncurve(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:hyperellisoncurve, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Cint,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:hyperellisoncurve, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -9990,12 +14247,21 @@ end
 function hyperellminimaldisc(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hyperellminimaldisc, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:hyperellminimaldisc, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10006,13 +14272,18 @@ function hyperellminimalmodel(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:hyperellminimalmodel, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ref{Ptr{Clong}}, Ptr{Clong}),
-            x1.ptr,
-            out1,
-            (x2 === nothing ? C_NULL : x2.ptr),
+            cglobal((:hyperellminimalmodel, LibPARI.PARI_jll.libpari)),
+            3,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            reinterpret(Clong, Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr))),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -10025,12 +14296,18 @@ end
 function hyperellordinate(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hyperellordinate, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:hyperellordinate, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10040,13 +14317,18 @@ end
 function hyperellpadicfrobenius0(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hyperellpadicfrobenius0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:hyperellpadicfrobenius0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10056,13 +14338,18 @@ end
 function hyperellratpoints(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hyperellratpoints, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:hyperellratpoints, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10073,12 +14360,18 @@ function hyperellred(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:hyperellred, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            out1,
+            cglobal((:hyperellred, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -10096,14 +14389,24 @@ function hypergeom(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hypergeom, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                (x1 === nothing ? C_NULL : x1.ptr),
-                (x2 === nothing ? C_NULL : x2.ptr),
-                x3.ptr,
+                cglobal((:hypergeom, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10118,14 +14421,18 @@ function hyperu(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hyperu, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:hyperu, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10135,13 +14442,18 @@ end
 function idealadd(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealadd, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:idealadd, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10151,13 +14463,21 @@ end
 function idealaddtoone0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealaddtoone0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:idealaddtoone0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10167,13 +14487,18 @@ end
 function idealappr0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealappr0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:idealappr0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10183,13 +14508,21 @@ end
 function idealchinese(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealchinese, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:idealchinese, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10199,13 +14532,18 @@ end
 function idealcoprime(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealcoprime, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:idealcoprime, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10220,14 +14558,18 @@ function idealdiv0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealdiv0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:idealdiv0, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 Clong(x4),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10237,12 +14579,18 @@ end
 function idealdown(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealdown, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:idealdown, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10252,13 +14600,21 @@ end
 function gpidealfactor(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gpidealfactor, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:gpidealfactor, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10268,13 +14624,18 @@ end
 function idealfrobenius(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealfrobenius, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:idealfrobenius, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10284,13 +14645,21 @@ end
 function idealhnf0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealhnf0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:idealhnf0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10300,13 +14669,18 @@ end
 function idealintersect(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealintersect, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:idealintersect, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10316,12 +14690,18 @@ end
 function idealinv(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealinv, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:idealinv, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10331,12 +14711,18 @@ end
 function idealismaximal(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealismaximal, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:idealismaximal, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10347,14 +14733,18 @@ function idealispower(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::Integer)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:idealispower, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Clong,
-            (Ptr{Clong}, Ptr{Clong}, Clong, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
+            cglobal((:idealispower, LibPARI.PARI_jll.libpari)),
+            4,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
             Clong(x3),
-            out1,
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = Int(r)
         o1 = LibPARI.Gen(out1[])
@@ -10367,13 +14757,18 @@ end
 function gideallist(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gideallist, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gideallist, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10383,13 +14778,18 @@ end
 function ideallistarch(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ideallistarch, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:ideallistarch, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10399,13 +14799,21 @@ end
 function ideallog(x2::LibPARI.Gen, x3::LibPARI.Gen; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ideallog, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                (x1 === nothing ? C_NULL : x1.ptr),
-                x2.ptr,
-                x3.ptr,
+                cglobal((:ideallog, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10415,13 +14823,21 @@ end
 function idealmin(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealmin, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:idealmin, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10436,14 +14852,18 @@ function idealmul0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealmul0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:idealmul0, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 Clong(x4),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10453,12 +14873,18 @@ end
 function idealnorm(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealnorm, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:idealnorm, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10468,12 +14894,18 @@ end
 function idealnumden(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealnumden, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:idealnumden, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10488,14 +14920,18 @@ function idealpow0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealpow0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:idealpow0, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 Clong(x4),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10509,13 +14945,18 @@ function idealprimedec_limit_f(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealprimedec_limit_f, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:idealprimedec_limit_f, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10525,13 +14966,18 @@ end
 function idealprincipalunits(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealprincipalunits, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:idealprincipalunits, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10541,13 +14987,18 @@ end
 function idealramgroups(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealramgroups, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:idealramgroups, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10557,13 +15008,21 @@ end
 function idealred0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealred0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:idealred0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10578,14 +15037,18 @@ function idealredmodpower(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealredmodpower, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Culong, Culong),
-                x1.ptr,
-                x2.ptr,
-                Culong(x3),
-                Culong(x4),
+                cglobal((:idealredmodpower, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Culong(x3)),
+                reinterpret(Clong, Culong(x4)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10595,13 +15058,21 @@ end
 function idealtwoelt0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:idealtwoelt0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:idealtwoelt0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10611,13 +15082,18 @@ end
 function gpidealval(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gpidealval, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:gpidealval, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10627,11 +15103,18 @@ end
 function gimag(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gimag, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gimag, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10646,14 +15129,21 @@ function incgam0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:incgam0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:incgam0, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10663,13 +15153,18 @@ end
 function incgamc(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:incgamc, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:incgamc, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10679,7 +15174,19 @@ end
 function gp_input()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:gp_input, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:gp_input, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -10692,15 +15199,25 @@ function gpinstall(
     x4::AbstractString = "",
 )
     LibPARI.protected_call() do
-        ccall(
-            (:gpinstall, LibPARI.PARI_jll.libpari),
-            Cvoid,
-            (Cstring, Cstring, Cstring, Cstring),
-            x1,
-            x2,
-            x3,
-            x4,
-        )
+        let _cs1 = Base.cconvert(Cstring, x1),
+            _cs2 = Base.cconvert(Cstring, x2),
+            _cs3 = Base.cconvert(Cstring, x3),
+            _cs4 = Base.cconvert(Cstring, x4);
+
+            GC.@preserve _cs1 _cs2 _cs3 _cs4 LibPARI._trap_call(
+                Cvoid,
+                cglobal((:gpinstall, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                reinterpret(Clong, Base.unsafe_convert(Cstring, _cs2)),
+                reinterpret(Clong, Base.unsafe_convert(Cstring, _cs3)),
+                reinterpret(Clong, Base.unsafe_convert(Cstring, _cs4)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            );
+        end
     end
     return nothing
 end
@@ -10709,12 +15226,18 @@ end
 function integ(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:integ, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:integ, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10724,12 +15247,18 @@ end
 function intnumgaussinit(; x1::Integer = 0, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:intnumgaussinit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Clong),
+                cglobal((:intnumgaussinit, LibPARI.PARI_jll.libpari)),
+                2,
                 Clong(x1),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10744,14 +15273,18 @@ function intnuminit(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:intnuminit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:intnuminit, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10761,11 +15294,18 @@ end
 function isfundamental(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:isfundamental, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:isfundamental, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -10776,13 +15316,18 @@ function ispolygonal(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:ispolygonal, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Clong,
-            (Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
-            out1,
+            cglobal((:ispolygonal, LibPARI.PARI_jll.libpari)),
+            3,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = Int(r)
         o1 = LibPARI.Gen(out1[])
@@ -10796,13 +15341,18 @@ function ispower(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:ispower, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Clong,
-            (Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            (x2 === nothing ? C_NULL : x2.ptr),
-            out1,
+            cglobal((:ispower, LibPARI.PARI_jll.libpari)),
+            3,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr))),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = Int(r)
         o1 = LibPARI.Gen(out1[])
@@ -10815,11 +15365,18 @@ end
 function ispowerful(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:ispowerful, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:ispowerful, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -10829,12 +15386,18 @@ end
 function gisprime(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gisprime, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gisprime, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10845,12 +15408,18 @@ function isprimepower(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:isprimepower, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Clong,
-            (Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            out1,
+            cglobal((:isprimepower, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = Int(r)
         o1 = LibPARI.Gen(out1[])
@@ -10863,12 +15432,18 @@ end
 function gispseudoprime(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gispseudoprime, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gispseudoprime, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10879,12 +15454,18 @@ function ispseudoprimepower(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:ispseudoprimepower, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Clong,
-            (Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            out1,
+            cglobal((:ispseudoprimepower, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = Int(r)
         o1 = LibPARI.Gen(out1[])
@@ -10898,12 +15479,18 @@ function issquareall(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:issquareall, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Clong,
-            (Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            out1,
+            cglobal((:issquareall, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = Int(r)
         o1 = LibPARI.Gen(out1[])
@@ -10916,11 +15503,18 @@ end
 function issquarefree(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:issquarefree, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:issquarefree, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -10931,12 +15525,18 @@ function istotient(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:istotient, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Clong,
-            (Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            out1,
+            cglobal((:istotient, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = Int(r)
         o1 = LibPARI.Gen(out1[])
@@ -10948,7 +15548,21 @@ end
 "kill(sym): restores the symbol sym to its ``undefined'' status and kill\nattached help messages."
 function kill0(x1::AbstractString)
     LibPARI.protected_call() do
-        ccall((:kill0, LibPARI.PARI_jll.libpari), Cvoid, (Cstring,), x1)
+        let _cs1 = Base.cconvert(Cstring, x1);
+            GC.@preserve _cs1 LibPARI._trap_call(
+                Cvoid,
+                cglobal((:kill0, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            );
+        end
     end
     return nothing
 end
@@ -10957,12 +15571,18 @@ end
 function kronecker(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:kronecker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:kronecker, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -10972,13 +15592,18 @@ end
 function glambertW(x1::LibPARI.Gen; x2::Integer = 0, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:glambertW, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:glambertW, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -10993,14 +15618,18 @@ function laurentseries0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:laurentseries0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong, Clong),
-                x1.ptr,
+                cglobal((:laurentseries0, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 seriesprec,
                 Clong(x2),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11010,12 +15639,21 @@ end
 function glcm0(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:glcm0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:glcm0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11030,14 +15668,18 @@ function lerchphi(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lerchphi, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:lerchphi, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11052,14 +15694,18 @@ function lerchzeta(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lerchzeta, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:lerchzeta, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11069,12 +15715,18 @@ end
 function lexcmp(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:lexcmp, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Cint,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:lexcmp, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -11089,14 +15741,18 @@ function lfun0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfun0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:lfun0, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11106,13 +15762,18 @@ end
 function lfunan(x1::LibPARI.Gen, x2::Integer; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfunan, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:lfunan, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11128,15 +15789,18 @@ function lfunartin(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfunartin, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:lfunartin, LibPARI.PARI_jll.libpari)),
+                5,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 Clong(x4),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11146,13 +15810,21 @@ end
 function lfuncheckfeq(x1::LibPARI.Gen; x2 = nothing, bitprec::Integer = 128)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:lfuncheckfeq, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:lfuncheckfeq, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -11162,11 +15834,18 @@ end
 function lfuncreate(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfuncreate, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:lfuncreate, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11176,13 +15855,18 @@ end
 function lfundiv(x1::LibPARI.Gen, x2::LibPARI.Gen; bitprec::Integer = 128)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfundiv, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:lfundiv, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11192,12 +15876,18 @@ end
 function lfundual(x1::LibPARI.Gen; bitprec::Integer = 128)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfundual, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:lfundual, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11207,11 +15897,18 @@ end
 function lfunetaquo(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfunetaquo, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:lfunetaquo, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11221,13 +15918,18 @@ end
 function lfuneuler(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfuneuler, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:lfuneuler, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11237,11 +15939,18 @@ end
 function lfungenus2(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfungenus2, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:lfungenus2, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11251,13 +15960,18 @@ end
 function lfunhardy(x1::LibPARI.Gen, x2::LibPARI.Gen; bitprec::Integer = 128)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfunhardy, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:lfunhardy, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11272,14 +15986,21 @@ function lfunhgm(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfunhgm, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:lfunhgm, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11294,14 +16015,18 @@ function lfuninit0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfuninit0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:lfuninit0, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11316,14 +16041,18 @@ function lfunlambda0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfunlambda0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:lfunlambda0, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11333,13 +16062,21 @@ end
 function lfunmf(x1::LibPARI.Gen; x2 = nothing, bitprec::Integer = 128)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfunmf, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:lfunmf, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11349,12 +16086,18 @@ end
 function lfunmfspec(x1::LibPARI.Gen; bitprec::Integer = 128)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfunmfspec, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:lfunmfspec, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11364,13 +16107,18 @@ end
 function lfunmul(x1::LibPARI.Gen, x2::LibPARI.Gen; bitprec::Integer = 128)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfunmul, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:lfunmul, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11384,13 +16132,18 @@ function lfunorderzero(
 )
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:lfunorderzero, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:lfunorderzero, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -11400,12 +16153,18 @@ end
 function lfunparams(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfunparams, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:lfunparams, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11415,12 +16174,18 @@ end
 function lfunqf(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfunqf, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:lfunqf, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11430,12 +16195,18 @@ end
 function lfunrootres(x1::LibPARI.Gen; bitprec::Integer = 128)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfunrootres, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:lfunrootres, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11450,14 +16221,18 @@ function lfunshift(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfunshift, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:lfunshift, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11467,12 +16242,18 @@ end
 function lfunsympow(x1::LibPARI.Gen, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfunsympow, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Culong),
-                x1.ptr,
-                Culong(x2),
+                cglobal((:lfunsympow, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Culong(x2)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11487,14 +16268,18 @@ function lfuntheta(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfuntheta, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:lfuntheta, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11504,13 +16289,18 @@ end
 function lfuntwist(x1::LibPARI.Gen, x2::LibPARI.Gen; bitprec::Integer = 128)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfuntwist, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:lfuntwist, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11525,14 +16315,18 @@ function lfunzeros(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lfunzeros, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:lfunzeros, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11542,12 +16336,18 @@ end
 function lift0(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lift0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:lift0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11557,11 +16357,18 @@ end
 function liftall(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:liftall, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:liftall, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11571,11 +16378,18 @@ end
 function liftint(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:liftint, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:liftint, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11585,11 +16399,18 @@ end
 function liftpol(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:liftpol, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:liftpol, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11599,13 +16420,21 @@ end
 function limitnum0(x1::LibPARI.Gen; x2 = nothing, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:limitnum0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:limitnum0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11615,12 +16444,18 @@ end
 function lindep0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:lindep0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:lindep0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11630,11 +16465,18 @@ end
 function listcreate_gp(; x1::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:listcreate_gp, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:listcreate_gp, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11644,12 +16486,18 @@ end
 function glngamma(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:glngamma, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:glngamma, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11658,11 +16506,18 @@ end
 "localbitprec(p): set the real precision to p bits in the dynamic scope."
 function localbitprec(x1::LibPARI.Gen)
     LibPARI.protected_call() do
-        ccall(
-            (:localbitprec, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Ptr{Clong},),
-            x1.ptr,
+            cglobal((:localbitprec, LibPARI.PARI_jll.libpari)),
+            1,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -11671,11 +16526,18 @@ end
 "localprec(p): set the real precision to p in the dynamic scope\nand return p."
 function localprec(x1::LibPARI.Gen)
     LibPARI.protected_call() do
-        ccall(
-            (:localprec, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Ptr{Clong},),
-            x1.ptr,
+            cglobal((:localprec, LibPARI.PARI_jll.libpari)),
+            1,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -11685,12 +16547,18 @@ end
 function glog(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:glog, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:glog, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11700,12 +16568,18 @@ end
 function glog1p(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:glog1p, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:glog1p, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11716,13 +16590,18 @@ function logint0(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:logint0, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Clong,
-            (Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
-            out1,
+            cglobal((:logint0, LibPARI.PARI_jll.libpari)),
+            3,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = Int(r)
         o1 = LibPARI.Gen(out1[])
@@ -11735,12 +16614,18 @@ end
 function mapget(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mapget, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mapget, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11751,13 +16636,18 @@ function mapisdefined(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:mapisdefined, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Cint,
-            (Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
-            out1,
+            cglobal((:mapisdefined, LibPARI.PARI_jll.libpari)),
+            3,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = Int(r)
         o1 = LibPARI.Gen(out1[])
@@ -11770,12 +16660,18 @@ end
 function matadjoint0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matadjoint0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:matadjoint0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11785,12 +16681,18 @@ end
 function matalgtobasis(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matalgtobasis, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:matalgtobasis, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11800,12 +16702,18 @@ end
 function matbasistoalg(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matbasistoalg, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:matbasistoalg, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11815,11 +16723,18 @@ end
 function matcompanion(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matcompanion, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:matcompanion, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11829,11 +16744,18 @@ end
 function matconcat(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matconcat, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:matconcat, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11843,12 +16765,18 @@ end
 function det0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:det0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:det0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11858,11 +16786,18 @@ end
 function detint(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:detint, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:detint, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11872,12 +16807,18 @@ end
 function matdetmod(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matdetmod, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:matdetmod, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11887,11 +16828,18 @@ end
 function diagonal(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:diagonal, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:diagonal, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11901,13 +16849,18 @@ end
 function mateigen(x1::LibPARI.Gen; x2::Integer = 0, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mateigen, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:mateigen, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11917,13 +16870,18 @@ end
 function matfrobenius(x1::LibPARI.Gen; x2::Integer = 0, x3::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matfrobenius, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:matfrobenius, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11933,11 +16891,18 @@ end
 function hess(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hess, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:hess, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11947,11 +16912,18 @@ end
 function mathilbert(x1::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mathilbert, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:mathilbert, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11961,12 +16933,18 @@ end
 function mathnf0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mathnf0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:mathnf0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11976,12 +16954,18 @@ end
 function hnfmod(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hnfmod, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:hnfmod, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -11991,12 +16975,18 @@ end
 function hnfmodid(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hnfmodid, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:hnfmodid, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12006,12 +16996,18 @@ end
 function mathouseholder(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mathouseholder, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mathouseholder, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12021,11 +17017,18 @@ end
 function matid(x1::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matid, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:matid, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12035,12 +17038,18 @@ end
 function matimage0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matimage0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:matimage0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12050,11 +17059,18 @@ end
 function imagecompl(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:imagecompl, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:imagecompl, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12065,13 +17081,18 @@ function matimagemod(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:matimagemod, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
-            out1,
+            cglobal((:matimagemod, LibPARI.PARI_jll.libpari)),
+            3,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -12084,11 +17105,18 @@ end
 function indexrank(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:indexrank, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:indexrank, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12098,12 +17126,18 @@ end
 function intersect(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:intersect, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:intersect, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12113,12 +17147,18 @@ end
 function inverseimage(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:inverseimage, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:inverseimage, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12128,12 +17168,18 @@ end
 function matinvmod(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matinvmod, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:matinvmod, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12143,11 +17189,18 @@ end
 function isdiagonal(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:isdiagonal, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Cint,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:isdiagonal, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -12157,12 +17210,18 @@ end
 function matker0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matker0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:matker0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12172,12 +17231,18 @@ end
 function matkerint0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matkerint0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:matkerint0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12188,13 +17253,18 @@ function matkermod(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:matkermod, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
-            out1,
+            cglobal((:matkermod, LibPARI.PARI_jll.libpari)),
+            3,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -12207,12 +17277,18 @@ end
 function matmuldiagonal(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matmuldiagonal, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:matmuldiagonal, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12222,12 +17298,18 @@ end
 function matmultodiagonal(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matmultodiagonal, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:matmultodiagonal, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12237,12 +17319,21 @@ end
 function matqpascal(x1::Integer; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matqpascal, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Ptr{Clong}),
+                cglobal((:matqpascal, LibPARI.PARI_jll.libpari)),
+                2,
                 Clong(x1),
-                (x2 === nothing ? C_NULL : x2.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12252,11 +17343,18 @@ end
 function matpermanent(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matpermanent, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:matpermanent, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12266,13 +17364,18 @@ end
 function matqr(x1::LibPARI.Gen; x2::Integer = 0, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matqr, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:matqr, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12282,11 +17385,18 @@ end
 function rank(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:rank, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:rank, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -12296,11 +17406,18 @@ end
 function matreduce(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matreduce, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:matreduce, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12310,12 +17427,21 @@ end
 function matrixqz0(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matrixqz0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:matrixqz0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12325,11 +17451,18 @@ end
 function matsize(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matsize, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:matsize, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12339,12 +17472,18 @@ end
 function matsnf0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matsnf0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:matsnf0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12354,12 +17493,18 @@ end
 function gauss(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gauss, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gauss, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12374,14 +17519,18 @@ function matsolvemod(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:matsolvemod, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:matsolvemod, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 Clong(x4),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12391,11 +17540,18 @@ end
 function suppl(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:suppl, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:suppl, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12405,12 +17561,18 @@ end
 function gmax(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gmax, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gmax, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12420,7 +17582,19 @@ end
 function mfDelta()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:mfDelta, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:mfDelta, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -12429,11 +17603,18 @@ end
 function mfEH(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfEH, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:mfEH, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12443,11 +17624,18 @@ end
 function mfEk(x1::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfEk, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:mfEk, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12457,11 +17645,21 @@ end
 function mfTheta(; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfTheta, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                (x1 === nothing ? C_NULL : x1.ptr),
+                cglobal((:mfTheta, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12471,12 +17669,18 @@ end
 function mfatkin(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfatkin, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mfatkin, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12486,13 +17690,18 @@ end
 function mfatkineigenvalues(x1::LibPARI.Gen, x2::Integer; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfatkineigenvalues, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:mfatkineigenvalues, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12502,13 +17711,18 @@ end
 function mfatkininit(x1::LibPARI.Gen, x2::Integer; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfatkininit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:mfatkininit, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12518,12 +17732,18 @@ end
 function mfbasis(x1::LibPARI.Gen; x2::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfbasis, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:mfbasis, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12533,12 +17753,18 @@ end
 function mfbd(x1::LibPARI.Gen, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfbd, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:mfbd, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12548,13 +17774,18 @@ end
 function mfbracket(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfbracket, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mfbracket, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12564,12 +17795,18 @@ end
 function mfcoef(x1::LibPARI.Gen, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfcoef, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:mfcoef, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12579,13 +17816,18 @@ end
 function mfcoefs(x1::LibPARI.Gen, x2::Integer; x3::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfcoefs, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:mfcoefs, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12595,12 +17837,18 @@ end
 function mfconductor(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:mfconductor, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mfconductor, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -12610,11 +17858,18 @@ end
 function mfcosets(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfcosets, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:mfcosets, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12624,12 +17879,18 @@ end
 function mfcuspisregular(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:mfcuspisregular, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mfcuspisregular, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -12639,11 +17900,18 @@ end
 function mfcusps(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfcusps, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:mfcusps, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12658,14 +17926,18 @@ function mfcuspval(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfcuspval, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:mfcuspval, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12675,12 +17947,18 @@ end
 function mfcuspwidth(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:mfcuspwidth, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mfcuspwidth, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -12690,12 +17968,18 @@ end
 function mfderiv(x1::LibPARI.Gen; x2::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfderiv, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:mfderiv, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12705,12 +17989,18 @@ end
 function mfderivE2(x1::LibPARI.Gen; x2::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfderivE2, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:mfderivE2, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12721,12 +18011,18 @@ function mfdescribe(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:mfdescribe, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            out1,
+            cglobal((:mfdescribe, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -12739,12 +18035,18 @@ end
 function mfdim(x1::LibPARI.Gen; x2::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfdim, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:mfdim, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12754,12 +18056,18 @@ end
 function mfdiv(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfdiv, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mfdiv, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12769,11 +18077,18 @@ end
 function mfeigenbasis(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfeigenbasis, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:mfeigenbasis, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12783,12 +18098,21 @@ end
 function mfeigensearch(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfeigensearch, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:mfeigensearch, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12798,13 +18122,24 @@ end
 function mfeisenstein(x1::Integer; x2 = nothing, x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfeisenstein, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Ptr{Clong}, Ptr{Clong}),
+                cglobal((:mfeisenstein, LibPARI.PARI_jll.libpari)),
+                3,
                 Clong(x1),
-                (x2 === nothing ? C_NULL : x2.ptr),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12814,13 +18149,21 @@ end
 function mfembed0(x1::LibPARI.Gen; x2 = nothing, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfembed0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:mfembed0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12835,14 +18178,18 @@ function mfeval(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfeval, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:mfeval, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12852,11 +18199,18 @@ end
 function mffields(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mffields, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:mffields, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12866,11 +18220,18 @@ end
 function mffromell(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mffromell, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:mffromell, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12880,12 +18241,18 @@ end
 function mffrometaquo(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mffrometaquo, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:mffrometaquo, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12895,12 +18262,18 @@ end
 function mffromlfun(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mffromlfun, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:mffromlfun, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12910,12 +18283,21 @@ end
 function mffromqf(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mffromqf, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:mffromqf, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12925,13 +18307,18 @@ end
 function mfgaloisprojrep(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfgaloisprojrep, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mfgaloisprojrep, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12941,12 +18328,21 @@ end
 function mfgaloistype(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfgaloistype, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:mfgaloistype, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12956,13 +18352,18 @@ end
 function mfhecke(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfhecke, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mfhecke, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12972,12 +18373,18 @@ end
 function mfheckemat(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfheckemat, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mfheckemat, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -12987,12 +18394,18 @@ end
 function mfinit(x1::LibPARI.Gen; x2::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfinit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:mfinit, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13002,11 +18415,18 @@ end
 function mfisCM(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfisCM, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:mfisCM, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13016,13 +18436,18 @@ end
 function mfisequal(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:mfisequal, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mfisequal, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -13032,12 +18457,18 @@ end
 function mfisetaquo(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfisetaquo, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:mfisetaquo, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13047,11 +18478,18 @@ end
 function mfkohnenbasis(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfkohnenbasis, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:mfkohnenbasis, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13061,11 +18499,18 @@ end
 function mfkohnenbijection(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfkohnenbijection, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:mfkohnenbijection, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13075,12 +18520,18 @@ end
 function mfkohneneigenbasis(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfkohneneigenbasis, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mfkohneneigenbasis, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13090,12 +18541,18 @@ end
 function mflinear(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mflinear, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mflinear, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13105,12 +18562,18 @@ end
 function mfmanin(x1::LibPARI.Gen; bitprec::Integer = 128)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfmanin, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:mfmanin, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13120,12 +18583,18 @@ end
 function mfmul(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfmul, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mfmul, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13135,11 +18604,18 @@ end
 function mfnumcusps(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfnumcusps, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:mfnumcusps, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13149,11 +18625,18 @@ end
 function mfparams(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfparams, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:mfparams, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13168,14 +18651,18 @@ function mfperiodpol(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfperiodpol, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mfperiodpol, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13185,12 +18672,18 @@ end
 function mfperiodpolbasis(x1::Integer; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfperiodpolbasis, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Clong),
+                cglobal((:mfperiodpolbasis, LibPARI.PARI_jll.libpari)),
+                2,
                 Clong(x1),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13200,12 +18693,21 @@ end
 function mfpetersson(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfpetersson, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:mfpetersson, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13215,12 +18717,18 @@ end
 function mfpow(x1::LibPARI.Gen, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfpow, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:mfpow, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13230,13 +18738,18 @@ end
 function mfsearch(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfsearch, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mfsearch, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13246,12 +18759,18 @@ end
 function mfshift(x1::LibPARI.Gen, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfshift, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:mfshift, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13261,13 +18780,18 @@ end
 function mfshimura(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfshimura, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mfshimura, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13285,25 +18809,18 @@ function mfslashexpansion(
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:mfslashexpansion, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (
-                Ptr{Clong},
-                Ptr{Clong},
-                Ptr{Clong},
-                Clong,
-                Clong,
-                Ref{Ptr{Clong}},
-                Clong,
-            ),
-            x1.ptr,
-            x2.ptr,
-            x3.ptr,
+            cglobal((:mfslashexpansion, LibPARI.PARI_jll.libpari)),
+            7,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
             Clong(x4),
             Clong(x5),
-            out1,
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
             prec,
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -13316,12 +18833,21 @@ end
 function mfspace(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:mfspace, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:mfspace, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -13331,13 +18857,18 @@ end
 function mfsplit(x1::LibPARI.Gen; x2::Integer = 0, x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfsplit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:mfsplit, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13347,11 +18878,18 @@ end
 function mfsturm(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:mfsturm, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:mfsturm, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -13361,13 +18899,21 @@ end
 function mfsymbol(x1::LibPARI.Gen; x2 = nothing, bitprec::Integer = 128)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfsymbol, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:mfsymbol, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13382,14 +18928,21 @@ function mfsymboleval(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mfsymboleval, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:mfsymboleval, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13404,14 +18957,18 @@ function mftaylor(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mftaylor, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong, Clong),
-                x1.ptr,
+                cglobal((:mftaylor, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13421,13 +18978,18 @@ end
 function mftobasis(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mftobasis, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mftobasis, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13437,13 +18999,18 @@ end
 function mftocoset(x1::Integer, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mftocoset, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Culong, Ptr{Clong}, Ptr{Clong}),
-                Culong(x1),
-                x2.ptr,
-                x3.ptr,
+                cglobal((:mftocoset, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Culong(x1)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13453,12 +19020,18 @@ end
 function mftonew(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mftonew, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mftonew, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13468,12 +19041,18 @@ end
 function mftraceform(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mftraceform, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:mftraceform, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13483,12 +19062,18 @@ end
 function mftwist(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mftwist, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mftwist, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13498,12 +19083,18 @@ end
 function gmin(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gmin, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gmin, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13513,12 +19104,18 @@ end
 function minpoly(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:minpoly, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:minpoly, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13528,11 +19125,18 @@ end
 function modreverse(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:modreverse, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:modreverse, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13542,11 +19146,18 @@ end
 function moebius(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:moebius, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:moebius, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -13556,13 +19167,21 @@ end
 function msatkinlehner(x1::LibPARI.Gen, x2::Integer; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:msatkinlehner, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Ptr{Clong}),
-                x1.ptr,
+                cglobal((:msatkinlehner, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13572,12 +19191,18 @@ end
 function mscosets0(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mscosets0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mscosets0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13587,12 +19212,18 @@ end
 function mscuspidal(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mscuspidal, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:mscuspidal, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13602,11 +19233,18 @@ end
 function msdim(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:msdim, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:msdim, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -13616,11 +19254,18 @@ end
 function mseisenstein(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mseisenstein, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:mseisenstein, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13630,13 +19275,21 @@ end
 function mseval(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mseval, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:mseval, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13647,13 +19300,18 @@ function msfarey0(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:msfarey0, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
-            out1,
+            cglobal((:msfarey0, LibPARI.PARI_jll.libpari)),
+            3,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -13666,12 +19324,18 @@ end
 function msfromcusp(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:msfromcusp, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:msfromcusp, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13681,12 +19345,18 @@ end
 function msfromell(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:msfromell, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:msfromell, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13696,13 +19366,21 @@ end
 function msfromhecke(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:msfromhecke, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:msfromhecke, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13712,11 +19390,18 @@ end
 function msgetlevel(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:msgetlevel, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:msgetlevel, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -13726,11 +19411,18 @@ end
 function msgetsign(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:msgetsign, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:msgetsign, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -13740,11 +19432,18 @@ end
 function msgetweight(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:msgetweight, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:msgetweight, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -13754,13 +19453,21 @@ end
 function mshecke(x1::LibPARI.Gen, x2::Integer; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mshecke, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Ptr{Clong}),
-                x1.ptr,
+                cglobal((:mshecke, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13770,13 +19477,18 @@ end
 function msinit(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:msinit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:msinit, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13786,12 +19498,18 @@ end
 function msissymbol(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:msissymbol, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:msissymbol, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13801,12 +19519,21 @@ end
 function mslattice(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mslattice, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:mslattice, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13816,11 +19543,18 @@ end
 function msnew(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:msnew, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:msnew, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13830,13 +19564,18 @@ end
 function msomseval(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:msomseval, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:msomseval, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13851,14 +19590,18 @@ function mspadicinit(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mspadicinit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong, Clong),
-                x1.ptr,
+                cglobal((:mspadicinit, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
                 Clong(x4),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13868,13 +19611,18 @@ end
 function mspadicmoments(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mspadicmoments, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mspadicmoments, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13884,12 +19632,18 @@ end
 function mspadicseries(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mspadicseries, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:mspadicseries, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13899,11 +19653,18 @@ end
 function mspathgens(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mspathgens, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:mspathgens, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13913,12 +19674,18 @@ end
 function mspathlog(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mspathlog, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mspathlog, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13928,13 +19695,24 @@ end
 function mspetersson(x1::LibPARI.Gen; x2 = nothing, x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mspetersson, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:mspetersson, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13944,12 +19722,18 @@ end
 function mspolygon(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mspolygon, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:mspolygon, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13963,13 +19747,18 @@ function msqexpansion(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:msqexpansion, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:msqexpansion, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 seriesprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13979,12 +19768,21 @@ end
 function msstar(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:msstar, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:msstar, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -13994,12 +19792,18 @@ end
 function mstooms(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:mstooms, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:mstooms, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14009,12 +19813,18 @@ end
 function newtonpoly(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:newtonpoly, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:newtonpoly, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14024,11 +19834,18 @@ end
 function next0(; x1::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:next0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:next0, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14038,11 +19855,18 @@ end
 function nextprime(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nextprime, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:nextprime, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14052,12 +19876,18 @@ end
 function algtobasis(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:algtobasis, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:algtobasis, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14068,12 +19898,18 @@ function nfbasis(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:nfbasis, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            out1,
+            cglobal((:nfbasis, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -14086,12 +19922,18 @@ end
 function basistoalg(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:basistoalg, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:basistoalg, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14101,11 +19943,18 @@ end
 function nfcertify(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfcertify, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:nfcertify, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14120,14 +19969,18 @@ function nfcompositum(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfcompositum, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nfcompositum, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 Clong(x4),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14137,12 +19990,18 @@ end
 function nfdetint(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfdetint, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:nfdetint, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14152,11 +20011,18 @@ end
 function nfdisc(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfdisc, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:nfdisc, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14166,11 +20032,18 @@ end
 function nfdiscfactors(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfdiscfactors, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:nfdiscfactors, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14180,13 +20053,18 @@ end
 function nfadd(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfadd, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nfadd, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14196,13 +20074,18 @@ end
 function nfdiv(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfdiv, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nfdiv, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14212,13 +20095,18 @@ end
 function nfdiveuc(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfdiveuc, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nfdiveuc, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14233,14 +20121,18 @@ function nfdivmodpr(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfdivmodpr, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:nfdivmodpr, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14250,13 +20142,18 @@ end
 function nfdivrem(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfdivrem, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nfdivrem, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14271,14 +20168,21 @@ function nfeltembed(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfeltembed, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:nfeltembed, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14289,14 +20193,18 @@ function nfispower(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::Integer)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:nfispower, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Clong,
-            (Ptr{Clong}, Ptr{Clong}, Clong, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
+            cglobal((:nfispower, LibPARI.PARI_jll.libpari)),
+            4,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
             Clong(x3),
-            out1,
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = Int(r)
         o1 = LibPARI.Gen(out1[])
@@ -14310,13 +20218,18 @@ function nfissquare(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:nfissquare, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Clong,
-            (Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
-            out1,
+            cglobal((:nfissquare, LibPARI.PARI_jll.libpari)),
+            3,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = Int(r)
         o1 = LibPARI.Gen(out1[])
@@ -14329,13 +20242,18 @@ end
 function nfmod(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfmod, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nfmod, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14345,13 +20263,18 @@ end
 function nfmul(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfmul, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nfmul, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14366,14 +20289,18 @@ function nfmulmodpr(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfmulmodpr, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:nfmulmodpr, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14383,12 +20310,18 @@ end
 function nfnorm(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfnorm, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:nfnorm, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14398,13 +20331,18 @@ end
 function nfpow(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfpow, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nfpow, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14419,14 +20357,18 @@ function nfpowmodpr(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfpowmodpr, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:nfpowmodpr, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14436,13 +20378,18 @@ end
 function nfreduce(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfreduce, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nfreduce, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14452,13 +20399,18 @@ end
 function nfreducemodpr(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfreducemodpr, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nfreducemodpr, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14468,13 +20420,21 @@ end
 function nfeltsign(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfeltsign, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:nfeltsign, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14484,12 +20444,18 @@ end
 function nftrace(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nftrace, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:nftrace, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14500,14 +20466,18 @@ function gpnfvalrem(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:gpnfvalrem, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
-            x3.ptr,
-            out1,
+            cglobal((:gpnfvalrem, LibPARI.PARI_jll.libpari)),
+            4,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -14520,12 +20490,18 @@ end
 function nffactor(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nffactor, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:nffactor, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14535,13 +20511,21 @@ end
 function nffactorback(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nffactorback, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:nffactorback, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14551,13 +20535,18 @@ end
 function nffactormod(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nffactormod, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nffactormod, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14567,13 +20556,18 @@ end
 function galoisapply(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:galoisapply, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:galoisapply, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14588,14 +20582,21 @@ function galoisconj0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:galoisconj0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:galoisconj0, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14611,15 +20612,18 @@ function nfgrunwaldwang(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfgrunwaldwang, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:nfgrunwaldwang, LibPARI.PARI_jll.libpari)),
+                5,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
                 Clong(x5),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14634,14 +20638,21 @@ function nfhilbert0(
 )
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:nfhilbert0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                (x4 === nothing ? C_NULL : x4.ptr),
+                cglobal((:nfhilbert0, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x4 === nothing ? C_NULL : x4.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -14651,13 +20662,18 @@ end
 function nfhnf0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfhnf0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:nfhnf0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14667,13 +20683,18 @@ end
 function nfhnfmod(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfhnfmod, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nfhnfmod, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14683,13 +20704,18 @@ end
 function nfinit0(x1::LibPARI.Gen; x2::Integer = 0, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfinit0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:nfinit0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14699,12 +20725,18 @@ end
 function isideal(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:isideal, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:isideal, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -14714,13 +20746,18 @@ end
 function nfisincl0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfisincl0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:nfisincl0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14730,12 +20767,18 @@ end
 function nfisisom(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfisisom, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:nfisisom, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14750,14 +20793,18 @@ function nfislocalpower(
 )
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:nfislocalpower, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:nfislocalpower, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -14767,13 +20814,18 @@ end
 function nfkermodpr(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfkermodpr, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nfkermodpr, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14783,13 +20835,18 @@ end
 function nfmodpr(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfmodpr, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nfmodpr, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14799,13 +20856,18 @@ end
 function nfmodprinit0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfmodprinit0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:nfmodprinit0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14815,13 +20877,18 @@ end
 function nfmodprlift(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfmodprlift, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nfmodprlift, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14831,12 +20898,18 @@ end
 function nfnewprec(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfnewprec, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:nfnewprec, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14846,13 +20919,21 @@ end
 function nfpolsturm(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfpolsturm, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:nfpolsturm, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14862,12 +20943,18 @@ end
 function nfresolvent(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfresolvent, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:nfresolvent, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14877,12 +20964,21 @@ end
 function nfroots(x2::LibPARI.Gen; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfroots, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                (x1 === nothing ? C_NULL : x1.ptr),
-                x2.ptr,
+                cglobal((:nfroots, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14892,11 +20988,18 @@ end
 function nfrootsof1(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfrootsof1, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:nfrootsof1, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14906,13 +21009,18 @@ end
 function nfsnf0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfsnf0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:nfsnf0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14927,14 +21035,18 @@ function nfsolvemodpr(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfsolvemodpr, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                x4.ptr,
+                cglobal((:nfsolvemodpr, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14944,13 +21056,18 @@ end
 function nfsubfields0(x1::LibPARI.Gen; x2::Integer = 0, x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfsubfields0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:nfsubfields0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14960,12 +21077,18 @@ end
 function nfsubfieldscm(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfsubfieldscm, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:nfsubfieldscm, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14975,12 +21098,18 @@ end
 function nfsubfieldsmax(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfsubfieldsmax, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:nfsubfieldsmax, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -14990,13 +21119,18 @@ end
 function nfweilheight(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nfweilheight, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:nfweilheight, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15006,11 +21140,18 @@ end
 function gnorm(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gnorm, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gnorm, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15020,11 +21161,18 @@ end
 function gnorml2(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gnorml2, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gnorml2, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15034,13 +21182,21 @@ end
 function gnormlp(x1::LibPARI.Gen; x2 = nothing, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gnormlp, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:gnormlp, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15050,11 +21206,18 @@ end
 function numbpart(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:numbpart, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:numbpart, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15064,11 +21227,18 @@ end
 function numdiv(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:numdiv, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:numdiv, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15078,12 +21248,21 @@ end
 function numerator(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:numerator, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:numerator, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15093,12 +21272,18 @@ end
 function numtoperm(x1::Integer, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:numtoperm, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Ptr{Clong}),
+                cglobal((:numtoperm, LibPARI.PARI_jll.libpari)),
+                2,
                 Clong(x1),
-                x2.ptr,
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15108,11 +21293,18 @@ end
 function omega(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:omega, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:omega, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -15122,7 +21314,19 @@ end
 function mkoo()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:mkoo, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:mkoo, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -15131,12 +21335,18 @@ end
 function padicappr(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:padicappr, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:padicappr, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15146,13 +21356,18 @@ end
 function padicfields0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:padicfields0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:padicfields0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15162,12 +21377,18 @@ end
 function gppadicprec(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gppadicprec, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:gppadicprec, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15177,12 +21398,18 @@ end
 function parapply(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:parapply, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:parapply, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15192,11 +21419,18 @@ end
 function pareval(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:pareval, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:pareval, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15206,13 +21440,18 @@ end
 function parselect(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:parselect, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:parselect, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15222,13 +21461,24 @@ end
 function partitions(x1::Integer; x2 = nothing, x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:partitions, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Ptr{Clong}, Ptr{Clong}),
+                cglobal((:partitions, LibPARI.PARI_jll.libpari)),
+                3,
                 Clong(x1),
-                (x2 === nothing ? C_NULL : x2.ptr),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15238,11 +21488,18 @@ end
 function permcycles(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:permcycles, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:permcycles, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15252,11 +21509,18 @@ end
 function permorder(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:permorder, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:permorder, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15266,11 +21530,18 @@ end
 function permsign(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:permsign, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:permsign, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -15280,11 +21551,18 @@ end
 function permtonum(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:permtonum, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:permtonum, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15293,14 +21571,18 @@ end
 "plotarc(w,x2,y2,{filled=0}): if the cursor is at position (x1,y1), draws the\nellipse that fits inside the box with diagonal (x1,y1) and (x2,y2) in rectwindow w\n(cursor does not move).\nIf filled=1, fill the ellipse"
 function plotarc(x1::Integer, x2::LibPARI.Gen, x3::LibPARI.Gen; x4::Integer = 0)
     LibPARI.protected_call() do
-        ccall(
-            (:plotarc, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Clong, Ptr{Clong}, Ptr{Clong}, Clong),
+            cglobal((:plotarc, LibPARI.PARI_jll.libpari)),
+            4,
             Clong(x1),
-            x2.ptr,
-            x3.ptr,
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
             Clong(x4),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -15309,14 +21591,18 @@ end
 "plotbox(w,x2,y2,{filled=0}): if the cursor is at position (x1,y1), draw a box\nwith diagonal (x1,y1) and (x2,y2) in rectwindow w (cursor does not move).\nIf filled=1, fill the box."
 function plotbox(x1::Integer, x2::LibPARI.Gen, x3::LibPARI.Gen; x4::Integer = 0)
     LibPARI.protected_call() do
-        ccall(
-            (:plotbox, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Clong, Ptr{Clong}, Ptr{Clong}, Clong),
+            cglobal((:plotbox, LibPARI.PARI_jll.libpari)),
+            4,
             Clong(x1),
-            x2.ptr,
-            x3.ptr,
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
             Clong(x4),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -15325,7 +21611,19 @@ end
 "plotclip(w): clip the contents of the rectwindow to the bounding box\n(except strings)."
 function plotclip(x1::Integer)
     LibPARI.protected_call() do
-        ccall((:plotclip, LibPARI.PARI_jll.libpari), Cvoid, (Clong,), Clong(x1))
+        LibPARI._trap_call(
+            Cvoid,
+            cglobal((:plotclip, LibPARI.PARI_jll.libpari)),
+            1,
+            Clong(x1),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+        )
     end
     return nothing
 end
@@ -15334,12 +21632,18 @@ end
 function plotcolor(x1::Integer, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:plotcolor, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Ptr{Clong}),
+                cglobal((:plotcolor, LibPARI.PARI_jll.libpari)),
+                2,
                 Clong(x1),
-                x2.ptr,
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15354,15 +21658,18 @@ function plotcopy(
     x5::Integer = 0,
 )
     LibPARI.protected_call() do
-        ccall(
-            (:plotcopy, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Clong, Clong, Ptr{Clong}, Ptr{Clong}, Clong),
+            cglobal((:plotcopy, LibPARI.PARI_jll.libpari)),
+            5,
             Clong(x1),
             Clong(x2),
-            x3.ptr,
-            x4.ptr,
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x4.ptr)),
             Clong(x5),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -15372,11 +21679,18 @@ end
 function plotcursor(x1::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:plotcursor, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:plotcursor, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15385,12 +21699,18 @@ end
 "plotdraw(w,{flag=0}): draw rectwindow w. More generally,\nw can be of the form [w1,x1,y1, w2,x2,y2,etc.]: draw rectwindows wi\nat given xi,yi positions. If flag!=0, the xi,yi express fractions of the size\nof the current output device."
 function plotdraw(x1::LibPARI.Gen; x2::Integer = 0)
     LibPARI.protected_call() do
-        ccall(
-            (:plotdraw, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Ptr{Clong}, Clong),
-            x1.ptr,
+            cglobal((:plotdraw, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
             Clong(x2),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -15400,13 +21720,18 @@ end
 function plotexport(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:plotexport, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:plotexport, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15416,13 +21741,18 @@ end
 function plothraw(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:plothraw, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:plothraw, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15437,14 +21767,18 @@ function plothrawexport(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:plothrawexport, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:plothrawexport, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 Clong(x4),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15454,11 +21788,18 @@ end
 function plothsizes(; x1::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:plothsizes, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:plothsizes, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15467,7 +21808,19 @@ end
 "plotkill(w): erase the rectwindow w."
 function plotkill(x1::Integer)
     LibPARI.protected_call() do
-        ccall((:plotkill, LibPARI.PARI_jll.libpari), Cvoid, (Clong,), Clong(x1))
+        LibPARI._trap_call(
+            Cvoid,
+            cglobal((:plotkill, LibPARI.PARI_jll.libpari)),
+            1,
+            Clong(x1),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+        )
     end
     return nothing
 end
@@ -15480,14 +21833,18 @@ function plotlines(
     x4::Integer = 0,
 )
     LibPARI.protected_call() do
-        ccall(
-            (:plotlines, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Clong, Ptr{Clong}, Ptr{Clong}, Clong),
+            cglobal((:plotlines, LibPARI.PARI_jll.libpari)),
+            4,
             Clong(x1),
-            x2.ptr,
-            x3.ptr,
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
             Clong(x4),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -15496,12 +21853,18 @@ end
 "plotlinetype(w,type): this function is obsolete; no graphing engine\nimplement this functionality."
 function plotlinetype(x1::Integer, x2::Integer)
     LibPARI.protected_call() do
-        ccall(
-            (:plotlinetype, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Clong, Clong),
+            cglobal((:plotlinetype, LibPARI.PARI_jll.libpari)),
+            2,
             Clong(x1),
             Clong(x2),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -15510,13 +21873,18 @@ end
 "plotmove(w,x,y): move cursor to position x,y in rectwindow w."
 function plotmove(x1::Integer, x2::LibPARI.Gen, x3::LibPARI.Gen)
     LibPARI.protected_call() do
-        ccall(
-            (:plotmove, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Clong, Ptr{Clong}, Ptr{Clong}),
+            cglobal((:plotmove, LibPARI.PARI_jll.libpari)),
+            3,
             Clong(x1),
-            x2.ptr,
-            x3.ptr,
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -15525,13 +21893,18 @@ end
 "plotpoints(w,X,Y): draws in rectwindow w the points whose x\n(resp y) coordinates are in X (resp Y). If X and Y are both\nsingle values (i.e not vectors), draw the corresponding point (and move\ncursor)."
 function plotpoints(x1::Integer, x2::LibPARI.Gen, x3::LibPARI.Gen)
     LibPARI.protected_call() do
-        ccall(
-            (:plotpoints, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Clong, Ptr{Clong}, Ptr{Clong}),
+            cglobal((:plotpoints, LibPARI.PARI_jll.libpari)),
+            3,
             Clong(x1),
-            x2.ptr,
-            x3.ptr,
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -15540,12 +21913,18 @@ end
 "plotpointsize(w,size): change the \"size\" of following points in\nrectwindow w. w=-1 changes global value."
 function plotpointsize(x1::Integer, x2::LibPARI.Gen)
     LibPARI.protected_call() do
-        ccall(
-            (:plotpointsize, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Clong, Ptr{Clong}),
+            cglobal((:plotpointsize, LibPARI.PARI_jll.libpari)),
+            2,
             Clong(x1),
-            x2.ptr,
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -15554,12 +21933,18 @@ end
 "plotpointtype(w,type): this function is obsolete; no graphing engine\nimplement this functionality."
 function plotpointtype(x1::Integer, x2::Integer)
     LibPARI.protected_call() do
-        ccall(
-            (:plotpointtype, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Clong, Clong),
+            cglobal((:plotpointtype, LibPARI.PARI_jll.libpari)),
+            2,
             Clong(x1),
             Clong(x2),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -15573,14 +21958,18 @@ function plotrbox(
     x4::Integer = 0,
 )
     LibPARI.protected_call() do
-        ccall(
-            (:plotrbox, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Clong, Ptr{Clong}, Ptr{Clong}, Clong),
+            cglobal((:plotrbox, LibPARI.PARI_jll.libpari)),
+            4,
             Clong(x1),
-            x2.ptr,
-            x3.ptr,
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
             Clong(x4),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -15590,13 +21979,18 @@ end
 function plotrecthraw(x1::Integer, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:plotrecthraw, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Ptr{Clong}, Clong),
+                cglobal((:plotrecthraw, LibPARI.PARI_jll.libpari)),
+                3,
                 Clong(x1),
-                x2.ptr,
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15605,13 +21999,18 @@ end
 "plotrline(w,dx,dy): if the cursor is at (x1,y1), draw a line from\n(x1,y1) to (x1+dx,y1+dy) (and move the cursor) in the rectwindow w."
 function plotrline(x1::Integer, x2::LibPARI.Gen, x3::LibPARI.Gen)
     LibPARI.protected_call() do
-        ccall(
-            (:plotrline, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Clong, Ptr{Clong}, Ptr{Clong}),
+            cglobal((:plotrline, LibPARI.PARI_jll.libpari)),
+            3,
             Clong(x1),
-            x2.ptr,
-            x3.ptr,
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -15620,13 +22019,18 @@ end
 "plotrmove(w,dx,dy): move cursor to position (dx,dy) relative to the\npresent position in the rectwindow w."
 function plotrmove(x1::Integer, x2::LibPARI.Gen, x3::LibPARI.Gen)
     LibPARI.protected_call() do
-        ccall(
-            (:plotrmove, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Clong, Ptr{Clong}, Ptr{Clong}),
+            cglobal((:plotrmove, LibPARI.PARI_jll.libpari)),
+            3,
             Clong(x1),
-            x2.ptr,
-            x3.ptr,
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -15635,13 +22039,18 @@ end
 "plotrpoint(w,dx,dy): draw a point (and move cursor) at position dx,dy\nrelative to present position of the cursor in rectwindow w."
 function plotrpoint(x1::Integer, x2::LibPARI.Gen, x3::LibPARI.Gen)
     LibPARI.protected_call() do
-        ccall(
-            (:plotrpoint, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Clong, Ptr{Clong}, Ptr{Clong}),
+            cglobal((:plotrpoint, LibPARI.PARI_jll.libpari)),
+            3,
             Clong(x1),
-            x2.ptr,
-            x3.ptr,
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -15656,15 +22065,18 @@ function plotscale(
     x5::LibPARI.Gen,
 )
     LibPARI.protected_call() do
-        ccall(
-            (:plotscale, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Clong, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
+            cglobal((:plotscale, LibPARI.PARI_jll.libpari)),
+            5,
             Clong(x1),
-            x2.ptr,
-            x3.ptr,
-            x4.ptr,
-            x5.ptr,
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x4.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x5.ptr)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -15673,14 +22085,21 @@ end
 "plotstring(w,x,{flags=0}): draw in rectwindow w the string\ncorresponding to x. Bits 1 and 2 of flag regulate horizontal alignment: left\nif 0, right if 2, center if 1. Bits 4 and 8 regulate vertical alignment:\nbottom if 0, top if 8, v-center if 4. Can insert additional gap between\npoint and string: horizontal if bit 16 is set, vertical if bit 32 is set."
 function plotstring(x1::Integer, x2::AbstractString; x3::Integer = 0)
     LibPARI.protected_call() do
-        ccall(
-            (:plotstring, LibPARI.PARI_jll.libpari),
-            Cvoid,
-            (Clong, Cstring, Clong),
-            Clong(x1),
-            x2,
-            Clong(x3),
-        )
+        let _cs1 = Base.cconvert(Cstring, x2);
+            GC.@preserve _cs1 LibPARI._trap_call(
+                Cvoid,
+                cglobal((:plotstring, LibPARI.PARI_jll.libpari)),
+                3,
+                Clong(x1),
+                reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            );
+        end
     end
     return nothing
 end
@@ -15689,13 +22108,21 @@ end
 function polchebyshev_eval(x1::Integer; x2::Integer = 1, x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polchebyshev_eval, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Clong, Ptr{Clong}),
+                cglobal((:polchebyshev_eval, LibPARI.PARI_jll.libpari)),
+                3,
                 Clong(x1),
                 Clong(x2),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15705,13 +22132,18 @@ end
 function polclass(x1::LibPARI.Gen; x2::Integer = 0, x3::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polclass, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:polclass, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15721,13 +22153,18 @@ end
 function polcoef(x1::LibPARI.Gen, x2::Integer; x3::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polcoef, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:polcoef, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15737,13 +22174,18 @@ end
 function polcompositum0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polcompositum0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:polcompositum0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15753,12 +22195,21 @@ end
 function polcyclo_eval(x1::Integer; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polcyclo_eval, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Ptr{Clong}),
+                cglobal((:polcyclo_eval, LibPARI.PARI_jll.libpari)),
+                2,
                 Clong(x1),
-                (x2 === nothing ? C_NULL : x2.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15768,11 +22219,18 @@ end
 function polcyclofactors(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polcyclofactors, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:polcyclofactors, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15782,12 +22240,18 @@ end
 function gppoldegree(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gppoldegree, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gppoldegree, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15797,12 +22261,18 @@ end
 function poldisc0(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:poldisc0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:poldisc0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15812,12 +22282,18 @@ end
 function poldiscfactors(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:poldiscfactors, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:poldiscfactors, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15827,11 +22303,18 @@ end
 function reduceddiscsmith(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:reduceddiscsmith, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:reduceddiscsmith, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15841,12 +22324,18 @@ end
 function polfromroots(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polfromroots, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:polfromroots, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15856,12 +22345,18 @@ end
 function polgalois(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polgalois, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:polgalois, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15871,11 +22366,18 @@ end
 function polgraeffe(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polgraeffe, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:polgraeffe, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15890,14 +22392,18 @@ function polhensellift(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polhensellift, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:polhensellift, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 Clong(x4),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15908,14 +22414,18 @@ function polint(x1::LibPARI.Gen; x2 = nothing, x3 = nothing)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:polint, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            (x2 === nothing ? C_NULL : x2.ptr),
-            (x3 === nothing ? C_NULL : x3.ptr),
-            out1,
+            cglobal((:polint, LibPARI.PARI_jll.libpari)),
+            4,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr))),
+            reinterpret(Clong, Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr))),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -15928,11 +22438,18 @@ end
 function polisclass(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:polisclass, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:polisclass, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -15942,11 +22459,18 @@ end
 function poliscyclo(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:poliscyclo, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:poliscyclo, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -15956,11 +22480,18 @@ end
 function poliscycloprod(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:poliscycloprod, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:poliscycloprod, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -15970,11 +22501,18 @@ end
 function polisirreducible(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:polisirreducible, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:polisirreducible, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -15984,12 +22522,18 @@ end
 function pollead(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:pollead, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:pollead, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -15999,11 +22543,18 @@ end
 function polrecip(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polrecip, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:polrecip, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16013,13 +22564,21 @@ end
 function polred0(x1::LibPARI.Gen; x2::Integer = 0, x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polred0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Ptr{Clong}),
-                x1.ptr,
+                cglobal((:polred0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16029,12 +22588,18 @@ end
 function polredabs0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polredabs0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:polredabs0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16044,12 +22609,18 @@ end
 function polredbest(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polredbest, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:polredbest, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16059,11 +22630,18 @@ end
 function polredord(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polredord, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:polredord, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16073,12 +22651,18 @@ end
 function roots(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:roots, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:roots, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16088,12 +22672,21 @@ end
 function polrootsbound(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polrootsbound, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:polrootsbound, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16103,13 +22696,24 @@ end
 function polrootsff(x1::LibPARI.Gen; x2 = nothing, x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polrootsff, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:polrootsff, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16119,12 +22723,21 @@ end
 function polrootsmod(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polrootsmod, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:polrootsmod, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16134,13 +22747,18 @@ end
 function polrootspadic(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polrootspadic, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:polrootspadic, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16150,13 +22768,21 @@ end
 function realroots(x1::LibPARI.Gen; x2 = nothing, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:realroots, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:realroots, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16166,13 +22792,24 @@ end
 function sturmpart(x1::LibPARI.Gen; x2 = nothing, x3 = nothing)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:sturmpart, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:sturmpart, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -16182,13 +22819,18 @@ end
 function polsubcyclo(x1::Integer, x2::Integer; x3::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polsubcyclo, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Clong, Clong),
+                cglobal((:polsubcyclo, LibPARI.PARI_jll.libpari)),
+                3,
                 Clong(x1),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16203,14 +22845,18 @@ function polsubcyclofast(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polsubcyclofast, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong, Clong),
-                x1.ptr,
+                cglobal((:polsubcyclofast, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
                 Clong(x4),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16220,12 +22866,18 @@ end
 function sylvestermatrix(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:sylvestermatrix, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:sylvestermatrix, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16235,12 +22887,18 @@ end
 function polsym(x1::LibPARI.Gen, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polsym, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:polsym, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16250,12 +22908,18 @@ end
 function polchebyshev1(x1::Integer; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polchebyshev1, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Clong),
+                cglobal((:polchebyshev1, LibPARI.PARI_jll.libpari)),
+                2,
                 Clong(x1),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16265,13 +22929,18 @@ end
 function polteichmuller(x1::LibPARI.Gen, x2::Integer, x3::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polteichmuller, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Culong, Clong),
-                x1.ptr,
-                Culong(x2),
+                cglobal((:polteichmuller, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Culong(x2)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16282,12 +22951,18 @@ function poltomonic(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:poltomonic, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            out1,
+            cglobal((:poltomonic, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -16300,11 +22975,18 @@ end
 function tschirnhaus(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:tschirnhaus, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:tschirnhaus, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16319,14 +23001,18 @@ function polylog0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polylog0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Ptr{Clong}, Clong, Clong),
+                cglobal((:polylog0, LibPARI.PARI_jll.libpari)),
+                4,
                 Clong(x1),
-                x2.ptr,
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16341,14 +23027,24 @@ function polylogmult_interpolate(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polylogmult_interpolate, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:polylogmult_interpolate, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16358,12 +23054,18 @@ end
 function polzag(x1::Integer, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:polzag, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Clong),
+                cglobal((:polzag, LibPARI.PARI_jll.libpari)),
+                2,
                 Clong(x1),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16373,13 +23075,21 @@ end
 function gpowers0(x1::LibPARI.Gen, x2::Integer; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gpowers0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Ptr{Clong}),
-                x1.ptr,
+                cglobal((:gpowers0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16389,12 +23099,21 @@ end
 function precision00(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:precision00, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:precision00, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16404,11 +23123,18 @@ end
 function precprime(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:precprime, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:precprime, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16418,11 +23144,18 @@ end
 function prime(x1::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:prime, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:prime, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16432,13 +23165,18 @@ end
 function primecert0(x1::LibPARI.Gen; x2::Integer = 0, x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:primecert0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:primecert0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16448,12 +23186,18 @@ end
 function primecertexport(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:primecertexport, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:primecertexport, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16463,11 +23207,18 @@ end
 function primecertisvalid(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:primecertisvalid, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:primecertisvalid, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -16477,11 +23228,18 @@ end
 function primepi(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:primepi, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:primepi, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16491,11 +23249,18 @@ end
 function primes0(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:primes0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:primes0, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16505,13 +23270,18 @@ end
 function prodnumrat(x1::LibPARI.Gen, x2::Integer; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:prodnumrat, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:prodnumrat, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16520,12 +23290,18 @@ end
 "psdraw(list,{flag=0}): obsolete function."
 function psdraw(x1::LibPARI.Gen; x2::Integer = 0)
     LibPARI.protected_call() do
-        ccall(
-            (:psdraw, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Ptr{Clong}, Clong),
-            x1.ptr,
+            cglobal((:psdraw, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
             Clong(x2),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -16535,13 +23311,18 @@ end
 function gpsi_der(x1::LibPARI.Gen; x2::Integer = 0, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gpsi_der, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:gpsi_der, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16551,13 +23332,18 @@ end
 function psplothraw(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:psplothraw, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:psplothraw, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16567,12 +23353,21 @@ end
 function qfauto0(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfauto0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:qfauto0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16582,12 +23377,18 @@ end
 function qfautoexport(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfautoexport, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:qfautoexport, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16597,12 +23398,18 @@ end
 function qfbclassno0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfbclassno0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:qfbclassno0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16612,12 +23419,18 @@ end
 function qfbcomp(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfbcomp, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:qfbcomp, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16627,12 +23440,18 @@ end
 function qfbcompraw(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfbcompraw, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:qfbcompraw, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16642,12 +23461,18 @@ end
 function qfbcornacchia(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfbcornacchia, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:qfbcornacchia, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16657,11 +23482,18 @@ end
 function hclassno(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:hclassno, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:hclassno, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16671,13 +23503,21 @@ end
 function qfbil(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfbil, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:qfbil, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16687,13 +23527,18 @@ end
 function nucomp(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nucomp, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:nucomp, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16703,13 +23548,21 @@ end
 function nupow(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:nupow, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:nupow, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16719,12 +23572,18 @@ end
 function qfbpow(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfbpow, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:qfbpow, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16734,12 +23593,18 @@ end
 function qfbpowraw(x1::LibPARI.Gen, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfbpowraw, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:qfbpowraw, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16749,12 +23614,18 @@ end
 function primeform(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:primeform, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:primeform, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16764,14 +23635,24 @@ end
 function qfbred0(x1::LibPARI.Gen; x2::Integer = 0, x3 = nothing, x4 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfbred0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
+                cglobal((:qfbred0, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
-                (x3 === nothing ? C_NULL : x3.ptr),
-                (x4 === nothing ? C_NULL : x4.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x4 === nothing ? C_NULL : x4.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16781,12 +23662,21 @@ end
 function qfbredsl2(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfbredsl2, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:qfbredsl2, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16796,13 +23686,18 @@ end
 function qfbsolve(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfbsolve, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:qfbsolve, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16812,12 +23707,18 @@ end
 function qfcholesky(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfcholesky, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:qfcholesky, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16827,13 +23728,24 @@ end
 function qfeval0(x2::LibPARI.Gen; x1 = nothing, x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfeval0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                (x1 === nothing ? C_NULL : x1.ptr),
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:qfeval0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16843,12 +23755,18 @@ end
 function qfgaussred0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfgaussred0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:qfgaussred0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16858,14 +23776,24 @@ end
 function qfisom0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing, x4 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfisom0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
-                (x4 === nothing ? C_NULL : x4.ptr),
+                cglobal((:qfisom0, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x4 === nothing ? C_NULL : x4.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16875,13 +23803,24 @@ end
 function qfisominit0(x1::LibPARI.Gen; x2 = nothing, x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfisominit0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:qfisominit0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16891,12 +23830,18 @@ end
 function jacobi(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:jacobi, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:jacobi, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16906,12 +23851,18 @@ end
 function qflll0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qflll0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:qflll0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16921,12 +23872,18 @@ end
 function qflllgram0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qflllgram0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:qflllgram0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16936,11 +23893,18 @@ end
 function qfminimize(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfminimize, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:qfminimize, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16950,12 +23914,21 @@ end
 function qfnorm(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfnorm, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:qfnorm, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16965,12 +23938,18 @@ end
 function qforbits(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qforbits, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:qforbits, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16980,13 +23959,18 @@ end
 function qfparam(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfparam, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:qfparam, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -16996,11 +23980,18 @@ end
 function qfperfection(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfperfection, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:qfperfection, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17010,13 +24001,18 @@ end
 function qfrep0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfrep0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:qfrep0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17026,11 +24022,18 @@ end
 function qfsign(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfsign, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:qfsign, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17040,11 +24043,18 @@ end
 function qfsolve(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:qfsolve, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:qfsolve, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17059,14 +24069,21 @@ function quadclassunit0(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:quadclassunit0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:quadclassunit0, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17076,11 +24093,18 @@ end
 function quaddisc(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:quaddisc, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:quaddisc, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17090,12 +24114,18 @@ end
 function quadgen0(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:quadgen0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:quadgen0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17105,12 +24135,18 @@ end
 function quadhilbert(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:quadhilbert, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:quadhilbert, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17120,12 +24156,18 @@ end
 function quadpoly0(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:quadpoly0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:quadpoly0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17135,13 +24177,18 @@ end
 function quadray(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:quadray, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:quadray, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17151,12 +24198,18 @@ end
 function quadregulator(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:quadregulator, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:quadregulator, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17166,12 +24219,18 @@ end
 function quadunit0(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:quadunit0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:quadunit0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17181,12 +24240,18 @@ end
 function quadunitindex(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:quadunitindex, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:quadunitindex, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17196,11 +24261,18 @@ end
 function quadunitnorm(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:quadunitnorm, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:quadunitnorm, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -17209,7 +24281,19 @@ end
 "quit({status = 0}): quit, return to the system with exit status\n'status'."
 function gp_quit(; x1::Integer = 0)
     LibPARI.protected_call() do
-        ccall((:gp_quit, LibPARI.PARI_jll.libpari), Cvoid, (Clong,), Clong(x1))
+        LibPARI._trap_call(
+            Cvoid,
+            cglobal((:gp_quit, LibPARI.PARI_jll.libpari)),
+            1,
+            Clong(x1),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+        )
     end
     return nothing
 end
@@ -17218,12 +24302,18 @@ end
 function ramanujantau(x1::LibPARI.Gen; x2::Integer = 12)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:ramanujantau, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:ramanujantau, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17233,11 +24323,21 @@ end
 function genrand(; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:genrand, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                (x1 === nothing ? C_NULL : x1.ptr),
+                cglobal((:genrand, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17247,12 +24347,24 @@ end
 function randomprime0(; x1 = nothing, x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:randomprime0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                (x1 === nothing ? C_NULL : x1.ptr),
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:randomprime0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17262,12 +24374,21 @@ end
 function gp_read_file(; x1::AbstractString = "")
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gp_read_file, LibPARI.PARI_jll.libpari),
-                Ptr{Clong},
-                (Cstring,),
-                x1,
-            )
+            let _cs1 = Base.cconvert(Cstring, x1);
+                GC.@preserve _cs1 LibPARI._trap_call(
+                    Ptr{Clong},
+                    cglobal((:gp_read_file, LibPARI.PARI_jll.libpari)),
+                    1,
+                    reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                );
+            end
         end
     end
 end
@@ -17276,12 +24397,21 @@ end
 function readstr(; x1::AbstractString = "")
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:readstr, LibPARI.PARI_jll.libpari),
-                Ptr{Clong},
-                (Cstring,),
-                x1,
-            )
+            let _cs1 = Base.cconvert(Cstring, x1);
+                GC.@preserve _cs1 LibPARI._trap_call(
+                    Ptr{Clong},
+                    cglobal((:readstr, LibPARI.PARI_jll.libpari)),
+                    1,
+                    reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                );
+            end
         end
     end
 end
@@ -17290,12 +24420,21 @@ end
 function gp_readvec_file(; x1::AbstractString = "")
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gp_readvec_file, LibPARI.PARI_jll.libpari),
-                Ptr{Clong},
-                (Cstring,),
-                x1,
-            )
+            let _cs1 = Base.cconvert(Cstring, x1);
+                GC.@preserve _cs1 LibPARI._trap_call(
+                    Ptr{Clong},
+                    cglobal((:gp_readvec_file, LibPARI.PARI_jll.libpari)),
+                    1,
+                    reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                );
+            end
         end
     end
 end
@@ -17304,11 +24443,18 @@ end
 function greal(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:greal, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:greal, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17318,11 +24464,21 @@ end
 function removeprimes(; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:removeprimes, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                (x1 === nothing ? C_NULL : x1.ptr),
+                cglobal((:removeprimes, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17332,11 +24488,21 @@ end
 function return0(; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:return0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                (x1 === nothing ? C_NULL : x1.ptr),
+                cglobal((:return0, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17346,12 +24512,18 @@ end
 function rnfalgtobasis(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfalgtobasis, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfalgtobasis, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17361,12 +24533,18 @@ end
 function rnfbasis(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfbasis, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfbasis, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17376,12 +24554,18 @@ end
 function rnfbasistoalg(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfbasistoalg, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfbasistoalg, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17396,14 +24580,18 @@ function rnfcharpoly(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfcharpoly, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:rnfcharpoly, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 Clong(x4),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17413,13 +24601,18 @@ end
 function rnfconductor0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfconductor0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfconductor0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17429,12 +24622,18 @@ end
 function rnfdet(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfdet, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfdet, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17444,12 +24643,18 @@ end
 function rnfdiscf(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfdiscf, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfdiscf, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17459,12 +24664,18 @@ end
 function rnfeltabstorel(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfeltabstorel, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfeltabstorel, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17474,13 +24685,18 @@ end
 function rnfeltdown0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfeltdown0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfeltdown0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17490,12 +24706,18 @@ end
 function rnfeltnorm(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfeltnorm, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfeltnorm, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17505,12 +24727,18 @@ end
 function rnfeltreltoabs(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfeltreltoabs, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfeltreltoabs, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17520,12 +24748,18 @@ end
 function rnfelttrace(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfelttrace, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfelttrace, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17535,13 +24769,18 @@ end
 function rnfeltup0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfeltup0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfeltup0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17551,13 +24790,18 @@ end
 function rnfequation0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfequation0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfequation0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17567,12 +24811,18 @@ end
 function rnfhnfbasis(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfhnfbasis, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfhnfbasis, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17582,12 +24832,18 @@ end
 function rnfidealabstorel(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfidealabstorel, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfidealabstorel, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17597,12 +24853,18 @@ end
 function rnfidealdown(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfidealdown, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfidealdown, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17612,12 +24874,18 @@ end
 function rnfidealfactor(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfidealfactor, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfidealfactor, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17627,12 +24895,18 @@ end
 function rnfidealhnf(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfidealhnf, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfidealhnf, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17642,13 +24916,18 @@ end
 function rnfidealmul(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfidealmul, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:rnfidealmul, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17658,12 +24937,18 @@ end
 function rnfidealnormabs(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfidealnormabs, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfidealnormabs, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17673,12 +24958,18 @@ end
 function rnfidealnormrel(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfidealnormrel, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfidealnormrel, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17688,12 +24979,18 @@ end
 function rnfidealprimedec(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfidealprimedec, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfidealprimedec, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17703,13 +25000,18 @@ end
 function rnfidealreltoabs0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfidealreltoabs0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfidealreltoabs0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17719,12 +25021,18 @@ end
 function rnfidealtwoelement(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfidealtwoelement, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfidealtwoelement, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17734,13 +25042,18 @@ end
 function rnfidealup0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfidealup0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfidealup0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17750,13 +25063,18 @@ end
 function rnfinit0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfinit0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfinit0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17766,12 +25084,18 @@ end
 function rnfisabelian(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:rnfisabelian, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfisabelian, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -17781,12 +25105,18 @@ end
 function rnfisfree(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:rnfisfree, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfisfree, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -17796,11 +25126,18 @@ end
 function rnfislocalcyclo(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:rnfislocalcyclo, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:rnfislocalcyclo, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -17810,13 +25147,18 @@ end
 function rnfisnorm(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfisnorm, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfisnorm, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17826,13 +25168,18 @@ end
 function rnfisnorminit(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 2)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfisnorminit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfisnorminit, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17842,13 +25189,21 @@ end
 function rnfkummer(x1::LibPARI.Gen; x2 = nothing, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfkummer, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:rnfkummer, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17863,14 +25218,18 @@ function rnflllgram(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnflllgram, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:rnflllgram, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17880,12 +25239,18 @@ end
 function rnfnormgroup(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfnormgroup, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfnormgroup, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17895,13 +25260,18 @@ end
 function rnfpolred(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfpolred, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfpolred, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17911,13 +25281,18 @@ end
 function rnfpolredabs(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfpolredabs, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfpolredabs, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17927,13 +25302,18 @@ end
 function rnfpolredbest(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfpolredbest, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfpolredbest, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17943,12 +25323,18 @@ end
 function rnfpseudobasis(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfpseudobasis, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfpseudobasis, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17958,12 +25344,18 @@ end
 function rnfsteinitz(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:rnfsteinitz, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:rnfsteinitz, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17973,12 +25365,18 @@ end
 function grootsof1(x1::Integer; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:grootsof1, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Clong),
+                cglobal((:grootsof1, LibPARI.PARI_jll.libpari)),
+                2,
                 Clong(x1),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -17989,12 +25387,18 @@ function round0(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:round0, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            out1,
+            cglobal((:round0, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -18007,13 +25411,18 @@ end
 function select0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:select0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:select0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18023,7 +25432,19 @@ end
 function pari_self()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:pari_self, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:pari_self, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -18032,13 +25453,18 @@ end
 function seralgdep(x1::LibPARI.Gen, x2::Integer, x3::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:seralgdep, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:seralgdep, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18048,12 +25474,18 @@ end
 function serchop(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:serchop, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:serchop, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18063,12 +25495,18 @@ end
 function convol(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:convol, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:convol, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18078,13 +25516,18 @@ end
 function serdiffdep(x1::LibPARI.Gen, x2::Integer, x3::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:serdiffdep, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:serdiffdep, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18094,11 +25537,18 @@ end
 function laplace(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:laplace, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:laplace, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18108,12 +25558,18 @@ end
 function gpserprec(x1::LibPARI.Gen, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gpserprec, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gpserprec, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18123,11 +25579,18 @@ end
 function serreverse(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:serreverse, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:serreverse, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18137,13 +25600,21 @@ end
 function setbinop(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:setbinop, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:setbinop, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18153,12 +25624,18 @@ end
 function setdelta(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:setdelta, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:setdelta, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18168,12 +25645,18 @@ end
 function setintersect(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:setintersect, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:setintersect, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18183,11 +25666,18 @@ end
 function setisset(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:setisset, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:setisset, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -18197,12 +25687,18 @@ end
 function setminus(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:setminus, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:setminus, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18211,11 +25707,18 @@ end
 "setrand(n): reset the seed of the random number generator to n."
 function setrand(x1::LibPARI.Gen)
     LibPARI.protected_call() do
-        ccall(
-            (:setrand, LibPARI.PARI_jll.libpari),
+        LibPARI._trap_call(
             Cvoid,
-            (Ptr{Clong},),
-            x1.ptr,
+            cglobal((:setrand, LibPARI.PARI_jll.libpari)),
+            1,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
     end
     return nothing
@@ -18225,13 +25728,18 @@ end
 function setsearch(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:setsearch, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:setsearch, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -18241,12 +25749,18 @@ end
 function setunion(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:setunion, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:setunion, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18256,12 +25770,18 @@ end
 function gmul2n(x1::LibPARI.Gen, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gmul2n, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gmul2n, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18271,12 +25791,18 @@ end
 function sumdivk(x1::LibPARI.Gen; x2::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:sumdivk, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:sumdivk, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18286,11 +25812,18 @@ end
 function gsigne(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:gsigne, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Cint,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gsigne, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -18300,11 +25833,18 @@ end
 function simplify(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:simplify, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:simplify, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18314,12 +25854,18 @@ end
 function gsin(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gsin, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gsin, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18329,12 +25875,18 @@ end
 function gsinc(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gsinc, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gsinc, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18344,12 +25896,18 @@ end
 function gsinh(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gsinh, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gsinh, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18359,11 +25917,18 @@ end
 function gsizebyte(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:gsizebyte, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gsizebyte, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -18373,11 +25938,18 @@ end
 function sizedigit(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:sizedigit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:sizedigit, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -18387,12 +25959,21 @@ end
 function snfrank(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:snfrank, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:snfrank, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -18402,11 +25983,18 @@ end
 function gsqr(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gsqr, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gsqr, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18416,12 +26004,18 @@ end
 function gsqrt(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gsqrt, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gsqrt, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18432,12 +26026,18 @@ function sqrtint0(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:sqrtint0, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            out1,
+            cglobal((:sqrtint0, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -18451,14 +26051,18 @@ function gsqrtn(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:gsqrtn, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}, Clong),
-            x1.ptr,
-            x2.ptr,
-            out1,
+            cglobal((:gsqrtn, LibPARI.PARI_jll.libpari)),
+            4,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
             prec,
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -18471,12 +26075,18 @@ end
 function sqrtnint(x1::LibPARI.Gen, x2::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:sqrtnint, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:sqrtnint, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18486,13 +26096,18 @@ end
 function stirling(x1::Integer, x2::Integer; x3::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:stirling, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Clong, Clong),
+                cglobal((:stirling, LibPARI.PARI_jll.libpari)),
+                3,
                 Clong(x1),
                 Clong(x2),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18502,12 +26117,21 @@ end
 function strjoin(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:strjoin, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:strjoin, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18517,12 +26141,21 @@ end
 function strsplit(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:strsplit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:strsplit, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18532,11 +26165,18 @@ end
 function strtime(x1::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:strtime, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong,),
+                cglobal((:strtime, LibPARI.PARI_jll.libpari)),
+                1,
                 Clong(x1),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18546,12 +26186,21 @@ end
 function subcyclohminus(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:subcyclohminus, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:subcyclohminus, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18561,13 +26210,18 @@ end
 function subcycloiwasawa(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:subcycloiwasawa, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:subcycloiwasawa, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18577,13 +26231,18 @@ end
 function subcyclopclgp(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:subcyclopclgp, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:subcyclopclgp, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18593,13 +26252,18 @@ end
 function gsubst(x1::LibPARI.Gen, x2::Integer, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gsubst, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Ptr{Clong}),
-                x1.ptr,
+                cglobal((:gsubst, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
-                x3.ptr,
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18609,13 +26273,18 @@ end
 function gsubstpol(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gsubstpol, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:gsubstpol, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18625,13 +26294,18 @@ end
 function gsubstvec(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gsubstvec, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:gsubstvec, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18641,12 +26315,18 @@ end
 function sumdedekind(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:sumdedekind, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:sumdedekind, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18656,12 +26336,21 @@ end
 function sumdigits0(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:sumdigits0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:sumdigits0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18671,12 +26360,18 @@ end
 function sumformal(x1::LibPARI.Gen; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:sumformal, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:sumformal, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18686,12 +26381,21 @@ end
 function sumnumapinit(; x1 = nothing, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:sumnumapinit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                (x1 === nothing ? C_NULL : x1.ptr),
+                cglobal((:sumnumapinit, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18701,12 +26405,21 @@ end
 function sumnuminit(; x1 = nothing, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:sumnuminit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                (x1 === nothing ? C_NULL : x1.ptr),
+                cglobal((:sumnuminit, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18716,13 +26429,24 @@ end
 function sumnumlagrangeinit(; x1 = nothing, x2 = nothing, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:sumnumlagrangeinit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                (x1 === nothing ? C_NULL : x1.ptr),
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:sumnumlagrangeinit, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18737,14 +26461,27 @@ function sumnummonieninit(;
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:sumnummonieninit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                (x1 === nothing ? C_NULL : x1.ptr),
-                (x2 === nothing ? C_NULL : x2.ptr),
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:sumnummonieninit, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18754,13 +26491,18 @@ end
 function sumnumrat(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:sumnumrat, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:sumnumrat, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18769,7 +26511,23 @@ end
 "system(str): str being a string, execute the system command str."
 function gpsystem(x1::AbstractString)
     return LibPARI.protected_call() do
-        Int(ccall((:gpsystem, LibPARI.PARI_jll.libpari), Clong, (Cstring,), x1))
+        Int(
+            let _cs1 = Base.cconvert(Cstring, x1);
+                GC.@preserve _cs1 LibPARI._trap_call(
+                    Clong,
+                    cglobal((:gpsystem, LibPARI.PARI_jll.libpari)),
+                    1,
+                    reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                );
+            end,
+        )
     end
 end
 
@@ -18777,12 +26535,18 @@ end
 function gtan(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gtan, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gtan, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18792,12 +26556,18 @@ end
 function gtanh(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gtanh, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gtanh, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18807,13 +26577,18 @@ end
 function tayl(x1::LibPARI.Gen, x2::Integer; seriesprec::Integer = 16)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:tayl, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:tayl, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 seriesprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18823,12 +26598,21 @@ end
 function teichmuller(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:teichmuller, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:teichmuller, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18838,13 +26622,18 @@ end
 function theta(x1::LibPARI.Gen, x2::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:theta, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:theta, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18854,13 +26643,18 @@ end
 function thetanullk(x1::LibPARI.Gen, x2::Integer; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:thetanullk, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:thetanullk, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18870,13 +26664,21 @@ end
 function thue(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:thue, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:thue, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18886,13 +26688,18 @@ end
 function thueinit(x1::LibPARI.Gen; x2::Integer = 0, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:thueinit, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:thueinit, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18902,11 +26709,18 @@ end
 function gtrace(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gtrace, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:gtrace, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18917,12 +26731,18 @@ function trunc0(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:trunc0, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            out1,
+            cglobal((:trunc0, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -18935,11 +26755,18 @@ end
 function type0(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:type0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:type0, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18948,7 +26775,19 @@ end
 "unexportall(): empty the list of variables exported to the parallel\nworld."
 function unexportall()
     LibPARI.protected_call() do
-        ccall((:unexportall, LibPARI.PARI_jll.libpari), Cvoid, ())
+        LibPARI._trap_call(
+            Cvoid,
+            cglobal((:unexportall, LibPARI.PARI_jll.libpari)),
+            0,
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+        )
     end
     return nothing
 end
@@ -18957,12 +26796,21 @@ end
 function gpvaluation(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gpvaluation, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:gpvaluation, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -18972,13 +26820,21 @@ end
 function varhigher(x1::AbstractString; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:varhigher, LibPARI.PARI_jll.libpari),
-                Ptr{Clong},
-                (Cstring, Clong),
-                x1,
-                Clong(x2),
-            )
+            let _cs1 = Base.cconvert(Cstring, x1);
+                GC.@preserve _cs1 LibPARI._trap_call(
+                    Ptr{Clong},
+                    cglobal((:varhigher, LibPARI.PARI_jll.libpari)),
+                    2,
+                    reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                    Clong(x2),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                );
+            end
         end
     end
 end
@@ -18987,11 +26843,21 @@ end
 function gpolvar(; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gpolvar, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                (x1 === nothing ? C_NULL : x1.ptr),
+                cglobal((:gpolvar, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19001,11 +26867,21 @@ end
 function variables_vec(; x1 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:variables_vec, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                (x1 === nothing ? C_NULL : x1.ptr),
+                cglobal((:variables_vec, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x1 === nothing ? C_NULL : x1.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19015,13 +26891,21 @@ end
 function varlower(x1::AbstractString; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:varlower, LibPARI.PARI_jll.libpari),
-                Ptr{Clong},
-                (Cstring, Clong),
-                x1,
-                Clong(x2),
-            )
+            let _cs1 = Base.cconvert(Cstring, x1);
+                GC.@preserve _cs1 LibPARI._trap_call(
+                    Ptr{Clong},
+                    cglobal((:varlower, LibPARI.PARI_jll.libpari)),
+                    2,
+                    reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                    Clong(x2),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                    Clong(0),
+                );
+            end
         end
     end
 end
@@ -19030,13 +26914,21 @@ end
 function extract0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:extract0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:extract0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19047,12 +26939,18 @@ function vecmax0(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:vecmax0, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            out1,
+            cglobal((:vecmax0, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -19066,12 +26964,18 @@ function vecmin0(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:vecmin0, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            out1,
+            cglobal((:vecmin0, LibPARI.PARI_jll.libpari)),
+            2,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -19084,11 +26988,18 @@ end
 function vecprod(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:vecprod, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:vecprod, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19098,13 +27009,21 @@ end
 function vecsearch(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:vecsearch, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:vecsearch, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -19114,11 +27033,18 @@ end
 function vecsum(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:vecsum, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:vecsum, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19128,7 +27054,19 @@ end
 function pari_version()
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall((:pari_version, LibPARI.PARI_jll.libpari), Ptr{Clong}, ())
+            LibPARI._trap_call(
+                Ptr{Clong},
+                cglobal((:pari_version, LibPARI.PARI_jll.libpari)),
+                0,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            )
         end
     end
 end
@@ -19137,13 +27075,18 @@ end
 function weber0(x1::LibPARI.Gen; x2::Integer = 0, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:weber0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong, Clong),
-                x1.ptr,
+                cglobal((:weber0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19152,7 +27095,21 @@ end
 "whatnow(key): if key was present in GP version 1.39.15, gives\nthe new function name."
 function whatnow0(x1::AbstractString)
     LibPARI.protected_call() do
-        ccall((:whatnow0, LibPARI.PARI_jll.libpari), Cvoid, (Cstring,), x1)
+        let _cs1 = Base.cconvert(Cstring, x1);
+            GC.@preserve _cs1 LibPARI._trap_call(
+                Cvoid,
+                cglobal((:whatnow0, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            );
+        end
     end
     return nothing
 end
@@ -19160,13 +27117,24 @@ end
 "writebin(filename,{x}): write x as a binary object to file filename.\nIf x is omitted, write all session variables."
 function gpwritebin(x1::AbstractString; x2 = nothing)
     LibPARI.protected_call() do
-        ccall(
-            (:gpwritebin, LibPARI.PARI_jll.libpari),
-            Cvoid,
-            (Cstring, Ptr{Clong}),
-            x1,
-            (x2 === nothing ? C_NULL : x2.ptr),
-        )
+        let _cs1 = Base.cconvert(Cstring, x1);
+            GC.@preserve _cs1 LibPARI._trap_call(
+                Cvoid,
+                cglobal((:gpwritebin, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Base.unsafe_convert(Cstring, _cs1)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+            );
+        end
     end
     return nothing
 end
@@ -19175,12 +27143,18 @@ end
 function gzeta(x1::LibPARI.Gen; prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:gzeta, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:gzeta, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19195,14 +27169,18 @@ function zetahurwitz(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:zetahurwitz, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:zetahurwitz, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19212,13 +27190,21 @@ end
 function zetamult_interpolate(x1::LibPARI.Gen; x2 = nothing, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:zetamult_interpolate, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:zetamult_interpolate, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19228,13 +27214,18 @@ end
 function zetamultall(x1::Integer; x2::Integer = 0, prec::Integer = 4)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:zetamultall, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Clong, Clong, Clong),
+                cglobal((:zetamultall, LibPARI.PARI_jll.libpari)),
+                3,
                 Clong(x1),
                 Clong(x2),
                 prec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19244,12 +27235,18 @@ end
 function zetamultconvert(x1::LibPARI.Gen; x2::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:zetamultconvert, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:zetamultconvert, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19259,11 +27256,18 @@ end
 function zetamultdual(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:zetamultdual, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:zetamultdual, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19273,11 +27277,18 @@ end
 function znchar(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:znchar, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:znchar, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19287,12 +27298,18 @@ end
 function zncharconductor(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:zncharconductor, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:zncharconductor, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19302,13 +27319,18 @@ end
 function znchardecompose(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:znchardecompose, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:znchardecompose, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19323,14 +27345,21 @@ function znchargauss(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:znchargauss, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:znchargauss, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
                 bitprec,
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19340,13 +27369,18 @@ end
 function zncharinduce(x1::LibPARI.Gen, x2::LibPARI.Gen, x3::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:zncharinduce, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
+                cglobal((:zncharinduce, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19356,12 +27390,18 @@ end
 function zncharisodd(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         Int(
-            ccall(
-                (:zncharisodd, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Clong,
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:zncharisodd, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             ),
         )
     end
@@ -19371,13 +27411,18 @@ end
 function znchartokronecker(x1::LibPARI.Gen, x2::LibPARI.Gen; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:znchartokronecker, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Clong),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:znchartokronecker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
                 Clong(x3),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19387,12 +27432,18 @@ end
 function znchartoprimitive(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:znchartoprimitive, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:znchartoprimitive, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19402,12 +27453,18 @@ end
 function znconreychar(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:znconreychar, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:znconreychar, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19418,13 +27475,18 @@ function znconreyconductor(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         out1 = Ref{Ptr{Clong}}(C_NULL)
         av = LibPARI._avma()
-        r = ccall(
-            (:znconreyconductor, LibPARI.PARI_jll.libpari),
+        r = LibPARI._trap_call(
             Ptr{Clong},
-            (Ptr{Clong}, Ptr{Clong}, Ref{Ptr{Clong}}),
-            x1.ptr,
-            x2.ptr,
-            out1,
+            cglobal((:znconreyconductor, LibPARI.PARI_jll.libpari)),
+            3,
+            reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+            reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+            reinterpret(Clong, Base.unsafe_convert(Ptr{Ptr{Clong}}, out1)),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
+            Clong(0),
         )
         primary = LibPARI.Gen(r)
         o1 = LibPARI.Gen(out1[])
@@ -19437,12 +27499,18 @@ end
 function znconreyexp(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:znconreyexp, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:znconreyexp, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19452,12 +27520,18 @@ end
 function znconreylog(x1::LibPARI.Gen, x2::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:znconreylog, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
+                cglobal((:znconreylog, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19472,14 +27546,21 @@ function zncoppersmith(
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:zncoppersmith, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                x3.ptr,
-                (x4 === nothing ? C_NULL : x4.ptr),
+                cglobal((:zncoppersmith, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x3.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x4 === nothing ? C_NULL : x4.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19489,13 +27570,21 @@ end
 function znlog0(x1::LibPARI.Gen, x2::LibPARI.Gen; x3 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:znlog0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                x2.ptr,
-                (x3 === nothing ? C_NULL : x3.ptr),
+                cglobal((:znlog0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(Clong, Ptr{Clong}(x2.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x3 === nothing ? C_NULL : x3.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19505,12 +27594,21 @@ end
 function znorder(x1::LibPARI.Gen; x2 = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:znorder, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
-                x1.ptr,
-                (x2 === nothing ? C_NULL : x2.ptr),
+                cglobal((:znorder, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                reinterpret(
+                    Clong,
+                    Ptr{Clong}((x2 === nothing ? C_NULL : x2.ptr)),
+                ),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19520,11 +27618,18 @@ end
 function znprimroot(x1::LibPARI.Gen)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:znprimroot, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong},),
-                x1.ptr,
+                cglobal((:znprimroot, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19534,12 +27639,18 @@ end
 function znstar0(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:znstar0, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:znstar0, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
@@ -19549,12 +27660,18 @@ end
 function znsubgroupgenerators(x1::LibPARI.Gen; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            ccall(
-                (:znsubgroupgenerators, LibPARI.PARI_jll.libpari),
+            LibPARI._trap_call(
                 Ptr{Clong},
-                (Ptr{Clong}, Clong),
-                x1.ptr,
+                cglobal((:znsubgroupgenerators, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Clong, Ptr{Clong}(x1.ptr)),
                 Clong(x2),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
+                Clong(0),
             )
         end
     end
