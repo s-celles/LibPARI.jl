@@ -8,6 +8,32 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.12.0] - 2026-05-21
+
+An **optional MCP connector** — the first feature beyond the M0–M10 roadmap.
+
+### Added
+
+- An optional **MCP (Model Context Protocol) connector**, delivered as a
+  Julia package extension (`ext/LibPARIMCPExt.jl`). When a user loads
+  [`ModelContextProtocol`](https://github.com/JuliaSMLM/ModelContextProtocol.jl)
+  alongside LibPARI, `LibPARI.serve_mcp()` starts an MCP server that exposes
+  PARI/GP to MCP clients (AI assistants) through three tools: `pari_eval`
+  (evaluate a GP expression — reaches every PARI function), `pari_functions`
+  (list/search PARI functions), and `pari_help` (a function's help text).
+- A documentation page for the connector (`docs/src/mcp.md`).
+- `test/mcp_tests.jl` — `@testitem`s covering activation, the three tools,
+  optionality, and structured error handling.
+
+### Changed
+
+- `Project.toml` declares `ModelContextProtocol` as a **weak dependency**
+  with a `LibPARIMCPExt` extension — the connector is strictly optional.
+  Installing LibPARI does **not** install `ModelContextProtocol`, and a
+  process that does not load it pays no cost: no dependency, no connector
+  code. Calling `serve_mcp` without it raises a `MethodError` whose hint
+  tells the user what to load.
+
 ## [0.11.0] - 2026-05-20
 
 Milestone **M10 — Documentation & 0.11.0 release**. The release milestone:

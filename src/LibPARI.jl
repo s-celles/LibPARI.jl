@@ -28,6 +28,7 @@ include("conversions.jl")
 include("numeric.jl")
 include("evaluator.jl")
 include("bindings.jl")
+include("mcp.jl")
 include("precompile.jl")
 
 """
@@ -41,6 +42,9 @@ function __init__()
     # here, on the loading task, so an invalid `LIBPARI_STACK_SIZE` raises a
     # catchable error at load (REQ-INI-06/07).
     _start_pari_worker!(_configured_stack_size())
+    # Register the hint shown when `serve_mcp` is called without the
+    # optional MCP extension loaded (no-op for normal use).
+    _register_mcp_hint()
     return nothing
 end
 

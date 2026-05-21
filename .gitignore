@@ -43,6 +43,10 @@
 !gen/
 !gen/**
 
+# Package extensions (Julia weak-dependency extensions)
+!ext/
+!ext/**
+
 # Documentation
 !docs/
 !docs/**

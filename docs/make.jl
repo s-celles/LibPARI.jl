@@ -32,6 +32,7 @@ makedocs(;
         "Home" => "index.md",
         "Getting started" => "getting-started.md",
         "API reference" => "api.md",
+        "MCP connector" => "mcp.md",
     ],
     doctest = true,
     # The ~1200 generated `LibPARI.PARI` bindings each carry PARI's `Help`
