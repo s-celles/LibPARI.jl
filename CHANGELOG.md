@@ -8,6 +8,30 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.14.0] - 2026-05-21
+
+`Gen` is now a complete Julia `Number`.
+
+### Added
+
+- **A complete `Number` interface for `Gen`.** `Gen` now carries the full
+  Julia `Number` contract: it mixes with every standard Julia numeric type
+  (`Int`, `BigInt`, `Float64`, `BigFloat`, `Rational`, `Complex`) in
+  arithmetic and comparison; it provides the `zero`/`one` identities,
+  ordering (`<`, `<=`, `isless`) and `hash` — so `Gen`s sort and serve as
+  `Dict`/`Set` keys interchangeably with equal Julia numbers; the standard
+  predicates (`iszero`, `isone`, `isinteger`, `isfinite`, `isreal`, …); the
+  elementary operations (`abs`, `sign`, `inv`, `conj`, `real`, `imag`); and
+  conversions to and from `Float64`, `BigFloat`, `Rational`, and `Complex`.
+  A `Gen` is now a drop-in Julia number in generic numeric code.
+
+### Changed
+
+- An operation that does not apply to a `Gen`'s underlying PARI type (for
+  example, ordering a polynomial, or `Float64` of a vector) raises a
+  catchable `PariError` or `InexactError`. The change is purely additive —
+  no public API change, and `Gen <: Number` is unchanged.
+
 ## [0.13.0] - 2026-05-21
 
 LibPARI is now **fully parallel** — concurrent `libpari` calls *and*

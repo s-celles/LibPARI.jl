@@ -86,6 +86,16 @@ Pages = ["conversions.jl"]
 
 ### Numeric API
 
+`Gen` is a complete Julia `Number`: it mixes with every standard Julia
+numeric type (`Int`, `BigInt`, `Float64`, `BigFloat`, `Rational`,
+`Complex`) in arithmetic and comparison through promotion; it carries the
+`zero`/`one` identities, the standard predicates (`iszero`, `isinteger`,
+`isfinite`, …), the elementary operations (`abs`, `sign`, `inv`, `conj`,
+`real`, `imag`), and `hash` — so a `Gen` sorts, serves as a `Dict`/`Set`
+key interchangeably with an equal Julia number, and works as a drop-in in
+generic numeric code. An operation that does not apply to a `Gen`'s
+underlying PARI type raises a catchable [`PariError`](@ref).
+
 ```@autodocs
 Modules = [LibPARI]
 Pages = ["numeric.jl"]

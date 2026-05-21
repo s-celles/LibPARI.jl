@@ -46,6 +46,26 @@ end
     @test (@inferred (a == b)) isa Bool
 end
 
+@testitem "the Number interface is type-stable" begin
+    using LibPARI
+
+    g = LibPARI.Gen(6)
+
+    @test (@inferred zero(LibPARI.Gen)) isa LibPARI.Gen
+    @test (@inferred one(LibPARI.Gen)) isa LibPARI.Gen
+    @test (@inferred abs(g)) isa LibPARI.Gen
+    @test (@inferred sign(g)) isa LibPARI.Gen
+    @test (@inferred inv(g)) isa LibPARI.Gen
+    @test (@inferred conj(g)) isa LibPARI.Gen
+    @test (@inferred g < g) isa Bool
+    @test (@inferred iszero(g)) isa Bool
+    @test (@inferred isinteger(g)) isa Bool
+    @test (@inferred hash(g, UInt(0))) isa UInt
+    @test (@inferred Float64(g)) isa Float64
+    @test (@inferred Rational(g)) isa Rational
+    @test (@inferred Complex(g)) isa Complex
+end
+
 @testitem "the lifecycle and introspection API is type-stable" begin
     using LibPARI
 

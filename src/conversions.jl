@@ -182,6 +182,70 @@ julia> Int(LibPARI.Gen(255))
 
 Base.convert(::Type{T}, g::Gen) where {T<:Integer} = T(g)
 
+# --- Gen → Julia rational / floating-point / complex -----------------------
+
+"""
+$(TYPEDSIGNATURES)
+
+Convert a rational- or integer-valued `Gen` to a Julia `Rational{BigInt}`.
+
+Throws `InexactError` when `g` is not a rational number.
+"""
+function Base.Rational(g::Gen)
+    return BigInt(PARI.numerator(g)) // BigInt(PARI.denominator(g))
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+Convert a real-valued `Gen` to a Julia `Float64`.
+
+Throws `InexactError` when `g` is not a real number (a complex value, a
+polynomial, a vector, …).
+"""
+function Base.Float64(g::Gen)
+    t = gentype(g)
+    if t === PariType.T_INT
+        return Float64(BigInt(g))
+    elseif t === PariType.T_FRAC
+        return Float64(Rational(g))
+    elseif t === PariType.T_REAL
+        return parse(Float64, _genrepr(g))
+    else
+        throw(InexactError(:Float64, Float64, g))
+    end
+end
+
+Base.AbstractFloat(g::Gen) = Float64(g)
+
+"""
+$(TYPEDSIGNATURES)
+
+Convert a real-valued `Gen` to a Julia `BigFloat`.
+
+Throws `InexactError` when `g` is not a real number.
+"""
+function Base.BigFloat(g::Gen)
+    t = gentype(g)
+    if t === PariType.T_INT
+        return BigFloat(BigInt(g))
+    elseif t === PariType.T_FRAC
+        return BigFloat(Rational(g))
+    elseif t === PariType.T_REAL
+        return parse(BigFloat, _genrepr(g))
+    else
+        throw(InexactError(:BigFloat, BigFloat, g))
+    end
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+Convert a numeric `Gen` to a Julia `Complex{Float64}` — the real and
+imaginary parts of `g` as `Float64`s.
+"""
+Base.Complex(g::Gen) = Complex(Float64(real(g)), Float64(imag(g)))
+
 # --- Display ---------------------------------------------------------------
 
 # A `Gen` shows, prints, and interpolates as PARI's own textual rendering.

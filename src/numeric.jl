@@ -160,3 +160,88 @@ Base.:(==)(a::Gen, b::Gen) = protected_call(
             b.ptr,
         ) != 0,
 )
+
+# --- Complex Gen construction (extends M5/M6's conversions) -----------------
+
+"""
+$(TYPEDSIGNATURES)
+
+Convert a Julia `Complex` number to a `Gen` (a PARI complex value).
+
+# Examples
+
+```jldoctest
+julia> using LibPARI
+
+julia> LibPARI.Gen(3 + 4im) isa LibPARI.Gen
+true
+```
+"""
+Gen(z::Complex) = Gen(real(z)) + Gen(imag(z)) * gp_eval("I")
+
+# --- Identity elements -----------------------------------------------------
+
+# `zero`/`one` (type and instance) — generic algorithms that need identity
+# elements (`sum`, `prod`, powering, matrix routines) accept `Gen`.
+Base.zero(::Type{Gen}) = Gen(0)
+Base.one(::Type{Gen}) = Gen(1)
+Base.oneunit(::Type{Gen}) = Gen(1)
+Base.zero(::Gen) = Gen(0)
+Base.one(::Gen) = Gen(1)
+Base.oneunit(::Gen) = Gen(1)
+
+# --- Ordering --------------------------------------------------------------
+
+# `gsigne(a - b)` is the sign of `a - b`. PARI raises a catchable `PariError`
+# when the values are not comparable (a complex value, a polynomial, …).
+# `>` / `>=` and `!=` follow automatically from `<` / `<=` and `==`.
+Base.:<(a::Gen, b::Gen) = PARI.gsigne(a - b) < 0
+Base.:<=(a::Gen, b::Gen) = PARI.gsigne(a - b) <= 0
+Base.:<(a::Gen, b::Number) = a < Gen(b)
+Base.:<(a::Number, b::Gen) = Gen(a) < b
+Base.:<=(a::Gen, b::Number) = a <= Gen(b)
+Base.:<=(a::Number, b::Gen) = Gen(a) <= b
+Base.isless(a::Gen, b::Gen) = a < b
+
+# --- Hashing ---------------------------------------------------------------
+
+# Hash by the `Gen`'s canonical Julia value, so a `Gen` and an equal Julia
+# number hash equal — they are interchangeable as `Dict`/`Set` keys, which
+# Julia's `a == b => hash(a) == hash(b)` invariant requires.
+function Base.hash(g::Gen, h::UInt)
+    t = gentype(g)
+    if t === PariType.T_INT
+        return hash(BigInt(g), h)
+    elseif t === PariType.T_FRAC
+        return hash(Rational(g), h)
+    elseif t === PariType.T_REAL
+        return hash(Float64(g), h)
+    else
+        return hash(_genrepr(g), h)
+    end
+end
+
+# --- Predicates ------------------------------------------------------------
+
+# Every predicate returns a `Bool` for any `Gen`, including a non-number
+# PARI type — never throws.
+Base.iszero(g::Gen) = g == Gen(0)
+Base.isone(g::Gen) = g == Gen(1)
+Base.isinteger(g::Gen) = gentype(g) === PariType.T_INT
+Base.isfinite(g::Gen) = gentype(g) !== PariType.T_INFINITY
+Base.isinf(g::Gen) = gentype(g) === PariType.T_INFINITY
+Base.isnan(::Gen) = false
+Base.isreal(g::Gen) =
+    gentype(g) in (PariType.T_INT, PariType.T_REAL, PariType.T_FRAC)
+
+# --- Elementary operations -------------------------------------------------
+
+# Thin wrappers over PARI bindings. An operation that does not apply to a
+# `Gen`'s PARI type (e.g. `sign` of a complex value) raises a catchable
+# `PariError`.
+Base.abs(g::Gen) = PARI.gabs(g)
+Base.sign(g::Gen) = Gen(PARI.gsigne(g))
+Base.inv(g::Gen) = PARI.ginv(g)
+Base.conj(g::Gen) = PARI.gconj(g)
+Base.real(g::Gen) = PARI.greal(g)
+Base.imag(g::Gen) = PARI.gimag(g)
