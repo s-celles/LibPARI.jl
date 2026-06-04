@@ -17,7 +17,7 @@
     # SC-005 — a sampled simple binding invokes PARI and returns a `Gen`.
     libpari = LibPARI.PARI_jll.libpari
     int_gen(n) = LibPARI.gen_from(
-        () -> ccall((:stoi, libpari), Ptr{Clong}, (Clong,), Clong(n)),
+        () -> ccall((:stoi, libpari), Ptr{Int}, (Int,), Int(n)),
     )
     g = LibPARI.PARI.nextprime(int_gen(1000))
     @test g isa LibPARI.Gen
@@ -29,7 +29,7 @@ end
 
     libpari = LibPARI.PARI_jll.libpari
     int_gen(n) = LibPARI.gen_from(
-        () -> ccall((:stoi, libpari), Ptr{Clong}, (Clong,), Clong(n)),
+        () -> ccall((:stoi, libpari), Ptr{Int}, (Int,), Int(n)),
     )
 
     # B3 — the `ccall` runs inside `protected_call`; a PARI error (1/0)
@@ -48,7 +48,7 @@ end
 
     libpari = LibPARI.PARI_jll.libpari
     int_gen(n) = LibPARI.gen_from(
-        () -> ccall((:stoi, libpari), Ptr{Clong}, (Clong,), Clong(n)),
+        () -> ccall((:stoi, libpari), Ptr{Int}, (Int,), Int(n)),
     )
     PT = LibPARI.PariType
 

@@ -29,8 +29,29 @@ end
     genenv = joinpath(repo, "gen")
     before = read(bindings, String)
 
+    # The gen/ environment is development-time only and gen/Manifest.toml
+    # is intentionally untracked (matches docs/-pattern). Instantiate it
+    # so a cold CI runner can launch the generator below. The explicit
+    # JULIA_LOAD_PATH overrides Pkg.test()'s `@`-only inheritance so the
+    # subprocess can `using Pkg` (stdlib).
+    rm(joinpath(genenv, "Manifest.toml"); force = true)
+    run(
+        pipeline(
+            addenv(
+                `$(Base.julia_cmd()) --startup-file=no --project=$genenv -e "using Pkg; Pkg.instantiate()"`,
+                "JULIA_LOAD_PATH" => "@$(Sys.iswindows() ? ';' : ':')@stdlib",
+            );
+            stdout = devnull,
+            stderr = devnull,
+        ),
+    )
+
     # G7 — re-run the development-time generator in its own environment;
-    # the same PARI version must yield byte-identical output.
+    # the same PARI version must yield byte-identical output. Compare with
+    # line endings normalized: the generator always writes LF, but git's
+    # `core.autocrlf` checks the committed (LF) file out as CRLF on Windows,
+    # so `before` carries CRLF there. The generator's determinism is a
+    # property of its output, not of git's checkout policy.
     run(
         pipeline(
             `$(Base.julia_cmd()) --startup-file=no --project=$genenv $(joinpath(genenv, "generate.jl"))`;
@@ -39,7 +60,8 @@ end
         ),
     )
 
-    @test read(bindings, String) == before
+    norm(s) = replace(s, "\r\n" => "\n")
+    @test norm(read(bindings, String)) == norm(before)
 end
 
 @testitem "the generator omits, skips, and excludes — never silently" begin
@@ -97,6 +119,24 @@ end
     # FR-015 — the generator names what it skips, in a diagnostic report.
     repo = pkgdir(LibPARI)
     genenv = joinpath(repo, "gen")
+
+    # The gen/ environment is development-time only and gen/Manifest.toml
+    # is intentionally untracked (matches docs/-pattern). Instantiate it
+    # so a cold CI runner can launch the generator below. The explicit
+    # JULIA_LOAD_PATH overrides Pkg.test()'s `@`-only inheritance so the
+    # subprocess can `using Pkg` (stdlib).
+    rm(joinpath(genenv, "Manifest.toml"); force = true)
+    run(
+        pipeline(
+            addenv(
+                `$(Base.julia_cmd()) --startup-file=no --project=$genenv -e "using Pkg; Pkg.instantiate()"`,
+                "JULIA_LOAD_PATH" => "@$(Sys.iswindows() ? ';' : ':')@stdlib",
+            );
+            stdout = devnull,
+            stderr = devnull,
+        ),
+    )
+
     report = read(
         pipeline(
             `$(Base.julia_cmd()) --startup-file=no --project=$genenv $(joinpath(genenv, "generate.jl"))`;

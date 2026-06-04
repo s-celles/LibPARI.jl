@@ -10,7 +10,7 @@ end
     libpari = LibPARI.PARI_jll.libpari
 
     # Build a Gen from a PARI small integer (the constructor clones it).
-    g = LibPARI.Gen(ccall((:stoi, libpari), Ptr{Clong}, (Clong,), 123))
+    g = LibPARI.Gen(ccall((:stoi, libpari), Ptr{Int}, (Int,), 123))
     @test g.ptr != C_NULL
 
     # The finalizer frees the clone (REQ-MEM-04) ...
@@ -29,11 +29,11 @@ end
     libpari = LibPARI.PARI_jll.libpari
     PT = LibPARI.PariType
 
-    int_g = LibPARI.Gen(ccall((:stoi, libpari), Ptr{Clong}, (Clong,), 7))
-    real_g = LibPARI.Gen(ccall((:dbltor, libpari), Ptr{Clong}, (Cdouble,), 1.5))
-    pol_g = LibPARI.Gen(ccall((:pol_x, libpari), Ptr{Clong}, (Clong,), 0))
-    vec_g = LibPARI.Gen(let i = ccall((:stoi, libpari), Ptr{Clong}, (Clong,), 1)
-        ccall((:mkvec, libpari), Ptr{Clong}, (Ptr{Clong},), i)
+    int_g = LibPARI.Gen(ccall((:stoi, libpari), Ptr{Int}, (Int,), 7))
+    real_g = LibPARI.Gen(ccall((:dbltor, libpari), Ptr{Int}, (Cdouble,), 1.5))
+    pol_g = LibPARI.Gen(ccall((:pol_x, libpari), Ptr{Int}, (Int,), 0))
+    vec_g = LibPARI.Gen(let i = ccall((:stoi, libpari), Ptr{Int}, (Int,), 1)
+        ccall((:mkvec, libpari), Ptr{Int}, (Ptr{Int},), i)
     end)
 
     @test LibPARI.gentype(int_g) === PT.T_INT

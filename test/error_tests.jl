@@ -2,14 +2,14 @@
     using LibPARI
 
     libpari = LibPARI.PARI_jll.libpari
-    stoi(n) = ccall((:stoi, libpari), Ptr{Clong}, (Clong,), Clong(n))
+    stoi(n) = ccall((:stoi, libpari), Ptr{Int}, (Int,), Int(n))
 
     err = try
         LibPARI.protected_call() do
             ccall(
                 (:gdiv, libpari),
-                Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
+                Ptr{Int},
+                (Ptr{Int}, Ptr{Int}),
                 stoi(1),
                 stoi(0),
             )
@@ -27,15 +27,15 @@ end
     using LibPARI
 
     libpari = LibPARI.PARI_jll.libpari
-    stoi(n) = ccall((:stoi, libpari), Ptr{Clong}, (Clong,), Clong(n))
+    stoi(n) = ccall((:stoi, libpari), Ptr{Int}, (Int,), Int(n))
 
     before = LibPARI._avma()
     try
         LibPARI.protected_call() do
             ccall(
                 (:gdiv, libpari),
-                Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
+                Ptr{Int},
+                (Ptr{Int}, Ptr{Int}),
                 stoi(1),
                 stoi(0),
             )
@@ -56,14 +56,14 @@ end
     using LibPARI
 
     libpari = LibPARI.PARI_jll.libpari
-    stoi(n) = ccall((:stoi, libpari), Ptr{Clong}, (Clong,), Clong(n))
+    stoi(n) = ccall((:stoi, libpari), Ptr{Int}, (Int,), Int(n))
 
     err = try
         LibPARI.protected_call() do
             ccall(
                 (:gdiv, libpari),
-                Ptr{Clong},
-                (Ptr{Clong}, Ptr{Clong}),
+                Ptr{Int},
+                (Ptr{Int}, Ptr{Int}),
                 stoi(1),
                 stoi(0),
             )

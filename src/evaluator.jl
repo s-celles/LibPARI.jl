@@ -31,17 +31,17 @@ function gp_eval(s::AbstractString)
             # a syntax/runtime error in the GP string is caught per-thread.
             cs = Base.cconvert(Cstring, s)
             GC.@preserve cs _trap_call(
-                Ptr{Clong},
+                Ptr{Int},
                 cglobal((:gp_read_str, PARI_jll.libpari)),
                 1,
-                reinterpret(Clong, Base.unsafe_convert(Cstring, cs)),
-                Clong(0),
-                Clong(0),
-                Clong(0),
-                Clong(0),
-                Clong(0),
-                Clong(0),
-                Clong(0),
+                reinterpret(Int, Base.unsafe_convert(Cstring, cs)),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
             )
         end
     end

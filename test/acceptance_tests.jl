@@ -97,6 +97,23 @@ end
     genenv = joinpath(repo, "gen")
     before = read(bindings, String)
 
+    # The gen/ environment is development-time only and gen/Manifest.toml
+    # is intentionally untracked (matches docs/-pattern). Instantiate it
+    # so a cold CI runner can launch the generator below. The explicit
+    # JULIA_LOAD_PATH overrides Pkg.test()'s `@`-only inheritance so the
+    # subprocess can `using Pkg` (stdlib).
+    rm(joinpath(genenv, "Manifest.toml"); force = true)
+    run(
+        pipeline(
+            addenv(
+                `$(Base.julia_cmd()) --startup-file=no --project=$genenv -e "using Pkg; Pkg.instantiate()"`,
+                "JULIA_LOAD_PATH" => "@$(Sys.iswindows() ? ';' : ':')@stdlib",
+            );
+            stdout = devnull,
+            stderr = devnull,
+        ),
+    )
+
     # Re-run the development-time generator in its own environment; the same
     # PARI version must reproduce `src/bindings.jl` byte-for-byte. (The M4
     # generator contract, test/generator_tests.jl, covers this from the
@@ -109,5 +126,12 @@ end
         ),
     )
 
-    @test read(bindings, String) == before
+    # Compare with line endings normalized: the generator always writes LF,
+    # but git's `core.autocrlf` checks the committed (LF) file out as CRLF on
+    # Windows, so the working-tree copy read into `before` carries CRLF
+    # there. Normalizing both sides keeps the content-equality contract
+    # platform-independent (generator determinism itself is covered by the
+    # two-run check in test/generator_tests.jl).
+    norm(s) = replace(s, "\r\n" => "\n")
+    @test norm(read(bindings, String)) == norm(before)
 end

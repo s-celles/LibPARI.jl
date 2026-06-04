@@ -6,22 +6,21 @@
 # --- Low-level libpari memory primitives -----------------------------------
 
 # Clone a GEN off PARI's transient stack into its persistent storage.
-_gclone(x::Ptr{Clong}) =
-    ccall((:gclone, PARI_jll.libpari), Ptr{Clong}, (Ptr{Clong},), x)
+_gclone(x::Ptr{Int}) =
+    ccall((:gclone, PARI_jll.libpari), Ptr{Int}, (Ptr{Int},), x)
 
 # Free a cloned GEN.
-_gunclone(x::Ptr{Clong}) =
-    ccall((:gunclone, PARI_jll.libpari), Cvoid, (Ptr{Clong},), x)
+_gunclone(x::Ptr{Int}) =
+    ccall((:gunclone, PARI_jll.libpari), Cvoid, (Ptr{Int},), x)
 
 # Read PARI's transient-stack pointer `avma`. `avma` is a thread-local
 # variable, so it MUST be read through PARI's `get_avma` function — each
 # worker then reads its own context's `avma`. (Reading it via `cglobal`
 # would resolve one fixed address and corrupt every secondary context.)
-_avma() = ccall((:get_avma, PARI_jll.libpari), Culong, ())
+_avma() = ccall((:get_avma, PARI_jll.libpari), UInt, ())
 
 # Restore PARI's transient-stack pointer to `av`.
-_set_avma(av::Culong) =
-    ccall((:set_avma, PARI_jll.libpari), Cvoid, (Culong,), av)
+_set_avma(av::UInt) = ccall((:set_avma, PARI_jll.libpari), Cvoid, (UInt,), av)
 
 # --- The `Gen` value type --------------------------------------------------
 
@@ -45,15 +44,15 @@ true
 ```
 """
 mutable struct Gen <: Number
-    ptr::Ptr{Clong}
+    ptr::Ptr{Int}
 
-    function Gen(raw::Ptr{Clong})
+    function Gen(raw::Ptr{Int})
         raw == C_NULL && throw(ArgumentError("cannot wrap a null GEN"))
         # `gclone` splices PARI's process-global clone list — run it on the
         # primary worker so the list is only ever touched by one thread.
         # `raw` lives on the producing worker's stack, which stays stable
         # (that worker is blocked awaiting this result).
-        cloned = _run_on_primary(() -> _gclone(raw))::Ptr{Clong}
+        cloned = _run_on_primary(() -> _gclone(raw))::Ptr{Int}
         g = new(cloned)
         finalizer(_finalize!, g)
         return g
@@ -101,7 +100,7 @@ true
 function gen_from(producer)
     return _run_on_pari() do
         av = _avma()
-        raw = producer()::Ptr{Clong}
+        raw = producer()::Ptr{Int}
         g = Gen(raw)        # the constructor clones `raw`
         _set_avma(av)       # discard the transient stack
         return g
@@ -148,7 +147,7 @@ end  # module PariType
 
 # Bit position of the PARI type tag within a GEN's first machine word
 # (BITS_IN_LONG − TYPnumBITS; TYPnumBITS = 7).
-const _TYPSHIFT = 8 * sizeof(Culong) - 7
+const _TYPSHIFT = 8 * sizeof(UInt) - 7
 
 """
 $(TYPEDSIGNATURES)
@@ -166,6 +165,6 @@ true
 ```
 """
 function gentype(g::Gen)
-    word = unsafe_load(Ptr{Culong}(g.ptr))
+    word = unsafe_load(Ptr{UInt}(g.ptr))
     return PariType.T(word >> _TYPSHIFT)
 end
