@@ -72,8 +72,14 @@ jobs:
     # (REQ-DOC-01, REQ-DOC-06). The build is STRICT — any warning or
     # doctest mismatch fails the job (REQ-DOC-04, REQ-DOC-05). `deploydocs`
     # publishes only from the default branch and from tags.
+    #
+    # `contents: write` is required for `deploydocs` to push to the
+    # `gh-pages` branch using the workflow-scoped GITHUB_TOKEN when no
+    # repository-level DOCUMENTER_KEY secret is configured.
     name: Documentation
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v4
       - uses: julia-actions/setup-julia@v2

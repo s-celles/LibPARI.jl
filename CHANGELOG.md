@@ -8,6 +8,50 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.15.1] - 2026-06-04
+
+Restores the 3-OS × 2-Julia CI hard gate that turned red on commit
+`e6cfcb4` (0.15.0). The three failing test items and the
+`Documentation` job are addressed in one patch release.
+
+### Fixed
+
+- **Generator-related tests on a cold runner.** The three `@testitem`s
+  that spawn `gen/generate.jl` as a subprocess
+  (`regenerating the bindings is byte-for-byte reproducible` and
+  `the generator omits, skips, and excludes — never silently` in
+  `test/generator_tests.jl`; `NFR-04 — the binding generator is
+  byte-identical across runs` in `test/acceptance_tests.jl`) now
+  instantiate the `gen/` environment before launching the
+  subprocess. CI runners (which never carry a `gen/Manifest.toml`,
+  since it is excluded by the `**/Manifest.toml` glob) can now run
+  the generator successfully on every cell of the matrix. The
+  instantiation subprocess is launched with `JULIA_LOAD_PATH=@:@stdlib`
+  via `addenv` to override `Pkg.test()`'s `@`-only LOAD_PATH
+  inheritance, which would otherwise hide the `Pkg` stdlib from the
+  child process.
+
+### Changed
+
+- **`gen/Project.toml`** — `PrecompileTools` is now a direct dep with
+  a defensive `[compat]` bound of `"1.0 - 1.2"`, capping the gen
+  environment at the last Julia-1.10-safe series. The bound stops a
+  `gen/Manifest.toml` resolved under Julia 1.12 from re-using
+  PrecompileTools 1.3.4 on Julia 1.10 (see `upstream-bugs.md`
+  2026-06-04 entry).
+- **`docs` job in `.github/workflows/CI.yml`** — declares
+  `permissions: contents: write`. `deploydocs` needs that scope on the
+  workflow-issued `GITHUB_TOKEN` to push to the `gh-pages` branch when
+  no repository `DOCUMENTER_KEY` is configured.
+
+### Documented
+
+- New `upstream-bugs.md` entry for the
+  `Base.StaticData`-on-Julia-1.10 defect in PrecompileTools 1.3.4 —
+  `src/invalidations.jl:15` references the symbol unguarded; the
+  defect is shielded for LibPARI by the new `gen/Project.toml`
+  compat bound.
+
 ## [0.15.0] - 2026-06-04
 
 `PARI_jll` is now registered in the Julia General registry — LibPARI
