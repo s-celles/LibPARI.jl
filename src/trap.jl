@@ -18,17 +18,19 @@
 # request to ship this trap in PARI itself.
 
 # The shim — a generic-arity trampoline. Every argument is passed as a
-# pointer-sized integer (a GEN, a `long`, a string pointer all share one
-# ABI register class), so a single `switch` over the argument count covers
-# the whole bound surface.
+# `long` (PARI's word type); the return is widened to `intptr_t` so the
+# shim works on Windows 64-bit (LLP64), where `long` is 32-bit but a
+# `GEN` pointer is 64-bit. On Linux/macOS (LP64), `intptr_t` and `long`
+# are the same width, so the shim is a no-op change on those platforms.
 const _TRAP_C_SOURCE = """
 #include <pari/pari.h>
-long
+#include <stdint.h>
+intptr_t
 libpari_trap(void *fn, long n, long *errnum,
              long a0, long a1, long a2, long a3,
              long a4, long a5, long a6, long a7)
 {
-  long r = 0;
+  intptr_t r = 0;
   pari_CATCH(CATCH_ALL)
   {
     *errnum = err_get_num(pari_err_last());
@@ -37,17 +39,18 @@ libpari_trap(void *fn, long n, long *errnum,
   {
     switch (n)
     {
-      case 0: r = ((long(*)(void))fn)(); break;
-      case 1: r = ((long(*)(long))fn)(a0); break;
-      case 2: r = ((long(*)(long,long))fn)(a0,a1); break;
-      case 3: r = ((long(*)(long,long,long))fn)(a0,a1,a2); break;
-      case 4: r = ((long(*)(long,long,long,long))fn)(a0,a1,a2,a3); break;
-      case 5: r = ((long(*)(long,long,long,long,long))fn)(a0,a1,a2,a3,a4); break;
-      case 6: r = ((long(*)(long,long,long,long,long,long))fn)
+      case 0: r = ((intptr_t(*)(void))fn)(); break;
+      case 1: r = ((intptr_t(*)(long))fn)(a0); break;
+      case 2: r = ((intptr_t(*)(long,long))fn)(a0,a1); break;
+      case 3: r = ((intptr_t(*)(long,long,long))fn)(a0,a1,a2); break;
+      case 4: r = ((intptr_t(*)(long,long,long,long))fn)(a0,a1,a2,a3); break;
+      case 5: r = ((intptr_t(*)(long,long,long,long,long))fn)
+                  (a0,a1,a2,a3,a4); break;
+      case 6: r = ((intptr_t(*)(long,long,long,long,long,long))fn)
                   (a0,a1,a2,a3,a4,a5); break;
-      case 7: r = ((long(*)(long,long,long,long,long,long,long))fn)
+      case 7: r = ((intptr_t(*)(long,long,long,long,long,long,long))fn)
                   (a0,a1,a2,a3,a4,a5,a6); break;
-      case 8: r = ((long(*)(long,long,long,long,long,long,long,long))fn)
+      case 8: r = ((intptr_t(*)(long,long,long,long,long,long,long,long))fn)
                   (a0,a1,a2,a3,a4,a5,a6,a7); break;
     }
     *errnum = -1;
@@ -102,13 +105,18 @@ end
 # Reinterpret the shim's pointer-sized result to a binding's declared
 # return type. `R` is a compile-time type parameter, so the branch folds
 # away — the boundary stays type-stable.
-@inline function _trap_reinterpret(::Type{R}, r::Clong) where {R}
+#
+# `r` is `Cssize_t` (pointer-sized signed integer): same as `Clong` on
+# Linux/macOS LP64, and `Int64` on Windows LLP64 — where `Clong` is only
+# 32 bits and would otherwise truncate `GEN` pointers in the shim's
+# return path.
+@inline function _trap_reinterpret(::Type{R}, r::Cssize_t) where {R}
     if R === Ptr{Clong}
         return reinterpret(Ptr{Clong}, r)
     elseif R === Clong
-        return r
+        return r % Clong         # on Windows, narrows Int64 → Int32
     elseif R === Culong
-        return reinterpret(Culong, r)
+        return r % Culong        # on Windows, narrows to UInt32
     elseif R === Cint
         return r % Cint
     else                       # Cvoid — the result is unused
