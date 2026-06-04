@@ -42,14 +42,14 @@ Julia code in two complementary ways:
 
 ## Status
 
-LibPARI is at version `0.13.0`. The hand-written core (lifecycle, `Gen`,
+LibPARI is at version `0.15.0`. The hand-written core (lifecycle, `Gen`,
 error handling, conversions, the numeric API, and the GP evaluator) and the
 generated binding layer are complete; the library is platform-correct,
 parallel, and thread-safe.
 
-`LibPARI` depends on `PARI_jll`, which is not yet in the Julia General
-registry — see [Getting started](@ref) for how to resolve it in the
-meantime.
+Both `LibPARI` and `PARI_jll` are registered in the Julia General registry
+— a plain `Pkg.add("LibPARI")` installs everything on Linux, macOS, and
+Windows. See [Getting started](@ref) for the install command.
 
 ## Contents
 

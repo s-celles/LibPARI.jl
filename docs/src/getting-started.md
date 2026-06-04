@@ -6,19 +6,18 @@ CurrentModule = LibPARI
 
 ## Installation
 
-`LibPARI` depends on
-[`PARI_jll`](https://github.com/JuliaPackaging/Yggdrasil), which is not yet
-in the Julia General registry. Until it is registered, resolve both packages
-from local development paths:
+`LibPARI` is installable from the Julia General registry:
 
 ```julia
 using Pkg
-Pkg.develop(path = joinpath(homedir(), ".julia", "dev", "PARI_jll"))
-Pkg.develop(path = "path/to/LibPARI.jl")
+Pkg.add("LibPARI")
 ```
 
-Once `PARI_jll` is registered, `LibPARI` will be installable with the usual
-`Pkg.add("LibPARI")`.
+The native PARI library is supplied by
+[`PARI_jll`](https://github.com/JuliaPackaging/Yggdrasil/tree/master/P/PARI),
+a registered binary build of PARI 2.17.3 for Linux, macOS, and Windows.
+`Pkg.add` resolves and installs it automatically — no system PARI is
+required.
 
 LibPARI requires Julia 1.10 (the long-term-support release) or later.
 

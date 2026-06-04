@@ -8,6 +8,31 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.15.0] - 2026-06-04
+
+`PARI_jll` is now registered in the Julia General registry — LibPARI
+installs with a plain `Pkg.add("LibPARI")` on Linux, macOS, and Windows.
+
+### Added
+
+- **Cross-platform CI hard gate.** The GitHub Actions `test` job is now a
+  hard 3-OS matrix (Ubuntu, macOS, Windows × Julia 1.10 and 1) — any
+  platform failure fails the build (REQ-QA-07, REQ-QA-08). `Documentation`
+  is likewise a hard gate (REQ-DOC-01, REQ-DOC-06) and auto-deploys the
+  Documenter.jl site to GitHub Pages from the default branch.
+
+### Changed
+
+- **Installation is now `Pkg.add("LibPARI")`.** The previous `Pkg.develop`
+  workaround for the unregistered `PARI_jll` is no longer needed. README
+  and the documentation `Getting started` page are updated accordingly.
+- The CI workflow's `continue-on-error` lines and the stub
+  `Resolve PARI_jll` steps — placeholders that existed only until
+  PARI_jll was registered — have been removed from both the `test` and
+  `docs` jobs.
+- LibPARI's `Manifest.toml` now resolves `PARI_jll` 2.17.3+0 from the
+  registry instead of a local development path.
+
 ## [0.14.0] - 2026-05-21
 
 `Gen` is now a complete Julia `Number`.
