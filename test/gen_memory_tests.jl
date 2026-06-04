@@ -4,9 +4,7 @@
     libpari = LibPARI.PARI_jll.libpari
 
     before = LibPARI._avma()
-    g = LibPARI.gen_from(
-        () -> ccall((:stoi, libpari), Ptr{Clong}, (Clong,), 99),
-    )
+    g = LibPARI.gen_from(() -> ccall((:stoi, libpari), Ptr{Int}, (Int,), 99))
     @test g isa LibPARI.Gen
     @test LibPARI.gentype(g) === LibPARI.PariType.T_INT
     # Producing the Gen left the transient stack exactly where it was.
@@ -20,7 +18,7 @@ end
 
     baseline = LibPARI._avma()
     for i = 1:100_000
-        LibPARI.gen_from(() -> ccall((:stoi, libpari), Ptr{Clong}, (Clong,), i))
+        LibPARI.gen_from(() -> ccall((:stoi, libpari), Ptr{Int}, (Int,), i))
     end
     GC.gc()
 

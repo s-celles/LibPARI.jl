@@ -74,6 +74,16 @@ Restores the 3-OS × 2-Julia CI hard gate that turned red on commit
   no-op there (verified: 311/311 on both Julia 1.10 and Julia release).
   The C trap shim now returns `intptr_t`. The binding generator's output
   remains byte-identical across runs (reproducibility contract intact).
+  The test suite's own raw PARI `ccall`s (`test/error_tests.jl`,
+  `test/gen_tests.jl`, `test/gen_memory_tests.jl`,
+  `test/conversions_tests.jl`, `test/bindings_tests.jl`) were updated the
+  same way — they had the identical `Ptr{Clong}` truncation.
+- **Windows path separator in the gen-instantiate test prelude.** The
+  prelude added in this release set `JULIA_LOAD_PATH=@:@stdlib`; the
+  `LOAD_PATH` separator is `;` on Windows, so the value was malformed
+  there and the instantiate subprocess could not find the `Pkg` stdlib.
+  The separator is now chosen per platform
+  (`Sys.iswindows() ? ';' : ':'`).
 - **`test/concurrency_tests.jl` "concurrent calls run in parallel
   across threads".** A timing-based speedup floor is flaky by
   construction on shared CI runners: run `26941877211` measured

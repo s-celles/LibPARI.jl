@@ -107,7 +107,7 @@ end
         pipeline(
             addenv(
                 `$(Base.julia_cmd()) --startup-file=no --project=$genenv -e "using Pkg; Pkg.instantiate()"`,
-                "JULIA_LOAD_PATH" => "@:@stdlib",
+                "JULIA_LOAD_PATH" => "@$(Sys.iswindows() ? ';' : ':')@stdlib",
             );
             stdout = devnull,
             stderr = devnull,

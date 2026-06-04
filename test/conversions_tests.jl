@@ -59,7 +59,7 @@ end
 
     # A non-integer Gen (1/2) must match PARI's own `GENtostr` output.
     half = LibPARI.PARI.gdiv(LibPARI.Gen(1), LibPARI.Gen(2))
-    raw = ccall((:GENtostr, lib), Cstring, (Ptr{Clong},), half.ptr)
+    raw = ccall((:GENtostr, lib), Cstring, (Ptr{Int},), half.ptr)
     expected = unsafe_string(raw)
     ccall((:pari_free, lib), Cvoid, (Cstring,), raw)
     @test string(half) == expected
@@ -100,14 +100,12 @@ end
     lib = LibPARI.PARI_jll.libpari
     PT = LibPARI.PariType
 
-    three = LibPARI.gen_from(
-        () -> ccall((:dbltor, lib), Ptr{Clong}, (Cdouble,), 3.0),
-    )
+    three =
+        LibPARI.gen_from(() -> ccall((:dbltor, lib), Ptr{Int}, (Cdouble,), 3.0))
     @test LibPARI.gentype(three) === PT.T_REAL
     @test BigInt(three) == 3
 
-    threehalf = LibPARI.gen_from(
-        () -> ccall((:dbltor, lib), Ptr{Clong}, (Cdouble,), 3.5),
-    )
+    threehalf =
+        LibPARI.gen_from(() -> ccall((:dbltor, lib), Ptr{Int}, (Cdouble,), 3.5))
     @test_throws InexactError BigInt(threehalf)
 end
