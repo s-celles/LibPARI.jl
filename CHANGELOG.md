@@ -52,18 +52,28 @@ Restores the 3-OS × 2-Julia CI hard gate that turned red on commit
   defect is shielded for LibPARI by the new `gen/Project.toml`
   compat bound.
 
-### Fixed (follow-up — CI runs `26941877211`, `26944653380`)
+### Fixed (follow-up — CI runs `26941877211`, `26944653380`, `26965046659`)
 
-- **Windows 64-bit error-trap pointer truncation.** The C trap shim
-  (`src/trap.jl`) declared its return type and `_trap_reinterpret`'s
-  argument as `long`/`Clong`. On Windows 64-bit (LLP64) `long` is
-  32 bits while a `GEN` pointer is 64 bits, so the shim truncated
-  every returned pointer and `reinterpret(Ptr{Clong}, ::Int32)`
-  raised `bitcast: argument size does not match size of target type`
-  during precompilation — failing both `windows-latest` matrix
-  cells. The shim return type is now `intptr_t` and the Julia
-  boundary uses `Cssize_t`; on Linux/macOS (LP64) these are identical
-  to `long`/`Clong`, so the change is a no-op there.
+- **Windows 64-bit (LLP64) ABI — the whole `ccall` boundary.** PARI
+  redefines `long` to `long long` (64-bit) on Windows 64-bit
+  (`parigen.h`: `#ifdef _WIN64 / #define long long long`), so the PARI
+  word is pointer-sized on every platform. LibPARI, however, marshalled
+  every PARI word and `GEN` as Julia's `Clong`/`Culong`, which are only
+  **32-bit on Windows** — truncating `GEN` pointers and reading 32-bit
+  type-tag words. This made `windows-latest` fail at precompilation
+  (`bitcast: argument size does not match size of target type`, then a
+  `_trap_reinterpret` `MethodError`); Windows had never actually
+  passed, only been masked by the former `continue-on-error`. The fix
+  replaces `Clong`→`Int` and `Culong`→`UInt` across the entire ccall
+  boundary — the hand-written core (`trap.jl`, `conversions.jl`,
+  `errors.jl`, `gen.jl`, `numeric.jl`, `evaluator.jl`, `concurrency.jl`,
+  `lifecycle.jl`), the binding generator (`gen/generate.jl`), and the
+  ~11 200 regenerated bindings in `src/bindings.jl`. `Int`/`UInt` are
+  pointer-sized on every platform (Int64 on 64-bit, including Win64) and
+  identical to `Clong`/`Culong` on Linux/macOS LP64, so the change is a
+  no-op there (verified: 311/311 on both Julia 1.10 and Julia release).
+  The C trap shim now returns `intptr_t`. The binding generator's output
+  remains byte-identical across runs (reproducibility contract intact).
 - **`test/concurrency_tests.jl` "concurrent calls run in parallel
   across threads".** A timing-based speedup floor is flaky by
   construction on shared CI runners: run `26941877211` measured

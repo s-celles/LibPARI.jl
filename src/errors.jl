@@ -91,9 +91,9 @@ function Base.showerror(io::IO, e::PariError)
 end
 
 # Render PARI's message for an error object `E` into a Julia-owned `String`.
-function _err_message(E::Ptr{Clong})
+function _err_message(E::Ptr{Int})
     E == C_NULL && return "PARI error"
-    msgptr = ccall((:pari_err2str, PARI_jll.libpari), Cstring, (Ptr{Clong},), E)
+    msgptr = ccall((:pari_err2str, PARI_jll.libpari), Cstring, (Ptr{Int},), E)
     msgptr == C_NULL && return "PARI error"
     message = unsafe_string(msgptr)
     ccall((:pari_free, PARI_jll.libpari), Cvoid, (Cstring,), msgptr)
@@ -105,8 +105,8 @@ end
 # throws it — Julia's exception unwind takes the place of PARI's `longjmp`,
 # landing at the `try` in `protected_call`. The error number is component 1
 # of the error object (`err_get_num(e) == e[1]`).
-function _err_handle(E::Ptr{Clong})
-    numerr = E == C_NULL ? Clong(_ERR_MAX) : unsafe_load(Ptr{Clong}(E), 2)
+function _err_handle(E::Ptr{Int})
+    numerr = E == C_NULL ? Int(_ERR_MAX) : unsafe_load(Ptr{Int}(E), 2)
     throw(PariError(_err_message(E), _category(numerr)))
     return Cint(0)  # unreachable — the throw never returns
 end
@@ -114,7 +114,7 @@ end
 # Callback PARI invokes through `cb_pari_err_recover`. The handler above
 # normally throws first; this is a fallback for any error path that reaches
 # recovery without `cb_pari_err_handle`.
-function _err_recover(numerr::Clong)
+function _err_recover(numerr::Int)
     throw(PariError("PARI error", _category(numerr)))
     return nothing
 end
@@ -122,8 +122,8 @@ end
 # Install the PARI error callbacks. Called once from `__init__`, after PARI is
 # initialized.
 function _install_error_handlers!()
-    recover = @cfunction(_err_recover, Cvoid, (Clong,))
-    handle = @cfunction(_err_handle, Cint, (Ptr{Clong},))
+    recover = @cfunction(_err_recover, Cvoid, (Int,))
+    handle = @cfunction(_err_handle, Cint, (Ptr{Int},))
     unsafe_store!(
         Ptr{Ptr{Cvoid}}(cglobal((:cb_pari_err_recover, PARI_jll.libpari))),
         recover,

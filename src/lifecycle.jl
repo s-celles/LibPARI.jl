@@ -128,7 +128,7 @@ function _init_libpari!(parisize::Integer, maxprime::Integer)
     ccall(
         (:pari_init_opts, PARI_jll.libpari),
         Cvoid,
-        (Csize_t, Culong, Culong),
+        (Csize_t, UInt, UInt),
         size,
         maxprime,
         _INIT_OPTS,

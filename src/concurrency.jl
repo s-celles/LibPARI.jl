@@ -81,7 +81,7 @@ function _pari_secondary_loop(
     chan::Channel{_PariJob},
     ready::Channel{Bool},
 )
-    ccall((:pari_thread_start, PARI_jll.libpari), Ptr{Clong}, (Ptr{Cvoid},), pt)
+    ccall((:pari_thread_start, PARI_jll.libpari), Ptr{Int}, (Ptr{Cvoid},), pt)
     put!(ready, true)
     _serve(chan)
     ccall((:pari_thread_close, PARI_jll.libpari), Cvoid, ())
@@ -96,7 +96,7 @@ function _pari_thread_alloc(parisize::Integer)
     ccall(
         (:pari_thread_alloc, PARI_jll.libpari),
         Cvoid,
-        (Ptr{Cvoid}, Csize_t, Ptr{Clong}),
+        (Ptr{Cvoid}, Csize_t, Ptr{Int}),
         pt,
         Csize_t(parisize),
         C_NULL,

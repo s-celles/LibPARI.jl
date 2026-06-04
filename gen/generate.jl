@@ -117,7 +117,7 @@ function classify(proto::AbstractString)
             push!(
                 args,
                 Arg(
-                    "Ptr{Clong}",
+                    "Ptr{Int}",
                     "x$(np).ptr",
                     "x$(np)::LibPARI.Gen",
                     "",
@@ -129,14 +129,14 @@ function classify(proto::AbstractString)
             np += 1
             push!(
                 args,
-                Arg("Clong", "Clong(x$(np))", "x$(np)::Integer", "", false),
+                Arg("Int", "Int(x$(np))", "x$(np)::Integer", "", false),
             )
             i += 1
         elseif c == 'U'
             np += 1
             push!(
                 args,
-                Arg("Culong", "Culong(x$(np))", "x$(np)::Integer", "", false),
+                Arg("UInt", "UInt(x$(np))", "x$(np)::Integer", "", false),
             )
             i += 1
         elseif c == 's' || c == 'r'
@@ -150,7 +150,7 @@ function classify(proto::AbstractString)
             push!(
                 args,
                 Arg(
-                    "Clong",
+                    "Int",
                     "prec",
                     "",
                     "prec::Integer = $DEFAULT_PREC",
@@ -162,7 +162,7 @@ function classify(proto::AbstractString)
             push!(
                 args,
                 Arg(
-                    "Clong",
+                    "Int",
                     "bitprec",
                     "",
                     "bitprec::Integer = $DEFAULT_BITPREC",
@@ -174,7 +174,7 @@ function classify(proto::AbstractString)
             push!(
                 args,
                 Arg(
-                    "Clong",
+                    "Int",
                     "seriesprec",
                     "",
                     "seriesprec::Integer = $DEFAULT_SERIESPREC",
@@ -184,7 +184,7 @@ function classify(proto::AbstractString)
             i += 1
         elseif c == '&'
             no += 1
-            push!(args, Arg("Ref{Ptr{Clong}}", "out$(no)", "", "", true))
+            push!(args, Arg("Ref{Ptr{Int}}", "out$(no)", "", "", true))
             i += 1
         elseif c in "EIVC"
             return (:exclude,)
@@ -200,8 +200,8 @@ function classify(proto::AbstractString)
                     push!(
                         args,
                         Arg(
-                            "Clong",
-                            "Clong(x$(np))",
+                            "Int",
+                            "Int(x$(np))",
                             "",
                             "x$(np)::Integer = $val",
                             false,
@@ -213,8 +213,8 @@ function classify(proto::AbstractString)
                     push!(
                         args,
                         Arg(
-                            "Culong",
-                            "Culong(x$(np))",
+                            "UInt",
+                            "UInt(x$(np))",
                             "",
                             "x$(np)::Integer = $val",
                             false,
@@ -246,7 +246,7 @@ function classify(proto::AbstractString)
                     push!(
                         args,
                         Arg(
-                            "Ptr{Clong}",
+                            "Ptr{Int}",
                             "(x$(np) === nothing ? C_NULL : x$(np).ptr)",
                             "",
                             "x$(np) = nothing",
@@ -258,8 +258,8 @@ function classify(proto::AbstractString)
                     push!(
                         args,
                         Arg(
-                            "Clong",
-                            "Clong(x$(np))",
+                            "Int",
+                            "Int(x$(np))",
                             "",
                             "x$(np)::Integer = -1",
                             false,
@@ -269,13 +269,13 @@ function classify(proto::AbstractString)
                     no += 1
                     push!(
                         args,
-                        Arg("Ref{Ptr{Clong}}", "out$(no)", "", "", true),
+                        Arg("Ref{Ptr{Int}}", "out$(no)", "", "", true),
                     )
                 elseif code == 'p'
                     push!(
                         args,
                         Arg(
-                            "Clong",
+                            "Int",
                             "prec",
                             "",
                             "prec::Integer = $DEFAULT_PREC",
@@ -286,7 +286,7 @@ function classify(proto::AbstractString)
                     push!(
                         args,
                         Arg(
-                            "Clong",
+                            "Int",
                             "seriesprec",
                             "",
                             "seriesprec::Integer = $DEFAULT_SERIESPREC",
@@ -328,19 +328,19 @@ ctypes_tuple(args) =
 # src/trap.jl). A binding with more arguments falls back to a raw `ccall`.
 const TRAP_MAXARGS = 8
 
-# Marshal one argument to a pointer-sized `Clong` expression for the trap
+# Marshal one argument to a pointer-sized `Int` expression for the trap
 # shim. Returns `nothing` for a `Cstring` (handled with a preserve block).
 function clong_arg(a::Arg)
     t = a.ctype
-    if t == "Ptr{Clong}"
-        return "reinterpret(Clong, Ptr{Clong}($(a.cexpr)))"
-    elseif t == "Clong"
+    if t == "Ptr{Int}"
+        return "reinterpret(Int, Ptr{Int}($(a.cexpr)))"
+    elseif t == "Int"
         return a.cexpr
-    elseif t == "Culong"
-        return "reinterpret(Clong, $(a.cexpr))"
-    elseif t == "Ref{Ptr{Clong}}"
-        return "reinterpret(Clong, " *
-               "Base.unsafe_convert(Ptr{Ptr{Clong}}, $(a.cexpr)))"
+    elseif t == "UInt"
+        return "reinterpret(Int, $(a.cexpr))"
+    elseif t == "Ref{Ptr{Int}}"
+        return "reinterpret(Int, " *
+               "Base.unsafe_convert(Ptr{Ptr{Int}}, $(a.cexpr)))"
     else
         return nothing   # Cstring — see `trap_call_expr`
     end
@@ -365,14 +365,14 @@ function trap_call_expr(cname, cret, args)
             push!(cstr_keep, lv)
             push!(
                 clongs,
-                "reinterpret(Clong, Base.unsafe_convert(Cstring, $lv))",
+                "reinterpret(Int, Base.unsafe_convert(Cstring, $lv))",
             )
         else
             push!(clongs, ce)
         end
     end
     while length(clongs) < TRAP_MAXARGS
-        push!(clongs, "Clong(0)")
+        push!(clongs, "Int(0)")
     end
     fnptr = "cglobal((:$(cname), LibPARI.PARI_jll.libpari))"
     inner =
@@ -394,9 +394,9 @@ function emit_binding(cname, fname, ret, args, help)
     crange = ctypes_tuple(args)
     cargs = join((a.cexpr for a in args), ", ")
     cret =
-        ret == :gen ? "Ptr{Clong}" :
-        ret == :long ? "Clong" :
-        ret == :int ? "Cint" : ret == :ulong ? "Culong" : "Cvoid"
+        ret == :gen ? "Ptr{Int}" :
+        ret == :long ? "Int" :
+        ret == :int ? "Cint" : ret == :ulong ? "UInt" : "Cvoid"
     # The `libpari` call routes through the concurrency-safe error trap
     # (feature 014). A binding with more arguments than the trap shim
     # supports falls back to a raw `ccall` (milestone-M3 error handling).
@@ -429,7 +429,7 @@ function emit_binding(cname, fname, ret, args, help)
     else
         println(body, "    return LibPARI.protected_call() do")
         for k = 1:length(outs)
-            println(body, "        out$(k) = Ref{Ptr{Clong}}(C_NULL)")
+            println(body, "        out$(k) = Ref{Ptr{Int}}(C_NULL)")
         end
         println(body, "        av = LibPARI._avma()")
         println(body, "        r = $call")

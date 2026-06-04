@@ -5,7 +5,7 @@
 
 # Default word precision supplied to PARI's general power `gpow` (used only
 # for an inexact power, e.g. a non-integer exponent).
-const _DEFAULT_PREC = Clong(4)
+const _DEFAULT_PREC = Int(4)
 
 # Run a GEN-producing PARI computation: error-safe (`protected_call`) and
 # leak-free (`gen_from` clones the result and restores the PARI stack).
@@ -16,8 +16,8 @@ _genresult(producer) = protected_call(() -> gen_from(producer))
 Base.:+(a::Gen, b::Gen) = _genresult(
     () -> ccall(
         (:gadd, PARI_jll.libpari),
-        Ptr{Clong},
-        (Ptr{Clong}, Ptr{Clong}),
+        Ptr{Int},
+        (Ptr{Int}, Ptr{Int}),
         a.ptr,
         b.ptr,
     ),
@@ -26,8 +26,8 @@ Base.:+(a::Gen, b::Gen) = _genresult(
 Base.:-(a::Gen, b::Gen) = _genresult(
     () -> ccall(
         (:gsub, PARI_jll.libpari),
-        Ptr{Clong},
-        (Ptr{Clong}, Ptr{Clong}),
+        Ptr{Int},
+        (Ptr{Int}, Ptr{Int}),
         a.ptr,
         b.ptr,
     ),
@@ -36,8 +36,8 @@ Base.:-(a::Gen, b::Gen) = _genresult(
 Base.:*(a::Gen, b::Gen) = _genresult(
     () -> ccall(
         (:gmul, PARI_jll.libpari),
-        Ptr{Clong},
-        (Ptr{Clong}, Ptr{Clong}),
+        Ptr{Int},
+        (Ptr{Int}, Ptr{Int}),
         a.ptr,
         b.ptr,
     ),
@@ -46,16 +46,15 @@ Base.:*(a::Gen, b::Gen) = _genresult(
 Base.:/(a::Gen, b::Gen) = _genresult(
     () -> ccall(
         (:gdiv, PARI_jll.libpari),
-        Ptr{Clong},
-        (Ptr{Clong}, Ptr{Clong}),
+        Ptr{Int},
+        (Ptr{Int}, Ptr{Int}),
         a.ptr,
         b.ptr,
     ),
 )
 
 Base.:-(a::Gen) = _genresult(
-    () ->
-        ccall((:gneg, PARI_jll.libpari), Ptr{Clong}, (Ptr{Clong},), a.ptr),
+    () -> ccall((:gneg, PARI_jll.libpari), Ptr{Int}, (Ptr{Int},), a.ptr),
 )
 
 # --- Exponentiation --------------------------------------------------------
@@ -63,14 +62,14 @@ Base.:-(a::Gen) = _genresult(
 # `Gen ^ Integer`: PARI's `gpowgs` (exact, handles negative/zero exponents)
 # for a word-sized exponent; an out-of-word exponent goes via `Gen ^ Gen`.
 function Base.:^(a::Gen, n::Integer)
-    if typemin(Clong) <= n <= typemax(Clong)
+    if typemin(Int) <= n <= typemax(Int)
         return _genresult(
             () -> ccall(
                 (:gpowgs, PARI_jll.libpari),
-                Ptr{Clong},
-                (Ptr{Clong}, Clong),
+                Ptr{Int},
+                (Ptr{Int}, Int),
                 a.ptr,
-                n % Clong,
+                n % Int,
             ),
         )
     end
@@ -81,8 +80,8 @@ end
 Base.:^(a::Gen, b::Gen) = _genresult(
     () -> ccall(
         (:gpow, PARI_jll.libpari),
-        Ptr{Clong},
-        (Ptr{Clong}, Ptr{Clong}, Clong),
+        Ptr{Int},
+        (Ptr{Int}, Ptr{Int}, Int),
         a.ptr,
         b.ptr,
         _DEFAULT_PREC,
@@ -113,7 +112,7 @@ Gen(x::AbstractFloat) = protected_call(
     () -> gen_from(
         () -> ccall(
             (:dbltor, PARI_jll.libpari),
-            Ptr{Clong},
+            Ptr{Int},
             (Cdouble,),
             Cdouble(x),
         ),
@@ -154,8 +153,8 @@ Base.:(==)(a::Gen, b::Gen) = protected_call(
     () ->
         ccall(
             (:gequal, PARI_jll.libpari),
-            Clong,
-            (Ptr{Clong}, Ptr{Clong}),
+            Int,
+            (Ptr{Int}, Ptr{Int}),
             a.ptr,
             b.ptr,
         ) != 0,

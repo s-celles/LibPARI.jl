@@ -18,10 +18,12 @@
 # request to ship this trap in PARI itself.
 
 # The shim — a generic-arity trampoline. Every argument is passed as a
-# `long` (PARI's word type); the return is widened to `intptr_t` so the
-# shim works on Windows 64-bit (LLP64), where `long` is 32-bit but a
-# `GEN` pointer is 64-bit. On Linux/macOS (LP64), `intptr_t` and `long`
-# are the same width, so the shim is a no-op change on those platforms.
+# `long` — PARI's word type, which `pari.h` redefines to `long long`
+# (64-bit) on Windows 64-bit / LLP64, so it is pointer-sized on every
+# platform here. The return is `intptr_t` (identical width) to make the
+# pointer-sized intent explicit. The Julia side marshals these as `Int`,
+# never `Clong`: Julia's `Clong` is only 32-bit on Windows and would
+# truncate `GEN` pointers.
 const _TRAP_C_SOURCE = """
 #include <pari/pari.h>
 #include <stdint.h>
@@ -69,7 +71,7 @@ const _TRAP_AVAILABLE = Ref{Bool}(false)
 const _TRAP_FN = Ref{Ptr{Cvoid}}(C_NULL)
 
 # PARI's last error object for the current thread.
-_pari_err_last() = ccall((:pari_err_last, PARI_jll.libpari), Ptr{Clong}, ())
+_pari_err_last() = ccall((:pari_err_last, PARI_jll.libpari), Ptr{Int}, ())
 
 # Compile and load the trap shim. Best-effort — any failure (no C compiler,
 # a build error) leaves `_TRAP_AVAILABLE` false and the M3 callback fallback
@@ -106,17 +108,19 @@ end
 # return type. `R` is a compile-time type parameter, so the branch folds
 # away — the boundary stays type-stable.
 #
-# `r` is `Cssize_t` (pointer-sized signed integer): same as `Clong` on
-# Linux/macOS LP64, and `Int64` on Windows LLP64 — where `Clong` is only
-# 32 bits and would otherwise truncate `GEN` pointers in the shim's
-# return path.
-@inline function _trap_reinterpret(::Type{R}, r::Cssize_t) where {R}
-    if R === Ptr{Clong}
-        return reinterpret(Ptr{Clong}, r)
-    elseif R === Clong
-        return r % Clong         # on Windows, narrows Int64 → Int32
-    elseif R === Culong
-        return r % Culong        # on Windows, narrows to UInt32
+# `r` is `Int` — a pointer-sized signed integer on every supported
+# platform (Int64 on 64-bit, including Windows 64-bit / LLP64). It is the
+# Julia counterpart of PARI's word type: PARI redefines `long` to
+# `long long` on Windows (parigen.h), so the PARI word is 64-bit there
+# even though C's `long` is 32-bit. Using `Int` (never `Clong`) keeps the
+# boundary correct on Windows; on Linux/macOS LP64 they coincide.
+@inline function _trap_reinterpret(::Type{R}, r::Int) where {R}
+    if R === Ptr{Int}
+        return reinterpret(Ptr{Int}, r)
+    elseif R === Int
+        return r
+    elseif R === UInt
+        return reinterpret(UInt, r)
     elseif R === Cint
         return r % Cint
     else                       # Cvoid — the result is unused
@@ -138,35 +142,23 @@ function _trap_call(
     ::Type{R},
     fn::Ptr{Cvoid},
     n::Integer,
-    a0::Clong,
-    a1::Clong,
-    a2::Clong,
-    a3::Clong,
-    a4::Clong,
-    a5::Clong,
-    a6::Clong,
-    a7::Clong,
+    a0::Int,
+    a1::Int,
+    a2::Int,
+    a3::Int,
+    a4::Int,
+    a5::Int,
+    a6::Int,
+    a7::Int,
 ) where {R}
     if _TRAP_AVAILABLE[]
-        errnum = Ref{Clong}(Clong(-1))
+        errnum = Ref{Int}(Int(-1))
         r = ccall(
             _TRAP_FN[],
-            Clong,
-            (
-                Ptr{Cvoid},
-                Clong,
-                Ptr{Clong},
-                Clong,
-                Clong,
-                Clong,
-                Clong,
-                Clong,
-                Clong,
-                Clong,
-                Clong,
-            ),
+            Int,
+            (Ptr{Cvoid}, Int, Ptr{Int}, Int, Int, Int, Int, Int, Int, Int, Int),
             fn,
-            Clong(n),
+            Int(n),
             errnum,
             a0,
             a1,
@@ -190,8 +182,8 @@ function _trap_call(
         # `cb_pari_err_handle` callback handles errors (single-threaded-safe).
         r = ccall(
             fn,
-            Clong,
-            (Clong, Clong, Clong, Clong, Clong, Clong, Clong, Clong),
+            Int,
+            (Int, Int, Int, Int, Int, Int, Int, Int),
             a0,
             a1,
             a2,

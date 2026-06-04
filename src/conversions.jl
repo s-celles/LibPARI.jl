@@ -8,8 +8,8 @@
 # Render a raw PARI `GEN` pointer to a Julia `String` via PARI's own
 # `GENtostr`. `GENtostr` returns a heap-allocated C string the caller owns; it
 # is copied into a Julia `String` and the C buffer freed with `pari_free`.
-function _genstr(ptr::Ptr{Clong})
-    s = ccall((:GENtostr, PARI_jll.libpari), Cstring, (Ptr{Clong},), ptr)
+function _genstr(ptr::Ptr{Int})
+    s = ccall((:GENtostr, PARI_jll.libpari), Cstring, (Ptr{Int},), ptr)
     s == C_NULL && return "GEN"
     str = unsafe_string(s)
     ccall((:pari_free, PARI_jll.libpari), Cvoid, (Cstring,), s)
@@ -37,13 +37,13 @@ end
 function _integer_to_gen(x::Integer)
     # Routed through the concurrency-safe error trap (feature 014): these
     # PARI primitives can raise `e_STACK` on a pathological magnitude.
-    z = Clong(0)
-    if typemin(Clong) <= x <= typemax(Clong)
+    z = Int(0)
+    if typemin(Int) <= x <= typemax(Int)
         return _trap_call(
-            Ptr{Clong},
+            Ptr{Int},
             cglobal((:stoi, PARI_jll.libpari)),
             1,
-            Clong(x % Clong),
+            Int(x % Int),
             z,
             z,
             z,
@@ -52,12 +52,12 @@ function _integer_to_gen(x::Integer)
             z,
             z,
         )
-    elseif 0 <= x <= typemax(Culong)
+    elseif 0 <= x <= typemax(UInt)
         return _trap_call(
-            Ptr{Clong},
+            Ptr{Int},
             cglobal((:utoi, PARI_jll.libpari)),
             1,
-            reinterpret(Clong, x % Culong),
+            reinterpret(Int, x % UInt),
             z,
             z,
             z,
@@ -72,10 +72,10 @@ function _integer_to_gen(x::Integer)
     digits = negative ? s[2:end] : s
     cs = Base.cconvert(Cstring, digits)
     t = GC.@preserve cs _trap_call(
-        Ptr{Clong},
+        Ptr{Int},
         cglobal((:strtoi, PARI_jll.libpari)),
         1,
-        reinterpret(Clong, Base.unsafe_convert(Cstring, cs)),
+        reinterpret(Int, Base.unsafe_convert(Cstring, cs)),
         z,
         z,
         z,
@@ -86,10 +86,10 @@ function _integer_to_gen(x::Integer)
     )
     return negative ?
            _trap_call(
-        Ptr{Clong},
+        Ptr{Int},
         cglobal((:gneg, PARI_jll.libpari)),
         1,
-        reinterpret(Clong, t),
+        reinterpret(Int, t),
         z,
         z,
         z,
@@ -140,12 +140,12 @@ julia> BigInt(LibPARI.Gen(-123456789))
 """
 function Base.BigInt(g::Gen)
     return protected_call() do
-        out = Ref{Ptr{Clong}}(C_NULL)
+        out = Ref{Ptr{Int}}(C_NULL)
         av = _avma()
         flag = ccall(
             (:isint, PARI_jll.libpari),
-            Clong,
-            (Ptr{Clong}, Ref{Ptr{Clong}}),
+            Int,
+            (Ptr{Int}, Ref{Ptr{Int}}),
             g.ptr,
             out,
         )
