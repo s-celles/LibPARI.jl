@@ -93,6 +93,29 @@ Restores the 3-OS × 2-Julia CI hard gate that turned red on commit
   (`test/generator_tests.jl`). Both comparisons now normalize `\r\n` to
   `\n` before comparing; generator determinism itself is unchanged
   (verified by the two-run check on Linux/macOS).
+- **Concurrent-error stress crash on Windows.** Concurrency-safe PARI
+  error handling requires LibPARI's C trap shim (a PARI error must
+  `longjmp` across C frames only). The shim is not active on the Windows
+  runner, so raising a PARI error concurrently from many threads routed
+  through PARI's cross-thread `mt_err_recover` and segfaulted
+  (`EXCEPTION_ACCESS_VIOLATION`) — the documented upstream limitation
+  (`upstream-bugs.md`). The multi-threaded concurrent-error testsets in
+  `test/concurrency_tests.jl` are now gated on `LibPARI._TRAP_AVAILABLE[]`
+  and skipped with a logged notice where the shim is unavailable; they
+  re-enable automatically if a future toolchain makes the shim work on
+  Windows. The other concurrency guarantees (cross-thread correctness,
+  leak-safety, parallelism) still run on every platform, and
+  single-threaded error handling is covered unconditionally by
+  `test/error_tests.jl`.
+
+### Known limitations
+
+- On platforms without LibPARI's C trap shim (currently the Windows CI
+  runner), error handling is **single-threaded-safe only**: a PARI error
+  raised concurrently from multiple Julia threads is not guaranteed safe.
+  Single-threaded use — the default — is fully supported on every
+  platform. Linux and macOS validate the concurrent-error guarantees in
+  CI.
 - **`test/concurrency_tests.jl` "concurrent calls run in parallel
   across threads".** A timing-based speedup floor is flaky by
   construction on shared CI runners: run `26941877211` measured
