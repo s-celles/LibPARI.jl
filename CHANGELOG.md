@@ -84,6 +84,15 @@ Restores the 3-OS × 2-Julia CI hard gate that turned red on commit
   there and the instantiate subprocess could not find the `Pkg` stdlib.
   The separator is now chosen per platform
   (`Sys.iswindows() ? ';' : ':'`).
+- **Reproducibility tests vs. git CRLF on Windows.** The generator
+  always writes `src/bindings.jl` with LF, but git's `core.autocrlf`
+  checks the committed (LF) file out as CRLF on the Windows runner, so
+  the working-tree copy and the freshly generated file differed only by
+  line endings — failing the byte-equality check in NFR-04
+  (`test/acceptance_tests.jl`) and the M4 reproducibility item
+  (`test/generator_tests.jl`). Both comparisons now normalize `\r\n` to
+  `\n` before comparing; generator determinism itself is unchanged
+  (verified by the two-run check on Linux/macOS).
 - **`test/concurrency_tests.jl` "concurrent calls run in parallel
   across threads".** A timing-based speedup floor is flaky by
   construction on shared CI runners: run `26941877211` measured

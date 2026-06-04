@@ -47,7 +47,11 @@ end
     )
 
     # G7 — re-run the development-time generator in its own environment;
-    # the same PARI version must yield byte-identical output.
+    # the same PARI version must yield byte-identical output. Compare with
+    # line endings normalized: the generator always writes LF, but git's
+    # `core.autocrlf` checks the committed (LF) file out as CRLF on Windows,
+    # so `before` carries CRLF there. The generator's determinism is a
+    # property of its output, not of git's checkout policy.
     run(
         pipeline(
             `$(Base.julia_cmd()) --startup-file=no --project=$genenv $(joinpath(genenv, "generate.jl"))`;
@@ -56,7 +60,8 @@ end
         ),
     )
 
-    @test read(bindings, String) == before
+    norm(s) = replace(s, "\r\n" => "\n")
+    @test norm(read(bindings, String)) == norm(before)
 end
 
 @testitem "the generator omits, skips, and excludes — never silently" begin

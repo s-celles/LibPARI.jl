@@ -126,5 +126,12 @@ end
         ),
     )
 
-    @test read(bindings, String) == before
+    # Compare with line endings normalized: the generator always writes LF,
+    # but git's `core.autocrlf` checks the committed (LF) file out as CRLF on
+    # Windows, so the working-tree copy read into `before` carries CRLF
+    # there. Normalizing both sides keeps the content-equality contract
+    # platform-independent (generator determinism itself is covered by the
+    # two-run check in test/generator_tests.jl).
+    norm(s) = replace(s, "\r\n" => "\n")
+    @test norm(read(bindings, String)) == norm(before)
 end
