@@ -8,6 +8,14 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- **TagBot workflow** (`.github/workflows/TagBot.yml`) to automatically
+  create Git tags and GitHub releases when versions are merged into the
+  Julia General registry.
+- **CompatHelper workflow** (`.github/workflows/CompatHelper.yml`) to keep
+  `[compat]` entries current via automated pull requests.
+
 ## [0.15.1] - 2026-06-04
 
 Restores the 3-OS × 2-Julia CI hard gate that turned red on commit
