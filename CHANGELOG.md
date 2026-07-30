@@ -16,6 +16,18 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **CompatHelper workflow** (`.github/workflows/CompatHelper.yml`) to keep
   `[compat]` entries current via automated pull requests.
 
+### Documented
+
+- **`ROADMAP.md` marked up to date.** Every M0–M10 deliverable is now
+  ticked, the milestone summary carries a status column, and a
+  `Current status` section records the one deviation from the exit
+  criteria: the per-milestone tags `v0.1.0`–`v0.11.0` were never created
+  (only `v0.15.1` exists, now produced by TagBot). M9's "single global
+  lock" deliverable is annotated as superseded by the per-thread PARI
+  contexts of `0.13.0`, REQ-QA-08 as a true hard gate only from `0.15.0`,
+  and a new `Delivered beyond the roadmap` section lists the
+  `0.12.0`–`0.15.1` work.
+
 ## [0.15.1] - 2026-06-04
 
 Restores the 3-OS × 2-Julia CI hard gate that turned red on commit
