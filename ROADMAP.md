@@ -497,7 +497,7 @@ never existed, and the remaining milestones will renumber the same way.
 | M13 | Precision-safe reals & a bit-based precision API | 0.18.0    | **released** in `0.16.0` |
 | M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | **released** in `0.16.0`; facade completed since |
 | M15 | Generated-binding argument ergonomics      | 0.20.0         | **done** (unreleased) |
-| M16 | Explicit GP evaluation sessions            | 0.21.0         | not started |
+| M16 | Explicit GP evaluation sessions            | 0.21.0         | **investigated**; design blocked |
 | M17 | Structured PARI objects                    | 0.22.0         | **done** (unreleased) |
 | M18 | Display contract                           | 0.23.0         | **done** (unreleased) |
 | M19 | Symbolics.jl bridge (optional extension)   | 0.24.0         | not started |
@@ -1174,14 +1174,13 @@ pretending to an isolation libpari may not provide.
 
 **Scope:** REQ-GPS-01 … REQ-GPS-08.
 
-> **Authoring note.** The analysis pass for this milestone did not complete,
-> so its deliverables are written from the source alone and the central
-> facts are **not yet verified**. REQ-GPS-01 is deliberately an
-> investigation: the design that follows it may have to change.
+> **REQ-GPS-01 is done, and it changes the milestone.** The findings are
+> below; the session design that follows them cannot be the one this
+> milestone originally assumed.
 
 **Deliverables**
 
-- [ ] **Investigate and write down** what GP state actually is here, before
+- [x] **Investigate and write down** what GP state actually is here, before
       any API is designed: whether PARI's variable table and GP environment
       are process-global or part of a per-thread context; what
       `pari_thread_alloc` snapshots of the calling thread's state
@@ -1209,6 +1208,46 @@ pretending to an isolation libpari may not provide.
       claims; concurrent sessions behave as documented. (REQ-GPS-07)
 - [ ] `gp_eval` stays documented as the escape hatch for GP-closure-argument
       functions — never as the primary API. (REQ-GPS-08)
+
+### REQ-GPS-01 findings — isolated GP sessions are not available
+
+Measured against the shipped `PARI_jll`, and corroborated by PARI's own
+documentation and by the Yggdrasil build recipe:
+
+- **`PARI_jll` is built `--mt=pthread`** (and `--kernel=gmp`,
+  `--graphic=none`, `--without-readline`). PARI's parallel machinery is
+  therefore compiled in and active — which is what the roadmap assumed, now
+  confirmed of the binary actually distributed.
+- **There is one GP environment per process**, living in the primary PARI
+  context. Assignments persist across `gp_eval` calls, as documented.
+- **A secondary context cannot write it.** With one PARI context per Julia
+  OS thread, every non-primary thread is a *parallel section* to PARI, and
+  PARI's documentation of `export` states that exported variables "cannot
+  be modified inside a parallel section". Measured, from a spawned task:
+  reading an unexported variable raises `PariError(e_MISC)` — `"mt: please
+  use export(x)"`; **assigning always raises** — `"mt: attempt to change
+  exported variable"`; while pure evaluation (`2 + 2`) and the generated
+  bindings work normally.
+- **A session cannot discover what it created.** GP's `variables()` lists
+  *polynomial* variables (`[x, y]`), not assignments, so there is no way to
+  diff the environment before and after. `kill(name)` does work, so cleanup
+  by name is possible.
+- **No public GMP interop.** Despite `--kernel=gmp`, no `mpz_t`↔`GEN`
+  converter is exported, so the decimal-string path in `_integer_to_gen`
+  has no drop-in replacement. A limb-level conversion is conceivable but
+  would write into PARI's internal `t_INT` layout — a separate decision.
+
+**Consequence.** `GPSession` cannot provide isolation, because PARI does not
+offer independent GP namespaces in one process. What remains honest is a
+session that *tracks the names it is given* and kills them on `reset!` —
+explicit, scoped cleanup over a shared namespace, with the docs and a test
+stating plainly that two sessions using the same name collide. Whether that
+is worth shipping, or whether it creates more illusion than it dispels, is
+the open question this milestone now carries.
+
+Already delivered from these findings: the `gp_eval` docstring no longer
+claims a shared environment without qualification — it states the threading
+rule — and `test/evaluator_tests.jl` pins the measured behaviour.
 
 **Breaking changes**
 

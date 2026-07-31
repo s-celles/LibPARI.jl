@@ -12,8 +12,28 @@ result as a `Gen`.
 `gp_eval` reaches every PARI capability — including the GP-closure-argument
 functions (`sum`, `intnum`, …) that the generated bindings do not expose. A
 syntactically invalid string raises a catchable `PariError` describing the
-parse error; a runtime failure raises a `PariError` too. GP variable
-assignments persist across calls — `gp_eval` shares one GP environment.
+parse error; a runtime failure raises a `PariError` too.
+
+# GP state, and the threading rule
+
+There is **one** GP environment per process, and it lives in PARI's primary
+context. Variable assignments persist across calls, so `gp_eval("x = 42")`
+followed by `gp_eval("x + 1")` answers `43`.
+
+That environment is **not** reachable for writing from another task. PARI's
+parallel model makes global variables read-only inside a secondary context,
+so from a `Threads.@spawn`ed task:
+
+- pure evaluation works — `gp_eval("2 + 2")` answers `4`;
+- reading a variable raises `PariError(e_MISC)`, `"mt: please use
+  export(x)"`, unless the primary task exported it with
+  `gp_eval("export(x)")`;
+- **assigning always raises** `PariError(e_MISC)`, `"mt: attempt to change
+  exported variable"`.
+
+This is PARI's design, not a LibPARI restriction: its documentation states
+that exported variables "cannot be modified inside a parallel section".
+Confine GP variable work to one task.
 
 # Examples
 
