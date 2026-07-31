@@ -70,8 +70,13 @@ $(TYPEDSIGNATURES)
 
 The greatest common divisor, as PARI computes it.
 
-Accepts a [`Gen`](@ref) or any [`PariConvertible`](@ref) value on either
-side, and returns a `Gen`.
+Accepts an integer- or rational-valued [`Gen`](@ref), or any
+[`PariConvertible`](@ref) value of those kinds, on either side; returns a
+`Gen`. Matches `Base.gcd`, which is defined for `Integer` and `Rational`.
+
+Throws `ArgumentError` on any other PARI type. PARI answers for reals,
+complex numbers and polynomials too — `gcd(12, 1.5)` is `1` there — but
+those are PARI's domain, not Julia's; reach them as `LibPARI.PARI.ggcd0`.
 
 # Examples
 
@@ -82,7 +87,11 @@ julia> gcd(pari(12), 18)
 6
 ```
 """
-Base.gcd(a::Gen, b::Gen) = PARI.ggcd0(a; x2 = b)
+function Base.gcd(a::Gen, b::Gen)
+    _require_type(:gcd, a, (PariType.T_INT, PariType.T_FRAC))
+    _require_type(:gcd, b, (PariType.T_INT, PariType.T_FRAC))
+    return PARI.ggcd0(a; x2 = b)
+end
 
 """
 $(TYPEDSIGNATURES)
@@ -92,6 +101,10 @@ in Julia's argument order.
 
 PARI's `gcdext` returns `[u, v, d]`; this reorders it to match `Base.gcdx`
 so the result can be destructured the usual way.
+
+Restricted to integer- and rational-valued arguments, like
+[`gcd`](@ref) — PARI computes a Bézout identity over the reals too, which
+`Base.gcdx` does not mean.
 
 # Examples
 
@@ -105,6 +118,8 @@ true
 ```
 """
 function Base.gcdx(a::Gen, b::Gen)
+    _require_type(:gcdx, a, (PariType.T_INT, PariType.T_FRAC))
+    _require_type(:gcdx, b, (PariType.T_INT, PariType.T_FRAC))
     r = PARI.gcdext0(a, b)
     return (PARI.compo(r, 3), PARI.compo(r, 1), PARI.compo(r, 2))
 end
@@ -225,13 +240,21 @@ end
 """
 $(TYPEDSIGNATURES)
 
-The factorization of an integer `Gen`, in PARI's own shape: a two-column
-`t_MAT` of primes and exponents.
+The factorization of a non-zero integer `Gen`, in PARI's own shape: a
+two-column `t_MAT` of primes and exponents.
+
+A negative argument carries the unit `-1` as its first factor, as it does
+in Primes.jl. Zero raises `ArgumentError`: it has no factorization, and
+PARI's own answer for it (`[0 1]`) does not name a prime.
 
 See [`factors`](@ref) for the Julia shape.
 """
 function factor(n::Gen)
     _require_type(:factor, n, (PariType.T_INT,))
+    # PARI answers `[0 1]` for zero — "0 to the power 1", which is not a
+    # prime factorization at all. Zero has none, so it is refused rather
+    # than relayed under a name that promises primes.
+    iszero(n) && throw(ArgumentError("0 has no prime factorization"))
     return PARI.factorint(n)
 end
 
@@ -241,7 +264,8 @@ $(TYPEDSIGNATURES)
 The factorization of an integer as a `Vector{Pair{Gen,Gen}}` of
 prime => exponent, in increasing order of prime.
 
-Returns an empty vector for `1`, which has no prime factors.
+Returns an empty vector for `1`, which has no prime factors. A negative
+argument carries `-1 => 1` first. Zero raises `ArgumentError`.
 
 # Examples
 

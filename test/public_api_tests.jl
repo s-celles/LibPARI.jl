@@ -181,3 +181,37 @@ end
         @test true
     end
 end
+
+# Found by the M12–M14 review pass: the facade was relaying PARI's answer
+# outside the domain where Base's meaning holds — the same defect class that
+# `numerator`/`denominator` were already guarded against.
+@testitem "REQ-PUB-07: gcd, gcdx and factor stay inside Base's domain" begin
+    using LibPARI
+
+    # PARI computes a gcd for reals, complex values and polynomials.
+    # `Base.gcd` is defined for Integer and Rational only, so relaying those
+    # would put a PARI meaning under a Julia name — `gcd(12, 1.5)` answered
+    # `1` before this guard.
+    @test_throws ArgumentError gcd(pari(12), 1.5)
+    @test_throws ArgumentError gcd(pari(3 + 4im), pari(2))
+    @test_throws ArgumentError gcd(gp_eval("x^2-1"), gp_eval("x-1"))
+    @test_throws ArgumentError gcdx(pari(1.5), pari(2.5))
+
+    # The domains Base does define keep working, and agree with Base.
+    @test Rational(gcd(pari(3 // 4), pari(1 // 2))) == gcd(3 // 4, 1 // 2)
+    @test BigInt(gcd(pari(-12), pari(18))) == gcd(-12, 18)
+    for (a, b) in ((12, 18), (-12, 18), (12, -18), (0, 5), (5, 0), (0, 0))
+        d, u, v = gcdx(pari(a), pari(b))
+        @test BigInt(d) == gcdx(big(a), big(b))[1]
+        @test u * pari(a) + v * pari(b) == d
+    end
+
+    # Zero has no prime factorization. PARI answers `[0 1]`, which names no
+    # prime; the facade refuses it rather than relay it.
+    @test_throws ArgumentError LibPARI.factor(pari(0))
+    @test_throws ArgumentError LibPARI.factors(0)
+
+    # A negative argument carries the unit, as Primes.jl does.
+    @test first(LibPARI.factors(-12)) == (pari(-1) => pari(1))
+    @test prod(BigInt(p)^BigInt(e) for (p, e) in LibPARI.factors(-12)) == -12
+end
