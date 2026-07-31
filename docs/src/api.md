@@ -77,6 +77,17 @@ Modules = [LibPARI]
 Pages = ["errors.jl"]
 ```
 
+### The entry point and the high-level facade
+
+`pari(x)` is the entry point; the rest of this section is the deliberately
+small facade over the generated layer. Every facade function documents the
+Julia and PARI inputs it accepts, its exact return type, and how it fails.
+
+```@autodocs
+Modules = [LibPARI]
+Pages = ["facade.jl"]
+```
+
 ### Type conversions
 
 LibPARI converts an *enumerated* set of Julia types, not every `Number`.
@@ -94,7 +105,7 @@ exactly one way.
 | `BigInt` | `t_INT` | exact, any magnitude |
 | `Rational{<:Integer}` | `t_FRAC` | reduced by PARI; an integral value normalises to `t_INT` |
 | `Float16`, `Float32`, `Float64` | `t_REAL` | exact |
-| `BigFloat` | `t_REAL` | **currently reduced to 53 bits** — fixed in M13 |
+| `BigFloat` | `t_REAL` | exact — see [Precision](@ref) |
 | `Complex{T}`, `T` convertible | `t_COMPLEX` | a zero imaginary part normalises to the real type |
 
 Anything else — an `Irrational` such as `π`, a `Missing`, a foreign

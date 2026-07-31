@@ -136,8 +136,9 @@ A series precision (prototype code `P`) is a **number of terms**, not a bit
 count. It has its own default and is deliberately outside the precision
 scope.
 
-```@docs
-LibPARI.nbits2prec
-LibPARI.default_precision
-LibPARI.isexact
+## Reference
+
+```@autodocs
+Modules = [LibPARI]
+Pages = ["precision.jl"]
 ```

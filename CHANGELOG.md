@@ -89,7 +89,48 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   holds every bit; no path from a `BigFloat` touches `Cdouble`. Values
   seeded from a `BigFloat` change, because the old ones were wrong.
 
+- **BREAKING — LibPARI now exports four names** (M14, REQ-PUB-04):
+  `pari`, `Gen`, `gp_eval` and `PariError`. It previously exported nothing,
+  so `using LibPARI` next to a package exporting any of those four now
+  raises an ambiguous-binding error at first use. No shim can exist for a
+  new export; the mitigation is that the list is four names and a test
+  locks it. The generated bindings stay behind `LibPARI.PARI`, and
+  `isprime`/`factor` are deliberately **not** exported because they are
+  Primes.jl's names.
+
 ### Added
+
+- **`pari(x)` — the entry point** (REQ-PUB-01/02). Converts any
+  [`PariConvertible`](@ref) value; `pari(g::Gen) === g`, returning the
+  argument rather than cloning it a second time. Documentation now leads
+  with `pari(x)` rather than `LibPARI.Gen(x)`.
+- **A small facade over the generated layer** (REQ-PUB-06/07/08), extending
+  Base only where PARI's operation *is* Julia's: `gcd`, `gcdx` (reordered
+  from PARI's `[u, v, d]` to Julia's `(d, u, v)`), `numerator`,
+  `denominator` and `factorial`, each with explicit mixed `Gen`/Julia
+  methods. Where PARI's answer means something else it is refused, not
+  relayed: `numerator`/`denominator` accept only `t_INT`/`t_FRAC`, because
+  PARI answers `denominator(x/2 + 1/3) == 1` in the polynomial domain; and
+  `factorial` validates a non-negative integer, because PARI's `mpfact`
+  does not. Unexported: `LibPARI.isprime`, `nextprime`, `prevprime`,
+  `factor` (PARI's 2-column `t_MAT`) and `factors` (a
+  `Vector{Pair{Gen,Gen}}`).
+- **The supported-but-unexported names are marked `public`** on Julia 1.11
+  and later (REQ-PUB-05) — `PARI`, `gentype`, `isexact`, `factors` and the
+  rest. The declaration is parsed at load time because `public` is a
+  keyword that does not parse on the 1.10 LTS floor.
+- **A getting-started section on the three levels of access**: the
+  idiomatic Julia surface (the layer promised stable at 1.0), the ~1200
+  generated `LibPARI.PARI` bindings, and `gp_eval` as the escape hatch.
+
+### Changed
+
+- **A complex `Gen` is built without the GP parser** (REQ-PUB-03).
+  `Gen(z::Complex)` was `Gen(real(z)) + Gen(imag(z)) * gp_eval("I")`, which
+  ran the GP parser on every complex conversion and tied a core constructor
+  to the evaluator. It now calls PARI's `gen_I` directly. Arithmetic is
+  kept rather than a raw `mkcomplex`, so a zero imaginary part still
+  normalises to the real type, as it does in GP. Values are unchanged.
 
 - **A bit-based precision API** (`docs/src/precision.md`):
   `setprecision(Gen, bits)` as a nesting, unwinding scope;

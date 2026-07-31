@@ -163,7 +163,14 @@ julia> LibPARI.Gen(3 + 4im) isa LibPARI.Gen
 true
 ```
 """
-Gen(z::Complex) = Gen(real(z)) + Gen(imag(z)) * gp_eval("I")
+Gen(z::Complex) = Gen(real(z)) + Gen(imag(z)) * _gen_I()
+
+# PARI's imaginary unit, built directly. The construction used to go through
+# `gp_eval("I")`, which ran the GP parser on every complex conversion and
+# tied a core constructor to the evaluator (REQ-PUB-03). Arithmetic — rather
+# than a raw `mkcomplex` — is kept deliberately: `gadd`/`gmul` normalise, so
+# a zero imaginary part collapses to the real type, as it does in GP.
+_gen_I() = _genresult(() -> ccall((:gen_I, PARI_jll.libpari), Ptr{Int}, ()))
 
 # --- Identity elements -----------------------------------------------------
 

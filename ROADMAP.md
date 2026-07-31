@@ -32,7 +32,8 @@ order, in releases `0.1.0` … `0.11.0`; the work that followed
 
 **Part II (M11–M21) is in progress.** M11, M12 and most of M13 have
 landed on the development branch, unreleased, targeted at `0.16.0`,
-`0.17.0` and `0.18.0`; M14–M21 are not started. M13 keeps one deliverable
+`0.17.0` and `0.18.0`, and most of M14 with them; M15–M21 are not
+started. M13 keeps one deliverable
 open — REQ-PREC-13, which collides with NFR-01; see the milestone. It is the
 API redesign that must land
 before 1.0: an honest type contract for `Gen`, precise conversion and
@@ -489,7 +490,7 @@ other and of `M12`–`M15`, and may be reordered freely after `M11`.
 | M11 | Honest type contract for `Gen`             | 0.16.0         | **done** (unreleased) |
 | M12 | Conversion & promotion contracts           | 0.17.0         | **done** (unreleased) |
 | M13 | Precision-safe reals & a bit-based precision API | 0.18.0    | **mostly done** (unreleased) |
-| M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | not started |
+| M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | **mostly done** (unreleased) |
 | M15 | Generated-binding argument ergonomics      | 0.20.0         | not started |
 | M16 | Explicit GP evaluation sessions            | 0.21.0         | not started |
 | M17 | Structured PARI objects                    | 0.22.0         | not started |
@@ -927,64 +928,68 @@ semantics match exactly.
 
 **Deliverables**
 
-- [ ] `pari(x)` as a facade over the `Gen` constructors, covering `Integer`,
+- [x] `pari(x)` as a facade over the `Gen` constructors, covering `Integer`,
       `Rational`, `AbstractFloat`, `Complex`; `@inferred pari(x)::Gen` for
       every documented input. (REQ-PUB-01)
-- [ ] `pari(g::Gen) = g` — return the argument, never re-clone; test
+- [x] `pari(g::Gen) = g` — return the argument, never re-clone; test
       `pari(g) === g`, and document why aliasing is safe. (REQ-PUB-02)
       - Safe because `ptr` is written only by the idempotent `_finalize!`
         (`src/gen.jl:68-79`), there is no mutation API on `Gen`, and one
         object means one finalizer, hence one `gunclone`. It matches
         `convert(Gen, g) === g`, which already holds.
-- [ ] Construct complex `Gen`s with a direct PARI call instead of
+- [x] Construct complex `Gen`s with a direct PARI call instead of
       `Gen(imag(z)) * gp_eval("I")` (`src/numeric.jl:179`). Assert
       `gentype(pari(3+4im)) === PariType.T_COMPLEX` and that the path calls
       no `gp_eval`. (REQ-PUB-03)
       - The current route is *correct* (GP refuses `I = 5`, so `I` cannot be
         shadowed) but runs the GP parser on every complex construction and
         ties a core constructor to the evaluator.
-- [ ] `export Gen, pari, gp_eval, PariError` — nothing else. A lock test in
+- [x] `export Gen, pari, gp_eval, PariError` — nothing else. A lock test in
       `test/package/` asserts `names(LibPARI)` equals exactly that set, so
       any new export fails CI. (REQ-PUB-04)
-- [ ] Mark the supported-but-unexported names public — `PARI`, `PariType`,
+- [x] Mark the supported-but-unexported names public — `PARI`, `PariType`,
       `PariErr`, `gentype`, `is_initialized`, `library_state`,
       `stack_size`, `serve_mcp` — behind a `VERSION >= v"1.11"` guard, since
       `public` does not parse on the 1.10 LTS floor. (REQ-PUB-05)
-- [ ] Extend Base only where semantics match exactly: `gcd`, `gcdx`,
+- [x] Extend Base only where semantics match exactly: `gcd`, `gcdx`,
       `numerator`, `denominator`, `factorial` on `Gen`, with explicit
       mixed-argument methods rather than promotion. (REQ-PUB-06)
       - `Base.factorial(::Integer)::Gen` is **rejected** as piracy that
         would change Base's return type.
-- [ ] Pin the exact semantics: `gcdx` returns Julia's `(d, u, v)` from
+- [x] Pin the exact semantics: `gcdx` returns Julia's `(d, u, v)` from
       PARI's `[u, v, d]`; `numerator`/`denominator` accept only
       `T_INT`/`T_FRAC`; `factorial` validates a non-negative integer `Gen`
       first. (REQ-PUB-07)
       - *Observed:* PARI 2.17 answers `denominator(x/2 + 1/3) == 1`, so the
         polynomial domain has no Base meaning and must be refused.
-- [ ] Unexported number-theory facade: `isprime(::Gen)::Bool`, `nextprime`,
+- [~] Unexported number-theory facade: `isprime(::Gen)::Bool`, `nextprime`,
       `prevprime`, `factor(::Gen)::Gen` and
       `factors(::Gen)::Vector{Pair{Gen,Gen}}`. (REQ-PUB-08)
+      - The five functions shipped. The optional `LibPARIPrimesExt` weakdep
+        extension supplying `Primes.isprime(::Gen)`, and its CI job, did
+        **not** — it is a separate package-extension change, not a facade
+        one. Reach them as `LibPARI.isprime` meanwhile.
       - Not exported: `isprime`/`factor` are Primes.jl's names. A hard
         dependency on Primes.jl is **rejected**; ship an optional
         `LibPARIPrimesExt` weakdep extension instead, with a CI job that
         loads Primes.
-- [ ] Modular arithmetic: `Mod(a, n)` and `lift`, `Base.powermod`,
+- [ ] **Not started.** Modular arithmetic: `Mod(a, n)` and `lift`, `Base.powermod`,
       `Base.invmod`; `Base.mod(::Gen, ::Gen)` restricted to integer-valued
       `Gen`s and corrected to Julia's sign convention. (REQ-PUB-09)
       - *Observed:* PARI's `%` is not Julia's `mod` — `(-7)%3 == 2`,
         `7%(-3) == 1`, `(1/2)%3 == 2`. Wrapping `gmod` verbatim as
         `Base.mod` would be wrong; PARI's operator stays reachable as
         `PARI.gmod`.
-- [ ] Selected polynomial facade, unexported: `degree(::Gen)::Int`,
+- [ ] **Not started.** Selected polynomial facade, unexported: `degree(::Gen)::Int`,
       `coeff`, `subst`, `polroots(::Gen; prec)`. `degree` throws
       `DomainError` on the zero polynomial, where PARI returns `-oo`.
       (REQ-PUB-10)
       - These exist because they add semantics (a Julia `Int` return,
         domain checks), **not** to rename `gppoldegree`.
-- [ ] Every facade docstring states accepted Julia *and* PARI inputs, the
+- [x] Every facade docstring states accepted Julia *and* PARI inputs, the
       exact return type, the error behaviour and the precision behaviour.
       (REQ-PUB-11)
-- [ ] `docs/src/api.md` gains an exported / public / internal surface table;
+- [x] `docs/src/api.md` gains an exported / public / internal surface table;
       README and getting-started switch to `pari(x)`. (REQ-PUB-12)
 - [ ] Re-check Aqua's `ambiguities` and `undocumented_names` for every newly
       exported or public name — adding ~15 Base methods on `Gen` is exactly
