@@ -498,7 +498,7 @@ never existed, and the remaining milestones will renumber the same way.
 | M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | **released** in `0.16.0`; facade completed since |
 | M15 | Generated-binding argument ergonomics      | 0.20.0         | **done** (unreleased) |
 | M16 | Explicit GP evaluation sessions            | 0.21.0         | not started |
-| M17 | Structured PARI objects                    | 0.22.0         | not started |
+| M17 | Structured PARI objects                    | 0.22.0         | **done** (unreleased) |
 | M18 | Display contract                           | 0.23.0         | not started |
 | M19 | Symbolics.jl bridge (optional extension)   | 0.24.0         | not started |
 | M20 | Giac.jl bridge (optional extension)        | 0.25.0         | not started |
@@ -1246,9 +1246,14 @@ cannot honour.
 
 **Scope:** REQ-IDX-01 … REQ-IDX-09.
 
-> **Authoring note.** Same caveat as M16: written from the source without a
-> completed analysis pass. The ownership and layout deliverables
-> (REQ-IDX-01, REQ-IDX-03) must be verified against PARI's headers first.
+> **Investigation done (REQ-IDX-01).** Verified before any accessor was
+> written: a `t_MAT` is a list of COLUMNS (`glength` counts columns,
+> component `j` is the `j`-th column as a `t_COL`, and GP's `matsize` gives
+> `[rows, cols]`); and reading a component through PARI's `compo` returns an
+> **owned** value, because the generated binding wraps it in `gen_from`,
+> which `gclone`s. Element access therefore clones, and an element outlives
+> its parent — verified by dropping the parent and forcing GC. No manual
+> re-cloning is needed and no pointer is exposed.
 
 **Deliverables**
 
@@ -1257,29 +1262,29 @@ cannot honour.
       a component pointer points *into* the parent's cloned block — so an
       element must be re-cloned through `gen_from` to own its memory.
       (REQ-IDX-01)
-- [ ] `length`, `size`, `axes`, `getindex(x, i)`, `getindex(x, i, j)`,
+- [x] `length`, `size`, `axes`, `getindex(x, i)`, `getindex(x, i, j)`,
       `iterate`, `eltype`, `collect`, `Vector{Gen}(x)`, `Matrix{Gen}(x)` —
       each defined only for the PARI types where it is meaningful.
       (REQ-IDX-02)
 - [ ] Coverage: `T_VEC`, `T_COL`, `T_VECSMALL`, `T_MAT`; `T_LIST` only if
       its semantics prove stable enough — otherwise excluded, with the
       reason recorded. (REQ-IDX-03)
-- [ ] One-based Julia indexing throughout, with a `BoundsError` outside the
+- [x] One-based Julia indexing throughout, with a `BoundsError` outside the
       range, and a clear error — naming the PARI type — for indexing a
       `Gen` that is not a container. (REQ-IDX-04)
-- [ ] `size` for `T_MAT` agrees with Julia conventions; PARI's `t_MAT` is a
+- [x] `size` for `T_MAT` agrees with Julia conventions; PARI's `t_MAT` is a
       column-major list of columns, so the mapping is spelled out and
       tested, not assumed. (REQ-IDX-05)
-- [ ] No pointer and no transient stack memory is exposed; every returned
+- [x] No pointer and no transient stack memory is exposed; every returned
       element is a fully owned `Gen`. Document explicitly **that element
       access clones**. (REQ-IDX-06)
-- [ ] Iteration leaks no PARI heap objects; allocation and leak tests match
+- [x] Iteration leaks no PARI heap objects; allocation and leak tests match
       the NFR-02/NFR-03 style already used in
       `test/acceptance_tests.jl`. (REQ-IDX-07)
-- [ ] `Gen` does **not** subtype `AbstractArray`; the relevant Base methods
+- [x] `Gen` does **not** subtype `AbstractArray`; the relevant Base methods
       are implemented directly. An explicit wrapper type is introduced only
       if a concrete need appears. (REQ-IDX-08)
-- [ ] `eltype` and the `collect`/`Vector{Gen}` conversions are type-stable
+- [x] `eltype` and the `collect`/`Vector{Gen}` conversions are type-stable
       and `@inferred`-clean. (REQ-IDX-09)
 
 **Breaking changes**

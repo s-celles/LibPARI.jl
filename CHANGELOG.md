@@ -10,6 +10,20 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **Idiomatic access to PARI's containers** (M17): `length`, `size`, `axes`,
+  `ndims`, `getindex` (linear and `[i, j]`), `iterate`, `eltype`, `collect`,
+  `Vector{Gen}` and `Matrix{Gen}` over `t_VEC`, `t_COL`, `t_VECSMALL`,
+  `t_MAT` and — read-only — `t_LIST`. `Gen` deliberately does **not**
+  subtype `AbstractArray`: the same concrete type also wraps integers,
+  strings and closures, so it cannot promise a static array interface. A
+  non-container `Gen` raises `ArgumentError` naming its PARI type rather
+  than a bare `MethodError`.
+
+  Two conventions worth knowing: a `t_MAT` reports Julia's `(rows,
+  columns)`, transposing PARI's column-major reading, and `length` counts
+  *elements* where PARI's own `glength` counts columns. Element access
+  **clones** — a component read through `compo` is `gclone`d, so it owns its
+  memory and outlives its parent.
 - **Generated bindings accept Julia scalars** where PARI's prototype expects
   a `GEN` (M15): `LibPARI.PARI.nextprime(1000)`,
   `LibPARI.PARI.gmodulo(5, 7)`, `LibPARI.PARI.factorial(100)`. Through
