@@ -95,7 +95,10 @@ end
     @test (@inferred PARI.nextprime(pari(1000))) isa LibPARI.Gen
     @test (@inferred PARI.gsigne(-5)) isa Int
     @test (@inferred PARI.eulerphi(100)) isa LibPARI.Gen
-    @test Base.infer_return_type(PARI.nextprime, Tuple{Int}) === LibPARI.Gen
+    # `Base.infer_return_type` is Julia 1.11+; `return_types` works on the
+    # 1.10 LTS floor this package supports.
+    @test only(Base.return_types(PARI.nextprime, Tuple{Int})) === LibPARI.Gen
+    @test only(Base.return_types(PARI.gsigne, Tuple{Int})) === Int
 end
 
 @testitem "REQ-ARG-05: a scalar argument leaks no PARI stack" begin
