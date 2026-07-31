@@ -18,6 +18,20 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Documented
 
+- **`ROADMAP.md` gains Part II — the API redesign for 1.0.0.** The roadmap
+  is now split into Part I (M0–M10, delivered) and **Part II (M11–M19, not
+  started)**: M11 honest type contract for `Gen` (`Gen <: PariObject`,
+  withdrawing `Gen <: Number`), M12 conversion and promotion contracts,
+  M13 precision-safe reals and a bit-based precision API, M14 `pari(x)`
+  plus a four-name export surface and a small facade, M15 generated-binding
+  argument ergonomics, M16 explicit GP sessions, M17 structured PARI
+  objects, M18 display contract, M19 documentation, migration and the
+  1.0.0 release. Each milestone carries its deliverables with requirement
+  ids, a **Breaking changes** table stating whether a deprecation shim is
+  possible, exit criteria, and open questions. The traceability table gains
+  the nine new requirement families and records that **REQ-API-01
+  (`Gen <: Number`) is superseded by REQ-TYPE-01**; the 0.7.0 and 0.14.0
+  entries below stand as historical record.
 - **`ROADMAP.md` marked up to date.** Every M0–M10 deliverable is now
   ticked, the milestone summary carries a status column, and a
   `Current status` section records the one deviation from the exit
