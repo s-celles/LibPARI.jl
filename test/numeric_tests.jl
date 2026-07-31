@@ -1,10 +1,15 @@
-# M6 — idiomatic numeric API: `Gen` as a Julia `Number`, arithmetic
-# operators, mixed-type promotion, equality, and display continuity.
+# M6 — idiomatic numeric API: arithmetic operators, mixed-type operands,
+# equality, and display continuity. M11 withdrew the `Gen <: Number` claim
+# these tests were written against; the operators themselves are unchanged.
 
-@testitem "Gen is a subtype of Number" begin
+# REQ-TYPE-01 supersedes REQ-API-01 (`Gen <: Number`, M6/0.7.0): one
+# concrete `Gen` wraps every PARI object, so it is a `PariObject`. The
+# `Gen <: PariObject` half is asserted in test/type_contract_tests.jl.
+@testitem "Gen's declared supertype" begin
     using LibPARI
 
-    @test LibPARI.Gen <: Number
+    @test !(LibPARI.Gen <: Number)
+    @test isconcretetype(LibPARI.Gen)
 end
 
 @testitem "arithmetic operators compute through PARI" begin
@@ -36,7 +41,10 @@ end
     @test BigInt(LibPARI.Gen(3) ^ n) == 2187
 end
 
-@testitem "mixed Gen / Julia-number arithmetic promotes the operand" begin
+# REQ-TYPE-02 supersedes the `promote`-based routing this asserted: the
+# mixed operators are now explicit `(Gen, Number)` / `(Number, Gen)`
+# methods. The computed values below are unchanged by that.
+@testitem "mixed Gen / Julia-number arithmetic" begin
     using LibPARI
 
     g = LibPARI.Gen(100)
@@ -66,7 +74,9 @@ end
     @test (LibPARI.Gen(7) == LibPARI.Gen(8)) == false
     @test LibPARI.Gen(7) != LibPARI.Gen(8)
 
-    # Mixed Gen / Julia-number equality, via promotion, in either order.
+    # Mixed Gen / Julia-number equality, in either order. REQ-TYPE-03
+    # supersedes promotion here with explicit `==` methods — without them
+    # Base's `==(x, y) = x === y` fallback answers `false` silently.
     @test LibPARI.Gen(42) == 42
     @test 0 == LibPARI.Gen(0)
 
@@ -74,10 +84,10 @@ end
     @test LibPARI.Gen(2) == LibPARI.Gen(2.0)
 end
 
-@testitem "a Gen still displays as PARI text under the Number supertype" begin
+@testitem "a Gen still displays as PARI text under its new supertype" begin
     using LibPARI
 
-    @test LibPARI.Gen <: Number
+    @test !(LibPARI.Gen <: Number)          # REQ-TYPE-01
     @test string(LibPARI.Gen(123)) == "123"
     @test sprint(show, LibPARI.Gen(-9)) == "-9"
     @test string(LibPARI.Gen(1) / LibPARI.Gen(4)) == "1/4"

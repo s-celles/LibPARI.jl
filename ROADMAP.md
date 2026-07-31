@@ -10,7 +10,7 @@ Section [Traceability](#traceability) maps each requirement ID to the
 milestone that delivers it.
 
 The roadmap is in two parts. **Part I (M0–M10)** built the wrapper and is
-delivered. **Part II (M11–M19)** redesigns the public API for 1.0 — it is
+delivered. **Part II (M11–M21)** redesigns the public API for 1.0 — it is
 not derived from `spec-ears.md` but introduces its own requirement families.
 
 ## How to read this roadmap
@@ -23,18 +23,20 @@ not derived from `spec-ears.md` but introduces its own requirement families.
   *every* milestone rather than waiting for a dedicated phase.
 - Status legend: `[ ]` not started · `[~]` in progress · `[x]` done.
 
-## Current status (2026-07-30, package version 0.15.1)
+## Current status (2026-07-31, package version 0.15.1)
 
 **Part I (M0–M10) is complete.** Every deliverable shipped, in milestone
 order, in releases `0.1.0` … `0.11.0`; the work that followed
 (`0.12.0` … `0.15.1`) is listed under
 [Delivered beyond Part I](#delivered-beyond-part-i-0120--0151).
 
-**Part II (M11–M19) is not started.** It is the API redesign that must land
+**Part II (M11–M21) is in progress.** M11 has landed on the development
+branch, unreleased, targeted at `0.16.0`; M12–M21 are not started. It is the
+API redesign that must land
 before 1.0: an honest type contract for `Gen`, precise conversion and
 promotion rules, precision-safe reals, `pari(x)`, ergonomic generated
-bindings, explicit GP state, and idiomatic access to structured PARI
-objects.
+bindings, explicit GP state, idiomatic access to structured PARI objects,
+and — as optional extensions — the Symbolics.jl and Giac.jl bridges.
 
 One deviation from the exit criteria, recorded here rather than silently
 ticked: the per-milestone tags `v0.1.0` … `v0.11.0` were **never created**.
@@ -470,7 +472,8 @@ M10 (0.11.0, done)
         M11 ─────────────> M16 GP sessions
         M11 ─────────────> M17 structured objects
         M11 ─────────────> M18 display contract
-  all ───────────────────> M19 documentation, migration, 1.0.0
+  M11+M13+M14+M17 ──────> M19 Symbolics bridge ─> M20 Giac bridge
+  all ───────────────────> M21 documentation, migration, 1.0.0
 ```
 
 `M13` and `M15` both regenerate `src/bindings.jl`; they must not be in
@@ -481,7 +484,7 @@ other and of `M12`–`M15`, and may be reordered freely after `M11`.
 
 | ID  | Milestone                                  | Target version | Status |
 |-----|--------------------------------------------|----------------|--------|
-| M11 | Honest type contract for `Gen`             | 0.16.0         | not started |
+| M11 | Honest type contract for `Gen`             | 0.16.0         | **done** (unreleased) |
 | M12 | Conversion & promotion contracts           | 0.17.0         | not started |
 | M13 | Precision-safe reals & a bit-based precision API | 0.18.0    | not started |
 | M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | not started |
@@ -489,7 +492,9 @@ other and of `M12`–`M15`, and may be reordered freely after `M11`.
 | M16 | Explicit GP evaluation sessions            | 0.21.0         | not started |
 | M17 | Structured PARI objects                    | 0.22.0         | not started |
 | M18 | Display contract                           | 0.23.0         | not started |
-| M19 | Documentation, migration & the 1.0.0 release | 1.0.0        | not started |
+| M19 | Symbolics.jl bridge (optional extension)   | 0.24.0         | not started |
+| M20 | Giac.jl bridge (optional extension)        | 0.25.0         | not started |
+| M21 | Documentation, migration & the 1.0.0 release | 1.0.0        | not started |
 
 ---
 
@@ -506,47 +511,47 @@ operation that Base's `Number` fallbacks silently provide today.
 
 **Deliverables**
 
-- [ ] `abstract type PariObject end`; `mutable struct Gen <: Number`
-      (`src/gen.jl:46`) becomes `Gen <: PariObject`. `Gen` stays concrete,
+- [x] `abstract type PariObject end`; `mutable struct Gen <: Number`
+      (was `src/gen.jl:46`) becomes `Gen <: PariObject`. `Gen` stays concrete,
       mutable, single-field, unparameterised (REQ-MEM-02). (REQ-TYPE-01)
       - No `Gen{T}` per PARI tag: the tag is a runtime word read from the
         GEN (`src/gen.jl:167-170`), so a parametric `Gen` would make every
         generated binding's return type uninferable and break REQ-PERF-01.
-- [ ] Explicit `+ - * / ^ \` methods on `(Gen, Number)` and `(Number, Gen)`,
+- [x] Explicit `+ - * / ^ \` methods on `(Gen, Number)` and `(Number, Gen)`,
       generated from one operator table, each building a `Gen` operand and
       calling the existing `Gen`/`Gen` operator. (REQ-TYPE-02)
       - Base's `op(::Number, ::Number)` promotion (`src/numeric.jl:140-145`)
         is the *only* reason `Gen(6) + 1` works today; it disappears with
         the supertype and cannot be recovered short of re-subtyping.
-- [ ] Explicit `==(::Gen, ::Number)` / `==(::Number, ::Gen)` over `gequal`.
+- [x] Explicit `==(::Gen, ::Number)` / `==(::Number, ::Gen)` over `gequal`.
       Without them Base's `==(x, y) = x === y` fallback returns `false`
       silently — a wrong answer, not an error. (REQ-TYPE-03)
-- [ ] `isless(::Gen, ::Number)` and `isless(::Number, ::Gen)`; keep the
+- [x] `isless(::Gen, ::Number)` and `isless(::Number, ::Gen)`; keep the
       mixed `<` / `<=` methods (`src/numeric.jl:199-202`). (REQ-TYPE-04)
       - *Observed:* only `isless(::Gen, ::Gen)` exists today, so
         `sort(Any[Gen(2), 1])` already raises a `MethodError` — the 0.14.0
         ordering claim is already overstated.
-- [ ] `Base.broadcastable(g::Gen) = Ref(g)`. A `Gen` broadcasts as a scalar
+- [x] `Base.broadcastable(g::Gen) = Ref(g)`. A `Gen` broadcasts as a scalar
       today only because `Number` is on Base's whitelist; the generic
       fallback is `collect(x)`, which a non-iterable `Gen` cannot satisfy.
       (REQ-TYPE-05)
-- [ ] Re-implement directly on `Gen` the Base-`Number` conveniences that
+- [x] Re-implement directly on `Gen` the Base-`Number` conveniences that
       would otherwise be lost — unary `+`, `\`, `float`, `abs2`,
       `adjoint`/`transpose` — and document every one deliberately *not*
       re-implemented. (REQ-TYPE-06)
-- [ ] Break the `convert(::Type{Gen}, x::Number) = Gen(x)` cycle
+- [x] Break the `convert(::Type{Gen}, x::Number) = Gen(x)` cycle
       (`src/numeric.jl:145`): an operand with no `Gen` constructor must
       raise a catchable exception. (REQ-TYPE-07)
       - *Observed:* `Gen(1) + π` raises `StackOverflowError` today.
-- [ ] Convert a `t_REAL` through PARI instead of `parse(_genrepr(g))`
+- [x] Convert a `t_REAL` through PARI instead of `parse(_genrepr(g))`
       (`src/conversions.jl:213,235`). (REQ-TYPE-08)
       - *Observed:* `Float64(gp_eval("1.0*10^400"))` raises
         `ArgumentError: cannot parse "1.0000…0 E400"` — PARI prints a space
         before the exponent. This is a REQ-CONV-04 violation.
-- [ ] Make `hash` total over every PARI type; it routes `T_REAL` through
+- [x] Make `hash` total over every PARI type; it routes `T_REAL` through
       `Float64` (`src/numeric.jl:216`) and therefore throws on a large real.
       Property-test `a == b ⟹ hash(a) == hash(b)`. (REQ-TYPE-09)
-- [ ] **Replace** the tests encoding the old contract —
+- [x] **Replace** the tests encoding the old contract —
       `test/numeric_tests.jl:4-8,77-84` and all of
       `test/number_interface_tests.jl` — with assertions that
       `Gen <: PariObject`, `!(Gen <: Number)`, `isconcretetype(Gen)`, and
@@ -555,11 +560,11 @@ operation that Base's `Number` fallbacks silently provide today.
       - *Observed:* `gp_eval("[1,2;3,4]") isa Number` and
         `gp_eval("\"abc\"") isa Number` are both `true` today — the concrete
         dishonesty this milestone removes.
-- [ ] A method-matrix test: {`+`,`-`,`*`,`/`,`^`,`==`,`<`,`<=`,`isless`} ×
+- [x] A method-matrix test: {`+`,`-`,`*`,`/`,`^`,`==`,`<`,`<=`,`isless`} ×
       {`Int`, `BigInt`, `Float64`, `BigFloat`, `Rational`, `Complex`} ×
       both operand orders, asserting *computed values*, not merely
       `isa Gen`. (REQ-TYPE-11)
-- [ ] Correct the "complete Julia `Number`" claim in `docs/src/api.md:89-96`,
+- [x] Correct the "complete Julia `Number`" claim in `docs/src/api.md:89-96`,
       `docs/src/index.md:23`, `docs/src/getting-started.md:47` and
       `README.md:31`; the 0.14.0 CHANGELOG entry stays as written and the
       0.16.0 entry records its supersession. (REQ-TYPE-12)
@@ -567,6 +572,13 @@ operation that Base's `Number` fallbacks silently provide today.
       (`test/package/aqua_tests.jl`, deferred pending M9 — shipped in
       0.10.0/0.13.0) and extend `test/inference_tests.jl` with `@inferred`
       over every new method. (REQ-TYPE-13)
+      - **Partly done, deliberately left open.** The `@inferred` extension
+        shipped; the Aqua check is still disabled. Evidence for whoever
+        flips it: with M11 in place both `Aqua.test_ambiguities(LibPARI)`
+        and `Test.detect_ambiguities(LibPARI; recursive = true)` are clean
+        locally. It is left off because the check spawns a subprocess that
+        loads PARI, which is an untested risk on the macOS and Windows
+        runners — flip it in its own change, not inside M11.
 
 **Breaking changes**
 
@@ -1295,11 +1307,221 @@ PARI-notation REPL rendering, and keep display cheap.
 
 ---
 
-## M19 — Documentation, migration & the 1.0.0 release
+## Interoperability bridges — M19 and M20
+
+Two conversion bridges to other Julia computer-algebra ecosystems, **in
+scope for 1.0**. Each depends on contracts M11-M18 freeze, so they are
+sequenced last before the release milestone.
+
+Both ship as **package extensions** (`[weakdeps]` + `[extensions]`), the
+pattern already used for the MCP connector (`ext/LibPARIMCPExt.jl`,
+0.12.0): installing LibPARI must not install Symbolics or Giac, and a
+process that does not load them must pay nothing — no dependency, no code,
+no precompilation. That is what makes them affordable before 1.0: they add
+surface to the *extensions*, not to the core the release freezes.
+
+**Depends on:** M11 (a `Gen` that does not lie about being a `Number`),
+M13 (a documented precision policy for `t_REAL`), M14 (`pari(x)` as the
+single inward entry point), M17 (indexing, needed for `t_VEC`/`t_MAT`).
+
+The two are **not** symmetric in where they live: M19 must be hosted here,
+M20 probably should not. See *Which package owns which bridge* under M20.
+
+---
+
+## M19 — Symbolics.jl bridge
+
+**Goal:** convert between PARI objects and Symbolics.jl expressions over a
+documented, tested subset — `to_symbolics(g)` outward, `pari(x)` inward —
+without a hard dependency and without pretending to a fidelity the two
+representations do not share.
+
+**Depends on:** M11, M13, M14, M17 (all of Part II in practice).
+
+**Scope:** REQ-SYM-01 … REQ-SYM-10.
+
+**Deliverables**
+
+- [ ] **Investigate and write down the mapping table first**, before any
+      code: which PARI type tag maps to which Symbolics/SymbolicUtils node,
+      and — the hard direction — which Symbolics expressions have **no**
+      PARI counterpart. Publish it as a table in the docs; it is the
+      contract. (REQ-SYM-01)
+- [ ] `ext/LibPARISymbolicsExt.jl` as a weakdep extension; `Project.toml`
+      gains `Symbolics` under `[weakdeps]`/`[extensions]` only. A test
+      asserts that loading LibPARI alone pulls in neither the package nor
+      its load time. (REQ-SYM-02)
+- [ ] Inward conversion: extend M14's `pari(x)` with methods for
+      `Num`/`BasicSymbolic`, so there is **one** inward entry point for
+      every foreign type. (REQ-SYM-03)
+      - See the open question on `to_pari`: a separate inward name is
+        proposed by the request, but a second entry point that does the
+        same job as `pari(x)` is a contract to maintain twice.
+- [ ] Outward conversion `to_symbolics(g::Gen)`, defined as a LibPARI
+      generic with its methods supplied by the extension. (REQ-SYM-04)
+- [ ] **Variable identity** — the central difficulty, and the deliverable
+      most likely to reshape this milestone: a PARI `t_POL` carries a
+      variable *number* with a priority ordering, while a Symbolics variable
+      is a named symbol. Define and test the name↔number mapping,
+      round-trip preservation of names, and what happens on a collision or
+      on PARI's variable-priority reordering. (REQ-SYM-05)
+- [ ] Documented supported subset — at minimum `t_INT`, `t_FRAC`, `t_REAL`,
+      `t_COMPLEX`, `t_POL`, `t_RFRAC`, and (via M17) `t_VEC`/`t_COL`/
+      `t_MAT`. Everything outside it raises a clear error naming the PARI
+      type; `t_SER`, `t_PADIC`, `t_INTMOD`, `t_FFELT` and `t_CLOSURE` are
+      explicitly out unless a deliverable adds them. (REQ-SYM-06)
+- [ ] Exactness and precision policy: what a `t_REAL` becomes on the
+      Symbolics side, and what a Julia `Float64`/`BigFloat` literal becomes
+      as a `Gen`, consistent with M13. Any unavoidable rounding is
+      documented. (REQ-SYM-07)
+- [ ] Round-trip tests in **both** directions over a fixed corpus, plus a
+      property test on randomly generated polynomials asserting
+      `pari(to_symbolics(g))` equals `g` on the supported subset — and an
+      explicit list of the cases where it deliberately does not.
+      (REQ-SYM-08)
+- [ ] No type piracy: every method has a LibPARI type in its signature, or
+      is a method on a Symbolics function that LibPARI's extension legally
+      owns. Aqua stays green. (REQ-SYM-09)
+- [ ] A CI job loading Symbolics, kept separate from the main matrix
+      because of its compile cost, plus a docs page with runnable examples.
+      (REQ-SYM-10)
+
+**Exit criteria**
+
+- The mapping table is published, and every row is exercised by a test.
+- `Pkg.add("LibPARI")` installs neither Symbolics nor its dependency tree;
+  a session that never loads Symbolics shows no extension code loaded.
+- Round-trip holds over the corpus and the property test; every documented
+  exception is itself tested.
+- Variable names survive a `Gen → Symbolics → Gen` round trip, or the
+  documented loss is asserted by a test.
+- Aqua reports no piracy and no ambiguity.
+
+**Open questions**
+
+- `to_pari` vs `pari(x)`: the request names `to_pari`/`to_symbolics` as a
+  symmetric pair. But M14 makes `pari(x)` **the** inward entry point, and
+  two names for one job is two contracts to keep. Recommendation: extend
+  `pari(x)` inward, keep `to_symbolics` outward, and — if symmetry is
+  wanted — ship `to_pari` as a documented one-line alias rather than a
+  second implementation. Decide before REQ-SYM-03.
+- Does the bridge convert **structurally** (walking the `GEN`) or through a
+  **string** round trip? Structural is the only honest answer for anything
+  that must preserve exactness and variable identity; a string path is
+  simpler but goes through two parsers and quietly loses precision and
+  variable priority. Structural is the working assumption.
+- What is the natural Symbolics counterpart of a `t_FRAC` — a `Rational`
+  literal, or a division node? They differ under simplification.
+- Should `t_INTMOD`/`t_FFELT` map onto anything at all, or stay refused?
+
+---
+
+## M20 — Giac.jl bridge
+
+**Goal:** the same bridge against Giac, over whatever exchange the Julia
+Giac interface actually offers.
+
+**Depends on:** M19 (which establishes the bridge pattern, the mapping-table
+discipline and the extension layout).
+
+**Scope:** REQ-GIAC-01 … REQ-GIAC-08.
+
+> **Authoring note.** This milestone's design is **not yet decidable**. It
+> depends entirely on what the Julia Giac package exposes — a native value
+> type, or a string-level interface to the CAS. REQ-GIAC-01 exists to settle
+> that before anything else is written.
+
+**Deliverables**
+
+- [ ] **Establish the target first:** which Julia Giac package (name,
+      registry status, maintenance, value type, API surface), and whether it
+      exposes a structured value or only strings. The answer decides the
+      whole milestone; record it in the roadmap before proceeding.
+      (REQ-GIAC-01)
+- [ ] **Decide which side hosts the bridge** — see *Which package owns
+      which bridge* below — and record the decision with its reason before
+      writing the extension. Either way it is a weakdep extension with no
+      hard dependency and no cost when unloaded: `ext/LibPARIGiacExt.jl`
+      here, or `ext/GiacLibPARIExt.jl` in Giac.jl. (REQ-GIAC-02)
+- [ ] Inward conversion through `pari(x)` and outward `to_giac(g::Gen)`,
+      mirroring M19's naming decision exactly — the two bridges must not
+      diverge in spelling. (REQ-GIAC-03)
+- [ ] A published mapping table with the same discipline as REQ-SYM-01,
+      including what Giac has that PARI does not and vice versa.
+      (REQ-GIAC-04)
+- [ ] If — and only if — the exchange proves to be **string-based**,
+      document that plainly as a limitation, pin the exact notation used in
+      each direction, and test the fragile cases explicitly: the imaginary
+      unit (`I` vs `i`), variable names, precedence and parenthesisation,
+      floating-point literal precision, and matrix/vector bracket syntax.
+      (REQ-GIAC-05)
+- [ ] Round-trip tests in both directions over a fixed corpus, with the
+      lossy cases enumerated rather than hidden. (REQ-GIAC-06)
+- [ ] No piracy; Aqua green; a separate CI job that loads Giac.
+      (REQ-GIAC-07)
+- [ ] A docs page with runnable examples, and an honest statement of which
+      of the three systems owns which semantics when they disagree.
+      (REQ-GIAC-08)
+
+**Exit criteria**
+
+- REQ-GIAC-01's finding is written down, with the design it implies.
+- The extension is optional and costs nothing when unloaded.
+- Round-trip holds over the corpus; every lossy case is documented **and**
+  tested.
+- Naming is identical to M19's — one convention across both bridges.
+
+**Open questions**
+
+- Which Julia Giac package, and is it registered and maintained? Without a
+  stable target this milestone should not start.
+- Is a PARI↔Giac bridge better served *directly*, or through a common
+  neutral representation — plausibly Symbolics, once M19 exists? A direct
+  bridge is faster and loses less; a hub avoids writing N² bridges. With
+  two systems, direct is the working assumption.
+- If Giac.jl hosts the bridge, LibPARI still owns the `pari` generic and
+  the mapping table. Does the table live here (and the code there), or does
+  the whole thing move? Proposed: the *rules* stay documented here, next to
+  M19's, so the two bridges cannot drift apart.
+
+### Which package owns which bridge
+
+Technically either side works: an extension can be declared by either
+package, and neither direction is type piracy — LibPARI owns `pari`, so
+`pari(::GiacExpr)` written in Giac.jl is legal; Giac.jl owns `to_giac`, so
+`to_giac(::Gen)` written here is legal. The decision is therefore about
+**maintenance direction**, not legality, and it resolves differently for
+the two bridges:
+
+- **M19 (Symbolics) must live in LibPARI.** Symbolics.jl is a large
+  third-party package that will not take a weak dependency on LibPARI. You
+  host the bridges to packages that will not host them for you.
+- **M20 (Giac) should live in Giac.jl**, if that package is under the same
+  maintainer. LibPARI is heading for a frozen 1.0; hosting the bridge here
+  ties that release to a foreign API's breaking changes, and a break in
+  Giac.jl would redden LibPARI's CI at the worst moment. The dependency
+  should point from the faster-moving package to the frozen one, not the
+  reverse.
+
+The reasons to override that and host it here anyway: LibPARI is where the
+structural knowledge of a `GEN` lives (type tags, variable priorities,
+`t_REAL` precision), so a *structural* bridge is easier to write here; and
+one home for both bridges keeps the naming and the mapping-table discipline
+from diverging. If the exchange turns out to be string-based (REQ-GIAC-01),
+that argument weakens considerably — a string bridge needs Giac's parser
+quirks more than PARI's internals.
+
+A third option, a separate glue package depending on both, is the right
+answer only if a third system appears: it costs discoverability and another
+registration, and buys isolation neither package needs at two systems.
+
+---
+
+## M21 — Documentation, migration & the 1.0.0 release
 
 **Goal:** ship the redesign as a documented, migratable 1.0.0.
 
-**Depends on:** M11 … M18.
+**Depends on:** M11 … M20.
 
 **Scope:** REQ-REL-01 … REQ-REL-08.
 
@@ -1324,8 +1546,8 @@ PARI-notation REPL rendering, and keep display cheap.
       round-trips, high-precision `BigFloat`, mixed arithmetic, supported
       *and unsupported* promotion, direct Julia arguments to bindings,
       `pari(x)`, precision scopes, GP sessions, structured indexing and
-      iteration, display, and the migration examples themselves.
-      (REQ-REL-06)
+      iteration, display, both bridge extensions with their round-trips,
+      and the migration examples themselves. (REQ-REL-06)
 - [ ] No existing performance, allocation, leak or reproducibility test has
       been weakened to make the redesign pass; every test replaced because
       it encoded a withdrawn contract is replaced by a **stronger** test,
@@ -1393,7 +1615,9 @@ introduces its own families; they are not in `spec-ears.md`.
 | GP sessions                       | REQ-GPS-01 … REQ-GPS-08    | M16       |
 | Structured objects                | REQ-IDX-01 … REQ-IDX-09    | M17       |
 | Display                           | REQ-SHOW-01 … REQ-SHOW-06  | M18       |
-| Release, docs & migration         | REQ-REL-01 … REQ-REL-08    | M19       |
+| Symbolics.jl bridge               | REQ-SYM-01 … REQ-SYM-10    | M19       |
+| Giac.jl bridge                    | REQ-GIAC-01 … REQ-GIAC-08  | M20       |
+| Release, docs & migration         | REQ-REL-01 … REQ-REL-08    | M21       |
 
 **Superseded.** REQ-API-01 (`Gen <: Number`, delivered in M6/0.7.0 and
 extended in 0.14.0) is withdrawn by REQ-TYPE-01 in M11. The 0.7.0 and

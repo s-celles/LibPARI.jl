@@ -86,15 +86,23 @@ Pages = ["conversions.jl"]
 
 ### Numeric API
 
-`Gen` is a complete Julia `Number`: it mixes with every standard Julia
-numeric type (`Int`, `BigInt`, `Float64`, `BigFloat`, `Rational`,
-`Complex`) in arithmetic and comparison through promotion; it carries the
-`zero`/`one` identities, the standard predicates (`iszero`, `isinteger`,
-`isfinite`, …), the elementary operations (`abs`, `sign`, `inv`, `conj`,
-`real`, `imag`), and `hash` — so a `Gen` sorts, serves as a `Dict`/`Set`
-key interchangeably with an equal Julia number, and works as a drop-in in
-generic numeric code. An operation that does not apply to a `Gen`'s
-underlying PARI type raises a catchable [`PariError`](@ref).
+`Gen` is a [`PariObject`](@ref LibPARI.PariObject), **not** a Julia
+`Number` — one concrete `Gen` wraps every PARI object, matrices and strings
+included. The numeric surface is therefore declared explicitly, not
+inherited: `+`, `-`, `*`, `/`, `^`, `\`, `==`, `<`, `<=` and `isless` have
+methods for `Gen`/`Gen` and for a `Gen` against a Julia `Integer`,
+`AbstractFloat`, `Rational` or `Complex`, in either operand order. `Gen`
+also carries the `zero`/`one` identities, the standard predicates
+(`iszero`, `isinteger`, `isfinite`, …), the elementary operations (`abs`,
+`sign`, `inv`, `conj`, `real`, `imag`), `hash`, `float`, `abs2`, `adjoint`,
+`transpose` and scalar broadcasting — so a `Gen` sorts and serves as a
+`Dict`/`Set` key interchangeably with an equal Julia number.
+
+Generic code bounded by `T<:Number` — parts of LinearAlgebra, other numeric
+packages — does **not** accept a `Gen`; dispatch on
+[`PariObject`](@ref LibPARI.PariObject), or convert. An operation that does
+not apply to a `Gen`'s underlying PARI type raises a catchable
+[`PariError`](@ref).
 
 ```@autodocs
 Modules = [LibPARI]

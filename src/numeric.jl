@@ -1,6 +1,10 @@
 # ---------------------------------------------------------------------------
-# Idiomatic numeric API — `Gen` as a Julia `Number` (M6).
+# Idiomatic numeric API — the arithmetic surface of `Gen` (M6, M11).
 # Included by src/LibPARI.jl after conversions.jl, before bindings.jl.
+#
+# `Gen` is a `PariObject`, not a Julia `Number` (REQ-TYPE-01), so nothing here
+# is inherited: every mixed `Gen`/Julia-number operation Base used to supply
+# through `Number` promotion is declared explicitly below.
 # ---------------------------------------------------------------------------
 
 # Default word precision supplied to PARI's general power `gpow` (used only
@@ -56,6 +60,17 @@ Base.:/(a::Gen, b::Gen) = _genresult(
 Base.:-(a::Gen) = _genresult(
     () -> ccall((:gneg, PARI_jll.libpari), Ptr{Int}, (Ptr{Int},), a.ptr),
 )
+
+# Unary `+` and left division `\` were Base `Number` fallbacks; they are
+# re-declared on `Gen` (REQ-TYPE-06).
+Base.:+(a::Gen) = a
+
+# `a \ b` is `a⁻¹·b`. For a scalar that is `b / a`, which is what Base's
+# `Number` fallback computed — but PARI's `gdiv` is `b·a⁻¹`, so on a `t_MAT`
+# the fallback silently answered the *right* division. A matrix left-hand
+# operand therefore goes through PARI's linear solver `gauss`.
+Base.:\(a::Gen, b::Gen) =
+    gentype(a) === PariType.T_MAT ? PARI.gauss(a, b) : b / a
 
 # --- Exponentiation --------------------------------------------------------
 
@@ -135,20 +150,11 @@ true
 """
 Gen(x::Rational) = Gen(numerator(x)) / Gen(denominator(x))
 
-# --- Promotion: mixed Gen / Julia-number expressions -----------------------
-
-# With `Gen <: Number`, Base's generic `op(::Number, ::Number)` dispatches a
-# mixed expression through `promote`; these two rules make that land on the
-# `Gen`/`Gen` operators above.
-Base.promote_rule(::Type{Gen}, ::Type{<:Number}) = Gen
-
-Base.convert(::Type{Gen}, x::Number) = Gen(x)
-
 # --- Equality --------------------------------------------------------------
 
 # `==` returns PARI's own mathematical-equality result (`gequal`) as a Bool.
-# Mixed `Gen`/number `==` reaches here through the promotion above; `!=`
-# follows automatically from `==`.
+# The mixed `Gen`/number methods are generated below; `!=` follows
+# automatically from `==`.
 Base.:(==)(a::Gen, b::Gen) = protected_call(
     () ->
         ccall(
@@ -196,17 +202,125 @@ Base.oneunit(::Gen) = Gen(1)
 # `>` / `>=` and `!=` follow automatically from `<` / `<=` and `==`.
 Base.:<(a::Gen, b::Gen) = PARI.gsigne(a - b) < 0
 Base.:<=(a::Gen, b::Gen) = PARI.gsigne(a - b) <= 0
-Base.:<(a::Gen, b::Number) = a < Gen(b)
-Base.:<(a::Number, b::Gen) = Gen(a) < b
-Base.:<=(a::Gen, b::Number) = a <= Gen(b)
-Base.:<=(a::Number, b::Gen) = Gen(a) <= b
+
+# `isless` is the ordering `sort` uses; it must exist wherever `<` does, or
+# `sort(Any[Gen(2), 1])` raises a `MethodError` (REQ-TYPE-04).
 Base.isless(a::Gen, b::Gen) = a < b
+
+# --- Mixed Gen / Julia-number operands -------------------------------------
+
+# The Julia number types a mixed expression accepts. It is an *enumerated*
+# set, deliberately not `Number`: with `Gen <: PariObject` there is no Base
+# fallback behind it, and an operand LibPARI cannot build a `Gen` from — an
+# `Irrational` such as `π`, which has no exact PARI value and would need an
+# explicit precision — must fail dispatch with a plain `MethodError` instead
+# of recursing through `promote`/`convert` into a `StackOverflowError`
+# (REQ-TYPE-07). M12 replaces this internal alias with the public, documented
+# `PariConvertible` and one `gen_convert` entry point (REQ-PROM-01).
+const _MixedOperand = Union{Integer,AbstractFloat,Rational,Complex}
+
+# One table generates the whole mixed matrix (REQ-TYPE-02/03/04). Each method
+# builds a `Gen` from the Julia operand and calls the `Gen`/`Gen` operator
+# above, so `g + 1` and `g + Gen(1)` are the same PARI call. `^(::Gen,
+# ::Integer)` above stays more specific than the generated `^` and keeps its
+# exact `gpowgs` path.
+for op in (:+, :-, :*, :/, :^, :\, :(==), :<, :<=, :isless)
+    @eval begin
+        Base.$op(a::Gen, b::_MixedOperand) = $op(a, Gen(b))
+        Base.$op(a::_MixedOperand, b::Gen) = $op(Gen(a), b)
+    end
+end
+
+# A `Number` outside the enumerated set must not reach Base's
+# `==(x, y) = x === y`, which would answer `false` — a wrong answer rather
+# than an error, and one `isequal`/`Dict` inherit silently. The arithmetic
+# operators need no such guard: they have no `Number` fallback and already
+# raise a `MethodError`. M12 replaces this with `ConversionError`
+# (REQ-PROM-03).
+_no_gen(x) = throw(
+    ArgumentError(
+        "cannot compare a Gen with a $(typeof(x)): LibPARI builds a Gen " *
+        "from an Integer, AbstractFloat, Rational or Complex only",
+    ),
+)
+
+Base.:(==)(::Gen, b::Number) = _no_gen(b)
+Base.:(==)(a::Number, ::Gen) = _no_gen(a)
+
+# `promote_rule`/`convert` survive, narrowed from `Number` to the same
+# enumerated set. They are no longer load-bearing for arithmetic — the table
+# above dispatches directly — but they are what types an array literal
+# (`[Gen(1), 2]::Vector{Gen}`) and a `Vector{Gen}` assignment. Narrowing is
+# what breaks the `Gen(1) + π` cycle: the blanket `convert(::Type{Gen},
+# ::Number) = Gen(x)` promised a conversion for every `Number`, including
+# ones with no `Gen` constructor. M12 revisits both (REQ-PROM-05).
+Base.promote_rule(::Type{Gen}, ::Type{<:_MixedOperand}) = Gen
+
+Base.convert(::Type{Gen}, x::_MixedOperand) = Gen(x)
+
+# --- Base conveniences no longer inherited from `Number` -------------------
+
+# A `Gen` broadcasts as a scalar. Base's `broadcastable` whitelists `Number`;
+# without this method the generic fallback is `collect(g)`, which a
+# non-iterable `Gen` cannot satisfy (REQ-TYPE-05).
+Base.broadcastable(g::Gen) = Ref(g)
+
+# Re-implemented `Number` conveniences (REQ-TYPE-06). `float` keeps Base's
+# meaning — the nearest Julia floating-point value.
+#
+# These must NOT assume a `Gen` is a scalar — that assumption is exactly what
+# M11 withdraws. The `Number` fallbacks they replace were silently wrong for a
+# container: `transpose` returned the matrix unchanged, `adjoint` conjugated
+# without transposing, and `a \ b` computed `b·a⁻¹` instead of `a⁻¹·b`. Each
+# one therefore dispatches on the runtime PARI type.
+#
+# Deliberately *not* re-implemented, and therefore a documented loss: the
+# `Number` fallbacks for `widen`, `signbit`, `flipsign`/`copysign`,
+# `divrem`/`fld`/`cld`, `fma`, `angle`, `complex(x)`, `first`/`in`,
+# `size`/`ndims`
+# /`length`/`iterate` on a scalar, and `Number`-bounded generic algorithms
+# (`T<:Number` methods in LinearAlgebra and other packages) no longer accept
+# a `Gen`. Use the `LibPARI.PARI` bindings, or convert to a Julia number.
+# (`cmp` and `muladd` keep working: Base defines them generically, over
+# `isless` and over `*`/`+`, not over `Number`.)
+
+# The PARI types for which the linear-algebra reading applies.
+_iscontainer(g::Gen) =
+    gentype(g) in (PariType.T_VEC, PariType.T_COL, PariType.T_MAT)
+
+Base.float(g::Gen) = Float64(g)
+
+# `abs2` is PARI's `gnorm` — `x^2` for a real, `re^2 + im^2` for a complex
+# value. On a container `gnorm` is elementwise, which is neither Base's scalar
+# `abs2` nor a norm, so a container is refused rather than answered wrongly.
+function Base.abs2(g::Gen)
+    _iscontainer(g) && throw(
+        ArgumentError(
+            "abs2 is not defined for a PARI $(gentype(g)); use " *
+            "LibPARI.PARI.gnorml2 for the squared L2 norm",
+        ),
+    )
+    return PARI.gnorm(g)
+end
+
+# `transpose` is PARI's `gtrans` for a container (a `t_VEC` transposes to a
+# `t_COL`), the identity for a scalar.
+Base.transpose(g::Gen) = _iscontainer(g) ? PARI.gtrans(g) : g
+
+# `adjoint` is the conjugate transpose; on a scalar that is just `conj`.
+Base.adjoint(g::Gen) = _iscontainer(g) ? conj(PARI.gtrans(g)) : conj(g)
 
 # --- Hashing ---------------------------------------------------------------
 
 # Hash by the `Gen`'s canonical Julia value, so a `Gen` and an equal Julia
 # number hash equal — they are interchangeable as `Dict`/`Set` keys, which
 # Julia's `a == b => hash(a) == hash(b)` invariant requires.
+#
+# `hash` is total over every PARI type (REQ-TYPE-09). A `t_REAL` goes through
+# `BigFloat`, not `Float64`: the `Float64` route threw on a real outside the
+# double range, which made such a `Gen` unusable as a key at all. Julia hashes
+# equal `Real`s alike, so the `BigInt`/`Rational`/`BigFloat` routes agree with
+# each other and with the equal Julia number.
 function Base.hash(g::Gen, h::UInt)
     t = gentype(g)
     if t === PariType.T_INT
@@ -214,7 +328,7 @@ function Base.hash(g::Gen, h::UInt)
     elseif t === PariType.T_FRAC
         return hash(Rational(g), h)
     elseif t === PariType.T_REAL
-        return hash(Float64(g), h)
+        return hash(BigFloat(g), h)
     else
         return hash(_genrepr(g), h)
     end

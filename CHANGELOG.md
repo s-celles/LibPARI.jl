@@ -16,19 +16,77 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **CompatHelper workflow** (`.github/workflows/CompatHelper.yml`) to keep
   `[compat]` entries current via automated pull requests.
 
+### Changed
+
+- **BREAKING — `Gen` is a `PariObject`, not a Julia `Number`** (M11,
+  REQ-TYPE-01, superseding REQ-API-01). One concrete `Gen` wraps *every*
+  PARI object — matrices, strings and closures included — so the `Number`
+  supertype was a false claim: `gp_eval("[1,2;3,4]") isa Number` answered
+  `true`. The new `abstract type LibPARI.PariObject` names what a `Gen`
+  actually is. No shim is possible — a type's supertype is fixed at
+  definition — so code dispatching on `::Number` (LinearAlgebra methods
+  bounded by `T<:Number`, `x isa Number` guards) no longer accepts a `Gen`.
+- **Every mixed `Gen`/Julia-number operation is now an explicit method.**
+  `+ - * / ^ \`, `==`, `<`, `<=` and `isless` are generated from one
+  operator table over `(Gen, x)` and `(x, Gen)`, each building a `Gen` and
+  calling the `Gen`/`Gen` operator, so behaviour is unchanged for the
+  documented operand set — `Integer`, `AbstractFloat`, `Rational`,
+  `Complex` (REQ-TYPE-02, REQ-TYPE-03, REQ-TYPE-04). `isless` is new: it
+  previously existed only for `Gen`/`Gen`, so `sort(Any[Gen(2), 1])` raised
+  a `MethodError`.
+- **The `Number` conveniences are re-declared on `Gen`**: `broadcastable`
+  (as `Ref`, keeping a `Gen` a broadcast scalar), unary `+`, `\`, `float`,
+  `abs2`, `adjoint` and `transpose` (REQ-TYPE-05, REQ-TYPE-06). Anything
+  not listed — `widen`, `signbit`, `divrem`, `fma`, `angle` and the other
+  `Number` fallbacks — is a deliberate, documented loss. (`cmp` and
+  `muladd` keep working: Base defines them generically, over `isless` and
+  over `*`/`+`, not over `Number`.) `transpose`, `adjoint` and `\` are
+  **corrected** rather than merely re-declared: the `Number` fallbacks were
+  silently wrong for a `t_MAT`/`t_VEC`/`t_COL` — `transpose` returned the
+  value unchanged, `adjoint` conjugated without transposing, and `a \ b`
+  computed `b·a⁻¹`. Each now dispatches on the PARI type. `abs2` refuses a
+  container instead of answering elementwise.
+- **`promote_rule`/`convert` narrowed** from every `Number` to the same
+  enumerated operand set. They no longer drive arithmetic (the table does);
+  they remain so that `[Gen(1), 2]` types as a `Vector{Gen}`.
+
+### Fixed
+
+- **An operand with no `Gen` constructor raises a catchable exception.**
+  `Gen(1) + π` recursed through `promote_type`/`convert` and died with a
+  `StackOverflowError`, which corrupts program state; it is now a plain
+  `MethodError` (REQ-TYPE-07).
+- **A `t_REAL` converts through PARI instead of parsing its printed form.**
+  `Float64` and `BigFloat` read PARI's own mantissa and exponent
+  (`mantissa_real`), so `Float64(Gen(1e-10))` and
+  `BigFloat(gp_eval("1.0*10^400"))` succeed; both previously raised
+  `ArgumentError: cannot parse …` because PARI prints a space before the
+  exponent (REQ-TYPE-08, a REQ-CONV-04 violation). A real too large for
+  `Float64` now converts to `Inf`.
+- **`hash` is total over every PARI type** (REQ-TYPE-09). It routed a
+  `t_REAL` through `Float64` and so threw on a large-exponent real, making
+  such a `Gen` unusable as a `Dict`/`Set` key; it now routes through
+  `BigFloat`, preserving `a == b ⟹ hash(a) == hash(b)`.
+
 ### Documented
 
 - **`ROADMAP.md` gains Part II — the API redesign for 1.0.0.** The roadmap
-  is now split into Part I (M0–M10, delivered) and **Part II (M11–M19, not
-  started)**: M11 honest type contract for `Gen` (`Gen <: PariObject`,
+  is now split into Part I (M0–M10, delivered) and **Part II (M11–M21)**:
+  M11 honest type contract for `Gen` (`Gen <: PariObject`,
   withdrawing `Gen <: Number`), M12 conversion and promotion contracts,
   M13 precision-safe reals and a bit-based precision API, M14 `pari(x)`
   plus a four-name export surface and a small facade, M15 generated-binding
   argument ergonomics, M16 explicit GP sessions, M17 structured PARI
-  objects, M18 display contract, M19 documentation, migration and the
+  objects, M18 display contract, M21 documentation, migration and the
   1.0.0 release. Each milestone carries its deliverables with requirement
   ids, a **Breaking changes** table stating whether a deprecation shim is
-  possible, exit criteria, and open questions. The traceability table gains
+  possible, exit criteria, and open questions. Two interoperability
+  bridges are scheduled **before** 1.0, as optional package extensions on
+  the `ext/LibPARIMCPExt.jl` pattern: **M19** Symbolics.jl
+  (`to_symbolics` outward, `pari(x)` inward) and **M20** Giac.jl — each
+  gated on an investigation deliverable, since variable identity
+  (PARI variable numbers versus named symbols) and the Giac package's
+  actual exchange format decide both designs. The traceability table gains
   the nine new requirement families and records that **REQ-API-01
   (`Gen <: Number`) is superseded by REQ-TYPE-01**; the 0.7.0 and 0.14.0
   entries below stand as historical record.

@@ -182,6 +182,45 @@ julia> Int(LibPARI.Gen(255))
 
 Base.convert(::Type{T}, g::Gen) where {T<:Integer} = T(g)
 
+# --- t_REAL → Julia floating point -----------------------------------------
+
+# Decompose a PARI `t_REAL` with PARI's own `mantissa_real`: it returns the
+# mantissa as a `t_INT` `m` and sets `e` so that the value is exactly
+# `m * 2^-e`. This replaces `parse(Float64, _genrepr(g))`, which was not
+# merely lossy but broken — PARI prints a space before the exponent, so every
+# real large or small enough to be printed with one raised `ArgumentError`
+# (REQ-TYPE-08, a REQ-CONV-04 violation).
+function _real_mantissa(g::Gen)
+    e = Ref{Clong}(0)
+    m = protected_call(
+        () -> gen_from(
+            () -> ccall(
+                (:mantissa_real, PARI_jll.libpari),
+                Ptr{Int},
+                (Ptr{Int}, Ref{Clong}),
+                g.ptr,
+                e,
+            ),
+        ),
+    )
+    return (BigInt(m), Int(e[]))
+end
+
+# A `t_REAL` as an exact `BigFloat`: the working precision is widened to hold
+# PARI's mantissa in full, so the only rounding is the caller's. Choosing the
+# output precision explicitly is M13's job (REQ-PREC-07, REQ-PREC-09).
+#
+# The widening must wrap the *whole* computation, not just the `BigFloat(m)`
+# constructor: `ldexp` allocates its result at the ambient default precision,
+# so scaling outside the scope would silently round a wide mantissa back down.
+function _real_to_bigfloat(g::Gen)
+    m, e = _real_mantissa(g)
+    p = max(precision(BigFloat), ndigits(m; base = 2))
+    return setprecision(BigFloat, p) do
+        ldexp(BigFloat(m), -e)
+    end
+end
+
 # --- Gen → Julia rational / floating-point / complex -----------------------
 
 """
@@ -200,6 +239,9 @@ $(TYPEDSIGNATURES)
 
 Convert a real-valued `Gen` to a Julia `Float64`.
 
+A PARI real too large for `Float64` converts to `±Inf`, as any other Julia
+floating-point conversion would.
+
 Throws `InexactError` when `g` is not a real number (a complex value, a
 polynomial, a vector, …).
 """
@@ -210,7 +252,7 @@ function Base.Float64(g::Gen)
     elseif t === PariType.T_FRAC
         return Float64(Rational(g))
     elseif t === PariType.T_REAL
-        return parse(Float64, _genrepr(g))
+        return Float64(_real_to_bigfloat(g))
     else
         throw(InexactError(:Float64, Float64, g))
     end
@@ -223,6 +265,9 @@ $(TYPEDSIGNATURES)
 
 Convert a real-valued `Gen` to a Julia `BigFloat`.
 
+A `t_REAL` converts exactly: the result carries PARI's own mantissa, at
+whatever precision that takes.
+
 Throws `InexactError` when `g` is not a real number.
 """
 function Base.BigFloat(g::Gen)
@@ -232,7 +277,7 @@ function Base.BigFloat(g::Gen)
     elseif t === PariType.T_FRAC
         return BigFloat(Rational(g))
     elseif t === PariType.T_REAL
-        return parse(BigFloat, _genrepr(g))
+        return _real_to_bigfloat(g)
     else
         throw(InexactError(:BigFloat, BigFloat, g))
     end

@@ -20,9 +20,12 @@ Julia code in two complementary ways:
 
 ## What LibPARI gives you
 
-- **`Gen` is a Julia `Number`.** PARI objects are first-class Julia values:
-  build them from Julia integers, floats, and rationals, and use `+`, `-`,
-  `*`, `/`, `^`, and `==` directly.
+- **`Gen` is a [`PariObject`](@ref LibPARI.PariObject), not a Julia
+  `Number`.** One wrapper type covers every PARI object — matrices, strings
+  and closures included — so LibPARI declares the arithmetic explicitly
+  rather than claiming a `Number` supertype: build a `Gen` from Julia
+  integers, floats and rationals and use `+`, `-`, `*`, `/`, `^`, and `==`
+  directly, with a Julia number on either side.
 - **Exact arithmetic of arbitrary size.** PARI's bignum integers, rationals,
   and reals, with conversions back to Julia's `BigInt` and fixed-width
   integer types.

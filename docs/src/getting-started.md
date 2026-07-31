@@ -44,7 +44,7 @@ package is loaded.
 ## A first tour
 
 Build a [`Gen`](@ref) — LibPARI's wrapper for a PARI object — from a Julia
-number, and compute with it as you would any Julia `Number`:
+number, and compute with it using the usual Julia operators:
 
 ```@repl tour
 using LibPARI
@@ -54,7 +54,8 @@ LibPARI.Gen(2)^100
 ```
 
 `Gen` accepts integers of any magnitude, floats, and rationals, and mixed
-arithmetic promotes the Julia operand automatically:
+arithmetic accepts a Julia `Integer`, `AbstractFloat`, `Rational` or
+`Complex` operand on either side:
 
 ```@repl tour
 LibPARI.Gen(3 // 4) + 1

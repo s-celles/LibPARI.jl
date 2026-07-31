@@ -28,8 +28,11 @@ is published at **<https://s-celles.github.io/LibPARI.jl>**.
 
 ## Features
 
-- **`Gen <: Number`** — PARI objects are first-class Julia numbers, with
-  `+`, `-`, `*`, `/`, `^`, and `==`, and mixed `Gen`/Julia arithmetic.
+- **`Gen <: LibPARI.PariObject`** — one wrapper for every PARI object, with
+  `+`, `-`, `*`, `/`, `^`, `\`, `==` and ordering as explicit methods,
+  including mixed `Gen`/Julia-number arithmetic in either operand order. A
+  `Gen` is deliberately **not** a Julia `Number`: the same type also wraps
+  matrices, strings and closures.
 - **Exact arbitrary-size arithmetic** — PARI bignum integers, rationals, and
   reals, with conversions back to `BigInt` and fixed-width integer types.
 - **`gp_eval`** — evaluate any GP-language expression, the escape hatch to
