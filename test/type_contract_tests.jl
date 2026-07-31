@@ -93,7 +93,12 @@ end
     # One value per remaining Julia number kind.
     @test BigInt(g + big(10)^30) == big(10)^30 + 12
     @test Float64(g + 2.5) == 14.5
-    @test string(g + big(2.5)) == string(g + LibPARI.Gen(2.5))
+    # See the note in test/number_interface_tests.jl: comparing the printed
+    # forms compared PRECISIONS, and only matched because `Gen(::BigFloat)`
+    # used to truncate to 53 bits. M13 (REQ-PREC-08) preserves the operand's
+    # precision, so the values match and the widths deliberately do not.
+    @test g + big(2.5) == g + LibPARI.Gen(2.5)
+    @test precision(g + big(2.5)) >= precision(big(2.5))
     @test Rational(g + 1 // 2) == 25 // 2
     @test BigInt(g + (3 + 0im)) == 15
     @test string(g + (3 + 4im)) == string(g + LibPARI.Gen(3 + 4im))

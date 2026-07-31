@@ -30,9 +30,10 @@ order, in releases `0.1.0` … `0.11.0`; the work that followed
 (`0.12.0` … `0.15.1`) is listed under
 [Delivered beyond Part I](#delivered-beyond-part-i-0120--0151).
 
-**Part II (M11–M21) is in progress.** M11 and M12 have landed on the
-development branch, unreleased, targeted at `0.16.0` and `0.17.0`;
-M13–M21 are not started. It is the
+**Part II (M11–M21) is in progress.** M11, M12 and most of M13 have
+landed on the development branch, unreleased, targeted at `0.16.0`,
+`0.17.0` and `0.18.0`; M14–M21 are not started. M13 keeps one deliverable
+open — REQ-PREC-13, which collides with NFR-01; see the milestone. It is the
 API redesign that must land
 before 1.0: an honest type contract for `Gen`, precise conversion and
 promotion rules, precision-safe reals, `pari(x)`, ergonomic generated
@@ -487,7 +488,7 @@ other and of `M12`–`M15`, and may be reordered freely after `M11`.
 |-----|--------------------------------------------|----------------|--------|
 | M11 | Honest type contract for `Gen`             | 0.16.0         | **done** (unreleased) |
 | M12 | Conversion & promotion contracts           | 0.17.0         | **done** (unreleased) |
-| M13 | Precision-safe reals & a bit-based precision API | 0.18.0    | not started |
+| M13 | Precision-safe reals & a bit-based precision API | 0.18.0    | **mostly done** (unreleased) |
 | M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | not started |
 | M15 | Generated-binding argument ergonomics      | 0.20.0         | not started |
 | M16 | Explicit GP evaluation sessions            | 0.21.0         | not started |
@@ -765,7 +766,7 @@ PARI worker.
 
 **Deliverables**
 
-- [ ] `docs/src/precision.md` fixing the units, with a requested→allocated
+- [x] `docs/src/precision.md` fixing the units, with a requested→allocated
       bits table. (REQ-PREC-01)
       - *Observed:* in PARI ≥ 2.15 the prototype codes `p` and `b` are
         **bit** counts (`p` rounded up to a multiple of 64), and
@@ -773,24 +774,24 @@ PARI worker.
         "word precision (prototype code `p`)" (`gen/generate.jl:20`) is
         wrong. Verify against the shipped `pariinl.h` before writing the
         page.
-- [ ] `Base.precision(g::Gen)::Int` in bits, plus `LibPARI.isexact(g)`. No
+- [x] `Base.precision(g::Gen)::Int` in bits, plus `LibPARI.isexact(g)`. No
       new type parameter — precision is a runtime property of the GEN
       header. (REQ-PREC-02)
-- [ ] Delete `_DEFAULT_PREC = Int(4)` (`src/numeric.jl:8`); add
+- [x] Delete `_DEFAULT_PREC = Int(4)` (`src/numeric.jl:8`); add
       `LibPARI.default_precision()::Int` **in bits** with documented
       provenance; `Gen^Gen` (`src/numeric.jl:80`) reads it. (REQ-PREC-03)
-- [ ] Generator: replace `DEFAULT_PREC`/`DEFAULT_BITPREC` with one
+- [x] Generator: replace `DEFAULT_PREC`/`DEFAULT_BITPREC` with one
       documented bit constant emitting `LibPARI.default_precision()` at
       every `p` and `b` site; keep `seriesprec` separate — it is a term
       count, not bits. (REQ-PREC-04)
-- [ ] `setprecision(f, Gen, bits)` / `setprecision(Gen, bits)` and a
+- [x] `setprecision(f, Gen, bits)` / `setprecision(Gen, bits)` and a
       `precision(Gen)` getter, backed by task-local storage with
       `try`/`finally` restore so scopes nest. It must never write PARI's
       `precreal`. (REQ-PREC-05)
       - `setprecision(f, ::Module, n)` is **rejected**: every argument type
         would be owned by Base, so Aqua's piracy check would flag it.
         `Gen` is ours.
-- [ ] Document and test the worker-boundary rule: precision is read in the
+- [x] Document and test the worker-boundary rule: precision is read in the
       **caller** task and captured into the closure `_run_on_pari`
       marshals. One positive test from a non-primary thread, one negative
       test proving task-local state in the worker is *not* consulted.
@@ -798,39 +799,73 @@ PARI worker.
       - Keyword defaults in generated bindings are evaluated in the caller
         frame, so `prec = LibPARI.default_precision()` crosses correctly
         with no extra plumbing.
-- [ ] Rewrite `BigFloat(::Gen)` (`src/conversions.jl:228`) on the exact
+- [x] Rewrite `BigFloat(::Gen)` (`src/conversions.jl:228`) on the exact
       mantissa/exponent — `m / 2^e`, rounded once — with signature
       `BigFloat(g; precision = precision(BigFloat))`. Delete the
       `parse(BigFloat, _genrepr(g))` branch. (REQ-PREC-07)
-- [ ] Rewrite `Gen(::AbstractFloat)` (`src/numeric.jl:111`): `IEEEFloat`
+- [x] Rewrite `Gen(::AbstractFloat)` (`src/numeric.jl:111`): `IEEEFloat`
       keeps `dbltor` (exact); `BigFloat` builds its exact integer mantissa
       then scales; any other `AbstractFloat` goes via `BigFloat(x;
       precision = precision(x))`. (REQ-PREC-08)
       - `Cdouble(x)` must not appear on any path reachable from a
         `BigFloat`; enforce with a source-grep test.
-- [ ] Convert the `T_REAL` branch of `Float64(::Gen)` to `rtodbl`/
+- [x] Convert the `T_REAL` branch of `Float64(::Gen)` to `rtodbl`/
       `gtodouble`: one rounding, independent of PARI's global output
       precision. (REQ-PREC-09)
-- [ ] `@testitem` round-tripping `BigFloat`↔`Gen` at 64, 113, 256, 512,
+- [x] `@testitem` round-tripping `BigFloat`↔`Gen` at 64, 113, 256, 512,
       1024 and 4096 bits, asserting bit-exact equality **both ways** and
       `precision(Gen(x)) >= precision(x)`. (REQ-PREC-10)
-- [ ] `@testitem` sweeping `setprecision(Gen, b)` for b ∈ {64, 128, 256,
+- [x] `@testitem` sweeping `setprecision(Gen, b)` for b ∈ {64, 128, 256,
       1024} over `PARI.mppi()`, `Gen(2)^Gen(1//2)` and `PARI.gexp`, against
       a BigFloat reference, to a **measured** guard margin; nested scopes
       restore. (REQ-PREC-11)
       - *Observed:* `mppi(prec=64)` is correct to only ~44 bits, so the
         margin must be measured and written down, not assumed to be zero.
-- [ ] Document that `gp_eval` and `show(::Gen)` follow PARI's process-global
+- [x] Document that `gp_eval` and `show(::Gen)` follow PARI's process-global
       `precreal`, **not** the scope; add `LibPARI.set_global_precision!`
       labelled global and thread-visible; test that a scope leaves
       `gp_eval("Pi")` unchanged. (REQ-PREC-12)
-- [ ] Generator: stop emitting the `Class: default` records whose empty
+- [ ] **BLOCKED on a decision — see below.** Generator: stop emitting the
+      `Class: default` records whose empty
       `Prototype:` produces 0-argument bindings for C functions declared
       `(const char *, long)`; replace with throwing stubs. (REQ-PREC-13)
       - *Observed:* calling `LibPARI.PARI.sd_realprecision()` today is
         undefined behaviour — the C function reads two argument registers
         the binding never sets. **Confirm this reading of `pari.desc`
         before acting**; it is the single most dangerous claim in Part II.
+
+### REQ-PREC-13 — verified, and blocked on one decision
+
+The defect is **confirmed** against the shipped headers, not merely
+suspected:
+
+- `pari.desc` holds **47** `Class: default` records (`_def_realprecision`,
+  `_def_seriesprecision`, …), each with an empty `Prototype:` and a
+  `C-Name:` of the form `sd_*`.
+- The generator therefore emits 47 **zero-argument** bindings, while
+  `paridecl.h:3150` declares `GEN sd_realprecision(const char *v, long
+  flag)`. Calling `LibPARI.PARI.sd_realprecision()` makes the C function
+  read two argument registers the caller never set — undefined behaviour,
+  not a catchable error.
+- They are not computational functions. They are GP's `default()` setters,
+  reachable properly through `gp_eval("default(realprecision, 100)")`.
+
+**The collision:** removing them takes the binding count from 1241 to
+**1194**, below NFR-01's `≥ 1200`. Three ways out, and lowering an accepted
+non-functional threshold silently is not one of them:
+
+1. **Remove them and restate NFR-01.** The requirement says "≥ 1200
+   *GP-accessible functions*"; these 47 are not that, so the old count
+   over-counted. Recommended — it is the honest reading, and it deletes
+   undefined behaviour from the public surface.
+2. **Emit them with the real `(const char *, long)` signature.** 45 of the
+   50 `sd_*` declarations have exactly that shape, but 5 diverge
+   (`sd_sopath` is `(char *, int)`), and the generator does not read C
+   headers — this would hard-code a family rule that cannot be verified
+   for all 47 from `pari.desc` alone.
+3. **Emit throwing stubs.** The count survives and the undefined behaviour
+   goes, but 47 entries of that count become deliberately unusable — a
+   number that no longer means what it says.
 
 **Breaking changes**
 

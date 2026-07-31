@@ -421,22 +421,35 @@ $(TYPEDSIGNATURES)
 
 Convert a real-valued `Gen` to a Julia `BigFloat`.
 
-A `t_REAL` converts exactly: the result carries PARI's own mantissa, at
-whatever precision that takes.
+With no `precision` keyword a `t_REAL` converts **exactly**: the result
+carries PARI's own mantissa, at whatever precision that takes — which may
+exceed the ambient `precision(BigFloat)`. Pass `precision` to round once to
+a chosen width instead (REQ-PREC-07).
 
 Throws `InexactError` when `g` is not a real number.
+
+# Examples
+
+```jldoctest
+julia> using LibPARI
+
+julia> precision(BigFloat(LibPARI.Gen(1.5); precision = 256))
+256
+```
 """
-function Base.BigFloat(g::Gen)
+function Base.BigFloat(g::Gen; precision::Union{Nothing,Integer} = nothing)
     t = gentype(g)
-    if t === PariType.T_INT
-        return BigFloat(BigInt(g))
+    value = if t === PariType.T_INT
+        BigFloat(BigInt(g))
     elseif t === PariType.T_FRAC
-        return BigFloat(Rational(g))
+        BigFloat(Rational(g))
     elseif t === PariType.T_REAL
-        return _real_to_bigfloat(g)
+        _real_to_bigfloat(g)
     else
         throw(InexactError(:BigFloat, BigFloat, g))
     end
+    precision === nothing && return value
+    return setprecision(() -> BigFloat(value), BigFloat, precision)
 end
 
 """

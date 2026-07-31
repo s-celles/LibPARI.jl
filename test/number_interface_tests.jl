@@ -19,7 +19,13 @@
     @test BigInt(g + big(10)^30) == big(10)^30 + 6
     @test Rational(g + 1 // 2) == 13 // 2
     @test Float64(g + 2.5) == 8.5
-    @test string(g + big(2.5)) == string(g + LibPARI.Gen(2.5))
+    # A `BigFloat` operand keeps its own precision — it is NOT crushed to the
+    # 53 bits a `Float64` carries. Before M13 (REQ-PREC-08) `Gen(big(2.5))`
+    # went through `Cdouble` and the two printed identically, which is what
+    # the original assertion here compared. Equality of VALUE is the real
+    # contract; equality of printed width was an artefact of the defect.
+    @test g + big(2.5) == g + LibPARI.Gen(2.5)
+    @test precision(g + big(2.5)) >= precision(big(2.5))
     @test g + 1im isa LibPARI.Gen
     @test BigInt(1 + g) == 7
 end

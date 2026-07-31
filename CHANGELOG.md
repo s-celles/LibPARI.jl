@@ -70,8 +70,41 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   in general arithmetic, so mapping onto it would produce values that fail
   later, far from the conversion.
 
+- **BREAKING — the working precision is stated in bits, and defaults to
+  128** (M13, REQ-PREC-03/04). Every generated binding taking a `p` or `b`
+  prototype argument defaulted to `prec = 4`, commented "word precision".
+  Verified against PARI 2.17's headers (`pariinl.h`:
+  `prec2nbits(long x) { return x; }`), those arguments are **bit** counts,
+  so the old default asked for 4 bits and got PARI's 64-bit minimum — not a
+  deliberate choice. Bindings now default to LibPARI's working precision,
+  which is GP's own `realbitprecision` default of 128 bits, so an
+  expression agrees with `gp`. Results get more accurate and slightly
+  larger; a caller passing `prec =` explicitly is unaffected. The
+  undocumented `_DEFAULT_PREC = 4` constant is gone.
+- **BREAKING — `Gen(::BigFloat)` preserves the value exactly**
+  (REQ-PREC-08). It routed through `Cdouble`, so
+  `BigFloat(Gen(big"1.00000000000000000000000000000001")) == 1.0` — a
+  silent 30-digit loss. A wide float is now decomposed into its exact
+  integer significand and binary exponent and rebuilt at a precision that
+  holds every bit; no path from a `BigFloat` touches `Cdouble`. Values
+  seeded from a `BigFloat` change, because the old ones were wrong.
+
 ### Added
 
+- **A bit-based precision API** (`docs/src/precision.md`):
+  `setprecision(Gen, bits)` as a nesting, unwinding scope;
+  `precision(Gen)` for the value in force; `precision(g::Gen)` for a real's
+  own accuracy, raising `ArgumentError` on an exact `Gen`;
+  `LibPARI.isexact`; `LibPARI.nbits2prec` for PARI's word rounding; and
+  `LibPARI.default_precision`. The scope is read in the **calling** task
+  and carried into the closure marshalled onto the PARI worker, so it
+  applies where the work runs (REQ-PREC-05/06). Two documented limits,
+  both pinned by tests: a task spawned inside a scope does not inherit it
+  (Julia 1.10 has no `ScopedValues`), and `gp_eval` follows PARI's
+  process-global `realprecision`, not the scope (REQ-PREC-12).
+- **`BigFloat(g; precision = bits)`** (REQ-PREC-07). Without the keyword
+  the conversion stays exact — the result carries PARI's own mantissa, at
+  whatever precision that takes.
 - **The typed outward conversions** (REQ-PROM-08): `Float16`, `Float32`,
   `Rational{T}` and `Complex{T}` from a `Gen`, each raising `InexactError`
   for a value outside the target type. All four were `MethodError`s.

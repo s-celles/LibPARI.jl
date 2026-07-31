@@ -7,10 +7,6 @@
 # through `Number` promotion is declared explicitly below.
 # ---------------------------------------------------------------------------
 
-# Default word precision supplied to PARI's general power `gpow` (used only
-# for an inexact power, e.g. a non-integer exponent).
-const _DEFAULT_PREC = Int(4)
-
 # Run a GEN-producing PARI computation: error-safe (`protected_call`) and
 # leak-free (`gen_from` clones the result and restores the PARI stack).
 _genresult(producer) = protected_call(() -> gen_from(producer))
@@ -91,17 +87,24 @@ function Base.:^(a::Gen, n::Integer)
     return a^Gen(n)
 end
 
-# `Gen ^ Gen`: PARI's general power `gpow`, supplying the default precision.
-Base.:^(a::Gen, b::Gen) = _genresult(
-    () -> ccall(
-        (:gpow, PARI_jll.libpari),
-        Ptr{Int},
-        (Ptr{Int}, Ptr{Int}, Int),
-        a.ptr,
-        b.ptr,
-        _DEFAULT_PREC,
-    ),
-)
+# `Gen ^ Gen`: PARI's general power `gpow`, at the working precision.
+#
+# The precision is read HERE, in the caller's task, and captured into the
+# closure — `_genresult` marshals that closure onto a PARI worker task, where
+# the caller's task-local `setprecision` scope is not visible (REQ-PREC-06).
+function Base.:^(a::Gen, b::Gen)
+    bits = precision(Gen)
+    return _genresult(
+        () -> ccall(
+            (:gpow, PARI_jll.libpari),
+            Ptr{Int},
+            (Ptr{Int}, Ptr{Int}, Int),
+            a.ptr,
+            b.ptr,
+            nbits2prec(bits),
+        ),
+    )
+end
 
 # Route a literal power (`g^2`, `g^0`, `g^-1`) through PARI rather than
 # Base's power-by-squaring / `one` / `inv` fallbacks.
@@ -109,44 +112,8 @@ Base.literal_pow(::typeof(^), a::Gen, ::Val{p}) where {p} = a^p
 
 # --- Non-integer Gen construction (extends M5's integer-only conversions) ---
 
-"""
-$(TYPEDSIGNATURES)
-
-Convert a Julia floating-point number to a `Gen` (a PARI real value).
-
-`Inf`, `-Inf` and `NaN` have no PARI real counterpart and raise
-`InexactError` — PARI's `t_INFINITY` exists but does not take part in
-general arithmetic, so mapping onto it would produce values that fail
-later, far from this call (REQ-PROM-10).
-
-!!! warning "Precision"
-    This conversion currently routes through `Cdouble`, so a `BigFloat`
-    argument is silently reduced to 53 bits. Fixing that is M13
-    (REQ-PREC-08); until then, `BigFloat(Gen(x)) == x` holds only for a
-    value representable in double precision.
-
-# Examples
-
-```jldoctest
-julia> using LibPARI
-
-julia> LibPARI.Gen(1.5) isa LibPARI.Gen
-true
-```
-"""
-function Gen(x::AbstractFloat)
-    isfinite(x) || throw(InexactError(:Gen, Gen, x))
-    return protected_call(
-        () -> gen_from(
-            () -> ccall(
-                (:dbltor, PARI_jll.libpari),
-                Ptr{Int},
-                (Cdouble,),
-                Cdouble(x),
-            ),
-        ),
-    )
-end
+# `Gen(::AbstractFloat)` lives in src/precision.jl: preserving a wide
+# float exactly is a precision matter (REQ-PREC-08).
 
 """
 $(TYPEDSIGNATURES)
