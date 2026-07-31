@@ -103,7 +103,12 @@ struct Arg
     param::String   # positional Julia parameter, or "" (none)
     kwarg::String   # keyword Julia parameter, or "" (none)
     output::Bool    # is this an output (`&`) argument?
+    conv::String    # statement converting the argument, or "" (none)
 end
+
+# Most argument kinds need no conversion statement.
+Arg(ctype, cexpr, param, kwarg, output) =
+    Arg(ctype, cexpr, param, kwarg, output, "")
 
 # Classify a `Prototype` string. Returns one of:
 #   (:exclude,)        — a GP-closure-argument function
@@ -127,14 +132,21 @@ function classify(proto::AbstractString)
         c = proto[i]
         if c == 'G'
             np += 1
+            # A `G` slot takes a `Gen` or any `PariConvertible` scalar. The
+            # conversion happens ONCE, into a local, inside the producer
+            # closure — so it runs on the PARI worker, and the result is a
+            # persistent clone whose pointer survives any `avma` movement.
+            # `gen_convert(::Gen)` returns its argument, so an existing
+            # `Gen` is never copied (REQ-ARG-02, REQ-ARG-03).
             push!(
                 args,
                 Arg(
                     "Ptr{Int}",
-                    "x$(np).ptr",
-                    "x$(np)::LibPARI.Gen",
+                    "_g$(np).ptr",
+                    "x$(np)::LibPARI.GenArg",
                     "",
                     false,
+                    "_g$(np) = LibPARI.gen_convert(x$(np))",
                 ),
             )
             i += 1
@@ -256,14 +268,21 @@ function classify(proto::AbstractString)
                 code = proto[i+1]
                 if code == 'G'
                     np += 1
+                    # Typed, where it used to be a bare `x = nothing`: an
+                    # unsupported argument now fails at dispatch instead of
+                    # late, inside the ccall, as `no field ptr`
+                    # (REQ-ARG-04).
                     push!(
                         args,
                         Arg(
                             "Ptr{Int}",
-                            "(x$(np) === nothing ? C_NULL : x$(np).ptr)",
+                            "(_g$(np) === nothing ? C_NULL : _g$(np).ptr)",
                             "",
-                            "x$(np) = nothing",
+                            "x$(np)::Union{Nothing,LibPARI.GenArg} " *
+                            "= nothing",
                             false,
+                            "_g$(np) = x$(np) === nothing ? nothing : " *
+                            "LibPARI.gen_convert(x$(np))",
                         ),
                     )
                 elseif code == 'n'
@@ -420,32 +439,61 @@ function emit_binding(cname, fname, ret, args, help)
             "$crange, $cargs)"
     end
 
+    # Arguments needing conversion (the `G` slots): each is converted ONCE,
+    # into a local, before the call — and every local is rooted across the
+    # call with `GC.@preserve`, since from there on it is reachable only as
+    # a raw integer inside the ccall (REQ-ARG-03, REQ-ARG-06).
+    convs = String[a.conv for a in args if a.conv != ""]
+    locals = String[
+        match(r"^(_g\d+)", a.conv).captures[1] for a in args if a.conv != ""
+    ]
+    guard(indent, expr) =
+        isempty(locals) ? expr :
+        "GC.@preserve " * join(locals, " ") * " " * expr
+
     doc = "\"$(escdoc(isempty(help) ? "$fname (PARI)" : help))\"\n"
     body = IOBuffer()
+    emitconv(pad) = for c in convs
+        println(body, pad, c)
+    end
     if isempty(outs)
         if ret == :gen
             println(body, "    return LibPARI.protected_call() do")
             println(body, "        LibPARI.gen_from() do")
-            println(body, "            $call")
+            emitconv("            ")
+            println(body, "            ", guard(12, call))
             println(body, "        end")
             println(body, "    end")
         elseif ret == :void
+            # `avma` is captured and restored around the call: a converted
+            # temporary, and anything the PARI function leaves behind, must
+            # not accumulate on the transient stack call after call
+            # (REQ-ARG-05). `protected_call` restores it only on error.
             println(body, "    LibPARI.protected_call() do")
-            println(body, "        $call")
+            emitconv("        ")
+            println(body, "        av = LibPARI._avma()")
+            println(body, "        ", guard(8, call))
+            println(body, "        LibPARI._set_avma(av)")
+            println(body, "        return nothing")
             println(body, "    end")
             println(body, "    return nothing")
         else
             println(body, "    return LibPARI.protected_call() do")
-            println(body, "        Int($call)")
+            emitconv("        ")
+            println(body, "        av = LibPARI._avma()")
+            println(body, "        r = Int(", guard(8, call), ")")
+            println(body, "        LibPARI._set_avma(av)")
+            println(body, "        return r")
             println(body, "    end")
         end
     else
         println(body, "    return LibPARI.protected_call() do")
+        emitconv("        ")
         for k = 1:length(outs)
             println(body, "        out$(k) = Ref{Ptr{Int}}(C_NULL)")
         end
         println(body, "        av = LibPARI._avma()")
-        println(body, "        r = $call")
+        println(body, "        r = ", guard(8, call))
         prim =
             ret == :gen ? "LibPARI.Gen(r)" : ret == :void ? "nothing" : "Int(r)"
         println(body, "        primary = $prim")

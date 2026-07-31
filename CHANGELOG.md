@@ -8,6 +8,48 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- **Generated bindings accept Julia scalars** where PARI's prototype expects
+  a `GEN` (M15): `LibPARI.PARI.nextprime(1000)`,
+  `LibPARI.PARI.gmodulo(5, 7)`, `LibPARI.PARI.factorial(100)`. Through
+  generator changes only — `src/bindings.jl` is not hand-edited. One method
+  per binding (no combinatorial explosion), one conversion per argument, and
+  an existing `Gen` is never copied, since `gen_convert(::Gen)` returns its
+  argument. `LibPARI.GenArg` names what a `G` slot accepts: a `Gen` or any
+  `PariConvertible` value.
+- **The modular and polynomial facade** (M14, REQ-PUB-09/10): `Mod`, `lift`,
+  `Base.powermod`, `Base.invmod`, `pari_mod`, `degree`, `coeff`, `subst`,
+  `polroots`. `pari_mod` corrects PARI's sign convention to Julia's —
+  `PARI.gmod(7, -3)` is `1`, `mod(7, -3)` is `-2` — and is deliberately not
+  `Base.mod`.
+
+### Fixed
+
+- **Generated bindings no longer leak PARI stack on the scalar and void
+  return paths** (REQ-ARG-05): those branches never captured `avma`, which
+  `protected_call` restores only on error. Verified stable over 40 000
+  calls.
+- **Generated bindings root their arguments explicitly** with `GC.@preserve`
+  (REQ-ARG-06). A `Gen` argument was previously kept alive only implicitly,
+  through the `protected_call`/`gen_from` closure captures — a latent
+  use-after-free window.
+- **An optional `G` keyword is typed** (REQ-ARG-04). It was a bare
+  `x = nothing`, so a wrong type failed late inside the `ccall` as
+  `type Int64 has no field ptr`; it now fails at the call with a `TypeError`
+  naming the expected type.
+- **`isexact` and `precision` handle complex values** (M13 defect found by
+  an M14 test). `isexact` tested the PARI tag alone, so every `t_COMPLEX`
+  counted as exact and `precision` refused every root `polroots` returns. A
+  `t_COMPLEX` is exact only if both components are. Zero components are
+  skipped when reporting accuracy: a PARI real zero has no mantissa words,
+  so it would otherwise report 0 bits for any complex with a zero part.
+- **No more type piracy** in the facade's mixed-argument methods:
+  `powermod(::PariConvertible, ::Integer, m)` and
+  `invmod(::PariConvertible, m)` left the last argument untyped, making them
+  methods over Base types only — they would have hijacked `invmod(3, 7)` in
+  unrelated code. Caught by Aqua.
+
 ## [0.16.0] - 2026-07-31
 
 The first release of the pre-1.0 API redesign: milestones M11–M14 of

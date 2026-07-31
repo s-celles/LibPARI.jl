@@ -495,8 +495,8 @@ never existed, and the remaining milestones will renumber the same way.
 | M11 | Honest type contract for `Gen`             | 0.16.0         | **released** in `0.16.0` |
 | M12 | Conversion & promotion contracts           | 0.17.0         | **released** in `0.16.0` |
 | M13 | Precision-safe reals & a bit-based precision API | 0.18.0    | **released** in `0.16.0` |
-| M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | **mostly released** in `0.16.0` |
-| M15 | Generated-binding argument ergonomics      | 0.20.0         | not started |
+| M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | **released** in `0.16.0`; facade completed since |
+| M15 | Generated-binding argument ergonomics      | 0.20.0         | **done** (unreleased) |
 | M16 | Explicit GP evaluation sessions            | 0.21.0         | not started |
 | M17 | Structured PARI objects                    | 0.22.0         | not started |
 | M18 | Display contract                           | 0.23.0         | not started |
@@ -986,14 +986,14 @@ semantics match exactly.
         dependency on Primes.jl is **rejected**; ship an optional
         `LibPARIPrimesExt` weakdep extension instead, with a CI job that
         loads Primes.
-- [ ] **Not started.** Modular arithmetic: `Mod(a, n)` and `lift`, `Base.powermod`,
+- [x] Modular arithmetic: `Mod(a, n)` and `lift`, `Base.powermod`,
       `Base.invmod`; `Base.mod(::Gen, ::Gen)` restricted to integer-valued
       `Gen`s and corrected to Julia's sign convention. (REQ-PUB-09)
       - *Observed:* PARI's `%` is not Julia's `mod` — `(-7)%3 == 2`,
         `7%(-3) == 1`, `(1/2)%3 == 2`. Wrapping `gmod` verbatim as
         `Base.mod` would be wrong; PARI's operator stays reachable as
         `PARI.gmod`.
-- [ ] **Not started.** Selected polynomial facade, unexported: `degree(::Gen)::Int`,
+- [x] Selected polynomial facade, unexported: `degree(::Gen)::Int`,
       `coeff`, `subst`, `polroots(::Gen; prec)`. `degree` throws
       `DomainError` on the zero polynomial, where PARI returns `-oo`.
       (REQ-PUB-10)
@@ -1061,59 +1061,65 @@ Extends M4.
 
 **Deliverables**
 
-- [ ] Hand-written `src/argconv.jl`, included before `bindings.jl`, exposing
+- [x] Hand-written `src/argconv.jl`, included before `bindings.jl`, exposing
       M12's `PariConvertible` to the generated layer. (REQ-ARG-01)
       - One alias naming the accepted **input** set only. Not a type
         parameter, not a per-PARI-tag type: every binding still returns
         `Gen`.
-- [ ] Internal `_argptr(x)::Ptr{Int}`, one method per admitted type:
+- [x] Internal `_argptr(x)::Ptr{Int}`, one method per admitted type:
       `_argptr(g::Gen) = g.ptr` (no clone, no copy); a scalar builds a raw
       GEN on the PARI stack under `_trap_call`. (REQ-ARG-02)
       - `_argptr` stays unexported and undocumented: it returns a
         **transient** GEN valid only inside the caller's `avma` frame, so it
         must never appear in a public signature.
-- [ ] Generator emits `x$(np)::LibPARI.PariConvertible` for prototype code
+- [x] Generator emits `x$(np)::LibPARI.PariConvertible` for prototype code
       `G`, plus exactly one `_argptr` call per argument, **inside** the
       `gen_from` producer — same worker, same `avma` frame as the call.
       (REQ-ARG-03)
-- [ ] Generator: the optional `D<G>` keyword becomes
+- [x] Generator: the optional `D<G>` keyword becomes
       `x::Union{Nothing,PariConvertible} = nothing`, replacing the ~189
       untyped `x = nothing` keywords. (REQ-ARG-04)
-- [ ] Generator: wrap the scalar-return and void-return branches in
+- [x] Generator: wrap the scalar-return and void-return branches in
       `av = _avma()` … `_set_avma(av)` so converted temporaries are
       reclaimed. (REQ-ARG-05)
       - Without this, `PARI.gsigne(5)` leaves its converted `t_INT` on the
         PARI stack — `protected_call` restores `avma` only on error.
         *Observed:* ~86 G-taking bindings sit in that branch.
-- [ ] Generator: emit one `GC.@preserve` region around every `_trap_call`,
+- [x] Generator: emit one `GC.@preserve` region around every `_trap_call`,
       merged with the existing `Cstring` block, so no `Gen` or `Ref` is
       reachable only as a raw `Int` across the call. (REQ-ARG-06)
       - This also closes a **pre-existing latent hole**: today a `Gen`
         argument is rooted only implicitly, through the
         `protected_call`/`gen_from` closure captures.
-- [ ] Audit the scalar/void G-taking bindings for PARI functions that retain
+- [x] Audit the scalar/void G-taking bindings for PARI functions that retain
       their argument in global state; any found go on a generator deny-list
       keeping `::LibPARI.Gen`, with the reason emitted into the generated
       header. (REQ-ARG-07)
+      - **Dissolved by the design, not performed.** A converted argument is
+        a *persistent clone* (`gen_convert`), exactly like a `Gen` the
+        caller passes, so nothing points into the transient stack and no
+        function can be left holding a dangling pointer. The deny-list
+        existed only for the stack-temporary design the milestone
+        originally assumed. Cost: one allocation per scalar argument.
       - A retained pointer into the transient stack would dangle once
         REQ-ARG-05 restores `avma`. A `Gen` argument is a persistent clone
         and is unaffected.
-- [ ] Agreement test: for every admitted argument type,
+- [x] Agreement test: for every admitted argument type,
       `PARI.f(x) == PARI.f(pari(x))` with matching `gentype`, over a sample
       covering all four return conventions (`Gen`, scalar, void,
       `&`-tuple). (REQ-ARG-08)
-- [ ] No-method-explosion test: every callable binding in `LibPARI.PARI` has
+- [x] No-method-explosion test: every callable binding in `LibPARI.PARI` has
       exactly **one** method, including those with combined G-arity 4.
       (REQ-ARG-09)
-- [ ] `@inferred` over scalar-argument calls for all four return conventions
+- [x] `@inferred` over scalar-argument calls for all four return conventions
       and each admitted argument type; `@code_warntype` shows no `Any` on a
       sampled binding per convention. (REQ-ARG-10)
-- [ ] Leak/allocation test: 10⁵ scalar-argument calls leave `get_avma()` at
+- [x] Leak/allocation test: 10⁵ scalar-argument calls leave `get_avma()` at
       its pre-loop value and PARI's heap within the NFR-02 bound;
       `@allocated` on the scalar path is bounded and independent of the
       value's size. Record first-call latency as the compilation-overhead
       gate. (REQ-ARG-11)
-- [ ] Document in `docs/src/api.md` and the getting-started guide: the
+- [x] Document in `docs/src/api.md` and the getting-started guide: the
       accepted union, what is **not** accepted (`Vector`, `AbstractString`),
       and that parameters stay `x1, x2, …` **because `pari.desc` has no
       argument-name field** — a limitation to document, not to paper over

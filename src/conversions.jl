@@ -138,6 +138,19 @@ const PariConvertible = Union{Integer,AbstractFloat,Rational,Complex}
 """
 $(TYPEDEF)
 
+What a generated `LibPARI.PARI` binding accepts where PARI's prototype
+expects a `GEN`: a [`Gen`](@ref), or any [`PariConvertible`](@ref) value.
+
+`PariConvertible` deliberately does **not** include `Gen` — it names the
+Julia types LibPARI converts *from*. `GenArg` is the union of both, and is
+what the generated layer dispatches on so that `PARI.nextprime(1000)` and
+`PARI.nextprime(pari(1000))` are the same call (REQ-ARG-01).
+"""
+const GenArg = Union{Gen,PariConvertible}
+
+"""
+$(TYPEDEF)
+
 Raised when a value cannot be converted to a [`Gen`](@ref).
 
 Carries the offending type and the reason, and names
