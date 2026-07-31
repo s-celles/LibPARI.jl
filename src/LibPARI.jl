@@ -38,6 +38,7 @@ include("numeric.jl")
 include("precision.jl")
 include("evaluator.jl")
 include("facade.jl")
+include("containers.jl")
 include("bindings.jl")
 include("mcp.jl")
 include("precompile.jl")
@@ -79,7 +80,7 @@ if VERSION >= v"1.11"
     eval(
         Meta.parse(
             "public PARI, PariObject, PariType, PariErr, PariConvertible, " *
-            "ConversionError, gen_convert, gentype, gen_from, " *
+            "ConversionError, GenArg, gen_convert, gentype, gen_from, " *
             "protected_call, isexact, nbits2prec, default_precision, " *
             "isprime, nextprime, prevprime, factor, factors, " *
             "is_initialized, library_state, stack_size, serve_mcp",

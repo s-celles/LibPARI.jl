@@ -8,6 +8,131 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-07-31
+
+The second release of the API redesign: `ROADMAP.md` Part II milestones
+M15, M17, M18 and M19, plus REQ-PREC-13 and the Aqua ambiguities gate.
+
+**Read this before upgrading.** Three breaking changes:
+
+- `repr(g)` is now `"Gen(42)"` where it was `"42"`. `string(g)`, `print`
+  and interpolation are unchanged, and the REPL still shows PARI's own
+  notation.
+- `LibPARI.PARI.sd_*` no longer exists — 47 bindings that were undefined
+  behaviour. `LibPARI.set_global_precision!` replaces the useful one.
+- Generated bindings widened from `::Gen` to `::GenArg`, which is purely
+  additive; and their optional `G` keywords are now typed, so a wrong type
+  fails at the call instead of inside the `ccall`.
+
+The package stays in `0.x` and the API can still change; every change is
+recorded here.
+
+### Added
+
+- **A Symbolics.jl bridge** (M19), as an optional package extension: loading
+  `Symbolics` alongside LibPARI supplies `LibPARI.to_symbolics(::Gen)` and
+  extends `pari` to Symbolics expressions. Installing LibPARI does not
+  install Symbolics. It covers `t_INT`, `t_FRAC`, `t_REAL`, `t_COMPLEX`,
+  `t_POL`, `t_VEC`, `t_COL`, `t_VECSMALL` and `t_MAT` outward, and numbers,
+  variables and `+ - * / ^` inward; anything else is refused by name.
+
+  The bridge is **value-preserving and name-preserving, not
+  representation-preserving**: a PARI polynomial carries a process-global
+  variable *priority* that decides its structure, and Symbolics models no
+  such notion. `(x+y)^2` returns as `x*(x + 2y) + y^2` — equal, differently
+  written. Round trips are asserted with `==` (PARI's `gequal`), never by
+  printed form.
+- **A page on GP state and sessions** (`docs/src/gp-state.md`, M16). It
+  states the rules — one GP environment per process, in PARI's primary
+  context, writable from **one task only** — and documents **process-level
+  isolation** via `Distributed` as the arrangement that gives genuinely
+  independent GP environments. A worker process may assign where a
+  secondary thread may not.
+
+  **No in-process `GPSession` is shipped**, and the page says why: every
+  route fails. PARI contexts serve parallel computation, not namespacing;
+  `variables()` cannot enumerate assignments; `is_entry` cannot tell a bound
+  name from a free one, since the entry survives `kill`; telling them apart
+  needs `paripriv.h`; injecting values as text loses precision (a 512-bit
+  real returns at 128 bits); and injecting them exactly with
+  `changevalue`/`fetch_entry` — which does work — depends on functions
+  declared in no PARI header and documented nowhere, the same unpublished-ABI
+  risk that made the `sd_*` bindings undefined behaviour.
+- **`show`, `show(::MIME"text/plain")` and `print` are three contracts**
+  (M18). `print` — and therefore `string` and interpolation — is PARI's own
+  text, unchanged; `text/plain` is PARI's text too, so the REPL and every
+  doctest look the way `gp` does; and `show`, the compact form used by
+  `repr`, inside containers and in stacktraces, marks the value as a
+  LibPARI object and is bounded.
+
+  **BREAKING for `repr`**: `repr(pari(42))` is now `"Gen(42)"` where it was
+  `"42"`. The reason is not cosmetic — PARI's text for a vector was
+  byte-identical to Julia's `repr` of a `Vector`, and for a string to
+  Julia's of a `String`, so `repr` could not tell a PARI value from a Julia
+  one. The marking is uniform because the ambiguity is not confined to any
+  one PARI type. `string(g)` is unaffected.
+
+  The compact form is truncated (40 characters of PARI text) so that a
+  `Gen` inside an array or an error message cannot flood the terminal: a
+  20 000-digit integer renders to 6 kB in full. Two documented limits,
+  both pinned by tests: an `InexactError` raised by `Int(::Gen)` embeds a
+  `BigInt`, which Base prints in full; and on the Julia 1.10 LTS
+  `showerror` renders an `InexactError` value with `print` rather than
+  `show`, so the budget does not apply there.
+- **Idiomatic access to PARI's containers** (M17): `length`, `size`, `axes`,
+  `ndims`, `getindex` (linear and `[i, j]`), `iterate`, `eltype`, `collect`,
+  `Vector{Gen}` and `Matrix{Gen}` over `t_VEC`, `t_COL`, `t_VECSMALL`,
+  `t_MAT` and — read-only — `t_LIST`. `Gen` deliberately does **not**
+  subtype `AbstractArray`: the same concrete type also wraps integers,
+  strings and closures, so it cannot promise a static array interface. A
+  non-container `Gen` raises `ArgumentError` naming its PARI type rather
+  than a bare `MethodError`.
+
+  Two conventions worth knowing: a `t_MAT` reports Julia's `(rows,
+  columns)`, transposing PARI's column-major reading, and `length` counts
+  *elements* where PARI's own `glength` counts columns. Element access
+  **clones** — a component read through `compo` is `gclone`d, so it owns its
+  memory and outlives its parent.
+- **Generated bindings accept Julia scalars** where PARI's prototype expects
+  a `GEN` (M15): `LibPARI.PARI.nextprime(1000)`,
+  `LibPARI.PARI.gmodulo(5, 7)`, `LibPARI.PARI.factorial(100)`. Through
+  generator changes only — `src/bindings.jl` is not hand-edited. One method
+  per binding (no combinatorial explosion), one conversion per argument, and
+  an existing `Gen` is never copied, since `gen_convert(::Gen)` returns its
+  argument. `LibPARI.GenArg` names what a `G` slot accepts: a `Gen` or any
+  `PariConvertible` value.
+- **The modular and polynomial facade** (M14, REQ-PUB-09/10): `Mod`, `lift`,
+  `Base.powermod`, `Base.invmod`, `pari_mod`, `degree`, `coeff`, `subst`,
+  `polroots`. `pari_mod` corrects PARI's sign convention to Julia's —
+  `PARI.gmod(7, -3)` is `1`, `mod(7, -3)` is `-2` — and is deliberately not
+  `Base.mod`.
+
+### Fixed
+
+- **Generated bindings no longer leak PARI stack on the scalar and void
+  return paths** (REQ-ARG-05): those branches never captured `avma`, which
+  `protected_call` restores only on error. Verified stable over 40 000
+  calls.
+- **Generated bindings root their arguments explicitly** with `GC.@preserve`
+  (REQ-ARG-06). A `Gen` argument was previously kept alive only implicitly,
+  through the `protected_call`/`gen_from` closure captures — a latent
+  use-after-free window.
+- **An optional `G` keyword is typed** (REQ-ARG-04). It was a bare
+  `x = nothing`, so a wrong type failed late inside the `ccall` as
+  `type Int64 has no field ptr`; it now fails at the call with a `TypeError`
+  naming the expected type.
+- **`isexact` and `precision` handle complex values** (M13 defect found by
+  an M14 test). `isexact` tested the PARI tag alone, so every `t_COMPLEX`
+  counted as exact and `precision` refused every root `polroots` returns. A
+  `t_COMPLEX` is exact only if both components are. Zero components are
+  skipped when reporting accuracy: a PARI real zero has no mantissa words,
+  so it would otherwise report 0 bits for any complex with a zero part.
+- **No more type piracy** in the facade's mixed-argument methods:
+  `powermod(::PariConvertible, ::Integer, m)` and
+  `invmod(::PariConvertible, m)` left the last argument untyped, making them
+  methods over Base types only — they would have hijacked `invmod(3, 7)` in
+  unrelated code. Caught by Aqua.
+
 ## [0.16.0] - 2026-07-31
 
 The first release of the pre-1.0 API redesign: milestones M11–M14 of
@@ -823,7 +948,8 @@ wrapper code exists. No PARI functionality is exposed yet.
   it is resolved from a local development build. Registering LibPARI is
   therefore deferred to a later milestone.
 
-[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.16.0...HEAD
+[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.17.0...HEAD
+[0.17.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.15.1...v0.16.0
 [0.10.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.8.0...v0.9.0

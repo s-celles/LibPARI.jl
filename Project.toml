@@ -1,6 +1,6 @@
 name = "LibPARI"
 uuid = "75bc234d-eb99-4f80-8816-cb1dc773483e"
-version = "0.16.0"
+version = "0.17.0"
 authors = ["Sébastien Celles <s.celles@gmail.com>"]
 
 [deps]
@@ -10,9 +10,11 @@ PrecompileTools = "aea7be01-6a6a-4083-8856-8a6e6704d82a"
 
 [weakdeps]
 ModelContextProtocol = "c58f755f-f2a7-4f48-bf29-4e9659b78499"
+Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
 
 [extensions]
 LibPARIMCPExt = "ModelContextProtocol"
+LibPARISymbolicsExt = "Symbolics"
 
 [compat]
 Aqua = "0.8"
@@ -21,6 +23,7 @@ JuliaFormatter = "~2.12"
 ModelContextProtocol = "0.4"
 PARI_jll = "2.17"
 PrecompileTools = "1"
+Symbolics = "6, 7"
 TOML = "< 0.0.1, 1"
 Test = "< 0.0.1, 1"
 TestItemRunner = "1"
@@ -30,9 +33,10 @@ julia = "1.10"
 Aqua = "4c88cf16-eb10-579e-8560-4a9242c79595"
 JuliaFormatter = "98e50ef6-434e-11e9-1051-2b60c6c9e899"
 ModelContextProtocol = "c58f755f-f2a7-4f48-bf29-4e9659b78499"
+Symbolics = "0c5d862f-8b57-4792-8d23-62f2024744c7"
 TOML = "fa267f1f-6049-4f14-aa54-33bafae1ed76"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 TestItemRunner = "f8b46487-2199-4994-9208-9a1283c18c0a"
 
 [targets]
-test = ["Aqua", "JuliaFormatter", "ModelContextProtocol", "TOML", "Test", "TestItemRunner"]
+test = ["Aqua", "JuliaFormatter", "ModelContextProtocol", "Symbolics", "TOML", "Test", "TestItemRunner"]

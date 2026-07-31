@@ -33,7 +33,7 @@ makedocs(;
         "Getting started" => "getting-started.md",
         "API reference" => "api.md",
         "Precision" => "precision.md",
-        "API redesign" => "api-redesign.md",
+        "GP state and sessions" => "gp-state.md",
         "MCP connector" => "mcp.md",
     ],
     doctest = true,

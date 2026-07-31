@@ -86,7 +86,9 @@ LibPARI.isprime(1009)
 LibPARI.factors(60)
 ```
 
-This layer is the one promised stable at 1.0.
+This is the layer that changes most slowly, and the one the documentation
+leads with. LibPARI is in `0.x`: it can still change, and the changelog
+records every such change.
 
 **2. The generated bindings.** Nearly 1200 PARI functions under
 `LibPARI.PARI`, one per eligible entry in PARI's own function database, each

@@ -88,6 +88,20 @@ Modules = [LibPARI]
 Pages = ["facade.jl"]
 ```
 
+### PARI containers
+
+`Gen` is deliberately **not** an `AbstractArray` — one concrete type also
+wraps integers, strings and closures — so the relevant Base methods are
+defined directly and refuse the PARI types where they mean nothing. A
+`t_MAT` reports Julia's `(rows, columns)`, transposing PARI's column-major
+storage, and element access **clones**: every element owns its memory and
+outlives the container it came from.
+
+```@autodocs
+Modules = [LibPARI]
+Pages = ["containers.jl"]
+```
+
 ### Type conversions
 
 LibPARI converts an *enumerated* set of Julia types, not every `Number`.

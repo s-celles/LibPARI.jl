@@ -89,6 +89,10 @@ end
 
     @test !(LibPARI.Gen <: Number)          # REQ-TYPE-01
     @test string(LibPARI.Gen(123)) == "123"
-    @test sprint(show, LibPARI.Gen(-9)) == "-9"
+    # See test/conversions_tests.jl: M18 split `show` from `print`. The PARI
+    # text is still what `print`, `string` and the REPL give.
+    @test sprint(print, LibPARI.Gen(-9)) == "-9"
+    @test sprint(show, MIME("text/plain"), LibPARI.Gen(-9)) == "-9"
+    @test sprint(show, LibPARI.Gen(-9)) == "Gen(-9)"
     @test string(LibPARI.Gen(1) / LibPARI.Gen(4)) == "1/4"
 end

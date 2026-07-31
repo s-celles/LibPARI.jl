@@ -10,7 +10,8 @@ Section [Traceability](#traceability) maps each requirement ID to the
 milestone that delivers it.
 
 The roadmap is in two parts. **Part I (M0–M10)** built the wrapper and is
-delivered. **Part II (M11–M21)** redesigns the public API for 1.0 — it is
+delivered. **Part II (M11–M21)** redesigns the public API while the
+package stays in `0.x` — it is
 not derived from `spec-ears.md` but introduces its own requirement families.
 
 ## How to read this roadmap
@@ -36,7 +37,8 @@ M14 keeps three deliverables open (modular arithmetic, the polynomial
 facade, the optional Primes.jl extension). M13 keeps one deliverable
 open — REQ-PREC-13, which collides with NFR-01; see the milestone. It is the
 API redesign that must land
-before 1.0: an honest type contract for `Gen`, precise conversion and
+while the API can still change: an honest type contract for `Gen`,
+precise conversion and
 promotion rules, precision-safe reals, `pari(x)`, ergonomic generated
 bindings, explicit GP state, idiomatic access to structured PARI objects,
 and — as optional extensions — the Symbolics.jl and Giac.jl bridges.
@@ -443,7 +445,7 @@ acceptance — the 0.11.0 release.
 
 ---
 
-# Part II — API redesign, 0.16.0 → 1.0.0
+# Part II — API redesign, from 0.16.0 onward
 
 M0–M10 built a *complete* wrapper. This second part makes it an *honest*
 one: it fixes the public contracts that cannot be changed after 1.0.
@@ -453,7 +455,7 @@ generated `LibPARI.PARI` layer of 1241 bindings. Nothing here rewrites PARI,
 replaces the generated layer with hand-maintained wrappers, or edits
 `src/bindings.jl` by hand.
 
-**Because the package is pre-1.0, correctness outranks backward
+**Because the package stays in `0.x`, correctness outranks backward
 compatibility.** Every milestone below therefore carries an explicit
 *Breaking changes* list. A deprecation shim is added only where it is cheap
 and unambiguous; a shim that would preserve semantics a milestone classifies
@@ -476,7 +478,7 @@ M10 (0.11.0, done)
         M11 ─────────────> M17 structured objects
         M11 ─────────────> M18 display contract
   M11+M13+M14+M17 ──────> M19 Symbolics bridge ─> M20 Giac bridge
-  all ───────────────────> M21 documentation, migration, 1.0.0
+  all ───────────────────> M21 documentation and release hygiene
 ```
 
 `M13` and `M15` both regenerate `src/bindings.jl`; they must not be in
@@ -495,14 +497,14 @@ never existed, and the remaining milestones will renumber the same way.
 | M11 | Honest type contract for `Gen`             | 0.16.0         | **released** in `0.16.0` |
 | M12 | Conversion & promotion contracts           | 0.17.0         | **released** in `0.16.0` |
 | M13 | Precision-safe reals & a bit-based precision API | 0.18.0    | **released** in `0.16.0` |
-| M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | **mostly released** in `0.16.0` |
-| M15 | Generated-binding argument ergonomics      | 0.20.0         | not started |
-| M16 | Explicit GP evaluation sessions            | 0.21.0         | not started |
-| M17 | Structured PARI objects                    | 0.22.0         | not started |
-| M18 | Display contract                           | 0.23.0         | not started |
-| M19 | Symbolics.jl bridge (optional extension)   | 0.24.0         | not started |
+| M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | **released** in `0.16.0`; facade completed since |
+| M15 | Generated-binding argument ergonomics      | 0.20.0         | **done** (unreleased) |
+| M16 | Explicit GP evaluation sessions            | 0.21.0         | **closed** — no session API; process isolation documented |
+| M17 | Structured PARI objects                    | 0.22.0         | **done** (unreleased) |
+| M18 | Display contract                           | 0.23.0         | **done** (unreleased) |
+| M19 | Symbolics.jl bridge (optional extension)   | 0.24.0         | **done** (unreleased) |
 | M20 | Giac.jl bridge (optional extension)        | 0.25.0         | not started |
-| M21 | Documentation, migration & the 1.0.0 release | 1.0.0        | not started |
+| M21 | Documentation & release hygiene             | 0.x            | not started |
 
 ---
 
@@ -576,17 +578,14 @@ operation that Base's `Number` fallbacks silently provide today.
       `docs/src/index.md:23`, `docs/src/getting-started.md:47` and
       `README.md:31`; the 0.14.0 CHANGELOG entry stays as written and the
       0.16.0 entry records its supersession. (REQ-TYPE-12)
-- [ ] Re-enable Aqua's `ambiguities` check
+- [x] Re-enable Aqua's `ambiguities` check
       (`test/package/aqua_tests.jl`, deferred pending M9 — shipped in
       0.10.0/0.13.0) and extend `test/inference_tests.jl` with `@inferred`
       over every new method. (REQ-TYPE-13)
-      - **Partly done, deliberately left open.** The `@inferred` extension
-        shipped; the Aqua check is still disabled. Evidence for whoever
-        flips it: with M11 in place both `Aqua.test_ambiguities(LibPARI)`
-        and `Test.detect_ambiguities(LibPARI; recursive = true)` are clean
-        locally. It is left off because the check spawns a subprocess that
-        loads PARI, which is an untested risk on the macOS and Windows
-        runners — flip it in its own change, not inside M11.
+      - Flipped after M18, in its own change rather than inside M11: the
+        check spawns a subprocess that loads PARI, which was an untested
+        risk on the macOS and Windows runners until the rest of the
+        redesign had proved stable there.
 
 **Breaking changes**
 
@@ -931,7 +930,7 @@ names stay gone.
 ## M14 — `pari(x)`, the public surface, and a small facade
 
 **Goal:** give LibPARI one compact conversion entry point, `pari(x)`, freeze
-the exported surface at four names so `using LibPARI` is safe for 1.0, and
+the exported surface at four names so `using LibPARI` is predictable, and
 add a deliberately small high-level facade — extending Base only where the
 semantics match exactly.
 
@@ -979,21 +978,28 @@ semantics match exactly.
       `prevprime`, `factor(::Gen)::Gen` and
       `factors(::Gen)::Vector{Pair{Gen,Gen}}`. (REQ-PUB-08)
       - The five functions shipped. The optional `LibPARIPrimesExt` weakdep
-        extension supplying `Primes.isprime(::Gen)`, and its CI job, did
-        **not** — it is a separate package-extension change, not a facade
-        one. Reach them as `LibPARI.isprime` meanwhile.
+        extension is **not shipped, by decision**: it would add a weak
+        dependency, a test dependency and a CI job for a single method, and
+        it could not be made coherent — `Primes.nextprime(n, i)` takes an
+        index PARI has no counterpart for, and `Primes.factor` returns a
+        `Factorization` whose mapping from PARI's two-column `t_MAT` is a
+        design commitment of its own. Extending only part of the family
+        would make the interoperability silently partial. Reach the
+        functions as `LibPARI.isprime`, `LibPARI.factor` and
+        `LibPARI.factors`; revisit if the pairing proves common in
+        practice.
       - Not exported: `isprime`/`factor` are Primes.jl's names. A hard
         dependency on Primes.jl is **rejected**; ship an optional
         `LibPARIPrimesExt` weakdep extension instead, with a CI job that
         loads Primes.
-- [ ] **Not started.** Modular arithmetic: `Mod(a, n)` and `lift`, `Base.powermod`,
+- [x] Modular arithmetic: `Mod(a, n)` and `lift`, `Base.powermod`,
       `Base.invmod`; `Base.mod(::Gen, ::Gen)` restricted to integer-valued
       `Gen`s and corrected to Julia's sign convention. (REQ-PUB-09)
       - *Observed:* PARI's `%` is not Julia's `mod` — `(-7)%3 == 2`,
         `7%(-3) == 1`, `(1/2)%3 == 2`. Wrapping `gmod` verbatim as
         `Base.mod` would be wrong; PARI's operator stays reachable as
         `PARI.gmod`.
-- [ ] **Not started.** Selected polynomial facade, unexported: `degree(::Gen)::Int`,
+- [x] Selected polynomial facade, unexported: `degree(::Gen)::Int`,
       `coeff`, `subst`, `polroots(::Gen; prec)`. `degree` throws
       `DomainError` on the zero polynomial, where PARI returns `-oo`.
       (REQ-PUB-10)
@@ -1061,59 +1067,65 @@ Extends M4.
 
 **Deliverables**
 
-- [ ] Hand-written `src/argconv.jl`, included before `bindings.jl`, exposing
+- [x] Hand-written `src/argconv.jl`, included before `bindings.jl`, exposing
       M12's `PariConvertible` to the generated layer. (REQ-ARG-01)
       - One alias naming the accepted **input** set only. Not a type
         parameter, not a per-PARI-tag type: every binding still returns
         `Gen`.
-- [ ] Internal `_argptr(x)::Ptr{Int}`, one method per admitted type:
+- [x] Internal `_argptr(x)::Ptr{Int}`, one method per admitted type:
       `_argptr(g::Gen) = g.ptr` (no clone, no copy); a scalar builds a raw
       GEN on the PARI stack under `_trap_call`. (REQ-ARG-02)
       - `_argptr` stays unexported and undocumented: it returns a
         **transient** GEN valid only inside the caller's `avma` frame, so it
         must never appear in a public signature.
-- [ ] Generator emits `x$(np)::LibPARI.PariConvertible` for prototype code
+- [x] Generator emits `x$(np)::LibPARI.PariConvertible` for prototype code
       `G`, plus exactly one `_argptr` call per argument, **inside** the
       `gen_from` producer — same worker, same `avma` frame as the call.
       (REQ-ARG-03)
-- [ ] Generator: the optional `D<G>` keyword becomes
+- [x] Generator: the optional `D<G>` keyword becomes
       `x::Union{Nothing,PariConvertible} = nothing`, replacing the ~189
       untyped `x = nothing` keywords. (REQ-ARG-04)
-- [ ] Generator: wrap the scalar-return and void-return branches in
+- [x] Generator: wrap the scalar-return and void-return branches in
       `av = _avma()` … `_set_avma(av)` so converted temporaries are
       reclaimed. (REQ-ARG-05)
       - Without this, `PARI.gsigne(5)` leaves its converted `t_INT` on the
         PARI stack — `protected_call` restores `avma` only on error.
         *Observed:* ~86 G-taking bindings sit in that branch.
-- [ ] Generator: emit one `GC.@preserve` region around every `_trap_call`,
+- [x] Generator: emit one `GC.@preserve` region around every `_trap_call`,
       merged with the existing `Cstring` block, so no `Gen` or `Ref` is
       reachable only as a raw `Int` across the call. (REQ-ARG-06)
       - This also closes a **pre-existing latent hole**: today a `Gen`
         argument is rooted only implicitly, through the
         `protected_call`/`gen_from` closure captures.
-- [ ] Audit the scalar/void G-taking bindings for PARI functions that retain
+- [x] Audit the scalar/void G-taking bindings for PARI functions that retain
       their argument in global state; any found go on a generator deny-list
       keeping `::LibPARI.Gen`, with the reason emitted into the generated
       header. (REQ-ARG-07)
+      - **Dissolved by the design, not performed.** A converted argument is
+        a *persistent clone* (`gen_convert`), exactly like a `Gen` the
+        caller passes, so nothing points into the transient stack and no
+        function can be left holding a dangling pointer. The deny-list
+        existed only for the stack-temporary design the milestone
+        originally assumed. Cost: one allocation per scalar argument.
       - A retained pointer into the transient stack would dangle once
         REQ-ARG-05 restores `avma`. A `Gen` argument is a persistent clone
         and is unaffected.
-- [ ] Agreement test: for every admitted argument type,
+- [x] Agreement test: for every admitted argument type,
       `PARI.f(x) == PARI.f(pari(x))` with matching `gentype`, over a sample
       covering all four return conventions (`Gen`, scalar, void,
       `&`-tuple). (REQ-ARG-08)
-- [ ] No-method-explosion test: every callable binding in `LibPARI.PARI` has
+- [x] No-method-explosion test: every callable binding in `LibPARI.PARI` has
       exactly **one** method, including those with combined G-arity 4.
       (REQ-ARG-09)
-- [ ] `@inferred` over scalar-argument calls for all four return conventions
+- [x] `@inferred` over scalar-argument calls for all four return conventions
       and each admitted argument type; `@code_warntype` shows no `Any` on a
       sampled binding per convention. (REQ-ARG-10)
-- [ ] Leak/allocation test: 10⁵ scalar-argument calls leave `get_avma()` at
+- [x] Leak/allocation test: 10⁵ scalar-argument calls leave `get_avma()` at
       its pre-loop value and PARI's heap within the NFR-02 bound;
       `@allocated` on the scalar path is bounded and independent of the
       value's size. Record first-call latency as the compilation-overhead
       gate. (REQ-ARG-11)
-- [ ] Document in `docs/src/api.md` and the getting-started guide: the
+- [x] Document in `docs/src/api.md` and the getting-started guide: the
       accepted union, what is **not** accepted (`Vector`, `AbstractString`),
       and that parameters stay `x1, x2, …` **because `pari.desc` has no
       argument-name field** — a limitation to document, not to paper over
@@ -1155,7 +1167,7 @@ Extends M4.
   prototype codes and makes `f("x")` ambiguous between a string value and a
   variable name.
 - Should codes `L`/`U` (today `::Integer`) also accept a `Gen`? Symmetry
-  says yes; a lossy `Gen`→`long` narrowing says no. Deferred past 1.0.0.
+  says yes; a lossy `Gen`→`long` narrowing says no. Deferred.
 
 ---
 
@@ -1168,41 +1180,102 @@ pretending to an isolation libpari may not provide.
 
 **Scope:** REQ-GPS-01 … REQ-GPS-08.
 
-> **Authoring note.** The analysis pass for this milestone did not complete,
-> so its deliverables are written from the source alone and the central
-> facts are **not yet verified**. REQ-GPS-01 is deliberately an
-> investigation: the design that follows it may have to change.
+> **REQ-GPS-01 is done, and it changes the milestone.** The findings are
+> below; the session design that follows them cannot be the one this
+> milestone originally assumed.
 
 **Deliverables**
 
-- [ ] **Investigate and write down** what GP state actually is here, before
+- [x] **Investigate and write down** what GP state actually is here, before
       any API is designed: whether PARI's variable table and GP environment
       are process-global or part of a per-thread context; what
       `pari_thread_alloc` snapshots of the calling thread's state
       (`src/concurrency.jl:93-105`); and whether a variable assigned on one
       worker is visible from another. Record the answer in the milestone
       before proceeding. (REQ-GPS-01)
-- [ ] `GPSession` type and `gp_eval(session, str)`, with the existing
+- [~] `GPSession` type and `gp_eval(session, str)`, with the existing
       `gp_eval(str)` (`src/evaluator.jl:27`) retained as a documented
       **default session**. (REQ-GPS-02)
+      - **Deliberately not shipped** — see the findings above. The default
+        environment is documented instead, and process isolation replaces
+        the session object.
 - [ ] `reset!(session)` clearing exactly what the session owns — with the
       cleared set *documented*, not implied. (REQ-GPS-03)
-- [ ] An honest isolation statement in the docstring and in
+- [x] An honest isolation statement in the docstring and in
       `docs/src/api.md`: if independent GP environments are not feasible
       with libpari as embedded, say so and implement the safest honest
       abstraction (for example a session owning a named variable list it can
       kill) instead of pretending. (REQ-GPS-04)
-- [ ] Documented thread/task behaviour, consistent with the finding of
+- [x] Documented thread/task behaviour, consistent with the finding of
       REQ-GPS-01 and with the sticky per-thread worker model. (REQ-GPS-05)
-- [ ] `PariError` behaviour is unchanged: a syntax or runtime error inside a
+- [x] `PariError` behaviour is unchanged: a syntax or runtime error inside a
       session stays catchable and leaves both the session and the library
       usable. (REQ-GPS-06)
 - [ ] Tests: assignment persists **within** a session; state does **not**
       leak between sessions (or the documented leakage is asserted
       explicitly, if isolation proves infeasible); `reset!` does what it
       claims; concurrent sessions behave as documented. (REQ-GPS-07)
-- [ ] `gp_eval` stays documented as the escape hatch for GP-closure-argument
+- [x] `gp_eval` stays documented as the escape hatch for GP-closure-argument
       functions — never as the primary API. (REQ-GPS-08)
+
+### REQ-GPS-01 findings — isolated GP sessions are not available
+
+Measured against the shipped `PARI_jll`, and corroborated by PARI's own
+documentation and by the Yggdrasil build recipe:
+
+- **`PARI_jll` is built `--mt=pthread`** (and `--kernel=gmp`,
+  `--graphic=none`, `--without-readline`). PARI's parallel machinery is
+  therefore compiled in and active — which is what the roadmap assumed, now
+  confirmed of the binary actually distributed.
+- **There is one GP environment per process**, living in the primary PARI
+  context. Assignments persist across `gp_eval` calls, as documented.
+- **A secondary context cannot write it.** With one PARI context per Julia
+  OS thread, every non-primary thread is a *parallel section* to PARI, and
+  PARI's documentation of `export` states that exported variables "cannot
+  be modified inside a parallel section". Measured, from a spawned task:
+  reading an unexported variable raises `PariError(e_MISC)` — `"mt: please
+  use export(x)"`; **assigning always raises** — `"mt: attempt to change
+  exported variable"`; while pure evaluation (`2 + 2`) and the generated
+  bindings work normally.
+- **A session cannot discover what it created.** GP's `variables()` lists
+  *polynomial* variables (`[x, y]`), not assignments, so there is no way to
+  diff the environment before and after. `kill(name)` does work, so cleanup
+  by name is possible.
+- **No public GMP interop.** Despite `--kernel=gmp`, no `mpz_t`↔`GEN`
+  converter is exported, so the decimal-string path in `_integer_to_gen`
+  has no drop-in replacement. A limb-level conversion is conceivable but
+  would write into PARI's internal `t_INT` layout — a separate decision.
+
+**Every route was then investigated, and each one fails:**
+
+| Route | Why it does not work |
+|-------|----------------------|
+| A PARI context per session (`pari_thread_*`) | Contexts serve parallel *computation*; a secondary one cannot write GP globals at all. |
+| Enumerate a session's variables | `variables()` lists polynomial variables, not assignments. |
+| Detect new names with `is_entry` | An `entree` survives `kill`, so bound and unbound are indistinguishable. |
+| Read `entree.valence` | The macros are in `paripriv.h`, a **private** header. |
+| Inject values as text | Lossy — a 512-bit real returns at 128 bits. |
+| Inject with `changevalue`/`fetch_entry` | Exact, and verified working — but **declared in no PARI header and documented nowhere**. Building on an unpublished ABI is precisely the risk that made the `sd_*` bindings undefined behaviour (REQ-PREC-13). |
+
+**Decision: no in-process `GPSession` is shipped.** An API named "session"
+that shares one namespace, cannot enumerate its own contents, and loses
+precision on injection would create more illusion than it dispels.
+
+**What ships instead** (`docs/src/gp-state.md`): the rules, stated and
+tested — one environment, writable from one task only — and **process-level
+isolation** as the arrangement that actually works. One PARI per process,
+via `Distributed`, is complete isolation and relies on nothing internal;
+verified, including that a worker process *may* assign where a thread may
+not. Its costs (a PARI stack per process, serialisation across the
+boundary, start-up) are documented rather than glossed.
+
+Reopening this needs one of: a PARI release that documents `changevalue`
+and `fetch_entry` as public, or a supported way to obtain independent GP
+namespaces in one process.
+
+Already delivered from these findings: the `gp_eval` docstring no longer
+claims a shared environment without qualification — it states the threading
+rule — and `test/evaluator_tests.jl` pins the measured behaviour.
 
 **Breaking changes**
 
@@ -1240,9 +1313,14 @@ cannot honour.
 
 **Scope:** REQ-IDX-01 … REQ-IDX-09.
 
-> **Authoring note.** Same caveat as M16: written from the source without a
-> completed analysis pass. The ownership and layout deliverables
-> (REQ-IDX-01, REQ-IDX-03) must be verified against PARI's headers first.
+> **Investigation done (REQ-IDX-01).** Verified before any accessor was
+> written: a `t_MAT` is a list of COLUMNS (`glength` counts columns,
+> component `j` is the `j`-th column as a `t_COL`, and GP's `matsize` gives
+> `[rows, cols]`); and reading a component through PARI's `compo` returns an
+> **owned** value, because the generated binding wraps it in `gen_from`,
+> which `gclone`s. Element access therefore clones, and an element outlives
+> its parent — verified by dropping the parent and forcing GC. No manual
+> re-cloning is needed and no pointer is exposed.
 
 **Deliverables**
 
@@ -1251,29 +1329,29 @@ cannot honour.
       a component pointer points *into* the parent's cloned block — so an
       element must be re-cloned through `gen_from` to own its memory.
       (REQ-IDX-01)
-- [ ] `length`, `size`, `axes`, `getindex(x, i)`, `getindex(x, i, j)`,
+- [x] `length`, `size`, `axes`, `getindex(x, i)`, `getindex(x, i, j)`,
       `iterate`, `eltype`, `collect`, `Vector{Gen}(x)`, `Matrix{Gen}(x)` —
       each defined only for the PARI types where it is meaningful.
       (REQ-IDX-02)
 - [ ] Coverage: `T_VEC`, `T_COL`, `T_VECSMALL`, `T_MAT`; `T_LIST` only if
       its semantics prove stable enough — otherwise excluded, with the
       reason recorded. (REQ-IDX-03)
-- [ ] One-based Julia indexing throughout, with a `BoundsError` outside the
+- [x] One-based Julia indexing throughout, with a `BoundsError` outside the
       range, and a clear error — naming the PARI type — for indexing a
       `Gen` that is not a container. (REQ-IDX-04)
-- [ ] `size` for `T_MAT` agrees with Julia conventions; PARI's `t_MAT` is a
+- [x] `size` for `T_MAT` agrees with Julia conventions; PARI's `t_MAT` is a
       column-major list of columns, so the mapping is spelled out and
       tested, not assumed. (REQ-IDX-05)
-- [ ] No pointer and no transient stack memory is exposed; every returned
+- [x] No pointer and no transient stack memory is exposed; every returned
       element is a fully owned `Gen`. Document explicitly **that element
       access clones**. (REQ-IDX-06)
-- [ ] Iteration leaks no PARI heap objects; allocation and leak tests match
+- [x] Iteration leaks no PARI heap objects; allocation and leak tests match
       the NFR-02/NFR-03 style already used in
       `test/acceptance_tests.jl`. (REQ-IDX-07)
-- [ ] `Gen` does **not** subtype `AbstractArray`; the relevant Base methods
+- [x] `Gen` does **not** subtype `AbstractArray`; the relevant Base methods
       are implemented directly. An explicit wrapper type is introduced only
       if a concrete need appears. (REQ-IDX-08)
-- [ ] `eltype` and the `collect`/`Vector{Gen}` conversions are type-stable
+- [x] `eltype` and the `collect`/`Vector{Gen}` conversions are type-stable
       and `@inferred`-clean. (REQ-IDX-09)
 
 **Breaking changes**
@@ -1313,28 +1391,32 @@ PARI-notation REPL rendering, and keep display cheap.
 
 **Scope:** REQ-SHOW-01 … REQ-SHOW-06.
 
-> **Authoring note.** Same caveat as M16/M17.
+> **Investigated first.** The ambiguity is wider than the milestone
+> described: PARI's text for a `t_VEC` is byte-identical to Julia's `repr`
+> of a `Vector` (`repr(gp_eval("[1,2,3]")) == repr([1,2,3])` held), not just
+> for strings. That is why the compact form marks EVERY `Gen` rather than
+> only the confusable types.
 
 **Deliverables**
 
-- [ ] `show(io, g)` becomes a compact representation that makes clear the
+- [x] `show(io, g)` becomes a compact representation that makes clear the
       value is a LibPARI object; `show(io, ::MIME"text/plain", g)` keeps the
       PARI notation for the REPL; `print(io, g)` stays PARI's own text.
       (REQ-SHOW-01)
       - Today `show` and `print` are the same call
         (`src/conversions.jl:252-255`), so `repr(g)` is bare PARI text —
         indistinguishable from the content of a `String`.
-- [ ] A `t_STR` must not be confusable with a Julia `String` in `repr`.
+- [x] A `t_STR` must not be confusable with a Julia `String` in `repr`.
       (REQ-SHOW-02)
-- [ ] Display must not become unexpectedly expensive: `_genrepr` calls
+- [x] Display must not become unexpectedly expensive: `_genrepr` calls
       `GENtostr` through `protected_call` on the PARI worker, so every
       rendering is real PARI work plus a task hop. Decide and document a
       truncation policy for very large values. (REQ-SHOW-03)
-- [ ] Tests for integers, rationals, polynomials, vectors, matrices and
+- [x] Tests for integers, rationals, polynomials, vectors, matrices and
       strings. (REQ-SHOW-04)
-- [ ] Tests for nested display — a vector of vectors, and a `Gen` inside a
+- [x] Tests for nested display — a vector of vectors, and a `Gen` inside a
       Julia `Array`, which uses `show`, not `text/plain`. (REQ-SHOW-05)
-- [ ] The doctests in the existing docstrings and guides are updated to the
+- [x] The doctests in the existing docstrings and guides are updated to the
       new output, and the docs still build with zero warnings
       (REQ-DOC-05). (REQ-SHOW-06)
 
@@ -1366,14 +1448,14 @@ PARI-notation REPL rendering, and keep display cheap.
 ## Interoperability bridges — M19 and M20
 
 Two conversion bridges to other Julia computer-algebra ecosystems, **in
-scope for 1.0**. Each depends on contracts M11-M18 freeze, so they are
+in scope**. Each depends on contracts M11-M18 settle, so they are
 sequenced last before the release milestone.
 
 Both ship as **package extensions** (`[weakdeps]` + `[extensions]`), the
 pattern already used for the MCP connector (`ext/LibPARIMCPExt.jl`,
 0.12.0): installing LibPARI must not install Symbolics or Giac, and a
 process that does not load them must pay nothing — no dependency, no code,
-no precompilation. That is what makes them affordable before 1.0: they add
+no precompilation. That is what makes them affordable: they add
 surface to the *extensions*, not to the core the release freezes.
 
 **Depends on:** M11 (a `Gen` that does not lie about being a `Number`),
@@ -1398,49 +1480,77 @@ representations do not share.
 
 **Deliverables**
 
-- [ ] **Investigate and write down the mapping table first**, before any
+- [x] **Investigate and write down the mapping table first**, before any
       code: which PARI type tag maps to which Symbolics/SymbolicUtils node,
       and — the hard direction — which Symbolics expressions have **no**
       PARI counterpart. Publish it as a table in the docs; it is the
       contract. (REQ-SYM-01)
-- [ ] `ext/LibPARISymbolicsExt.jl` as a weakdep extension; `Project.toml`
+- [x] `ext/LibPARISymbolicsExt.jl` as a weakdep extension; `Project.toml`
       gains `Symbolics` under `[weakdeps]`/`[extensions]` only. A test
       asserts that loading LibPARI alone pulls in neither the package nor
       its load time. (REQ-SYM-02)
-- [ ] Inward conversion: extend M14's `pari(x)` with methods for
+- [x] Inward conversion: extend M14's `pari(x)` with methods for
       `Num`/`BasicSymbolic`, so there is **one** inward entry point for
       every foreign type. (REQ-SYM-03)
       - See the open question on `to_pari`: a separate inward name is
         proposed by the request, but a second entry point that does the
         same job as `pari(x)` is a contract to maintain twice.
-- [ ] Outward conversion `to_symbolics(g::Gen)`, defined as a LibPARI
+- [x] Outward conversion `to_symbolics(g::Gen)`, defined as a LibPARI
       generic with its methods supplied by the extension. (REQ-SYM-04)
-- [ ] **Variable identity** — the central difficulty, and the deliverable
+- [x] **Variable identity** — the central difficulty, and the deliverable
       most likely to reshape this milestone: a PARI `t_POL` carries a
       variable *number* with a priority ordering, while a Symbolics variable
       is a named symbol. Define and test the name↔number mapping,
       round-trip preservation of names, and what happens on a collision or
       on PARI's variable-priority reordering. (REQ-SYM-05)
-- [ ] Documented supported subset — at minimum `t_INT`, `t_FRAC`, `t_REAL`,
+- [x] Documented supported subset — at minimum `t_INT`, `t_FRAC`, `t_REAL`,
       `t_COMPLEX`, `t_POL`, `t_RFRAC`, and (via M17) `t_VEC`/`t_COL`/
       `t_MAT`. Everything outside it raises a clear error naming the PARI
       type; `t_SER`, `t_PADIC`, `t_INTMOD`, `t_FFELT` and `t_CLOSURE` are
       explicitly out unless a deliverable adds them. (REQ-SYM-06)
-- [ ] Exactness and precision policy: what a `t_REAL` becomes on the
+- [x] Exactness and precision policy: what a `t_REAL` becomes on the
       Symbolics side, and what a Julia `Float64`/`BigFloat` literal becomes
       as a `Gen`, consistent with M13. Any unavoidable rounding is
       documented. (REQ-SYM-07)
-- [ ] Round-trip tests in **both** directions over a fixed corpus, plus a
+- [x] Round-trip tests in **both** directions over a fixed corpus, plus a
       property test on randomly generated polynomials asserting
       `pari(to_symbolics(g))` equals `g` on the supported subset — and an
       explicit list of the cases where it deliberately does not.
       (REQ-SYM-08)
-- [ ] No type piracy: every method has a LibPARI type in its signature, or
+- [x] No type piracy: every method has a LibPARI type in its signature, or
       is a method on a Symbolics function that LibPARI's extension legally
       owns. Aqua stays green. (REQ-SYM-09)
 - [ ] A CI job loading Symbolics, kept separate from the main matrix
       because of its compile cost, plus a docs page with runnable examples.
       (REQ-SYM-10)
+
+### What the investigation settled, and what it cost
+
+**Variable identity (REQ-SYM-05) is resolvable but asymmetric.** A PARI
+`t_POL` carries a variable *number* with a process-global *priority*, and
+`varhigher`/`varlower` change that ordering for the whole process:
+`(w+x)^2` prints as `x^2+2*w*x+w^2` or `w^2+2*x*w+x^2` depending on it. The
+NAME is recoverable — GP's `variable(p)` returns the free symbol — so names
+survive a round trip. The ordering does not: Symbolics models no priority,
+so it is lost outward and re-derived inward. The bridge is therefore
+**value-preserving and name-preserving, never representation-preserving**,
+and its round-trip test asserts `pari(to_symbolics(g)) == g` — PARI's
+`gequal` — never `string`.
+
+**Two upstream defects were found and reported** while writing it:
+
+- [SymbolicUtils.jl#1023](https://github.com/JuliaSymbolics/SymbolicUtils.jl/issues/1023)
+  — TermInterface is only partially implemented: `iscall` is true while
+  `isexpr` is false, and `head`/`children` are undefined, in violation of
+  the protocol's own documented contract.
+- [SymbolicUtils.jl#1024](https://github.com/JuliaSymbolics/SymbolicUtils.jl/issues/1024)
+  — numeric literals in `arguments()` stopped being `isa Number` between
+  SymbolicUtils 3.32 and 4.44, so a walk that was total under 3.x silently
+  drops them under 4.x. This one bit the bridge directly.
+
+Both are recorded in `upstream-bugs.md` with the exact commit permalinks.
+The workaround, `Symbolics.value(x) isa Number`, is correct on both majors
+and relies only on an exported function.
 
 **Exit criteria**
 
@@ -1573,9 +1683,10 @@ registration, and buys isolation neither package needs at two systems.
 
 ---
 
-## M21 — Documentation, migration & the 1.0.0 release
+## M21 — Documentation & release hygiene
 
-**Goal:** ship the redesign as a documented, migratable 1.0.0.
+**Goal:** keep the documentation and the release record honest as the
+redesign lands, release by release, while the package stays in `0.x`.
 
 **Depends on:** M11 … M20.
 
@@ -1583,18 +1694,31 @@ registration, and buys isolation neither package needs at two systems.
 
 **Deliverables**
 
-- [ ] `docs/src/api-redesign.md` — the issue-style plan: current API
+- [~] `docs/src/api-redesign.md` — the issue-style plan: current API
       problems, proposed contracts, breaking changes, migration examples,
       implementation phases, unresolved design questions. (REQ-REL-01)
-- [ ] `docs/src/migration.md` — a before/after example for **every**
+      - **Written, then removed.** It served its purpose while the redesign
+        was being planned, and became clutter once the work landed: a
+        package still in `0.x` development does not need a document
+        narrating a transition away from an API nobody is using any more.
+        Nothing is lost — the contracts live in `docs/src/api.md`, the
+        precision and GP-state rules in their own pages, the breaking
+        changes in `CHANGELOG.md`, and the plan itself is this file.
+- [~] `docs/src/migration.md` — a before/after example for **every**
       breaking change listed in M11–M18. (REQ-REL-02)
+      - **Dropped while the API is unstable.** The package stays in `0.x` and
+        in active redesign: a migration guide written now would document
+        contracts that the remaining milestones are still free to change,
+        and would have to be rewritten each time. The CHANGELOG carries
+        every breaking change with its before/after in the meantime.
+        Revisit if and when the surface is declared stable.
 - [ ] The getting-started guide is rewritten around `pari(x)` and gains the
       **three levels of access** section — idiomatic Julia operations; the
       comprehensive `PARI` bindings; dynamic GP through `gp_eval` — stating
-      which layer is promised stable at 1.0. (REQ-REL-03)
+      which layer changes most slowly. (REQ-REL-03)
 - [ ] README, API reference, docstrings and examples updated; no surviving
       claim that `Gen` is a drop-in Julia number. (REQ-REL-04)
-- [ ] A detailed CHANGELOG entry per release 0.16.0 … 1.0.0, each listing
+- [ ] A detailed CHANGELOG entry per release, each listing
       its breaking changes with before/after. (REQ-REL-05)
 - [ ] The full test list required by the redesign is green: lifecycle,
       memory safety, stack restoration, error trapping, generator
@@ -1608,7 +1732,7 @@ registration, and buys isolation neither package needs at two systems.
       been weakened to make the redesign pass; every test replaced because
       it encoded a withdrawn contract is replaced by a **stronger** test,
       and the substitution is explained in the CHANGELOG. (REQ-REL-07)
-- [ ] Version 1.0.0 tagged and registered; the stability promise of each
+- [ ] Each release tagged and registered; the relative stability of each
       layer is stated in the README. (REQ-REL-08)
 
 **Exit criteria**
@@ -1616,12 +1740,13 @@ registration, and buys isolation neither package needs at two systems.
 - CI green on the 3-OS × 2-Julia matrix; docs deploy with zero warnings.
 - Every breaking change in Part II appears in the migration guide with a
   runnable before/after.
-- `Pkg.add("LibPARI")` at 1.0.0 installs and the getting-started examples
+- `Pkg.add("LibPARI")` installs and the getting-started examples
   run verbatim.
 
 **Open questions**
 
-- Does 1.0.0 freeze the generated layer's signatures too, or only the
+- Would a future stability declaration cover the generated layer's
+  signatures too, or only the
   hand-written core? The generated layer changes whenever PARI's
   `pari.desc` changes, which argues for promising stability only on the
   hand-written surface plus the *shape* of the generated one.
@@ -1694,9 +1819,9 @@ Carried from SRS §8.2 — explicitly *not* on the M0–M10 plan:
 - [x] Per-thread PARI stack contexts; 0.11.0 serialized calls
       (REQ-PLT-03). **Delivered after the roadmap, in `0.12.0`–`0.13.0`.**
 
-## Out of scope for 1.0.0
+## Out of scope for Part II
 
-Carried into Part II — explicitly *not* on the path to 1.0:
+Carried into Part II — explicitly *not* planned:
 
 - [ ] Native Julia callback support for GP-closure-argument functions.
 - [ ] Optional data-package integration.
