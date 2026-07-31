@@ -46,7 +46,10 @@ end
     @test (@inferred (a == b)) isa Bool
 end
 
-@testitem "the Number interface is type-stable" begin
+# REQ-TYPE-13 supersedes the "Number interface" framing: these are explicit
+# methods on `Gen`, not Base `Number` fallbacks. The mixed-operand methods
+# added by REQ-TYPE-02/03/04 are covered in test/type_contract_tests.jl.
+@testitem "the numeric method surface on Gen is type-stable" begin
     using LibPARI
 
     g = LibPARI.Gen(6)

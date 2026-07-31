@@ -43,44 +43,72 @@ package is loaded.
 
 ## A first tour
 
-Build a [`Gen`](@ref) — LibPARI's wrapper for a PARI object — from a Julia
-number, and compute with it as you would any Julia `Number`:
+`using LibPARI` brings in exactly four names: [`pari`](@ref), [`Gen`](@ref),
+[`gp_eval`](@ref) and [`PariError`](@ref). Everything else stays qualified.
+
+[`pari`](@ref) converts a Julia value into a PARI one — a [`Gen`](@ref) —
+and the usual Julia operators work on it:
 
 ```@repl tour
 using LibPARI
-a = LibPARI.Gen(42)
-a * a + LibPARI.Gen(1)
-LibPARI.Gen(2)^100
+a = pari(42)
+a * a + 1
+pari(2)^100
 ```
 
-`Gen` accepts integers of any magnitude, floats, and rationals, and mixed
-arithmetic promotes the Julia operand automatically:
+`pari` accepts integers of any magnitude, rationals, floats — including
+`BigFloat`, exactly — and complex numbers. Mixed arithmetic takes a Julia
+operand on either side:
 
 ```@repl tour
-LibPARI.Gen(3 // 4) + 1
-LibPARI.Gen(2)^200 == big(2)^200
+pari(3 // 4) + 1
+pari(2)^200 == big(2)^200
+pari(big"1.234567890123456789012345678901")
 ```
 
-Convert an integer-valued `Gen` back to a Julia integer:
+Convert back to a Julia value:
 
 ```@repl tour
-BigInt(LibPARI.Gen(2)^64)
-Int(LibPARI.Gen(255))
+BigInt(pari(2)^64)
+Int(pari(255))
 ```
 
-Call one of the generated bindings from the `LibPARI.PARI` submodule — here,
-the next prime after 1000:
+## The three levels of access
+
+**1. Idiomatic Julia.** A small hand-written surface: the operators above,
+the conversions, and a short list of Base functions where PARI's operation
+*is* Julia's.
 
 ```@repl tour
-LibPARI.PARI.nextprime(LibPARI.Gen(1000))
+gcd(pari(12), 18)
+factorial(pari(20))
+LibPARI.isprime(1009)
+LibPARI.factors(60)
 ```
 
-Or reach any PARI/GP capability through the GP expression evaluator,
-[`gp_eval`](@ref):
+This layer is the one promised stable at 1.0.
+
+**2. The generated bindings.** Over 1200 PARI functions under
+`LibPARI.PARI`, one per eligible entry in PARI's own function database, each
+carrying PARI's help text as its docstring:
 
 ```@repl tour
-LibPARI.gp_eval("sum(k = 1, 100, k^2)")
+LibPARI.PARI.nextprime(pari(1000))
+LibPARI.PARI.eulerphi(pari(100))
 ```
+
+Their names and calling conventions follow `pari.desc`, so they track PARI
+rather than Julia taste.
+
+**3. GP expressions.** [`gp_eval`](@ref) reaches anything the other two do
+not — in particular the functions taking a GP closure, which are not
+generated:
+
+```@repl tour
+gp_eval("sum(k = 1, 100, k^2)")
+```
+
+It is an escape hatch, not the recommended way to use LibPARI.
 
 ## Handling errors
 
@@ -89,9 +117,9 @@ own message and an error category:
 
 ```@repl tour
 try
-    LibPARI.gp_eval("1/0")
+    gp_eval("1/0")
 catch e
-    e isa LibPARI.PariError
+    e isa PariError
 end
 ```
 

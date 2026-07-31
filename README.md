@@ -28,16 +28,24 @@ is published at **<https://s-celles.github.io/LibPARI.jl>**.
 
 ## Features
 
-- **`Gen <: Number`** — PARI objects are first-class Julia numbers, with
-  `+`, `-`, `*`, `/`, `^`, and `==`, and mixed `Gen`/Julia arithmetic.
+- **`Gen <: LibPARI.PariObject`** — one wrapper for every PARI object, with
+  `+`, `-`, `*`, `/`, `^`, `\`, `==` and ordering as explicit methods,
+  including mixed `Gen`/Julia-number arithmetic in either operand order. A
+  `Gen` is deliberately **not** a Julia `Number`: the same type also wraps
+  matrices, strings and closures.
 - **Exact arbitrary-size arithmetic** — PARI bignum integers, rationals, and
   reals, with conversions back to `BigInt` and fixed-width integer types.
+- **`pari(x)`** — one entry point, converting Julia integers of any size,
+  rationals, floats (`BigFloat` exactly) and complex numbers.
+- **Precision in bits** — `setprecision(Gen, 256) do ... end`, a nesting
+  scope that reaches the generated bindings too.
 - **`gp_eval`** — evaluate any GP-language expression, the escape hatch to
   every PARI capability.
 - **A safe C boundary** — every PARI error becomes a catchable `PariError`;
   PARI's stack stays leak-free and each `Gen` frees its own storage.
-- **Thread-safe** — every `libpari` call is marshalled onto one dedicated
-  worker task, so LibPARI is correct under multi-threaded Julia.
+- **Parallel and thread-safe** — one PARI context per Julia OS thread, so
+  concurrent calls run on multiple cores, and a PARI error raised on any
+  thread is caught safely.
 - **Type-stable and precompiled** — built to SciML inference standards.
 
 ## Installation
@@ -57,16 +65,24 @@ LibPARI requires Julia 1.10 (the long-term-support release) or later.
 ## Quick example
 
 ```julia
-using LibPARI
+using LibPARI                     # exports exactly: pari, Gen, gp_eval, PariError
 
-a = LibPARI.Gen(42)
-a * a + LibPARI.Gen(1)                  # 1765
-LibPARI.Gen(2)^100                      # 1267650600228229401496703205376
-BigInt(LibPARI.Gen(2)^64)               # 18446744073709551616
+a = pari(42)
+a * a + 1                         # 1765
+pari(2)^100                       # 1267650600228229401496703205376
+BigInt(pari(2)^64)                # 18446744073709551616
+pari(3 // 4) + 1                  # 7/4
 
-LibPARI.PARI.nextprime(LibPARI.Gen(1000))   # 1009
-LibPARI.gp_eval("sum(k = 1, 100, k^2)")     # 338350
+gcd(pari(12), 18)                 # 6
+LibPARI.factors(60)               # [2 => 2, 3 => 1, 5 => 1]
+
+LibPARI.PARI.nextprime(pari(1000))    # 1009 — the generated binding layer
+gp_eval("sum(k = 1, 100, k^2)")       # 338350 — the GP escape hatch
 ```
+
+Three levels of access: a small idiomatic Julia surface (the one promised
+stable at 1.0), the ~1200 generated `LibPARI.PARI` bindings, and `gp_eval`
+for everything else.
 
 See the
 [getting-started guide](https://s-celles.github.io/LibPARI.jl/getting-started/)

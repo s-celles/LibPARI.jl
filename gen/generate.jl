@@ -16,10 +16,23 @@ using JuliaFormatter
 const REPO = dirname(@__DIR__)
 const OUTFILE = joinpath(REPO, "src", "bindings.jl")
 
-# Default precision values used when a binding auto-supplies precision.
-const DEFAULT_PREC = 4        # word precision (prototype code `p`)
-const DEFAULT_BITPREC = 128   # bit precision  (prototype code `b`)
-const DEFAULT_SERIESPREC = 16 # series precision (prototype code `P`)
+# Defaults a binding supplies when the caller gives no precision.
+#
+# UNITS (verified against PARI 2.17's headers): prototype codes `p` and `b`
+# are BIT counts — `pariinl.h` defines `prec2nbits(long x) { return x; }` —
+# and PARI rounds a `p` request up to a whole number of machine words. The
+# previous `DEFAULT_PREC = 4`, commented "word precision", therefore asked
+# for 4 bits and got PARI's 64-bit minimum; it was not a deliberate choice.
+#
+# Both now read LibPARI's working precision, in bits, at the CALL SITE: a
+# keyword default is evaluated in the caller's frame, which is what carries a
+# `setprecision(Gen, bits)` scope across the hop onto the PARI worker task
+# (REQ-PREC-04, REQ-PREC-06).
+const DEFAULT_PREC = "LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen))"
+const DEFAULT_BITPREC = "LibPARI.precision(LibPARI.Gen)"
+# A series precision is a NUMBER OF TERMS, not bits, so it has its own
+# default and is deliberately left out of the precision scope.
+const DEFAULT_SERIESPREC = 16
 
 # Julia reserved words a C-Name must not collide with.
 const RESERVED = Set([

@@ -10,7 +10,7 @@ Section [Traceability](#traceability) maps each requirement ID to the
 milestone that delivers it.
 
 The roadmap is in two parts. **Part I (M0–M10)** built the wrapper and is
-delivered. **Part II (M11–M19)** redesigns the public API for 1.0 — it is
+delivered. **Part II (M11–M21)** redesigns the public API for 1.0 — it is
 not derived from `spec-ears.md` but introduces its own requirement families.
 
 ## How to read this roadmap
@@ -23,18 +23,23 @@ not derived from `spec-ears.md` but introduces its own requirement families.
   *every* milestone rather than waiting for a dedicated phase.
 - Status legend: `[ ]` not started · `[~]` in progress · `[x]` done.
 
-## Current status (2026-07-30, package version 0.15.1)
+## Current status (2026-07-31, package version 0.15.1)
 
 **Part I (M0–M10) is complete.** Every deliverable shipped, in milestone
 order, in releases `0.1.0` … `0.11.0`; the work that followed
 (`0.12.0` … `0.15.1`) is listed under
 [Delivered beyond Part I](#delivered-beyond-part-i-0120--0151).
 
-**Part II (M11–M19) is not started.** It is the API redesign that must land
+**Part II (M11–M21) is in progress.** M11, M12 and most of M13 have
+landed on the development branch, unreleased, targeted at `0.16.0`,
+`0.17.0` and `0.18.0`, and most of M14 with them; M15–M21 are not
+started. M13 keeps one deliverable
+open — REQ-PREC-13, which collides with NFR-01; see the milestone. It is the
+API redesign that must land
 before 1.0: an honest type contract for `Gen`, precise conversion and
 promotion rules, precision-safe reals, `pari(x)`, ergonomic generated
-bindings, explicit GP state, and idiomatic access to structured PARI
-objects.
+bindings, explicit GP state, idiomatic access to structured PARI objects,
+and — as optional extensions — the Symbolics.jl and Giac.jl bridges.
 
 One deviation from the exit criteria, recorded here rather than silently
 ticked: the per-milestone tags `v0.1.0` … `v0.11.0` were **never created**.
@@ -470,7 +475,8 @@ M10 (0.11.0, done)
         M11 ─────────────> M16 GP sessions
         M11 ─────────────> M17 structured objects
         M11 ─────────────> M18 display contract
-  all ───────────────────> M19 documentation, migration, 1.0.0
+  M11+M13+M14+M17 ──────> M19 Symbolics bridge ─> M20 Giac bridge
+  all ───────────────────> M21 documentation, migration, 1.0.0
 ```
 
 `M13` and `M15` both regenerate `src/bindings.jl`; they must not be in
@@ -481,15 +487,17 @@ other and of `M12`–`M15`, and may be reordered freely after `M11`.
 
 | ID  | Milestone                                  | Target version | Status |
 |-----|--------------------------------------------|----------------|--------|
-| M11 | Honest type contract for `Gen`             | 0.16.0         | not started |
-| M12 | Conversion & promotion contracts           | 0.17.0         | not started |
-| M13 | Precision-safe reals & a bit-based precision API | 0.18.0    | not started |
-| M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | not started |
+| M11 | Honest type contract for `Gen`             | 0.16.0         | **done** (unreleased) |
+| M12 | Conversion & promotion contracts           | 0.17.0         | **done** (unreleased) |
+| M13 | Precision-safe reals & a bit-based precision API | 0.18.0    | **mostly done** (unreleased) |
+| M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | **mostly done** (unreleased) |
 | M15 | Generated-binding argument ergonomics      | 0.20.0         | not started |
 | M16 | Explicit GP evaluation sessions            | 0.21.0         | not started |
 | M17 | Structured PARI objects                    | 0.22.0         | not started |
 | M18 | Display contract                           | 0.23.0         | not started |
-| M19 | Documentation, migration & the 1.0.0 release | 1.0.0        | not started |
+| M19 | Symbolics.jl bridge (optional extension)   | 0.24.0         | not started |
+| M20 | Giac.jl bridge (optional extension)        | 0.25.0         | not started |
+| M21 | Documentation, migration & the 1.0.0 release | 1.0.0        | not started |
 
 ---
 
@@ -506,47 +514,47 @@ operation that Base's `Number` fallbacks silently provide today.
 
 **Deliverables**
 
-- [ ] `abstract type PariObject end`; `mutable struct Gen <: Number`
-      (`src/gen.jl:46`) becomes `Gen <: PariObject`. `Gen` stays concrete,
+- [x] `abstract type PariObject end`; `mutable struct Gen <: Number`
+      (was `src/gen.jl:46`) becomes `Gen <: PariObject`. `Gen` stays concrete,
       mutable, single-field, unparameterised (REQ-MEM-02). (REQ-TYPE-01)
       - No `Gen{T}` per PARI tag: the tag is a runtime word read from the
         GEN (`src/gen.jl:167-170`), so a parametric `Gen` would make every
         generated binding's return type uninferable and break REQ-PERF-01.
-- [ ] Explicit `+ - * / ^ \` methods on `(Gen, Number)` and `(Number, Gen)`,
+- [x] Explicit `+ - * / ^ \` methods on `(Gen, Number)` and `(Number, Gen)`,
       generated from one operator table, each building a `Gen` operand and
       calling the existing `Gen`/`Gen` operator. (REQ-TYPE-02)
       - Base's `op(::Number, ::Number)` promotion (`src/numeric.jl:140-145`)
         is the *only* reason `Gen(6) + 1` works today; it disappears with
         the supertype and cannot be recovered short of re-subtyping.
-- [ ] Explicit `==(::Gen, ::Number)` / `==(::Number, ::Gen)` over `gequal`.
+- [x] Explicit `==(::Gen, ::Number)` / `==(::Number, ::Gen)` over `gequal`.
       Without them Base's `==(x, y) = x === y` fallback returns `false`
       silently — a wrong answer, not an error. (REQ-TYPE-03)
-- [ ] `isless(::Gen, ::Number)` and `isless(::Number, ::Gen)`; keep the
+- [x] `isless(::Gen, ::Number)` and `isless(::Number, ::Gen)`; keep the
       mixed `<` / `<=` methods (`src/numeric.jl:199-202`). (REQ-TYPE-04)
       - *Observed:* only `isless(::Gen, ::Gen)` exists today, so
         `sort(Any[Gen(2), 1])` already raises a `MethodError` — the 0.14.0
         ordering claim is already overstated.
-- [ ] `Base.broadcastable(g::Gen) = Ref(g)`. A `Gen` broadcasts as a scalar
+- [x] `Base.broadcastable(g::Gen) = Ref(g)`. A `Gen` broadcasts as a scalar
       today only because `Number` is on Base's whitelist; the generic
       fallback is `collect(x)`, which a non-iterable `Gen` cannot satisfy.
       (REQ-TYPE-05)
-- [ ] Re-implement directly on `Gen` the Base-`Number` conveniences that
+- [x] Re-implement directly on `Gen` the Base-`Number` conveniences that
       would otherwise be lost — unary `+`, `\`, `float`, `abs2`,
       `adjoint`/`transpose` — and document every one deliberately *not*
       re-implemented. (REQ-TYPE-06)
-- [ ] Break the `convert(::Type{Gen}, x::Number) = Gen(x)` cycle
+- [x] Break the `convert(::Type{Gen}, x::Number) = Gen(x)` cycle
       (`src/numeric.jl:145`): an operand with no `Gen` constructor must
       raise a catchable exception. (REQ-TYPE-07)
       - *Observed:* `Gen(1) + π` raises `StackOverflowError` today.
-- [ ] Convert a `t_REAL` through PARI instead of `parse(_genrepr(g))`
+- [x] Convert a `t_REAL` through PARI instead of `parse(_genrepr(g))`
       (`src/conversions.jl:213,235`). (REQ-TYPE-08)
       - *Observed:* `Float64(gp_eval("1.0*10^400"))` raises
         `ArgumentError: cannot parse "1.0000…0 E400"` — PARI prints a space
         before the exponent. This is a REQ-CONV-04 violation.
-- [ ] Make `hash` total over every PARI type; it routes `T_REAL` through
+- [x] Make `hash` total over every PARI type; it routes `T_REAL` through
       `Float64` (`src/numeric.jl:216`) and therefore throws on a large real.
       Property-test `a == b ⟹ hash(a) == hash(b)`. (REQ-TYPE-09)
-- [ ] **Replace** the tests encoding the old contract —
+- [x] **Replace** the tests encoding the old contract —
       `test/numeric_tests.jl:4-8,77-84` and all of
       `test/number_interface_tests.jl` — with assertions that
       `Gen <: PariObject`, `!(Gen <: Number)`, `isconcretetype(Gen)`, and
@@ -555,11 +563,11 @@ operation that Base's `Number` fallbacks silently provide today.
       - *Observed:* `gp_eval("[1,2;3,4]") isa Number` and
         `gp_eval("\"abc\"") isa Number` are both `true` today — the concrete
         dishonesty this milestone removes.
-- [ ] A method-matrix test: {`+`,`-`,`*`,`/`,`^`,`==`,`<`,`<=`,`isless`} ×
+- [x] A method-matrix test: {`+`,`-`,`*`,`/`,`^`,`==`,`<`,`<=`,`isless`} ×
       {`Int`, `BigInt`, `Float64`, `BigFloat`, `Rational`, `Complex`} ×
       both operand orders, asserting *computed values*, not merely
       `isa Gen`. (REQ-TYPE-11)
-- [ ] Correct the "complete Julia `Number`" claim in `docs/src/api.md:89-96`,
+- [x] Correct the "complete Julia `Number`" claim in `docs/src/api.md:89-96`,
       `docs/src/index.md:23`, `docs/src/getting-started.md:47` and
       `README.md:31`; the 0.14.0 CHANGELOG entry stays as written and the
       0.16.0 entry records its supersession. (REQ-TYPE-12)
@@ -567,6 +575,13 @@ operation that Base's `Number` fallbacks silently provide today.
       (`test/package/aqua_tests.jl`, deferred pending M9 — shipped in
       0.10.0/0.13.0) and extend `test/inference_tests.jl` with `@inferred`
       over every new method. (REQ-TYPE-13)
+      - **Partly done, deliberately left open.** The `@inferred` extension
+        shipped; the Aqua check is still disabled. Evidence for whoever
+        flips it: with M11 in place both `Aqua.test_ambiguities(LibPARI)`
+        and `Test.detect_ambiguities(LibPARI; recursive = true)` are clean
+        locally. It is left off because the check spawns a subprocess that
+        loads PARI, which is an untested risk on the macOS and Windows
+        runners — flip it in its own change, not inside M11.
 
 **Breaking changes**
 
@@ -625,12 +640,12 @@ boundary with one named error.
 
 **Deliverables**
 
-- [ ] One canonical accepted-input set: a documented union alias
+- [x] One canonical accepted-input set: a documented union alias
       `LibPARI.PariConvertible`, plus a single conversion entry point
       `LibPARI.gen_convert(x)::Gen`. `Gen(x)`, `convert(Gen, x)` and every
       mixed operator call it; no second conversion path exists.
       (REQ-PROM-01)
-- [ ] Coverage-matrix `@testitem`: `Bool`, `Int8`…`Int128`,
+- [x] Coverage-matrix `@testitem`: `Bool`, `Int8`…`Int128`,
       `UInt8`…`UInt128`, `BigInt`, `Rational{<:Integer}` (including
       `Rational{Int8}`), `Float16`, `Float32`, `Float64`, `BigFloat`, and
       `Complex{T}` for every supported `T` — each asserting the resulting
@@ -638,18 +653,18 @@ boundary with one named error.
       - `Bool` maps to `t_INT` 0/1 (`Bool <: Integer`, and PARI has no
         boolean type); the test pins the decision rather than leaving it
         accidental.
-- [ ] One `LibPARI.ConversionError` raised at the boundary for every input
+- [x] One `LibPARI.ConversionError` raised at the boundary for every input
       outside the set — foreign `AbstractFloat`, `Irrational`, `Missing`,
       foreign `Number` — naming the offending type and the `gen_convert`
       hook. (REQ-PROM-03)
       - *Observed:* a foreign `AbstractFloat` fails today as
         `MethodError: no method matching Float64(::MyFloat)` raised *inside*
         `Gen`; `promote_type(Gen, typeof(π))` raises `StackOverflowError`.
-- [ ] Delete the catch-alls `promote_rule(::Type{Gen}, ::Type{<:Number})`
+- [x] Delete the catch-alls `promote_rule(::Type{Gen}, ::Type{<:Number})`
       and `convert(::Type{Gen}, x::Number)` (`src/numeric.jl:143,145`);
       `convert(::Type{Gen}, ::Integer)` (`src/conversions.jl:120`) is
       subsumed by the `PariConvertible` method. (REQ-PROM-04)
-- [ ] Mixed arithmetic no longer relies on promotion: emit explicit
+- [x] Mixed arithmetic no longer relies on promotion: emit explicit
       `op(::Gen, ::PariConvertible)` and `op(::PariConvertible, ::Gen)`
       methods for `+ - * / ^ == < <=` from one operator list, each calling
       `gen_convert` exactly once. (REQ-PROM-05)
@@ -657,34 +672,36 @@ boundary with one named error.
         `promote_rule` then plays no role at all, so it is *removed* rather
         than narrowed. If M11 slips, ship this anyway — explicit methods are
         strictly more specific than promotion and take precedence.
-- [ ] Neutralise the constructors `Gen` inherits from `Number`: `Gen('a')`,
+- [x] Neutralise the constructors `Gen` inherits from `Number`: `Gen('a')`,
       `convert(Gen, 'a')`, `convert(Gen, CartesianIndex(3))` and
       `Gen(::Base.TwicePrecision)` must raise `ConversionError`; a test
       asserts each. (REQ-PROM-06)
       - *Observed:* all four resolve today through Base methods that apply
         only because `Gen <: Number`; two of them are lossy.
-- [ ] `Float64(::Gen)` / `BigFloat(::Gen)` stop parsing PARI's decimal text
+- [x] `Float64(::Gen)` / `BigFloat(::Gen)` stop parsing PARI's decimal text
       and read the `t_REAL` numerically; regression test over magnitudes
       `1e-500` … `1e434`. (REQ-PROM-07)
+      - Delivered early, in M11 as REQ-TYPE-08: the same defect blocked
+        `hash`, so it could not wait for this milestone.
       - *Observed:* `Float64(Gen(1e-10))` raises `ArgumentError: cannot
         parse "1.0000000000000000364 E-10"`. Any magnitude outside roughly
         `[1e-5, 1e19)` is affected. Shares its fix with REQ-TYPE-08.
-- [ ] Add the missing typed outward conversions `Float16`, `Float32`,
+- [x] Add the missing typed outward conversions `Float16`, `Float32`,
       `Rational{T}`, `Complex{T}`, each raising `InexactError` outside `T`;
       `Rational(g)::Rational{BigInt}` and `Complex(g)::ComplexF64` keep
       their current return types. (REQ-PROM-08)
       - *Observed:* `Float32(Gen(1))`, `Float16(Gen(1))`,
         `Rational{Int}(Gen(1)/Gen(2))` and `Complex{BigFloat}(Gen(1))` are
         all `MethodError`s today.
-- [ ] Narrow `(::Type{T})(g::Gen) where {T<:Integer}`
+- [x] Narrow `(::Type{T})(g::Gen) where {T<:Integer}`
       (`src/conversions.jl:181`) to `Base.BitInteger`, `BigInt` and `Bool`,
       keeping `Integer(g)::BigInt` explicit. (REQ-PROM-09)
       - Cheap unambiguous shim **accepted** here: route an unknown
         `T<:Integer` through `T(BigInt(g))` behind a deprecation warning —
         the semantics are unchanged for well-behaved `T`.
-- [ ] Pin the `Inf`/`NaN` policy, replacing today's
+- [x] Pin the `Inf`/`NaN` policy, replacing today's
       `PariError(e_OVERFLOW)` from `dbltor`. (REQ-PROM-10)
-- [ ] `docs/src/api.md` gains a conversion-contract table (accepted inward
+- [x] `docs/src/api.md` gains a conversion-contract table (accepted inward
       type → PARI tag; `Gen` → Julia type and its failure mode), with
       jldoctests. (REQ-PROM-11)
 
@@ -750,7 +767,7 @@ PARI worker.
 
 **Deliverables**
 
-- [ ] `docs/src/precision.md` fixing the units, with a requested→allocated
+- [x] `docs/src/precision.md` fixing the units, with a requested→allocated
       bits table. (REQ-PREC-01)
       - *Observed:* in PARI ≥ 2.15 the prototype codes `p` and `b` are
         **bit** counts (`p` rounded up to a multiple of 64), and
@@ -758,24 +775,24 @@ PARI worker.
         "word precision (prototype code `p`)" (`gen/generate.jl:20`) is
         wrong. Verify against the shipped `pariinl.h` before writing the
         page.
-- [ ] `Base.precision(g::Gen)::Int` in bits, plus `LibPARI.isexact(g)`. No
+- [x] `Base.precision(g::Gen)::Int` in bits, plus `LibPARI.isexact(g)`. No
       new type parameter — precision is a runtime property of the GEN
       header. (REQ-PREC-02)
-- [ ] Delete `_DEFAULT_PREC = Int(4)` (`src/numeric.jl:8`); add
+- [x] Delete `_DEFAULT_PREC = Int(4)` (`src/numeric.jl:8`); add
       `LibPARI.default_precision()::Int` **in bits** with documented
       provenance; `Gen^Gen` (`src/numeric.jl:80`) reads it. (REQ-PREC-03)
-- [ ] Generator: replace `DEFAULT_PREC`/`DEFAULT_BITPREC` with one
+- [x] Generator: replace `DEFAULT_PREC`/`DEFAULT_BITPREC` with one
       documented bit constant emitting `LibPARI.default_precision()` at
       every `p` and `b` site; keep `seriesprec` separate — it is a term
       count, not bits. (REQ-PREC-04)
-- [ ] `setprecision(f, Gen, bits)` / `setprecision(Gen, bits)` and a
+- [x] `setprecision(f, Gen, bits)` / `setprecision(Gen, bits)` and a
       `precision(Gen)` getter, backed by task-local storage with
       `try`/`finally` restore so scopes nest. It must never write PARI's
       `precreal`. (REQ-PREC-05)
       - `setprecision(f, ::Module, n)` is **rejected**: every argument type
         would be owned by Base, so Aqua's piracy check would flag it.
         `Gen` is ours.
-- [ ] Document and test the worker-boundary rule: precision is read in the
+- [x] Document and test the worker-boundary rule: precision is read in the
       **caller** task and captured into the closure `_run_on_pari`
       marshals. One positive test from a non-primary thread, one negative
       test proving task-local state in the worker is *not* consulted.
@@ -783,39 +800,73 @@ PARI worker.
       - Keyword defaults in generated bindings are evaluated in the caller
         frame, so `prec = LibPARI.default_precision()` crosses correctly
         with no extra plumbing.
-- [ ] Rewrite `BigFloat(::Gen)` (`src/conversions.jl:228`) on the exact
+- [x] Rewrite `BigFloat(::Gen)` (`src/conversions.jl:228`) on the exact
       mantissa/exponent — `m / 2^e`, rounded once — with signature
       `BigFloat(g; precision = precision(BigFloat))`. Delete the
       `parse(BigFloat, _genrepr(g))` branch. (REQ-PREC-07)
-- [ ] Rewrite `Gen(::AbstractFloat)` (`src/numeric.jl:111`): `IEEEFloat`
+- [x] Rewrite `Gen(::AbstractFloat)` (`src/numeric.jl:111`): `IEEEFloat`
       keeps `dbltor` (exact); `BigFloat` builds its exact integer mantissa
       then scales; any other `AbstractFloat` goes via `BigFloat(x;
       precision = precision(x))`. (REQ-PREC-08)
       - `Cdouble(x)` must not appear on any path reachable from a
         `BigFloat`; enforce with a source-grep test.
-- [ ] Convert the `T_REAL` branch of `Float64(::Gen)` to `rtodbl`/
+- [x] Convert the `T_REAL` branch of `Float64(::Gen)` to `rtodbl`/
       `gtodouble`: one rounding, independent of PARI's global output
       precision. (REQ-PREC-09)
-- [ ] `@testitem` round-tripping `BigFloat`↔`Gen` at 64, 113, 256, 512,
+- [x] `@testitem` round-tripping `BigFloat`↔`Gen` at 64, 113, 256, 512,
       1024 and 4096 bits, asserting bit-exact equality **both ways** and
       `precision(Gen(x)) >= precision(x)`. (REQ-PREC-10)
-- [ ] `@testitem` sweeping `setprecision(Gen, b)` for b ∈ {64, 128, 256,
+- [x] `@testitem` sweeping `setprecision(Gen, b)` for b ∈ {64, 128, 256,
       1024} over `PARI.mppi()`, `Gen(2)^Gen(1//2)` and `PARI.gexp`, against
       a BigFloat reference, to a **measured** guard margin; nested scopes
       restore. (REQ-PREC-11)
       - *Observed:* `mppi(prec=64)` is correct to only ~44 bits, so the
         margin must be measured and written down, not assumed to be zero.
-- [ ] Document that `gp_eval` and `show(::Gen)` follow PARI's process-global
+- [x] Document that `gp_eval` and `show(::Gen)` follow PARI's process-global
       `precreal`, **not** the scope; add `LibPARI.set_global_precision!`
       labelled global and thread-visible; test that a scope leaves
       `gp_eval("Pi")` unchanged. (REQ-PREC-12)
-- [ ] Generator: stop emitting the `Class: default` records whose empty
+- [ ] **BLOCKED on a decision — see below.** Generator: stop emitting the
+      `Class: default` records whose empty
       `Prototype:` produces 0-argument bindings for C functions declared
       `(const char *, long)`; replace with throwing stubs. (REQ-PREC-13)
       - *Observed:* calling `LibPARI.PARI.sd_realprecision()` today is
         undefined behaviour — the C function reads two argument registers
         the binding never sets. **Confirm this reading of `pari.desc`
         before acting**; it is the single most dangerous claim in Part II.
+
+### REQ-PREC-13 — verified, and blocked on one decision
+
+The defect is **confirmed** against the shipped headers, not merely
+suspected:
+
+- `pari.desc` holds **47** `Class: default` records (`_def_realprecision`,
+  `_def_seriesprecision`, …), each with an empty `Prototype:` and a
+  `C-Name:` of the form `sd_*`.
+- The generator therefore emits 47 **zero-argument** bindings, while
+  `paridecl.h:3150` declares `GEN sd_realprecision(const char *v, long
+  flag)`. Calling `LibPARI.PARI.sd_realprecision()` makes the C function
+  read two argument registers the caller never set — undefined behaviour,
+  not a catchable error.
+- They are not computational functions. They are GP's `default()` setters,
+  reachable properly through `gp_eval("default(realprecision, 100)")`.
+
+**The collision:** removing them takes the binding count from 1241 to
+**1194**, below NFR-01's `≥ 1200`. Three ways out, and lowering an accepted
+non-functional threshold silently is not one of them:
+
+1. **Remove them and restate NFR-01.** The requirement says "≥ 1200
+   *GP-accessible functions*"; these 47 are not that, so the old count
+   over-counted. Recommended — it is the honest reading, and it deletes
+   undefined behaviour from the public surface.
+2. **Emit them with the real `(const char *, long)` signature.** 45 of the
+   50 `sd_*` declarations have exactly that shape, but 5 diverge
+   (`sd_sopath` is `(char *, int)`), and the generator does not read C
+   headers — this would hard-code a family rule that cannot be verified
+   for all 47 from `pari.desc` alone.
+3. **Emit throwing stubs.** The count survives and the undefined behaviour
+   goes, but 47 entries of that count become deliberately unusable — a
+   number that no longer means what it says.
 
 **Breaking changes**
 
@@ -877,64 +928,68 @@ semantics match exactly.
 
 **Deliverables**
 
-- [ ] `pari(x)` as a facade over the `Gen` constructors, covering `Integer`,
+- [x] `pari(x)` as a facade over the `Gen` constructors, covering `Integer`,
       `Rational`, `AbstractFloat`, `Complex`; `@inferred pari(x)::Gen` for
       every documented input. (REQ-PUB-01)
-- [ ] `pari(g::Gen) = g` — return the argument, never re-clone; test
+- [x] `pari(g::Gen) = g` — return the argument, never re-clone; test
       `pari(g) === g`, and document why aliasing is safe. (REQ-PUB-02)
       - Safe because `ptr` is written only by the idempotent `_finalize!`
         (`src/gen.jl:68-79`), there is no mutation API on `Gen`, and one
         object means one finalizer, hence one `gunclone`. It matches
         `convert(Gen, g) === g`, which already holds.
-- [ ] Construct complex `Gen`s with a direct PARI call instead of
+- [x] Construct complex `Gen`s with a direct PARI call instead of
       `Gen(imag(z)) * gp_eval("I")` (`src/numeric.jl:179`). Assert
       `gentype(pari(3+4im)) === PariType.T_COMPLEX` and that the path calls
       no `gp_eval`. (REQ-PUB-03)
       - The current route is *correct* (GP refuses `I = 5`, so `I` cannot be
         shadowed) but runs the GP parser on every complex construction and
         ties a core constructor to the evaluator.
-- [ ] `export Gen, pari, gp_eval, PariError` — nothing else. A lock test in
+- [x] `export Gen, pari, gp_eval, PariError` — nothing else. A lock test in
       `test/package/` asserts `names(LibPARI)` equals exactly that set, so
       any new export fails CI. (REQ-PUB-04)
-- [ ] Mark the supported-but-unexported names public — `PARI`, `PariType`,
+- [x] Mark the supported-but-unexported names public — `PARI`, `PariType`,
       `PariErr`, `gentype`, `is_initialized`, `library_state`,
       `stack_size`, `serve_mcp` — behind a `VERSION >= v"1.11"` guard, since
       `public` does not parse on the 1.10 LTS floor. (REQ-PUB-05)
-- [ ] Extend Base only where semantics match exactly: `gcd`, `gcdx`,
+- [x] Extend Base only where semantics match exactly: `gcd`, `gcdx`,
       `numerator`, `denominator`, `factorial` on `Gen`, with explicit
       mixed-argument methods rather than promotion. (REQ-PUB-06)
       - `Base.factorial(::Integer)::Gen` is **rejected** as piracy that
         would change Base's return type.
-- [ ] Pin the exact semantics: `gcdx` returns Julia's `(d, u, v)` from
+- [x] Pin the exact semantics: `gcdx` returns Julia's `(d, u, v)` from
       PARI's `[u, v, d]`; `numerator`/`denominator` accept only
       `T_INT`/`T_FRAC`; `factorial` validates a non-negative integer `Gen`
       first. (REQ-PUB-07)
       - *Observed:* PARI 2.17 answers `denominator(x/2 + 1/3) == 1`, so the
         polynomial domain has no Base meaning and must be refused.
-- [ ] Unexported number-theory facade: `isprime(::Gen)::Bool`, `nextprime`,
+- [~] Unexported number-theory facade: `isprime(::Gen)::Bool`, `nextprime`,
       `prevprime`, `factor(::Gen)::Gen` and
       `factors(::Gen)::Vector{Pair{Gen,Gen}}`. (REQ-PUB-08)
+      - The five functions shipped. The optional `LibPARIPrimesExt` weakdep
+        extension supplying `Primes.isprime(::Gen)`, and its CI job, did
+        **not** — it is a separate package-extension change, not a facade
+        one. Reach them as `LibPARI.isprime` meanwhile.
       - Not exported: `isprime`/`factor` are Primes.jl's names. A hard
         dependency on Primes.jl is **rejected**; ship an optional
         `LibPARIPrimesExt` weakdep extension instead, with a CI job that
         loads Primes.
-- [ ] Modular arithmetic: `Mod(a, n)` and `lift`, `Base.powermod`,
+- [ ] **Not started.** Modular arithmetic: `Mod(a, n)` and `lift`, `Base.powermod`,
       `Base.invmod`; `Base.mod(::Gen, ::Gen)` restricted to integer-valued
       `Gen`s and corrected to Julia's sign convention. (REQ-PUB-09)
       - *Observed:* PARI's `%` is not Julia's `mod` — `(-7)%3 == 2`,
         `7%(-3) == 1`, `(1/2)%3 == 2`. Wrapping `gmod` verbatim as
         `Base.mod` would be wrong; PARI's operator stays reachable as
         `PARI.gmod`.
-- [ ] Selected polynomial facade, unexported: `degree(::Gen)::Int`,
+- [ ] **Not started.** Selected polynomial facade, unexported: `degree(::Gen)::Int`,
       `coeff`, `subst`, `polroots(::Gen; prec)`. `degree` throws
       `DomainError` on the zero polynomial, where PARI returns `-oo`.
       (REQ-PUB-10)
       - These exist because they add semantics (a Julia `Int` return,
         domain checks), **not** to rename `gppoldegree`.
-- [ ] Every facade docstring states accepted Julia *and* PARI inputs, the
+- [x] Every facade docstring states accepted Julia *and* PARI inputs, the
       exact return type, the error behaviour and the precision behaviour.
       (REQ-PUB-11)
-- [ ] `docs/src/api.md` gains an exported / public / internal surface table;
+- [x] `docs/src/api.md` gains an exported / public / internal surface table;
       README and getting-started switch to `pari(x)`. (REQ-PUB-12)
 - [ ] Re-check Aqua's `ambiguities` and `undocumented_names` for every newly
       exported or public name — adding ~15 Base methods on `Gen` is exactly
@@ -1295,11 +1350,221 @@ PARI-notation REPL rendering, and keep display cheap.
 
 ---
 
-## M19 — Documentation, migration & the 1.0.0 release
+## Interoperability bridges — M19 and M20
+
+Two conversion bridges to other Julia computer-algebra ecosystems, **in
+scope for 1.0**. Each depends on contracts M11-M18 freeze, so they are
+sequenced last before the release milestone.
+
+Both ship as **package extensions** (`[weakdeps]` + `[extensions]`), the
+pattern already used for the MCP connector (`ext/LibPARIMCPExt.jl`,
+0.12.0): installing LibPARI must not install Symbolics or Giac, and a
+process that does not load them must pay nothing — no dependency, no code,
+no precompilation. That is what makes them affordable before 1.0: they add
+surface to the *extensions*, not to the core the release freezes.
+
+**Depends on:** M11 (a `Gen` that does not lie about being a `Number`),
+M13 (a documented precision policy for `t_REAL`), M14 (`pari(x)` as the
+single inward entry point), M17 (indexing, needed for `t_VEC`/`t_MAT`).
+
+The two are **not** symmetric in where they live: M19 must be hosted here,
+M20 probably should not. See *Which package owns which bridge* under M20.
+
+---
+
+## M19 — Symbolics.jl bridge
+
+**Goal:** convert between PARI objects and Symbolics.jl expressions over a
+documented, tested subset — `to_symbolics(g)` outward, `pari(x)` inward —
+without a hard dependency and without pretending to a fidelity the two
+representations do not share.
+
+**Depends on:** M11, M13, M14, M17 (all of Part II in practice).
+
+**Scope:** REQ-SYM-01 … REQ-SYM-10.
+
+**Deliverables**
+
+- [ ] **Investigate and write down the mapping table first**, before any
+      code: which PARI type tag maps to which Symbolics/SymbolicUtils node,
+      and — the hard direction — which Symbolics expressions have **no**
+      PARI counterpart. Publish it as a table in the docs; it is the
+      contract. (REQ-SYM-01)
+- [ ] `ext/LibPARISymbolicsExt.jl` as a weakdep extension; `Project.toml`
+      gains `Symbolics` under `[weakdeps]`/`[extensions]` only. A test
+      asserts that loading LibPARI alone pulls in neither the package nor
+      its load time. (REQ-SYM-02)
+- [ ] Inward conversion: extend M14's `pari(x)` with methods for
+      `Num`/`BasicSymbolic`, so there is **one** inward entry point for
+      every foreign type. (REQ-SYM-03)
+      - See the open question on `to_pari`: a separate inward name is
+        proposed by the request, but a second entry point that does the
+        same job as `pari(x)` is a contract to maintain twice.
+- [ ] Outward conversion `to_symbolics(g::Gen)`, defined as a LibPARI
+      generic with its methods supplied by the extension. (REQ-SYM-04)
+- [ ] **Variable identity** — the central difficulty, and the deliverable
+      most likely to reshape this milestone: a PARI `t_POL` carries a
+      variable *number* with a priority ordering, while a Symbolics variable
+      is a named symbol. Define and test the name↔number mapping,
+      round-trip preservation of names, and what happens on a collision or
+      on PARI's variable-priority reordering. (REQ-SYM-05)
+- [ ] Documented supported subset — at minimum `t_INT`, `t_FRAC`, `t_REAL`,
+      `t_COMPLEX`, `t_POL`, `t_RFRAC`, and (via M17) `t_VEC`/`t_COL`/
+      `t_MAT`. Everything outside it raises a clear error naming the PARI
+      type; `t_SER`, `t_PADIC`, `t_INTMOD`, `t_FFELT` and `t_CLOSURE` are
+      explicitly out unless a deliverable adds them. (REQ-SYM-06)
+- [ ] Exactness and precision policy: what a `t_REAL` becomes on the
+      Symbolics side, and what a Julia `Float64`/`BigFloat` literal becomes
+      as a `Gen`, consistent with M13. Any unavoidable rounding is
+      documented. (REQ-SYM-07)
+- [ ] Round-trip tests in **both** directions over a fixed corpus, plus a
+      property test on randomly generated polynomials asserting
+      `pari(to_symbolics(g))` equals `g` on the supported subset — and an
+      explicit list of the cases where it deliberately does not.
+      (REQ-SYM-08)
+- [ ] No type piracy: every method has a LibPARI type in its signature, or
+      is a method on a Symbolics function that LibPARI's extension legally
+      owns. Aqua stays green. (REQ-SYM-09)
+- [ ] A CI job loading Symbolics, kept separate from the main matrix
+      because of its compile cost, plus a docs page with runnable examples.
+      (REQ-SYM-10)
+
+**Exit criteria**
+
+- The mapping table is published, and every row is exercised by a test.
+- `Pkg.add("LibPARI")` installs neither Symbolics nor its dependency tree;
+  a session that never loads Symbolics shows no extension code loaded.
+- Round-trip holds over the corpus and the property test; every documented
+  exception is itself tested.
+- Variable names survive a `Gen → Symbolics → Gen` round trip, or the
+  documented loss is asserted by a test.
+- Aqua reports no piracy and no ambiguity.
+
+**Open questions**
+
+- `to_pari` vs `pari(x)`: the request names `to_pari`/`to_symbolics` as a
+  symmetric pair. But M14 makes `pari(x)` **the** inward entry point, and
+  two names for one job is two contracts to keep. Recommendation: extend
+  `pari(x)` inward, keep `to_symbolics` outward, and — if symmetry is
+  wanted — ship `to_pari` as a documented one-line alias rather than a
+  second implementation. Decide before REQ-SYM-03.
+- Does the bridge convert **structurally** (walking the `GEN`) or through a
+  **string** round trip? Structural is the only honest answer for anything
+  that must preserve exactness and variable identity; a string path is
+  simpler but goes through two parsers and quietly loses precision and
+  variable priority. Structural is the working assumption.
+- What is the natural Symbolics counterpart of a `t_FRAC` — a `Rational`
+  literal, or a division node? They differ under simplification.
+- Should `t_INTMOD`/`t_FFELT` map onto anything at all, or stay refused?
+
+---
+
+## M20 — Giac.jl bridge
+
+**Goal:** the same bridge against Giac, over whatever exchange the Julia
+Giac interface actually offers.
+
+**Depends on:** M19 (which establishes the bridge pattern, the mapping-table
+discipline and the extension layout).
+
+**Scope:** REQ-GIAC-01 … REQ-GIAC-08.
+
+> **Authoring note.** This milestone's design is **not yet decidable**. It
+> depends entirely on what the Julia Giac package exposes — a native value
+> type, or a string-level interface to the CAS. REQ-GIAC-01 exists to settle
+> that before anything else is written.
+
+**Deliverables**
+
+- [ ] **Establish the target first:** which Julia Giac package (name,
+      registry status, maintenance, value type, API surface), and whether it
+      exposes a structured value or only strings. The answer decides the
+      whole milestone; record it in the roadmap before proceeding.
+      (REQ-GIAC-01)
+- [ ] **Decide which side hosts the bridge** — see *Which package owns
+      which bridge* below — and record the decision with its reason before
+      writing the extension. Either way it is a weakdep extension with no
+      hard dependency and no cost when unloaded: `ext/LibPARIGiacExt.jl`
+      here, or `ext/GiacLibPARIExt.jl` in Giac.jl. (REQ-GIAC-02)
+- [ ] Inward conversion through `pari(x)` and outward `to_giac(g::Gen)`,
+      mirroring M19's naming decision exactly — the two bridges must not
+      diverge in spelling. (REQ-GIAC-03)
+- [ ] A published mapping table with the same discipline as REQ-SYM-01,
+      including what Giac has that PARI does not and vice versa.
+      (REQ-GIAC-04)
+- [ ] If — and only if — the exchange proves to be **string-based**,
+      document that plainly as a limitation, pin the exact notation used in
+      each direction, and test the fragile cases explicitly: the imaginary
+      unit (`I` vs `i`), variable names, precedence and parenthesisation,
+      floating-point literal precision, and matrix/vector bracket syntax.
+      (REQ-GIAC-05)
+- [ ] Round-trip tests in both directions over a fixed corpus, with the
+      lossy cases enumerated rather than hidden. (REQ-GIAC-06)
+- [ ] No piracy; Aqua green; a separate CI job that loads Giac.
+      (REQ-GIAC-07)
+- [ ] A docs page with runnable examples, and an honest statement of which
+      of the three systems owns which semantics when they disagree.
+      (REQ-GIAC-08)
+
+**Exit criteria**
+
+- REQ-GIAC-01's finding is written down, with the design it implies.
+- The extension is optional and costs nothing when unloaded.
+- Round-trip holds over the corpus; every lossy case is documented **and**
+  tested.
+- Naming is identical to M19's — one convention across both bridges.
+
+**Open questions**
+
+- Which Julia Giac package, and is it registered and maintained? Without a
+  stable target this milestone should not start.
+- Is a PARI↔Giac bridge better served *directly*, or through a common
+  neutral representation — plausibly Symbolics, once M19 exists? A direct
+  bridge is faster and loses less; a hub avoids writing N² bridges. With
+  two systems, direct is the working assumption.
+- If Giac.jl hosts the bridge, LibPARI still owns the `pari` generic and
+  the mapping table. Does the table live here (and the code there), or does
+  the whole thing move? Proposed: the *rules* stay documented here, next to
+  M19's, so the two bridges cannot drift apart.
+
+### Which package owns which bridge
+
+Technically either side works: an extension can be declared by either
+package, and neither direction is type piracy — LibPARI owns `pari`, so
+`pari(::GiacExpr)` written in Giac.jl is legal; Giac.jl owns `to_giac`, so
+`to_giac(::Gen)` written here is legal. The decision is therefore about
+**maintenance direction**, not legality, and it resolves differently for
+the two bridges:
+
+- **M19 (Symbolics) must live in LibPARI.** Symbolics.jl is a large
+  third-party package that will not take a weak dependency on LibPARI. You
+  host the bridges to packages that will not host them for you.
+- **M20 (Giac) should live in Giac.jl**, if that package is under the same
+  maintainer. LibPARI is heading for a frozen 1.0; hosting the bridge here
+  ties that release to a foreign API's breaking changes, and a break in
+  Giac.jl would redden LibPARI's CI at the worst moment. The dependency
+  should point from the faster-moving package to the frozen one, not the
+  reverse.
+
+The reasons to override that and host it here anyway: LibPARI is where the
+structural knowledge of a `GEN` lives (type tags, variable priorities,
+`t_REAL` precision), so a *structural* bridge is easier to write here; and
+one home for both bridges keeps the naming and the mapping-table discipline
+from diverging. If the exchange turns out to be string-based (REQ-GIAC-01),
+that argument weakens considerably — a string bridge needs Giac's parser
+quirks more than PARI's internals.
+
+A third option, a separate glue package depending on both, is the right
+answer only if a third system appears: it costs discoverability and another
+registration, and buys isolation neither package needs at two systems.
+
+---
+
+## M21 — Documentation, migration & the 1.0.0 release
 
 **Goal:** ship the redesign as a documented, migratable 1.0.0.
 
-**Depends on:** M11 … M18.
+**Depends on:** M11 … M20.
 
 **Scope:** REQ-REL-01 … REQ-REL-08.
 
@@ -1324,8 +1589,8 @@ PARI-notation REPL rendering, and keep display cheap.
       round-trips, high-precision `BigFloat`, mixed arithmetic, supported
       *and unsupported* promotion, direct Julia arguments to bindings,
       `pari(x)`, precision scopes, GP sessions, structured indexing and
-      iteration, display, and the migration examples themselves.
-      (REQ-REL-06)
+      iteration, display, both bridge extensions with their round-trips,
+      and the migration examples themselves. (REQ-REL-06)
 - [ ] No existing performance, allocation, leak or reproducibility test has
       been weakened to make the redesign pass; every test replaced because
       it encoded a withdrawn contract is replaced by a **stronger** test,
@@ -1393,7 +1658,9 @@ introduces its own families; they are not in `spec-ears.md`.
 | GP sessions                       | REQ-GPS-01 … REQ-GPS-08    | M16       |
 | Structured objects                | REQ-IDX-01 … REQ-IDX-09    | M17       |
 | Display                           | REQ-SHOW-01 … REQ-SHOW-06  | M18       |
-| Release, docs & migration         | REQ-REL-01 … REQ-REL-08    | M19       |
+| Symbolics.jl bridge               | REQ-SYM-01 … REQ-SYM-10    | M19       |
+| Giac.jl bridge                    | REQ-GIAC-01 … REQ-GIAC-08  | M20       |
+| Release, docs & migration         | REQ-REL-01 … REQ-REL-08    | M21       |
 
 **Superseded.** REQ-API-01 (`Gen <: Number`, delivered in M6/0.7.0 and
 extended in 0.14.0) is withdrawn by REQ-TYPE-01 in M11. The 0.7.0 and

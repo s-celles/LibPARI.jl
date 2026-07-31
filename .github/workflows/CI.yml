@@ -21,10 +21,15 @@ jobs:
         with:
           version: '1'
       - name: Run JuliaFormatter in check mode
+        # The version is pinned to the same minor series as the root and
+        # `gen/` [compat] bounds. `src/bindings.jl` is written by the `gen/`
+        # environment and checked here, so a version skew between the two
+        # makes the generated file fail this gate — and the byte-identical
+        # reproducibility test — without any source change.
         run: |
           julia --color=yes --startup-file=no -e '
             using Pkg
-            Pkg.add(name = "JuliaFormatter", version = "2")
+            Pkg.add(name = "JuliaFormatter", version = "2.12")
             using JuliaFormatter
             ok = format(["src", "test"]; overwrite = false)
             ok || error("Formatting check failed — run JuliaFormatter.")

@@ -77,7 +77,54 @@ Modules = [LibPARI]
 Pages = ["errors.jl"]
 ```
 
+### The entry point and the high-level facade
+
+`pari(x)` is the entry point; the rest of this section is the deliberately
+small facade over the generated layer. Every facade function documents the
+Julia and PARI inputs it accepts, its exact return type, and how it fails.
+
+```@autodocs
+Modules = [LibPARI]
+Pages = ["facade.jl"]
+```
+
 ### Type conversions
+
+LibPARI converts an *enumerated* set of Julia types, not every `Number`.
+The set is [`LibPARI.PariConvertible`](@ref) and the single entry point is
+[`LibPARI.gen_convert`](@ref); `Gen(x)`, `convert(Gen, x)` and every
+mixed-operand operator funnel through it, so one type is converted in
+exactly one way.
+
+**Into a `Gen`:**
+
+| Julia type | PARI type | Notes |
+|------------|-----------|-------|
+| `Bool` | `t_INT` | `0`/`1` — PARI has no boolean type, and `Bool <: Integer` |
+| `Int8` … `Int128`, `UInt8` … `UInt128` | `t_INT` | exact at every width |
+| `BigInt` | `t_INT` | exact, any magnitude |
+| `Rational{<:Integer}` | `t_FRAC` | reduced by PARI; an integral value normalises to `t_INT` |
+| `Float16`, `Float32`, `Float64` | `t_REAL` | exact |
+| `BigFloat` | `t_REAL` | exact — see [Precision](@ref) |
+| `Complex{T}`, `T` convertible | `t_COMPLEX` | a zero imaginary part normalises to the real type |
+
+Anything else — an `Irrational` such as `π`, a `Missing`, a foreign
+numeric type — raises [`LibPARI.ConversionError`](@ref), which names the
+offending type. A downstream package adds support for its own type by
+defining a `LibPARI.gen_convert` method for it, which is type piracy on
+neither side.
+
+`Inf`, `-Inf` and `NaN` raise `InexactError`: PARI's `t_INFINITY` exists
+but does not take part in general arithmetic, so mapping onto it would
+produce values that fail later, far from the conversion.
+
+**Out of a `Gen`:** `BigInt`, `Bool` and the fixed-width integer types
+(`InexactError` when the value is not an integer or does not fit);
+`Rational` and `Rational{T}`; `Float16`, `Float32`, `Float64` and
+`BigFloat`; `Complex` and `Complex{T}`. A `t_REAL` is decomposed with
+PARI's own mantissa and exponent rather than re-parsed from its printed
+form, so the conversion neither loses digits nor fails on a large
+exponent.
 
 ```@autodocs
 Modules = [LibPARI]
@@ -86,15 +133,23 @@ Pages = ["conversions.jl"]
 
 ### Numeric API
 
-`Gen` is a complete Julia `Number`: it mixes with every standard Julia
-numeric type (`Int`, `BigInt`, `Float64`, `BigFloat`, `Rational`,
-`Complex`) in arithmetic and comparison through promotion; it carries the
-`zero`/`one` identities, the standard predicates (`iszero`, `isinteger`,
-`isfinite`, …), the elementary operations (`abs`, `sign`, `inv`, `conj`,
-`real`, `imag`), and `hash` — so a `Gen` sorts, serves as a `Dict`/`Set`
-key interchangeably with an equal Julia number, and works as a drop-in in
-generic numeric code. An operation that does not apply to a `Gen`'s
-underlying PARI type raises a catchable [`PariError`](@ref).
+`Gen` is a [`PariObject`](@ref LibPARI.PariObject), **not** a Julia
+`Number` — one concrete `Gen` wraps every PARI object, matrices and strings
+included. The numeric surface is therefore declared explicitly, not
+inherited: `+`, `-`, `*`, `/`, `^`, `\`, `==`, `<`, `<=` and `isless` have
+methods for `Gen`/`Gen` and for a `Gen` against a Julia `Integer`,
+`AbstractFloat`, `Rational` or `Complex`, in either operand order. `Gen`
+also carries the `zero`/`one` identities, the standard predicates
+(`iszero`, `isinteger`, `isfinite`, …), the elementary operations (`abs`,
+`sign`, `inv`, `conj`, `real`, `imag`), `hash`, `float`, `abs2`, `adjoint`,
+`transpose` and scalar broadcasting — so a `Gen` sorts and serves as a
+`Dict`/`Set` key interchangeably with an equal Julia number.
+
+Generic code bounded by `T<:Number` — parts of LinearAlgebra, other numeric
+packages — does **not** accept a `Gen`; dispatch on
+[`PariObject`](@ref LibPARI.PariObject), or convert. An operation that does
+not apply to a `Gen`'s underlying PARI type raises a catchable
+[`PariError`](@ref).
 
 ```@autodocs
 Modules = [LibPARI]

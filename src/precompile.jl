@@ -30,6 +30,13 @@
         -a
         a == b
 
+        # The mixed Gen / Julia-number methods (M11) — no `Number`
+        # fallback stands behind these, so they are worth compiling here.
+        a + 1
+        1 * a
+        a == 12
+        a < 13
+
         # The GP expression evaluator (M7).
         gp_eval("2 + 2")
 
