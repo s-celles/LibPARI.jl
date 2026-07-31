@@ -119,6 +119,106 @@ Gen(x::Integer) = protected_call(() -> gen_from(() -> _integer_to_gen(x)))
 
 Base.convert(::Type{Gen}, x::Integer) = Gen(x)
 
+# --- The accepted-input set and the one conversion entry point (M12) --------
+
+"""
+$(TYPEDEF)
+
+The Julia types LibPARI guarantees it can convert to a [`Gen`](@ref).
+
+`PariConvertible` is an *enumerated* set, deliberately not `Number`: a rule
+that accepted every `Number` would promise conversions LibPARI cannot
+perform, and the failure would surface far from the call that caused it.
+
+Support a further type by adding a method to [`gen_convert`](@ref) — that is
+a method on your own type, so it is not type piracy on either side.
+"""
+const PariConvertible = Union{Integer,AbstractFloat,Rational,Complex}
+
+"""
+$(TYPEDEF)
+
+Raised when a value cannot be converted to a [`Gen`](@ref).
+
+Carries the offending type and the reason, and names
+[`gen_convert`](@ref) — the extension point — rather than surfacing as a
+`MethodError` inside a Base function the caller never invoked.
+"""
+struct ConversionError <: Exception
+    type::Type
+    reason::String
+end
+
+function Base.showerror(io::IO, e::ConversionError)
+    print(
+        io,
+        "ConversionError: cannot convert a value of type ",
+        e.type,
+        " to a LibPARI.Gen: ",
+        e.reason,
+        "\nLibPARI converts an Integer, AbstractFloat, Rational or Complex; ",
+        "add a `LibPARI.gen_convert(::",
+        e.type,
+        ")` method to support this type.",
+    )
+    return nothing
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+Convert `x` to a [`Gen`](@ref) — the single conversion entry point.
+
+Every hand-written conversion, every mixed-operand arithmetic method and
+every `convert(Gen, x)` funnels through here, so one type is converted in
+exactly one way. A `Gen` argument is returned unchanged, never re-cloned.
+
+A value outside [`PariConvertible`](@ref), or one whose conversion fails,
+raises a [`ConversionError`](@ref) naming the type — never a `MethodError`
+from inside a Base function the caller did not invoke.
+
+# Examples
+
+```jldoctest
+julia> using LibPARI
+
+julia> LibPARI.gen_convert(42) == LibPARI.Gen(42)
+true
+```
+"""
+gen_convert(g::Gen) = g
+
+function gen_convert(x::PariConvertible)
+    try
+        return Gen(x)
+    catch e
+        # A `Gen` constructor exists for the abstract type but failed on this
+        # concrete one — a foreign `AbstractFloat` with no `BigFloat` route,
+        # say. Report it at the boundary instead of leaking a Base MethodError.
+        e isa MethodError || rethrow(e)
+        throw(ConversionError(typeof(x), "no LibPARI conversion for this type"))
+    end
+end
+
+gen_convert(x) =
+    throw(ConversionError(typeof(x), "not one of the convertible Julia types"))
+
+# `Irrational` is a `Number` with no exact PARI value: converting it needs a
+# working precision, which LibPARI will not pick silently. Refuse it here so
+# the message names the type (M13 may offer an explicit-precision route).
+gen_convert(x::Irrational) = throw(
+    ConversionError(
+        typeof(x),
+        "an irrational has no exact PARI value; it needs an explicit " *
+        "precision — use LibPARI.gp_eval or a PARI constant such as " *
+        "LibPARI.PARI.mppi",
+    ),
+)
+
+Gen(x::Irrational) = gen_convert(x)
+
+Base.convert(::Type{Gen}, x::Irrational) = gen_convert(x)
+
 # --- Gen integer → Julia ---------------------------------------------------
 
 """
@@ -166,6 +266,11 @@ $(TYPEDSIGNATURES)
 
 Convert an integer-valued `Gen` to a fixed-width Julia integer type `T`.
 
+`T` is one of Julia's built-in integer types (`Base.BitInteger`), `BigInt`
+or `Bool` — the set LibPARI can validate. A third-party `Integer` subtype
+still works, through `T(BigInt(g))`, but warns: LibPARI cannot check that
+its construction from a `BigInt` is exact (REQ-PROM-09).
+
 Throws `InexactError` when `g` is not an integer, or when its value lies
 outside the range of `T`.
 
@@ -178,7 +283,20 @@ julia> Int(LibPARI.Gen(255))
 255
 ```
 """
-(::Type{T})(g::Gen) where {T<:Integer} = T(BigInt(g))
+(::Type{T})(g::Gen) where {T<:Base.BitInteger} = T(BigInt(g))
+
+Base.Bool(g::Gen) = Bool(BigInt(g))
+
+Base.Integer(g::Gen) = BigInt(g)
+
+# A third-party `Integer`: the semantics are unchanged for a well-behaved
+# `T`, so this stays rather than breaking downstream code — but LibPARI is
+# not promising it, hence the warning (REQ-PROM-09).
+function (::Type{T})(g::Gen) where {T<:Integer}
+    @warn "LibPARI does not validate conversion of a Gen to $T; the result \
+           goes through BigInt" maxlog = 1
+    return T(BigInt(g))
+end
 
 Base.convert(::Type{T}, g::Gen) where {T<:Integer} = T(g)
 
@@ -237,6 +355,16 @@ end
 """
 $(TYPEDSIGNATURES)
 
+Convert a rational- or integer-valued `Gen` to a `Rational{T}`.
+
+Throws `InexactError` when `g` is not rational, or when its numerator or
+denominator lies outside the range of `T` (REQ-PROM-08).
+"""
+Base.Rational{T}(g::Gen) where {T<:Integer} = Rational{T}(Rational(g))
+
+"""
+$(TYPEDSIGNATURES)
+
 Convert a real-valued `Gen` to a Julia `Float64`.
 
 A PARI real too large for `Float64` converts to `±Inf`, as any other Julia
@@ -259,6 +387,34 @@ function Base.Float64(g::Gen)
 end
 
 Base.AbstractFloat(g::Gen) = Float64(g)
+
+"""
+$(TYPEDSIGNATURES)
+
+Convert a real-valued `Gen` to a narrower Julia float — `Float16` or
+`Float32`.
+
+The value is read at full PARI precision and rounded once to `F`
+(REQ-PROM-08).
+"""
+Base.Float32(g::Gen) = Float32(_narrow_float(g))
+
+Base.Float16(g::Gen) = Float16(_narrow_float(g))
+
+# A `t_INT` or `t_FRAC` is exact, so it narrows directly; a `t_REAL` goes
+# through its full-precision `BigFloat`, so the narrowing rounds exactly once.
+function _narrow_float(g::Gen)
+    t = gentype(g)
+    if t === PariType.T_INT
+        return BigFloat(BigInt(g))
+    elseif t === PariType.T_FRAC
+        return BigFloat(Rational(g))
+    elseif t === PariType.T_REAL
+        return _real_to_bigfloat(g)
+    else
+        throw(InexactError(:AbstractFloat, AbstractFloat, g))
+    end
+end
 
 """
 $(TYPEDSIGNATURES)
@@ -290,6 +446,14 @@ Convert a numeric `Gen` to a Julia `Complex{Float64}` — the real and
 imaginary parts of `g` as `Float64`s.
 """
 Base.Complex(g::Gen) = Complex(Float64(real(g)), Float64(imag(g)))
+
+"""
+$(TYPEDSIGNATURES)
+
+Convert a numeric `Gen` to a `Complex{T}` — its real and imaginary parts
+each converted to `T` (REQ-PROM-08).
+"""
+Base.Complex{T}(g::Gen) where {T<:Real} = Complex{T}(T(real(g)), T(imag(g)))
 
 # --- Display ---------------------------------------------------------------
 

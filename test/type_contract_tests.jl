@@ -230,17 +230,18 @@ end
 @testitem "REQ-TYPE-07: an operand with no Gen constructor errors cleanly" begin
     using LibPARI
 
-    # `Gen(1) + π` recurses through `promote_type`/`convert` today and dies
-    # with a `StackOverflowError`, which corrupts program state. The type
-    # asserted here is `MethodError`: with the blanket
-    # `convert(::Type{Gen}, ::Number)` cycle broken, an operand with no
-    # `Gen` constructor simply fails dispatch. `ArgumentError` is admitted
-    # too, for an implementation that instead adds an explicit refusing
-    # `Gen(::Irrational)` (see the M11 open question on `PARI.mppi`).
-    @test_throws Union{MethodError,ArgumentError} LibPARI.Gen(1) + π
-    @test_throws Union{MethodError,ArgumentError} π + LibPARI.Gen(1)
-    @test_throws Union{MethodError,ArgumentError} LibPARI.Gen(π)
-    @test_throws Union{MethodError,ArgumentError} convert(LibPARI.Gen, π)
+    # `Gen(1) + π` used to recurse through `promote_type`/`convert` and die
+    # with a `StackOverflowError`, which corrupts program state. The two
+    # failure modes are now distinct and both exact — M12 (REQ-PROM-03)
+    # replaced the loose `Union{MethodError,ArgumentError}` this test
+    # originally admitted:
+    #   * an arithmetic operand outside `PariConvertible` fails dispatch,
+    #     because the mixed-operand table has no method for it;
+    #   * an explicit conversion reports the type it cannot convert.
+    @test_throws MethodError LibPARI.Gen(1) + π
+    @test_throws MethodError π + LibPARI.Gen(1)
+    @test_throws LibPARI.ConversionError LibPARI.Gen(π)
+    @test_throws LibPARI.ConversionError convert(LibPARI.Gen, π)
 
     # PARI stays usable afterwards — the failure is a plain exception.
     @test BigInt(LibPARI.Gen(2) + LibPARI.Gen(3)) == 5

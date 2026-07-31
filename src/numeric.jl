@@ -114,6 +114,17 @@ $(TYPEDSIGNATURES)
 
 Convert a Julia floating-point number to a `Gen` (a PARI real value).
 
+`Inf`, `-Inf` and `NaN` have no PARI real counterpart and raise
+`InexactError` — PARI's `t_INFINITY` exists but does not take part in
+general arithmetic, so mapping onto it would produce values that fail
+later, far from this call (REQ-PROM-10).
+
+!!! warning "Precision"
+    This conversion currently routes through `Cdouble`, so a `BigFloat`
+    argument is silently reduced to 53 bits. Fixing that is M13
+    (REQ-PREC-08); until then, `BigFloat(Gen(x)) == x` holds only for a
+    value representable in double precision.
+
 # Examples
 
 ```jldoctest
@@ -123,16 +134,19 @@ julia> LibPARI.Gen(1.5) isa LibPARI.Gen
 true
 ```
 """
-Gen(x::AbstractFloat) = protected_call(
-    () -> gen_from(
-        () -> ccall(
-            (:dbltor, PARI_jll.libpari),
-            Ptr{Int},
-            (Cdouble,),
-            Cdouble(x),
+function Gen(x::AbstractFloat)
+    isfinite(x) || throw(InexactError(:Gen, Gen, x))
+    return protected_call(
+        () -> gen_from(
+            () -> ccall(
+                (:dbltor, PARI_jll.libpari),
+                Ptr{Int},
+                (Cdouble,),
+                Cdouble(x),
+            ),
         ),
-    ),
-)
+    )
+end
 
 """
 $(TYPEDSIGNATURES)
@@ -209,15 +223,13 @@ Base.isless(a::Gen, b::Gen) = a < b
 
 # --- Mixed Gen / Julia-number operands -------------------------------------
 
-# The Julia number types a mixed expression accepts. It is an *enumerated*
-# set, deliberately not `Number`: with `Gen <: PariObject` there is no Base
-# fallback behind it, and an operand LibPARI cannot build a `Gen` from — an
-# `Irrational` such as `π`, which has no exact PARI value and would need an
-# explicit precision — must fail dispatch with a plain `MethodError` instead
-# of recursing through `promote`/`convert` into a `StackOverflowError`
-# (REQ-TYPE-07). M12 replaces this internal alias with the public, documented
-# `PariConvertible` and one `gen_convert` entry point (REQ-PROM-01).
-const _MixedOperand = Union{Integer,AbstractFloat,Rational,Complex}
+# The mixed matrix dispatches on `PariConvertible` (src/conversions.jl) — the
+# public, enumerated accepted-input set — and converts through the single
+# `gen_convert` entry point (REQ-PROM-01, REQ-PROM-05). It is deliberately not
+# `Number`: with `Gen <: PariObject` there is no Base fallback behind it, so an
+# operand LibPARI cannot build a `Gen` from must fail at dispatch rather than
+# recurse through `promote`/`convert` into a `StackOverflowError`
+# (REQ-TYPE-07).
 
 # One table generates the whole mixed matrix (REQ-TYPE-02/03/04). Each method
 # builds a `Gen` from the Julia operand and calls the `Gen`/`Gen` operator
@@ -226,8 +238,8 @@ const _MixedOperand = Union{Integer,AbstractFloat,Rational,Complex}
 # exact `gpowgs` path.
 for op in (:+, :-, :*, :/, :^, :\, :(==), :<, :<=, :isless)
     @eval begin
-        Base.$op(a::Gen, b::_MixedOperand) = $op(a, Gen(b))
-        Base.$op(a::_MixedOperand, b::Gen) = $op(Gen(a), b)
+        Base.$op(a::Gen, b::PariConvertible) = $op(a, gen_convert(b))
+        Base.$op(a::PariConvertible, b::Gen) = $op(gen_convert(a), b)
     end
 end
 
@@ -254,9 +266,9 @@ Base.:(==)(a::Number, ::Gen) = _no_gen(a)
 # what breaks the `Gen(1) + π` cycle: the blanket `convert(::Type{Gen},
 # ::Number) = Gen(x)` promised a conversion for every `Number`, including
 # ones with no `Gen` constructor. M12 revisits both (REQ-PROM-05).
-Base.promote_rule(::Type{Gen}, ::Type{<:_MixedOperand}) = Gen
+Base.promote_rule(::Type{Gen}, ::Type{<:PariConvertible}) = Gen
 
-Base.convert(::Type{Gen}, x::_MixedOperand) = Gen(x)
+Base.convert(::Type{Gen}, x::PariConvertible) = gen_convert(x)
 
 # --- Base conveniences no longer inherited from `Number` -------------------
 

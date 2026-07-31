@@ -79,6 +79,42 @@ Pages = ["errors.jl"]
 
 ### Type conversions
 
+LibPARI converts an *enumerated* set of Julia types, not every `Number`.
+The set is [`LibPARI.PariConvertible`](@ref) and the single entry point is
+[`LibPARI.gen_convert`](@ref); `Gen(x)`, `convert(Gen, x)` and every
+mixed-operand operator funnel through it, so one type is converted in
+exactly one way.
+
+**Into a `Gen`:**
+
+| Julia type | PARI type | Notes |
+|------------|-----------|-------|
+| `Bool` | `t_INT` | `0`/`1` — PARI has no boolean type, and `Bool <: Integer` |
+| `Int8` … `Int128`, `UInt8` … `UInt128` | `t_INT` | exact at every width |
+| `BigInt` | `t_INT` | exact, any magnitude |
+| `Rational{<:Integer}` | `t_FRAC` | reduced by PARI; an integral value normalises to `t_INT` |
+| `Float16`, `Float32`, `Float64` | `t_REAL` | exact |
+| `BigFloat` | `t_REAL` | **currently reduced to 53 bits** — fixed in M13 |
+| `Complex{T}`, `T` convertible | `t_COMPLEX` | a zero imaginary part normalises to the real type |
+
+Anything else — an `Irrational` such as `π`, a `Missing`, a foreign
+numeric type — raises [`LibPARI.ConversionError`](@ref), which names the
+offending type. A downstream package adds support for its own type by
+defining a `LibPARI.gen_convert` method for it, which is type piracy on
+neither side.
+
+`Inf`, `-Inf` and `NaN` raise `InexactError`: PARI's `t_INFINITY` exists
+but does not take part in general arithmetic, so mapping onto it would
+produce values that fail later, far from the conversion.
+
+**Out of a `Gen`:** `BigInt`, `Bool` and the fixed-width integer types
+(`InexactError` when the value is not an integer or does not fit);
+`Rational` and `Rational{T}`; `Float16`, `Float32`, `Float64` and
+`BigFloat`; `Complex` and `Complex{T}`. A `t_REAL` is decomposed with
+PARI's own mantissa and exponent rather than re-parsed from its printed
+form, so the conversion neither loses digits nor fails on a large
+exponent.
+
 ```@autodocs
 Modules = [LibPARI]
 Pages = ["conversions.jl"]

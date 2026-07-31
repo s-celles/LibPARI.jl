@@ -30,8 +30,9 @@ order, in releases `0.1.0` … `0.11.0`; the work that followed
 (`0.12.0` … `0.15.1`) is listed under
 [Delivered beyond Part I](#delivered-beyond-part-i-0120--0151).
 
-**Part II (M11–M21) is in progress.** M11 has landed on the development
-branch, unreleased, targeted at `0.16.0`; M12–M21 are not started. It is the
+**Part II (M11–M21) is in progress.** M11 and M12 have landed on the
+development branch, unreleased, targeted at `0.16.0` and `0.17.0`;
+M13–M21 are not started. It is the
 API redesign that must land
 before 1.0: an honest type contract for `Gen`, precise conversion and
 promotion rules, precision-safe reals, `pari(x)`, ergonomic generated
@@ -485,7 +486,7 @@ other and of `M12`–`M15`, and may be reordered freely after `M11`.
 | ID  | Milestone                                  | Target version | Status |
 |-----|--------------------------------------------|----------------|--------|
 | M11 | Honest type contract for `Gen`             | 0.16.0         | **done** (unreleased) |
-| M12 | Conversion & promotion contracts           | 0.17.0         | not started |
+| M12 | Conversion & promotion contracts           | 0.17.0         | **done** (unreleased) |
 | M13 | Precision-safe reals & a bit-based precision API | 0.18.0    | not started |
 | M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | not started |
 | M15 | Generated-binding argument ergonomics      | 0.20.0         | not started |
@@ -637,12 +638,12 @@ boundary with one named error.
 
 **Deliverables**
 
-- [ ] One canonical accepted-input set: a documented union alias
+- [x] One canonical accepted-input set: a documented union alias
       `LibPARI.PariConvertible`, plus a single conversion entry point
       `LibPARI.gen_convert(x)::Gen`. `Gen(x)`, `convert(Gen, x)` and every
       mixed operator call it; no second conversion path exists.
       (REQ-PROM-01)
-- [ ] Coverage-matrix `@testitem`: `Bool`, `Int8`…`Int128`,
+- [x] Coverage-matrix `@testitem`: `Bool`, `Int8`…`Int128`,
       `UInt8`…`UInt128`, `BigInt`, `Rational{<:Integer}` (including
       `Rational{Int8}`), `Float16`, `Float32`, `Float64`, `BigFloat`, and
       `Complex{T}` for every supported `T` — each asserting the resulting
@@ -650,18 +651,18 @@ boundary with one named error.
       - `Bool` maps to `t_INT` 0/1 (`Bool <: Integer`, and PARI has no
         boolean type); the test pins the decision rather than leaving it
         accidental.
-- [ ] One `LibPARI.ConversionError` raised at the boundary for every input
+- [x] One `LibPARI.ConversionError` raised at the boundary for every input
       outside the set — foreign `AbstractFloat`, `Irrational`, `Missing`,
       foreign `Number` — naming the offending type and the `gen_convert`
       hook. (REQ-PROM-03)
       - *Observed:* a foreign `AbstractFloat` fails today as
         `MethodError: no method matching Float64(::MyFloat)` raised *inside*
         `Gen`; `promote_type(Gen, typeof(π))` raises `StackOverflowError`.
-- [ ] Delete the catch-alls `promote_rule(::Type{Gen}, ::Type{<:Number})`
+- [x] Delete the catch-alls `promote_rule(::Type{Gen}, ::Type{<:Number})`
       and `convert(::Type{Gen}, x::Number)` (`src/numeric.jl:143,145`);
       `convert(::Type{Gen}, ::Integer)` (`src/conversions.jl:120`) is
       subsumed by the `PariConvertible` method. (REQ-PROM-04)
-- [ ] Mixed arithmetic no longer relies on promotion: emit explicit
+- [x] Mixed arithmetic no longer relies on promotion: emit explicit
       `op(::Gen, ::PariConvertible)` and `op(::PariConvertible, ::Gen)`
       methods for `+ - * / ^ == < <=` from one operator list, each calling
       `gen_convert` exactly once. (REQ-PROM-05)
@@ -669,34 +670,36 @@ boundary with one named error.
         `promote_rule` then plays no role at all, so it is *removed* rather
         than narrowed. If M11 slips, ship this anyway — explicit methods are
         strictly more specific than promotion and take precedence.
-- [ ] Neutralise the constructors `Gen` inherits from `Number`: `Gen('a')`,
+- [x] Neutralise the constructors `Gen` inherits from `Number`: `Gen('a')`,
       `convert(Gen, 'a')`, `convert(Gen, CartesianIndex(3))` and
       `Gen(::Base.TwicePrecision)` must raise `ConversionError`; a test
       asserts each. (REQ-PROM-06)
       - *Observed:* all four resolve today through Base methods that apply
         only because `Gen <: Number`; two of them are lossy.
-- [ ] `Float64(::Gen)` / `BigFloat(::Gen)` stop parsing PARI's decimal text
+- [x] `Float64(::Gen)` / `BigFloat(::Gen)` stop parsing PARI's decimal text
       and read the `t_REAL` numerically; regression test over magnitudes
       `1e-500` … `1e434`. (REQ-PROM-07)
+      - Delivered early, in M11 as REQ-TYPE-08: the same defect blocked
+        `hash`, so it could not wait for this milestone.
       - *Observed:* `Float64(Gen(1e-10))` raises `ArgumentError: cannot
         parse "1.0000000000000000364 E-10"`. Any magnitude outside roughly
         `[1e-5, 1e19)` is affected. Shares its fix with REQ-TYPE-08.
-- [ ] Add the missing typed outward conversions `Float16`, `Float32`,
+- [x] Add the missing typed outward conversions `Float16`, `Float32`,
       `Rational{T}`, `Complex{T}`, each raising `InexactError` outside `T`;
       `Rational(g)::Rational{BigInt}` and `Complex(g)::ComplexF64` keep
       their current return types. (REQ-PROM-08)
       - *Observed:* `Float32(Gen(1))`, `Float16(Gen(1))`,
         `Rational{Int}(Gen(1)/Gen(2))` and `Complex{BigFloat}(Gen(1))` are
         all `MethodError`s today.
-- [ ] Narrow `(::Type{T})(g::Gen) where {T<:Integer}`
+- [x] Narrow `(::Type{T})(g::Gen) where {T<:Integer}`
       (`src/conversions.jl:181`) to `Base.BitInteger`, `BigInt` and `Bool`,
       keeping `Integer(g)::BigInt` explicit. (REQ-PROM-09)
       - Cheap unambiguous shim **accepted** here: route an unknown
         `T<:Integer` through `T(BigInt(g))` behind a deprecation warning —
         the semantics are unchanged for well-behaved `T`.
-- [ ] Pin the `Inf`/`NaN` policy, replacing today's
+- [x] Pin the `Inf`/`NaN` policy, replacing today's
       `PariError(e_OVERFLOW)` from `dbltor`. (REQ-PROM-10)
-- [ ] `docs/src/api.md` gains a conversion-contract table (accepted inward
+- [x] `docs/src/api.md` gains a conversion-contract table (accepted inward
       type → PARI tag; `Gen` → Julia type and its failure mode), with
       jldoctests. (REQ-PROM-11)
 

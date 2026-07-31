@@ -49,6 +49,40 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **`promote_rule`/`convert` narrowed** from every `Number` to the same
   enumerated operand set. They no longer drive arithmetic (the table does);
   they remain so that `[Gen(1), 2]` types as a `Vector{Gen}`.
+- **BREAKING — one accepted-input set and one conversion entry point**
+  (M12, REQ-PROM-01/05). `LibPARI.PariConvertible` names the Julia types
+  LibPARI guarantees it can convert — `Integer`, `AbstractFloat`,
+  `Rational`, `Complex` — and `LibPARI.gen_convert(x)` is the single funnel
+  every constructor, `convert(Gen, x)` and mixed-operand operator goes
+  through, so one type is converted in exactly one way. `gen_convert(::Gen)`
+  returns its argument unchanged, never re-cloned. A downstream package adds
+  support for its own type by defining a `gen_convert` method for it — type
+  piracy on neither side.
+- **BREAKING — an unsupported value raises `LibPARI.ConversionError`**
+  (REQ-PROM-03), naming the offending type and the extension point, instead
+  of surfacing as a `MethodError` from inside a Base function the caller
+  never invoked. `Gen(π)` and `convert(Gen, π)` are the canonical cases: an
+  irrational has no exact PARI value and needs a precision LibPARI will not
+  pick silently.
+- **BREAKING — `Gen(Inf)`, `Gen(-Inf)` and `Gen(NaN)` raise `InexactError`**
+  (REQ-PROM-10), where they previously reached `dbltor` and surfaced as
+  `PariError(e_OVERFLOW)`. PARI's `t_INFINITY` exists but does not take part
+  in general arithmetic, so mapping onto it would produce values that fail
+  later, far from the conversion.
+
+### Added
+
+- **The typed outward conversions** (REQ-PROM-08): `Float16`, `Float32`,
+  `Rational{T}` and `Complex{T}` from a `Gen`, each raising `InexactError`
+  for a value outside the target type. All four were `MethodError`s.
+  `Rational(g)::Rational{BigInt}` and `Complex(g)::ComplexF64` keep their
+  return types. A `t_REAL` narrows through its full-precision `BigFloat`, so
+  the conversion rounds exactly once.
+- **`Bool(::Gen)` and `Integer(::Gen)`** as explicit methods. The integer
+  constructors are now enumerated over `Base.BitInteger`, `BigInt` and
+  `Bool` — the set LibPARI can validate; a third-party `Integer` subtype
+  still works through `T(BigInt(g))` but warns once, since LibPARI cannot
+  check that construction is exact (REQ-PROM-09).
 
 ### Fixed
 
