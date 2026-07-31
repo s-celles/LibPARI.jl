@@ -34,7 +34,6 @@ makedocs(;
         "API reference" => "api.md",
         "Precision" => "precision.md",
         "GP state and sessions" => "gp-state.md",
-        "API redesign" => "api-redesign.md",
         "MCP connector" => "mcp.md",
     ],
     doctest = true,

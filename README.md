@@ -81,7 +81,8 @@ gp_eval("sum(k = 1, 100, k^2)")       # 338350 — the GP escape hatch
 ```
 
 Three levels of access: a small idiomatic Julia surface (the one promised
-stable at 1.0), the ~1200 generated `LibPARI.PARI` bindings, and `gp_eval`
+changing most slowly), the ~1200 generated `LibPARI.PARI` bindings, and
+`gp_eval`
 for everything else.
 
 See the

@@ -281,14 +281,11 @@ julia> LibPARI.factors(60)
 """
 function factors(n::Gen)
     m = factor(n)
-    # A t_MAT is a list of columns: column 1 holds the primes, column 2 the
-    # exponents. `compo` reaches a component without exposing a pointer.
-    primes = PARI.compo(m, 1)
-    exps = PARI.compo(m, 2)
-    k = PARI.glength(primes)
-    return Pair{Gen,Gen}[
-        PARI.compo(primes, i) => PARI.compo(exps, i) for i = 1:k
-    ]
+    # PARI's factorization is a two-column `t_MAT`: primes then exponents.
+    # Read through M17's indexing rather than `PARI.compo` — same clone, and
+    # the container interface is the supported spelling.
+    nrows, _ = size(m)
+    return Pair{Gen,Gen}[m[i, 1] => m[i, 2] for i = 1:nrows]
 end
 
 # The same accepted-input set as everywhere else.

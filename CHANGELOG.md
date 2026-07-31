@@ -8,6 +8,25 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.17.0] - 2026-07-31
+
+The second release of the API redesign: `ROADMAP.md` Part II milestones
+M15, M17, M18 and M19, plus REQ-PREC-13 and the Aqua ambiguities gate.
+
+**Read this before upgrading.** Three breaking changes:
+
+- `repr(g)` is now `"Gen(42)"` where it was `"42"`. `string(g)`, `print`
+  and interpolation are unchanged, and the REPL still shows PARI's own
+  notation.
+- `LibPARI.PARI.sd_*` no longer exists — 47 bindings that were undefined
+  behaviour. `LibPARI.set_global_precision!` replaces the useful one.
+- Generated bindings widened from `::Gen` to `::GenArg`, which is purely
+  additive; and their optional `G` keywords are now typed, so a wrong type
+  fails at the call instead of inside the `ccall`.
+
+The package stays in `0.x` and the API can still change; every change is
+recorded here.
+
 ### Added
 
 - **A Symbolics.jl bridge** (M19), as an optional package extension: loading
@@ -929,7 +948,8 @@ wrapper code exists. No PARI functionality is exposed yet.
   it is resolved from a local development build. Registering LibPARI is
   therefore deferred to a later milestone.
 
-[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.16.0...HEAD
+[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.17.0...HEAD
+[0.17.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.15.1...v0.16.0
 [0.10.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.8.0...v0.9.0

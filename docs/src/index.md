@@ -45,15 +45,16 @@ Julia code in two complementary ways:
 
 ## Status
 
-LibPARI is at version `0.16.0`, the first release of the pre-1.0 API
-redesign. The hand-written core (lifecycle, `Gen`, error handling,
-conversions, the numeric API, precision, the `pari` entry point and the GP
-evaluator) and the generated binding layer are complete; the library is
+LibPARI is at version `0.17.0`, the second release of the API redesign. The
+hand-written core (lifecycle, `Gen`, error handling, conversions, the
+numeric API, precision, containers, display, the `pari` entry point and the
+GP evaluator) and the generated binding layer are complete; the library is
 platform-correct, parallel, and thread-safe.
 
-`0.16.0` carries breaking changes, two of which alter computed values — see
+`0.17.0` carries breaking changes — see
 the [changelog](https://github.com/s-celles/LibPARI.jl/blob/main/CHANGELOG.md)
-before upgrading. The API is still being reshaped for 1.0; `ROADMAP.md`
+before upgrading. The API is still being reshaped and the package stays in
+`0.x`; `ROADMAP.md`
 Part II tracks what remains.
 
 Both `LibPARI` and `PARI_jll` are registered in the Julia General registry

@@ -10,7 +10,8 @@ Section [Traceability](#traceability) maps each requirement ID to the
 milestone that delivers it.
 
 The roadmap is in two parts. **Part I (M0–M10)** built the wrapper and is
-delivered. **Part II (M11–M21)** redesigns the public API for 1.0 — it is
+delivered. **Part II (M11–M21)** redesigns the public API while the
+package stays in `0.x` — it is
 not derived from `spec-ears.md` but introduces its own requirement families.
 
 ## How to read this roadmap
@@ -36,7 +37,8 @@ M14 keeps three deliverables open (modular arithmetic, the polynomial
 facade, the optional Primes.jl extension). M13 keeps one deliverable
 open — REQ-PREC-13, which collides with NFR-01; see the milestone. It is the
 API redesign that must land
-before 1.0: an honest type contract for `Gen`, precise conversion and
+while the API can still change: an honest type contract for `Gen`,
+precise conversion and
 promotion rules, precision-safe reals, `pari(x)`, ergonomic generated
 bindings, explicit GP state, idiomatic access to structured PARI objects,
 and — as optional extensions — the Symbolics.jl and Giac.jl bridges.
@@ -443,7 +445,7 @@ acceptance — the 0.11.0 release.
 
 ---
 
-# Part II — API redesign, 0.16.0 → 1.0.0
+# Part II — API redesign, from 0.16.0 onward
 
 M0–M10 built a *complete* wrapper. This second part makes it an *honest*
 one: it fixes the public contracts that cannot be changed after 1.0.
@@ -453,7 +455,7 @@ generated `LibPARI.PARI` layer of 1241 bindings. Nothing here rewrites PARI,
 replaces the generated layer with hand-maintained wrappers, or edits
 `src/bindings.jl` by hand.
 
-**Because the package is pre-1.0, correctness outranks backward
+**Because the package stays in `0.x`, correctness outranks backward
 compatibility.** Every milestone below therefore carries an explicit
 *Breaking changes* list. A deprecation shim is added only where it is cheap
 and unambiguous; a shim that would preserve semantics a milestone classifies
@@ -476,7 +478,7 @@ M10 (0.11.0, done)
         M11 ─────────────> M17 structured objects
         M11 ─────────────> M18 display contract
   M11+M13+M14+M17 ──────> M19 Symbolics bridge ─> M20 Giac bridge
-  all ───────────────────> M21 documentation, migration, 1.0.0
+  all ───────────────────> M21 documentation and release hygiene
 ```
 
 `M13` and `M15` both regenerate `src/bindings.jl`; they must not be in
@@ -502,7 +504,7 @@ never existed, and the remaining milestones will renumber the same way.
 | M18 | Display contract                           | 0.23.0         | **done** (unreleased) |
 | M19 | Symbolics.jl bridge (optional extension)   | 0.24.0         | **done** (unreleased) |
 | M20 | Giac.jl bridge (optional extension)        | 0.25.0         | not started |
-| M21 | Documentation, migration & the 1.0.0 release | 1.0.0        | not started |
+| M21 | Documentation & release hygiene             | 0.x            | not started |
 
 ---
 
@@ -928,7 +930,7 @@ names stay gone.
 ## M14 — `pari(x)`, the public surface, and a small facade
 
 **Goal:** give LibPARI one compact conversion entry point, `pari(x)`, freeze
-the exported surface at four names so `using LibPARI` is safe for 1.0, and
+the exported surface at four names so `using LibPARI` is predictable, and
 add a deliberately small high-level facade — extending Base only where the
 semantics match exactly.
 
@@ -1165,7 +1167,7 @@ Extends M4.
   prototype codes and makes `f("x")` ambiguous between a string value and a
   variable name.
 - Should codes `L`/`U` (today `::Integer`) also accept a `Gen`? Symmetry
-  says yes; a lossy `Gen`→`long` narrowing says no. Deferred past 1.0.0.
+  says yes; a lossy `Gen`→`long` narrowing says no. Deferred.
 
 ---
 
@@ -1446,14 +1448,14 @@ PARI-notation REPL rendering, and keep display cheap.
 ## Interoperability bridges — M19 and M20
 
 Two conversion bridges to other Julia computer-algebra ecosystems, **in
-scope for 1.0**. Each depends on contracts M11-M18 freeze, so they are
+in scope**. Each depends on contracts M11-M18 settle, so they are
 sequenced last before the release milestone.
 
 Both ship as **package extensions** (`[weakdeps]` + `[extensions]`), the
 pattern already used for the MCP connector (`ext/LibPARIMCPExt.jl`,
 0.12.0): installing LibPARI must not install Symbolics or Giac, and a
 process that does not load them must pay nothing — no dependency, no code,
-no precompilation. That is what makes them affordable before 1.0: they add
+no precompilation. That is what makes them affordable: they add
 surface to the *extensions*, not to the core the release freezes.
 
 **Depends on:** M11 (a `Gen` that does not lie about being a `Number`),
@@ -1681,9 +1683,10 @@ registration, and buys isolation neither package needs at two systems.
 
 ---
 
-## M21 — Documentation, migration & the 1.0.0 release
+## M21 — Documentation & release hygiene
 
-**Goal:** ship the redesign as a documented, migratable 1.0.0.
+**Goal:** keep the documentation and the release record honest as the
+redesign lands, release by release, while the package stays in `0.x`.
 
 **Depends on:** M11 … M20.
 
@@ -1691,24 +1694,31 @@ registration, and buys isolation neither package needs at two systems.
 
 **Deliverables**
 
-- [ ] `docs/src/api-redesign.md` — the issue-style plan: current API
+- [~] `docs/src/api-redesign.md` — the issue-style plan: current API
       problems, proposed contracts, breaking changes, migration examples,
       implementation phases, unresolved design questions. (REQ-REL-01)
+      - **Written, then removed.** It served its purpose while the redesign
+        was being planned, and became clutter once the work landed: a
+        package still in `0.x` development does not need a document
+        narrating a transition away from an API nobody is using any more.
+        Nothing is lost — the contracts live in `docs/src/api.md`, the
+        precision and GP-state rules in their own pages, the breaking
+        changes in `CHANGELOG.md`, and the plan itself is this file.
 - [~] `docs/src/migration.md` — a before/after example for **every**
       breaking change listed in M11–M18. (REQ-REL-02)
-      - **Dropped while the API is unstable.** The package is pre-1.0 and
+      - **Dropped while the API is unstable.** The package stays in `0.x` and
         in active redesign: a migration guide written now would document
         contracts that the remaining milestones are still free to change,
         and would have to be rewritten each time. The CHANGELOG carries
         every breaking change with its before/after in the meantime.
-        Revisit when the surface is frozen for 1.0.
+        Revisit if and when the surface is declared stable.
 - [ ] The getting-started guide is rewritten around `pari(x)` and gains the
       **three levels of access** section — idiomatic Julia operations; the
       comprehensive `PARI` bindings; dynamic GP through `gp_eval` — stating
-      which layer is promised stable at 1.0. (REQ-REL-03)
+      which layer changes most slowly. (REQ-REL-03)
 - [ ] README, API reference, docstrings and examples updated; no surviving
       claim that `Gen` is a drop-in Julia number. (REQ-REL-04)
-- [ ] A detailed CHANGELOG entry per release 0.16.0 … 1.0.0, each listing
+- [ ] A detailed CHANGELOG entry per release, each listing
       its breaking changes with before/after. (REQ-REL-05)
 - [ ] The full test list required by the redesign is green: lifecycle,
       memory safety, stack restoration, error trapping, generator
@@ -1722,7 +1732,7 @@ registration, and buys isolation neither package needs at two systems.
       been weakened to make the redesign pass; every test replaced because
       it encoded a withdrawn contract is replaced by a **stronger** test,
       and the substitution is explained in the CHANGELOG. (REQ-REL-07)
-- [ ] Version 1.0.0 tagged and registered; the stability promise of each
+- [ ] Each release tagged and registered; the relative stability of each
       layer is stated in the README. (REQ-REL-08)
 
 **Exit criteria**
@@ -1730,12 +1740,13 @@ registration, and buys isolation neither package needs at two systems.
 - CI green on the 3-OS × 2-Julia matrix; docs deploy with zero warnings.
 - Every breaking change in Part II appears in the migration guide with a
   runnable before/after.
-- `Pkg.add("LibPARI")` at 1.0.0 installs and the getting-started examples
+- `Pkg.add("LibPARI")` installs and the getting-started examples
   run verbatim.
 
 **Open questions**
 
-- Does 1.0.0 freeze the generated layer's signatures too, or only the
+- Would a future stability declaration cover the generated layer's
+  signatures too, or only the
   hand-written core? The generated layer changes whenever PARI's
   `pari.desc` changes, which argues for promising stability only on the
   hand-written surface plus the *shape* of the generated one.
@@ -1808,9 +1819,9 @@ Carried from SRS §8.2 — explicitly *not* on the M0–M10 plan:
 - [x] Per-thread PARI stack contexts; 0.11.0 serialized calls
       (REQ-PLT-03). **Delivered after the roadmap, in `0.12.0`–`0.13.0`.**
 
-## Out of scope for 1.0.0
+## Out of scope for Part II
 
-Carried into Part II — explicitly *not* on the path to 1.0:
+Carried into Part II — explicitly *not* planned:
 
 - [ ] Native Julia callback support for GP-closure-argument functions.
 - [ ] Optional data-package integration.
