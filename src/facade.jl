@@ -295,3 +295,180 @@ end
 for f in (:isprime, :nextprime, :prevprime, :factor, :factors)
     @eval $f(n::PariConvertible) = $f(gen_convert(n))
 end
+
+# --- Modular arithmetic (unexported) ---------------------------------------
+
+"""
+$(TYPEDSIGNATURES)
+
+The class of `a` modulo `n` — PARI's `Mod(a, n)`, a `t_INTMOD`.
+
+Use [`lift`](@ref) to recover a representative as a plain integer.
+
+# Examples
+
+```jldoctest
+julia> using LibPARI
+
+julia> LibPARI.Mod(5, 7)
+Mod(5, 7)
+```
+"""
+function Mod(a::Gen, n::Gen)
+    _require_type(:Mod, a, (PariType.T_INT,))
+    _require_type(:Mod, n, (PariType.T_INT,))
+    iszero(n) && throw(ArgumentError("the modulus must be non-zero"))
+    return PARI.gmodulo(a, n)
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+Lift a `t_INTMOD` (or `t_POLMOD`) to a representative in its base ring.
+
+# Examples
+
+```jldoctest
+julia> using LibPARI
+
+julia> LibPARI.lift(LibPARI.Mod(12, 7))
+5
+```
+"""
+lift(g::Gen) = PARI.lift0(g)
+
+"""
+$(TYPEDSIGNATURES)
+
+`a mod n`, with **Julia's** sign convention: the result takes the sign of
+`n`.
+
+PARI's own `%` does not. It always answers in `[0, |n|)`, so
+`PARI.gmod(7, -3)` is `1` where `mod(7, -3)` is `-2` in Julia. This
+wrapper corrects for that; PARI's operator stays reachable as
+`LibPARI.PARI.gmod`.
+
+Restricted to integer-valued arguments, where `Base.mod`'s meaning is the
+one being matched.
+
+# Examples
+
+```jldoctest
+julia> using LibPARI
+
+julia> LibPARI.pari_mod(7, -3) == mod(7, -3)
+true
+```
+"""
+function pari_mod(a::Gen, n::Gen)
+    _require_type(:pari_mod, a, (PariType.T_INT,))
+    _require_type(:pari_mod, n, (PariType.T_INT,))
+    iszero(n) && throw(DivideError())
+    r = PARI.gmod(a, n)
+    # PARI answers in [0, |n|); Julia wants the sign of `n`.
+    return (n < 0 && !iszero(r)) ? r + n : r
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+`x^p mod m`, matching `Base.powermod`. A negative exponent inverts `x`
+modulo `m` first, and raises a `PariError` when it is not invertible.
+"""
+function Base.powermod(x::Gen, p::Integer, m::Gen)
+    _require_type(:powermod, x, (PariType.T_INT,))
+    _require_type(:powermod, m, (PariType.T_INT,))
+    return lift(Mod(x, m)^p)
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+The inverse of `x` modulo `m`, matching `Base.invmod`.
+
+Raises a catchable [`PariError`](@ref) when `x` is not invertible modulo
+`m` — PARI reports the offending common factor in its message.
+"""
+function Base.invmod(x::Gen, m::Gen)
+    _require_type(:invmod, x, (PariType.T_INT,))
+    _require_type(:invmod, m, (PariType.T_INT,))
+    return pari_mod(lift(inv(Mod(x, m))), m)
+end
+
+# --- Polynomials (unexported) ----------------------------------------------
+
+"""
+$(TYPEDSIGNATURES)
+
+The degree of a polynomial `Gen`, as a Julia `Int`.
+
+Raises `DomainError` on the zero polynomial, where PARI answers `-oo`:
+there is no `Int` for it, and returning a sentinel would be a trap.
+"""
+function degree(g::Gen)
+    _require_type(:degree, g, (PariType.T_POL, PariType.T_INT, PariType.T_FRAC))
+    iszero(g) && throw(DomainError(g, "the zero polynomial has no degree"))
+    return Int(BigInt(PARI.gppoldegree(g)))
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+The coefficient of `x^k` in a polynomial `Gen`, as a `Gen`.
+"""
+function coeff(g::Gen, k::Integer)
+    _require_type(:coeff, g, (PariType.T_POL, PariType.T_INT, PariType.T_FRAC))
+    k >= 0 || throw(ArgumentError("the exponent must be non-negative, got $k"))
+    return PARI.polcoef(g, k)
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+Substitute `y` for the main variable of `g`.
+"""
+function subst(g::Gen, y::Gen)
+    _require_type(:subst, g, (PariType.T_POL, PariType.T_RFRAC, PariType.T_SER))
+    return PARI.gsubst(g, _mainvar(g), y)
+end
+
+# The variable number PARI's `gsubst` expects. `gvar` is not in the
+# generated layer — `pari.desc` has no record for it — so it is called
+# directly, through the same protected boundary as everything else.
+_mainvar(g::Gen) = protected_call() do
+    Int(ccall((:gvar, PARI_jll.libpari), Int, (Ptr{Int},), g.ptr))
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+The complex roots of a polynomial `Gen`, as a `t_COL` of `t_COMPLEX`
+values, computed at the current working precision.
+
+The precision follows `setprecision(Gen, bits)` like every other
+precision-taking call.
+"""
+function polroots(g::Gen)
+    _require_type(:polroots, g, (PariType.T_POL,))
+    return PARI.roots(g)
+end
+
+for f in (:lift, :degree, :polroots)
+    @eval $f(x::PariConvertible) = $f(gen_convert(x))
+end
+Mod(a::PariConvertible, n) = Mod(gen_convert(a), gen_convert(n))
+Mod(a::Gen, n::PariConvertible) = Mod(a, gen_convert(n))
+pari_mod(a::PariConvertible, n) = pari_mod(gen_convert(a), gen_convert(n))
+pari_mod(a::Gen, n::PariConvertible) = pari_mod(a, gen_convert(n))
+coeff(g::PariConvertible, k::Integer) = coeff(gen_convert(g), k)
+subst(g::Gen, y::PariConvertible) = subst(g, gen_convert(y))
+# Every mixed method keeps a `Gen` in its signature. An untyped trailing
+# argument would make `powermod(::Integer, ::Integer, ::Any)` and
+# `invmod(::Integer, ::Any)` methods over Base types only — type piracy,
+# which would hijack `invmod(3, 7)` in unrelated code. Aqua catches it.
+Base.powermod(x::PariConvertible, p::Integer, m::Gen) =
+    powermod(gen_convert(x), p, m)
+Base.powermod(x::Gen, p::Integer, m::PariConvertible) =
+    powermod(x, p, gen_convert(m))
+Base.invmod(x::PariConvertible, m::Gen) = invmod(gen_convert(x), m)
+Base.invmod(x::Gen, m::PariConvertible) = invmod(x, gen_convert(m))

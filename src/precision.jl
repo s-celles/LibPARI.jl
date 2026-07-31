@@ -156,7 +156,22 @@ julia> LibPARI.isexact(LibPARI.Gen(42))
 true
 ```
 """
-isexact(g::Gen) = gentype(g) !== PariType.T_REAL
+function isexact(g::Gen)
+    t = gentype(g)
+    t === PariType.T_REAL && return false
+    # A `t_COMPLEX` is exact only if BOTH components are: `pari(3 + 4im)` is
+    # two `t_INT`s and carries no precision, while a root returned by
+    # `polroots` has `t_REAL` components and very much does. Testing the tag
+    # alone got this wrong.
+    if t === PariType.T_COMPLEX
+        return isexact(PARI.greal(g)) && isexact(PARI.gimag(g))
+    end
+    # `t_PADIC` and `t_SER` carry their own kinds of precision — p-adic
+    # accuracy and a term count — which are not bit counts and are not
+    # reported here. They are treated as exact for this predicate, and
+    # `precision` refuses them.
+    return true
+end
 
 """
 $(TYPEDSIGNATURES)
@@ -178,6 +193,21 @@ true
 ```
 """
 function Base.precision(g::Gen)
+    # A complex value is as accurate as its least accurate inexact part —
+    # but a PARI real ZERO carries no mantissa at all (`lg == 2`, so 0 bits
+    # by the formula below), and `polroots` routinely returns components like
+    # `0.E-38`. Taking the plain minimum would report 0 bits for any complex
+    # with a zero part, which says nothing useful about the value. Zero
+    # components are therefore skipped.
+    if gentype(g) === PariType.T_COMPLEX && !isexact(g)
+        ps = Int[]
+        for part in (PARI.greal(g), PARI.gimag(g))
+            isexact(part) && continue
+            p = precision(part)
+            p > 0 && push!(ps, p)
+        end
+        return isempty(ps) ? 0 : minimum(ps)
+    end
     isexact(g) && throw(
         ArgumentError(
             "a PARI $(gentype(g)) is exact and has no working precision; " *

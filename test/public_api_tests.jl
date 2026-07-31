@@ -215,3 +215,70 @@ end
     @test first(LibPARI.factors(-12)) == (pari(-1) => pari(1))
     @test prod(BigInt(p)^BigInt(e) for (p, e) in LibPARI.factors(-12)) == -12
 end
+
+@testitem "REQ-PUB-09: modular arithmetic uses Julia's conventions" begin
+    using LibPARI
+
+    @test string(LibPARI.Mod(5, 7)) == "Mod(5, 7)"
+    @test LibPARI.lift(LibPARI.Mod(12, 7)) == 5
+    @test LibPARI.gentype(LibPARI.Mod(5, 7)) === LibPARI.PariType.T_INTMOD
+
+    # The one that matters: PARI's `%` always answers in [0, |n|), so
+    # `PARI.gmod(7, -3)` is 1 where Julia's `mod(7, -3)` is -2. Wrapping
+    # `gmod` verbatim under a Julia name would have been wrong.
+    for (a, n) in ((7, 3), (-7, 3), (7, -3), (-7, -3), (0, 5), (10, 5))
+        @test BigInt(LibPARI.pari_mod(a, n)) == mod(a, n)
+    end
+    @test BigInt(LibPARI.PARI.gmod(pari(7), pari(-3))) == 1  # PARI's answer
+    @test BigInt(LibPARI.pari_mod(7, -3)) == -2       # Julia's
+
+    @test BigInt(powermod(pari(2), 10, pari(1000))) == powermod(2, 10, 1000)
+    @test BigInt(powermod(pari(3), 100, pari(7))) == powermod(3, 100, 7)
+    @test BigInt(invmod(pari(3), pari(7))) == invmod(3, 7)
+    @test_throws LibPARI.PariError invmod(pari(2), pari(4))
+
+    @test_throws ArgumentError LibPARI.Mod(5, 0)
+    @test_throws DivideError LibPARI.pari_mod(5, 0)
+    @test_throws ArgumentError LibPARI.Mod(1.5, 7)
+end
+
+@testitem "REQ-PUB-10: the polynomial facade adds Julia semantics" begin
+    using LibPARI
+
+    p = gp_eval("x^3 + 2*x + 5")
+
+    # A Julia `Int`, not a Gen — that is the semantics being added.
+    @test LibPARI.degree(p) === 3
+    @test LibPARI.degree(pari(5)) === 0
+    @test LibPARI.coeff(p, 0) == 5
+    @test LibPARI.coeff(p, 1) == 2
+    @test LibPARI.coeff(p, 3) == 1
+    @test LibPARI.coeff(p, 9) == 0
+
+    # PARI answers -oo for the zero polynomial; there is no Int for it, and
+    # a sentinel would be a trap.
+    @test_throws DomainError LibPARI.degree(pari(0))
+    @test_throws ArgumentError LibPARI.coeff(p, -1)
+
+    # Substitution finds the main variable, whichever it is.
+    @test LibPARI.subst(gp_eval("x^2"), pari(3)) == 9
+    @test LibPARI.subst(gp_eval("y^3"), pari(2)) == 8
+    @test string(LibPARI.subst(gp_eval("x^2+1"), gp_eval("y"))) == "y^2 + 1"
+
+    # Roots follow the precision scope like every other precision-taking call.
+    r = LibPARI.polroots(gp_eval("x^2 - 2"))
+    @test LibPARI.gentype(r) === LibPARI.PariType.T_COL
+    hi = setprecision(
+        () -> LibPARI.polroots(gp_eval("x^2 - 2")),
+        LibPARI.Gen,
+        512,
+    )
+    # The roots are t_COMPLEX with t_REAL components, so they carry the
+    # working precision — and follow the scope like every other
+    # precision-taking call.
+    @test precision(LibPARI.PARI.compo(hi, 2)) >
+          precision(LibPARI.PARI.compo(r, 2))
+    @test !LibPARI.isexact(LibPARI.PARI.compo(r, 2))
+
+    @test_throws ArgumentError LibPARI.polroots(pari(5))
+end
