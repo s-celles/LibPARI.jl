@@ -500,7 +500,7 @@ never existed, and the remaining milestones will renumber the same way.
 | M16 | Explicit GP evaluation sessions            | 0.21.0         | **closed** — no session API; process isolation documented |
 | M17 | Structured PARI objects                    | 0.22.0         | **done** (unreleased) |
 | M18 | Display contract                           | 0.23.0         | **done** (unreleased) |
-| M19 | Symbolics.jl bridge (optional extension)   | 0.24.0         | not started |
+| M19 | Symbolics.jl bridge (optional extension)   | 0.24.0         | **done** (unreleased) |
 | M20 | Giac.jl bridge (optional extension)        | 0.25.0         | not started |
 | M21 | Documentation, migration & the 1.0.0 release | 1.0.0        | not started |
 
@@ -1478,49 +1478,77 @@ representations do not share.
 
 **Deliverables**
 
-- [ ] **Investigate and write down the mapping table first**, before any
+- [x] **Investigate and write down the mapping table first**, before any
       code: which PARI type tag maps to which Symbolics/SymbolicUtils node,
       and — the hard direction — which Symbolics expressions have **no**
       PARI counterpart. Publish it as a table in the docs; it is the
       contract. (REQ-SYM-01)
-- [ ] `ext/LibPARISymbolicsExt.jl` as a weakdep extension; `Project.toml`
+- [x] `ext/LibPARISymbolicsExt.jl` as a weakdep extension; `Project.toml`
       gains `Symbolics` under `[weakdeps]`/`[extensions]` only. A test
       asserts that loading LibPARI alone pulls in neither the package nor
       its load time. (REQ-SYM-02)
-- [ ] Inward conversion: extend M14's `pari(x)` with methods for
+- [x] Inward conversion: extend M14's `pari(x)` with methods for
       `Num`/`BasicSymbolic`, so there is **one** inward entry point for
       every foreign type. (REQ-SYM-03)
       - See the open question on `to_pari`: a separate inward name is
         proposed by the request, but a second entry point that does the
         same job as `pari(x)` is a contract to maintain twice.
-- [ ] Outward conversion `to_symbolics(g::Gen)`, defined as a LibPARI
+- [x] Outward conversion `to_symbolics(g::Gen)`, defined as a LibPARI
       generic with its methods supplied by the extension. (REQ-SYM-04)
-- [ ] **Variable identity** — the central difficulty, and the deliverable
+- [x] **Variable identity** — the central difficulty, and the deliverable
       most likely to reshape this milestone: a PARI `t_POL` carries a
       variable *number* with a priority ordering, while a Symbolics variable
       is a named symbol. Define and test the name↔number mapping,
       round-trip preservation of names, and what happens on a collision or
       on PARI's variable-priority reordering. (REQ-SYM-05)
-- [ ] Documented supported subset — at minimum `t_INT`, `t_FRAC`, `t_REAL`,
+- [x] Documented supported subset — at minimum `t_INT`, `t_FRAC`, `t_REAL`,
       `t_COMPLEX`, `t_POL`, `t_RFRAC`, and (via M17) `t_VEC`/`t_COL`/
       `t_MAT`. Everything outside it raises a clear error naming the PARI
       type; `t_SER`, `t_PADIC`, `t_INTMOD`, `t_FFELT` and `t_CLOSURE` are
       explicitly out unless a deliverable adds them. (REQ-SYM-06)
-- [ ] Exactness and precision policy: what a `t_REAL` becomes on the
+- [x] Exactness and precision policy: what a `t_REAL` becomes on the
       Symbolics side, and what a Julia `Float64`/`BigFloat` literal becomes
       as a `Gen`, consistent with M13. Any unavoidable rounding is
       documented. (REQ-SYM-07)
-- [ ] Round-trip tests in **both** directions over a fixed corpus, plus a
+- [x] Round-trip tests in **both** directions over a fixed corpus, plus a
       property test on randomly generated polynomials asserting
       `pari(to_symbolics(g))` equals `g` on the supported subset — and an
       explicit list of the cases where it deliberately does not.
       (REQ-SYM-08)
-- [ ] No type piracy: every method has a LibPARI type in its signature, or
+- [x] No type piracy: every method has a LibPARI type in its signature, or
       is a method on a Symbolics function that LibPARI's extension legally
       owns. Aqua stays green. (REQ-SYM-09)
 - [ ] A CI job loading Symbolics, kept separate from the main matrix
       because of its compile cost, plus a docs page with runnable examples.
       (REQ-SYM-10)
+
+### What the investigation settled, and what it cost
+
+**Variable identity (REQ-SYM-05) is resolvable but asymmetric.** A PARI
+`t_POL` carries a variable *number* with a process-global *priority*, and
+`varhigher`/`varlower` change that ordering for the whole process:
+`(w+x)^2` prints as `x^2+2*w*x+w^2` or `w^2+2*x*w+x^2` depending on it. The
+NAME is recoverable — GP's `variable(p)` returns the free symbol — so names
+survive a round trip. The ordering does not: Symbolics models no priority,
+so it is lost outward and re-derived inward. The bridge is therefore
+**value-preserving and name-preserving, never representation-preserving**,
+and its round-trip test asserts `pari(to_symbolics(g)) == g` — PARI's
+`gequal` — never `string`.
+
+**Two upstream defects were found and reported** while writing it:
+
+- [SymbolicUtils.jl#1023](https://github.com/JuliaSymbolics/SymbolicUtils.jl/issues/1023)
+  — TermInterface is only partially implemented: `iscall` is true while
+  `isexpr` is false, and `head`/`children` are undefined, in violation of
+  the protocol's own documented contract.
+- [SymbolicUtils.jl#1024](https://github.com/JuliaSymbolics/SymbolicUtils.jl/issues/1024)
+  — numeric literals in `arguments()` stopped being `isa Number` between
+  SymbolicUtils 3.32 and 4.44, so a walk that was total under 3.x silently
+  drops them under 4.x. This one bit the bridge directly.
+
+Both are recorded in `upstream-bugs.md` with the exact commit permalinks.
+The workaround, `Symbolics.value(x) isa Number`, is correct on both majors
+and relies only on an exported function.
 
 **Exit criteria**
 

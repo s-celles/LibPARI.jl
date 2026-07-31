@@ -10,6 +10,19 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **A Symbolics.jl bridge** (M19), as an optional package extension: loading
+  `Symbolics` alongside LibPARI supplies `LibPARI.to_symbolics(::Gen)` and
+  extends `pari` to Symbolics expressions. Installing LibPARI does not
+  install Symbolics. It covers `t_INT`, `t_FRAC`, `t_REAL`, `t_COMPLEX`,
+  `t_POL`, `t_VEC`, `t_COL`, `t_VECSMALL` and `t_MAT` outward, and numbers,
+  variables and `+ - * / ^` inward; anything else is refused by name.
+
+  The bridge is **value-preserving and name-preserving, not
+  representation-preserving**: a PARI polynomial carries a process-global
+  variable *priority* that decides its structure, and Symbolics models no
+  such notion. `(x+y)^2` returns as `x*(x + 2y) + y^2` — equal, differently
+  written. Round trips are asserted with `==` (PARI's `gequal`), never by
+  printed form.
 - **A page on GP state and sessions** (`docs/src/gp-state.md`, M16). It
   states the rules — one GP environment per process, in PARI's primary
   context, writable from **one task only** — and documents **process-level

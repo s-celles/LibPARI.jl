@@ -472,3 +472,33 @@ Base.powermod(x::Gen, p::Integer, m::PariConvertible) =
     powermod(x, p, gen_convert(m))
 Base.invmod(x::PariConvertible, m::Gen) = invmod(gen_convert(x), m)
 Base.invmod(x::Gen, m::PariConvertible) = invmod(x, gen_convert(m))
+
+
+# --- Interoperability bridges (M19/M20) ------------------------------------
+
+"""
+$(TYPEDSIGNATURES)
+
+Convert a PARI value to the corresponding expression of another computer
+algebra system.
+
+This is a generic with no methods of its own: a bridge supplies them. The
+Symbolics.jl bridge is a package extension, live as soon as `Symbolics` is
+loaded alongside LibPARI:
+
+```julia
+using LibPARI, Symbolics
+to_symbolics(gp_eval("x^2 + 1"))     # x^2 + 1, as a Symbolics expression
+```
+
+The inward direction is [`pari`](@ref), extended by the same bridge.
+
+!!! note "Value-preserving, not representation-preserving"
+    A PARI polynomial carries a *variable priority* — a process-global
+    ordering that decides which variable is the main one, and therefore how
+    the polynomial is structured and printed. Symbolics has no such notion.
+    A round trip preserves the mathematical value and the variable names; it
+    does not promise the same internal ordering, so compare results by
+    value, never by printed form.
+"""
+function to_symbolics end
