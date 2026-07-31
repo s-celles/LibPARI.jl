@@ -499,7 +499,7 @@ never existed, and the remaining milestones will renumber the same way.
 | M15 | Generated-binding argument ergonomics      | 0.20.0         | **done** (unreleased) |
 | M16 | Explicit GP evaluation sessions            | 0.21.0         | not started |
 | M17 | Structured PARI objects                    | 0.22.0         | **done** (unreleased) |
-| M18 | Display contract                           | 0.23.0         | not started |
+| M18 | Display contract                           | 0.23.0         | **done** (unreleased) |
 | M19 | Symbolics.jl bridge (optional extension)   | 0.24.0         | not started |
 | M20 | Giac.jl bridge (optional extension)        | 0.25.0         | not started |
 | M21 | Documentation, migration & the 1.0.0 release | 1.0.0        | not started |
@@ -1324,28 +1324,32 @@ PARI-notation REPL rendering, and keep display cheap.
 
 **Scope:** REQ-SHOW-01 … REQ-SHOW-06.
 
-> **Authoring note.** Same caveat as M16/M17.
+> **Investigated first.** The ambiguity is wider than the milestone
+> described: PARI's text for a `t_VEC` is byte-identical to Julia's `repr`
+> of a `Vector` (`repr(gp_eval("[1,2,3]")) == repr([1,2,3])` held), not just
+> for strings. That is why the compact form marks EVERY `Gen` rather than
+> only the confusable types.
 
 **Deliverables**
 
-- [ ] `show(io, g)` becomes a compact representation that makes clear the
+- [x] `show(io, g)` becomes a compact representation that makes clear the
       value is a LibPARI object; `show(io, ::MIME"text/plain", g)` keeps the
       PARI notation for the REPL; `print(io, g)` stays PARI's own text.
       (REQ-SHOW-01)
       - Today `show` and `print` are the same call
         (`src/conversions.jl:252-255`), so `repr(g)` is bare PARI text —
         indistinguishable from the content of a `String`.
-- [ ] A `t_STR` must not be confusable with a Julia `String` in `repr`.
+- [x] A `t_STR` must not be confusable with a Julia `String` in `repr`.
       (REQ-SHOW-02)
-- [ ] Display must not become unexpectedly expensive: `_genrepr` calls
+- [x] Display must not become unexpectedly expensive: `_genrepr` calls
       `GENtostr` through `protected_call` on the PARI worker, so every
       rendering is real PARI work plus a task hop. Decide and document a
       truncation policy for very large values. (REQ-SHOW-03)
-- [ ] Tests for integers, rationals, polynomials, vectors, matrices and
+- [x] Tests for integers, rationals, polynomials, vectors, matrices and
       strings. (REQ-SHOW-04)
-- [ ] Tests for nested display — a vector of vectors, and a `Gen` inside a
+- [x] Tests for nested display — a vector of vectors, and a `Gen` inside a
       Julia `Array`, which uses `show`, not `text/plain`. (REQ-SHOW-05)
-- [ ] The doctests in the existing docstrings and guides are updated to the
+- [x] The doctests in the existing docstrings and guides are updated to the
       new output, and the docs still build with zero warnings
       (REQ-DOC-05). (REQ-SHOW-06)
 

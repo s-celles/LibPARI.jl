@@ -10,6 +10,27 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **`show`, `show(::MIME"text/plain")` and `print` are three contracts**
+  (M18). `print` — and therefore `string` and interpolation — is PARI's own
+  text, unchanged; `text/plain` is PARI's text too, so the REPL and every
+  doctest look the way `gp` does; and `show`, the compact form used by
+  `repr`, inside containers and in stacktraces, marks the value as a
+  LibPARI object and is bounded.
+
+  **BREAKING for `repr`**: `repr(pari(42))` is now `"Gen(42)"` where it was
+  `"42"`. The reason is not cosmetic — PARI's text for a vector was
+  byte-identical to Julia's `repr` of a `Vector`, and for a string to
+  Julia's of a `String`, so `repr` could not tell a PARI value from a Julia
+  one. The marking is uniform because the ambiguity is not confined to any
+  one PARI type. `string(g)` is unaffected.
+
+  The compact form is truncated (40 characters of PARI text) so that a
+  `Gen` inside an array or an error message cannot flood the terminal: a
+  20 000-digit integer renders to 6 kB in full. Two documented limits,
+  both pinned by tests: an `InexactError` raised by `Int(::Gen)` embeds a
+  `BigInt`, which Base prints in full; and on the Julia 1.10 LTS
+  `showerror` renders an `InexactError` value with `print` rather than
+  `show`, so the budget does not apply there.
 - **Idiomatic access to PARI's containers** (M17): `length`, `size`, `axes`,
   `ndims`, `getindex` (linear and `[i, j]`), `iterate`, `eltype`, `collect`,
   `Vector{Gen}` and `Matrix{Gen}` over `t_VEC`, `t_COL`, `t_VECSMALL`,

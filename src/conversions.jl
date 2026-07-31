@@ -483,7 +483,40 @@ Base.Complex{T}(g::Gen) where {T<:Real} = Complex{T}(T(real(g)), T(imag(g)))
 
 # --- Display ---------------------------------------------------------------
 
-# A `Gen` shows, prints, and interpolates as PARI's own textual rendering.
-Base.show(io::IO, g::Gen) = print(io, _genrepr(g))
+# Three distinct contracts (M18, REQ-SHOW-01):
+#
+#   * `print` — and therefore `string` and interpolation — is PARI's own
+#     text, unchanged. This is what a caller wants when building a message.
+#   * `show(io, ::MIME"text/plain", g)` is PARI's text too: at the REPL, and
+#     in a doctest, the value should look the way it looks in `gp`.
+#   * `show(io, g)` — the compact form used by `repr`, by containers and by
+#     stacktraces — marks the value as a LibPARI object and is bounded.
+#
+# The compact form is not cosmetic. PARI's text for a vector is
+# byte-identical to Julia's `repr` of a `Vector`, and for a string to
+# Julia's `repr` of a `String`: `repr(gp_eval("[1,2,3]")) == repr([1,2,3])`
+# held before this. The marking is uniform rather than per-type, because the
+# ambiguity is not confined to any one PARI type.
+
+# How much of PARI's text the compact form keeps. A `Gen` can render to
+# megabytes — `2^20000` is 6 kB of digits, a 60x60 matrix 15 kB — and the
+# compact form appears where that would be unreadable: inside an array, in a
+# stacktrace, in a logging call.
+const _SHOW_BUDGET = 40
+
+function Base.show(io::IO, g::Gen)
+    text = _genrepr(g)
+    # Collapse PARI's multi-line layouts (a t_MAT, a t_COL) onto one line:
+    # the compact form has to stay one line to be usable in a container.
+    text = replace(text, r"\s*\n\s*" => " ")
+    if length(text) > _SHOW_BUDGET
+        text = first(text, _SHOW_BUDGET) * "…"
+    end
+    print(io, "Gen(", text, ")")
+    return nothing
+end
+
+# PARI's own rendering, in full — the way `gp` would print it.
+Base.show(io::IO, ::MIME"text/plain", g::Gen) = print(io, _genrepr(g))
 
 Base.print(io::IO, g::Gen) = print(io, _genrepr(g))

@@ -274,9 +274,9 @@ julia> using LibPARI
 
 julia> LibPARI.factors(60)
 3-element Vector{Pair{Gen, Gen}}:
- 2 => 2
- 3 => 1
- 5 => 1
+ Gen(2) => Gen(2)
+ Gen(3) => Gen(1)
+ Gen(5) => Gen(1)
 ```
 """
 function factors(n::Gen)

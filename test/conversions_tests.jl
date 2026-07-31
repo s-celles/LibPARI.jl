@@ -54,7 +54,17 @@ end
     # An integer Gen renders through `string`, `show`, and interpolation.
     @test string(LibPARI.Gen(123456789)) == "123456789"
     @test string(LibPARI.Gen(-7)) == "-7"
-    @test sprint(show, LibPARI.Gen(42)) == "42"
+    # REQ-CONV-03 is about the TEXT of a `Gen`, which `print`, `string` and
+    # interpolation still deliver verbatim. `show` no longer does: M18
+    # (REQ-SHOW-01/02) split the compact representation off, because PARI's
+    # own text for a vector is byte-identical to Julia's `repr` of a
+    # `Vector`, and for a string to Julia's of a `String`. The text contract
+    # is asserted through the three calls that still promise it, plus the
+    # REPL rendering — which is a stronger check than the single `show` this
+    # replaces.
+    @test sprint(print, LibPARI.Gen(42)) == "42"
+    @test sprint(show, MIME("text/plain"), LibPARI.Gen(42)) == "42"
+    @test sprint(show, LibPARI.Gen(42)) == "Gen(42)"
     @test "$(LibPARI.Gen(2024))" == "2024"
 
     # A non-integer Gen (1/2) must match PARI's own `GENtostr` output.
