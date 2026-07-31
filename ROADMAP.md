@@ -497,7 +497,7 @@ never existed, and the remaining milestones will renumber the same way.
 | M13 | Precision-safe reals & a bit-based precision API | 0.18.0    | **released** in `0.16.0` |
 | M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | **released** in `0.16.0`; facade completed since |
 | M15 | Generated-binding argument ergonomics      | 0.20.0         | **done** (unreleased) |
-| M16 | Explicit GP evaluation sessions            | 0.21.0         | **investigated**; design blocked |
+| M16 | Explicit GP evaluation sessions            | 0.21.0         | **closed** — no session API; process isolation documented |
 | M17 | Structured PARI objects                    | 0.22.0         | **done** (unreleased) |
 | M18 | Display contract                           | 0.23.0         | **done** (unreleased) |
 | M19 | Symbolics.jl bridge (optional extension)   | 0.24.0         | not started |
@@ -1187,26 +1187,29 @@ pretending to an isolation libpari may not provide.
       (`src/concurrency.jl:93-105`); and whether a variable assigned on one
       worker is visible from another. Record the answer in the milestone
       before proceeding. (REQ-GPS-01)
-- [ ] `GPSession` type and `gp_eval(session, str)`, with the existing
+- [~] `GPSession` type and `gp_eval(session, str)`, with the existing
       `gp_eval(str)` (`src/evaluator.jl:27`) retained as a documented
       **default session**. (REQ-GPS-02)
+      - **Deliberately not shipped** — see the findings above. The default
+        environment is documented instead, and process isolation replaces
+        the session object.
 - [ ] `reset!(session)` clearing exactly what the session owns — with the
       cleared set *documented*, not implied. (REQ-GPS-03)
-- [ ] An honest isolation statement in the docstring and in
+- [x] An honest isolation statement in the docstring and in
       `docs/src/api.md`: if independent GP environments are not feasible
       with libpari as embedded, say so and implement the safest honest
       abstraction (for example a session owning a named variable list it can
       kill) instead of pretending. (REQ-GPS-04)
-- [ ] Documented thread/task behaviour, consistent with the finding of
+- [x] Documented thread/task behaviour, consistent with the finding of
       REQ-GPS-01 and with the sticky per-thread worker model. (REQ-GPS-05)
-- [ ] `PariError` behaviour is unchanged: a syntax or runtime error inside a
+- [x] `PariError` behaviour is unchanged: a syntax or runtime error inside a
       session stays catchable and leaves both the session and the library
       usable. (REQ-GPS-06)
 - [ ] Tests: assignment persists **within** a session; state does **not**
       leak between sessions (or the documented leakage is asserted
       explicitly, if isolation proves infeasible); `reset!` does what it
       claims; concurrent sessions behave as documented. (REQ-GPS-07)
-- [ ] `gp_eval` stays documented as the escape hatch for GP-closure-argument
+- [x] `gp_eval` stays documented as the escape hatch for GP-closure-argument
       functions — never as the primary API. (REQ-GPS-08)
 
 ### REQ-GPS-01 findings — isolated GP sessions are not available
@@ -1237,13 +1240,32 @@ documentation and by the Yggdrasil build recipe:
   has no drop-in replacement. A limb-level conversion is conceivable but
   would write into PARI's internal `t_INT` layout — a separate decision.
 
-**Consequence.** `GPSession` cannot provide isolation, because PARI does not
-offer independent GP namespaces in one process. What remains honest is a
-session that *tracks the names it is given* and kills them on `reset!` —
-explicit, scoped cleanup over a shared namespace, with the docs and a test
-stating plainly that two sessions using the same name collide. Whether that
-is worth shipping, or whether it creates more illusion than it dispels, is
-the open question this milestone now carries.
+**Every route was then investigated, and each one fails:**
+
+| Route | Why it does not work |
+|-------|----------------------|
+| A PARI context per session (`pari_thread_*`) | Contexts serve parallel *computation*; a secondary one cannot write GP globals at all. |
+| Enumerate a session's variables | `variables()` lists polynomial variables, not assignments. |
+| Detect new names with `is_entry` | An `entree` survives `kill`, so bound and unbound are indistinguishable. |
+| Read `entree.valence` | The macros are in `paripriv.h`, a **private** header. |
+| Inject values as text | Lossy — a 512-bit real returns at 128 bits. |
+| Inject with `changevalue`/`fetch_entry` | Exact, and verified working — but **declared in no PARI header and documented nowhere**. Building on an unpublished ABI is precisely the risk that made the `sd_*` bindings undefined behaviour (REQ-PREC-13). |
+
+**Decision: no in-process `GPSession` is shipped.** An API named "session"
+that shares one namespace, cannot enumerate its own contents, and loses
+precision on injection would create more illusion than it dispels.
+
+**What ships instead** (`docs/src/gp-state.md`): the rules, stated and
+tested — one environment, writable from one task only — and **process-level
+isolation** as the arrangement that actually works. One PARI per process,
+via `Distributed`, is complete isolation and relies on nothing internal;
+verified, including that a worker process *may* assign where a thread may
+not. Its costs (a PARI stack per process, serialisation across the
+boundary, start-up) are documented rather than glossed.
+
+Reopening this needs one of: a PARI release that documents `changevalue`
+and `fetch_entry` as public, or a supported way to obtain independent GP
+namespaces in one process.
 
 Already delivered from these findings: the `gp_eval` docstring no longer
 claims a shared environment without qualification — it states the threading

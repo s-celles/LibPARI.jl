@@ -10,6 +10,22 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **A page on GP state and sessions** (`docs/src/gp-state.md`, M16). It
+  states the rules — one GP environment per process, in PARI's primary
+  context, writable from **one task only** — and documents **process-level
+  isolation** via `Distributed` as the arrangement that gives genuinely
+  independent GP environments. A worker process may assign where a
+  secondary thread may not.
+
+  **No in-process `GPSession` is shipped**, and the page says why: every
+  route fails. PARI contexts serve parallel computation, not namespacing;
+  `variables()` cannot enumerate assignments; `is_entry` cannot tell a bound
+  name from a free one, since the entry survives `kill`; telling them apart
+  needs `paripriv.h`; injecting values as text loses precision (a 512-bit
+  real returns at 128 bits); and injecting them exactly with
+  `changevalue`/`fetch_entry` — which does work — depends on functions
+  declared in no PARI header and documented nowhere, the same unpublished-ABI
+  risk that made the `sd_*` bindings undefined behaviour.
 - **`show`, `show(::MIME"text/plain")` and `print` are three contracts**
   (M18). `print` — and therefore `string` and interpolation — is PARI's own
   text, unchanged; `text/plain` is PARI's text too, so the REPL and every
