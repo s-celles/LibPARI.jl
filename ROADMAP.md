@@ -23,17 +23,17 @@ not derived from `spec-ears.md` but introduces its own requirement families.
   *every* milestone rather than waiting for a dedicated phase.
 - Status legend: `[ ]` not started · `[~]` in progress · `[x]` done.
 
-## Current status (2026-07-31, package version 0.15.1)
+## Current status (2026-07-31, package version 0.16.0)
 
 **Part I (M0–M10) is complete.** Every deliverable shipped, in milestone
 order, in releases `0.1.0` … `0.11.0`; the work that followed
 (`0.12.0` … `0.15.1`) is listed under
 [Delivered beyond Part I](#delivered-beyond-part-i-0120--0151).
 
-**Part II (M11–M21) is in progress.** M11, M12 and most of M13 have
-landed on the development branch, unreleased, targeted at `0.16.0`,
-`0.17.0` and `0.18.0`, and most of M14 with them; M15–M21 are not
-started. M13 keeps one deliverable
+**Part II (M11–M21) is in progress.** M11, M12, M13 and most of M14
+shipped together as **`0.16.0`** (2026-07-31). M15–M21 are not started;
+M14 keeps three deliverables open (modular arithmetic, the polynomial
+facade, the optional Primes.jl extension). M13 keeps one deliverable
 open — REQ-PREC-13, which collides with NFR-01; see the milestone. It is the
 API redesign that must land
 before 1.0: an honest type contract for `Gen`, precise conversion and
@@ -483,14 +483,19 @@ M10 (0.11.0, done)
 flight at the same time. `M16`, `M17` and `M18` are independent of each
 other and of `M12`–`M15`, and may be reordered freely after `M11`.
 
+**Version targets are targets.** The per-milestone versions below were the
+plan; milestones that ship together collapse into one release. M11–M14 plus
+REQ-PREC-13 shipped as **`0.16.0`** on 2026-07-31 — `0.17.0` and `0.18.0`
+never existed, and the remaining milestones will renumber the same way.
+
 ## Milestone summary — Part II
 
 | ID  | Milestone                                  | Target version | Status |
 |-----|--------------------------------------------|----------------|--------|
-| M11 | Honest type contract for `Gen`             | 0.16.0         | **done** (unreleased) |
-| M12 | Conversion & promotion contracts           | 0.17.0         | **done** (unreleased) |
-| M13 | Precision-safe reals & a bit-based precision API | 0.18.0    | **done** (unreleased) |
-| M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | **mostly done** (unreleased) |
+| M11 | Honest type contract for `Gen`             | 0.16.0         | **released** in `0.16.0` |
+| M12 | Conversion & promotion contracts           | 0.17.0         | **released** in `0.16.0` |
+| M13 | Precision-safe reals & a bit-based precision API | 0.18.0    | **released** in `0.16.0` |
+| M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | **mostly released** in `0.16.0` |
 | M15 | Generated-binding argument ergonomics      | 0.20.0         | not started |
 | M16 | Explicit GP evaluation sessions            | 0.21.0         | not started |
 | M17 | Structured PARI objects                    | 0.22.0         | not started |

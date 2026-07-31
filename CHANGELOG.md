@@ -8,6 +8,29 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.16.0] - 2026-07-31
+
+The first release of the pre-1.0 API redesign: milestones M11–M14 of
+`ROADMAP.md` Part II, plus REQ-PREC-13. They are released together because
+none of them shipped separately; the roadmap's per-milestone version
+targets (0.16.0 … 0.19.0) were targets, not releases.
+
+**Read this before upgrading.** Two of the six breaking changes alter
+*computed values*, silently and for the better:
+
+- `Gen(::BigFloat)` no longer routes through `Cdouble`, so a `BigFloat`
+  argument keeps all its bits instead of collapsing to 53. Anything seeded
+  from a `BigFloat` changes value — the old values were wrong.
+- Every generated binding taking a precision argument now defaults to 128
+  bits rather than PARI's 64-bit minimum, so results are more accurate and
+  slightly larger. A caller passing `prec =` explicitly is unaffected.
+
+The other four are visible at compile time or as a clear error:
+`Gen` is no longer a `Number`; four names are now exported; an unsupported
+conversion raises `ConversionError` instead of a `MethodError` or a
+`StackOverflowError`; and the 47 undefined-behaviour `PARI.sd_*` bindings
+are gone.
+
 ### Added
 
 - **TagBot workflow** (`.github/workflows/TagBot.yml`) to automatically
@@ -800,7 +823,8 @@ wrapper code exists. No PARI functionality is exposed yet.
   it is resolved from a local development build. Registering LibPARI is
   therefore deferred to a later milestone.
 
-[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.16.0...HEAD
+[0.16.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.15.1...v0.16.0
 [0.10.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.7.0...v0.8.0
