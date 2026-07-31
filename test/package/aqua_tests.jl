@@ -2,10 +2,12 @@
     using Aqua
     using LibPARI
 
-    # `ambiguities` is disabled: Aqua runs that check in a spawned subprocess
-    # that loads LibPARI, and loading PARI inside a multi-threaded Julia
-    # process is not yet safe — PARI's working state is thread-local. Thread
-    # serialization is milestone M9 (REQ-PLT-03); re-enable this check then.
-    # All other Aqua checks run.
-    Aqua.test_all(LibPARI; ambiguities = false)
+    # `ambiguities` is on (REQ-TYPE-13). It was disabled pending M9: Aqua
+    # runs that check in a spawned subprocess that loads LibPARI, and PARI's
+    # working state is thread-local, so loading it under a multi-threaded
+    # Julia was unsafe. M9 (0.10.0) and the per-thread contexts of 0.13.0
+    # settled that, and the check matters more now: M11-M18 added a large
+    # matrix of two-argument methods on `Gen`, which is exactly the change
+    # that introduces ambiguities.
+    Aqua.test_all(LibPARI)
 end

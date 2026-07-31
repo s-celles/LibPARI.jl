@@ -576,17 +576,14 @@ operation that Base's `Number` fallbacks silently provide today.
       `docs/src/index.md:23`, `docs/src/getting-started.md:47` and
       `README.md:31`; the 0.14.0 CHANGELOG entry stays as written and the
       0.16.0 entry records its supersession. (REQ-TYPE-12)
-- [ ] Re-enable Aqua's `ambiguities` check
+- [x] Re-enable Aqua's `ambiguities` check
       (`test/package/aqua_tests.jl`, deferred pending M9 — shipped in
       0.10.0/0.13.0) and extend `test/inference_tests.jl` with `@inferred`
       over every new method. (REQ-TYPE-13)
-      - **Partly done, deliberately left open.** The `@inferred` extension
-        shipped; the Aqua check is still disabled. Evidence for whoever
-        flips it: with M11 in place both `Aqua.test_ambiguities(LibPARI)`
-        and `Test.detect_ambiguities(LibPARI; recursive = true)` are clean
-        locally. It is left off because the check spawns a subprocess that
-        loads PARI, which is an untested risk on the macOS and Windows
-        runners — flip it in its own change, not inside M11.
+      - Flipped after M18, in its own change rather than inside M11: the
+        check spawns a subprocess that loads PARI, which was an untested
+        risk on the macOS and Windows runners until the rest of the
+        redesign had proved stable there.
 
 **Breaking changes**
 
@@ -979,9 +976,16 @@ semantics match exactly.
       `prevprime`, `factor(::Gen)::Gen` and
       `factors(::Gen)::Vector{Pair{Gen,Gen}}`. (REQ-PUB-08)
       - The five functions shipped. The optional `LibPARIPrimesExt` weakdep
-        extension supplying `Primes.isprime(::Gen)`, and its CI job, did
-        **not** — it is a separate package-extension change, not a facade
-        one. Reach them as `LibPARI.isprime` meanwhile.
+        extension is **not shipped, by decision**: it would add a weak
+        dependency, a test dependency and a CI job for a single method, and
+        it could not be made coherent — `Primes.nextprime(n, i)` takes an
+        index PARI has no counterpart for, and `Primes.factor` returns a
+        `Factorization` whose mapping from PARI's two-column `t_MAT` is a
+        design commitment of its own. Extending only part of the family
+        would make the interoperability silently partial. Reach the
+        functions as `LibPARI.isprime`, `LibPARI.factor` and
+        `LibPARI.factors`; revisit if the pairing proves common in
+        practice.
       - Not exported: `isprime`/`factor` are Primes.jl's names. A hard
         dependency on Primes.jl is **rejected**; ship an optional
         `LibPARIPrimesExt` weakdep extension instead, with a CI job that
@@ -1662,8 +1666,14 @@ registration, and buys isolation neither package needs at two systems.
 - [ ] `docs/src/api-redesign.md` — the issue-style plan: current API
       problems, proposed contracts, breaking changes, migration examples,
       implementation phases, unresolved design questions. (REQ-REL-01)
-- [ ] `docs/src/migration.md` — a before/after example for **every**
+- [~] `docs/src/migration.md` — a before/after example for **every**
       breaking change listed in M11–M18. (REQ-REL-02)
+      - **Dropped while the API is unstable.** The package is pre-1.0 and
+        in active redesign: a migration guide written now would document
+        contracts that the remaining milestones are still free to change,
+        and would have to be rewritten each time. The CHANGELOG carries
+        every breaking change with its before/after in the meantime.
+        Revisit when the surface is frozen for 1.0.
 - [ ] The getting-started guide is rewritten around `pari(x)` and gains the
       **three levels of access** section — idiomatic Julia operations; the
       comprehensive `PARI` bindings; dynamic GP through `gp_eval` — stating
