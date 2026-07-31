@@ -9,7 +9,7 @@
 # See specs/011-m10-documentation-release/contracts/nfr-acceptance.md.
 # ---------------------------------------------------------------------------
 
-@testitem "NFR-01 — the binding layer covers ≥ 1200 PARI functions" begin
+@testitem "NFR-01 — the binding layer covers ≥ 1190 PARI functions" begin
     using LibPARI
 
     # Count the callable bindings the generator emitted into `LibPARI.PARI`
@@ -23,7 +23,23 @@
         getfield(LibPARI.PARI, s) isa Function
     end
 
-    @test length(bindings) >= 1200
+    # The threshold was 1200 through M10. It is 1190 from M13 (REQ-PREC-13),
+    # and the change is a CORRECTION of the count, not a relaxation of the
+    # goal: 47 of the bindings it used to include were generated from
+    # `pari.desc` records with `Class: default` and an EMPTY `Prototype:`,
+    # so they took no arguments while the C functions behind them are
+    # declared `(const char *v, long flag)`. Calling one made the C function
+    # read two argument registers the caller never set — undefined
+    # behaviour. They are also not GP-accessible *functions*, which is what
+    # NFR-01 counts: they are GP's `default()` setters, reachable through
+    # `gp_eval("default(...)")` or `LibPARI.set_global_precision!`.
+    #
+    # Removing them is what takes the count from 1241 to 1194.
+    @test length(bindings) >= 1190
+
+    # And the unsafe ones must stay gone.
+    @test !isdefined(LibPARI.PARI, :sd_realprecision)
+    @test !isdefined(LibPARI.PARI, :sd_seriesprecision)
 end
 
 @testitem "NFR-02 — repeated binding calls leak no PARI heap memory" begin

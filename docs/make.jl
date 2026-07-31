@@ -32,6 +32,8 @@ makedocs(;
         "Home" => "index.md",
         "Getting started" => "getting-started.md",
         "API reference" => "api.md",
+        "Precision" => "precision.md",
+        "API redesign" => "api-redesign.md",
         "MCP connector" => "mcp.md",
     ],
     doctest = true,

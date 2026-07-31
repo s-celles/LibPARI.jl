@@ -98,7 +98,7 @@ end
 
     ext = Base.get_extension(LibPARI, :LibPARIMCPExt)
 
-    # The full list covers the generated binding layer (NFR-01: >= 1200).
+    # The full list covers the generated binding layer (NFR-01: >= 1190).
     all_fns = ext._functions_handler(Dict{String,Any}())
     @test all_fns isa AbstractString
     @test occursin("nextprime", all_fns)

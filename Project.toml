@@ -1,6 +1,6 @@
 name = "LibPARI"
 uuid = "75bc234d-eb99-4f80-8816-cb1dc773483e"
-version = "0.15.1"
+version = "0.16.0"
 authors = ["Sébastien Celles <s.celles@gmail.com>"]
 
 [deps]
@@ -17,7 +17,7 @@ LibPARIMCPExt = "ModelContextProtocol"
 [compat]
 Aqua = "0.8"
 DocStringExtensions = "0.9"
-JuliaFormatter = "1, 2"
+JuliaFormatter = "~2.12"
 ModelContextProtocol = "0.4"
 PARI_jll = "2.17"
 PrecompileTools = "1"

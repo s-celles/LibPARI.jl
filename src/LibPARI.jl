@@ -5,7 +5,7 @@ A Julia wrapper for the PARI/GP number-theory library.
 
 Loading this module initializes the embedded PARI library once for the
 process and registers a clean shutdown at process exit. LibPARI exposes
-PARI/GP in two ways: over 1200 functions generated from PARI's own function
+PARI/GP in two ways: nearly 1200 functions generated from PARI's own function
 database, reachable through the `LibPARI.PARI` submodule, and a hand-written
 core — the `Gen` value type, idiomatic numeric operators, conversions to and
 from Julia numbers, the `gp_eval` expression evaluator, and safe library
@@ -15,6 +15,14 @@ The lifecycle is observable through `LibPARI.is_initialized`,
 `LibPARI.library_state`, and `LibPARI.stack_size`.
 """
 module LibPARI
+
+# The exported surface is deliberately four names (M14, REQ-PUB-04): the
+# entry point `pari`, the wrapper type `Gen` it produces, the escape hatch
+# `gp_eval`, and the exception every PARI failure raises. The ~1200
+# generated bindings stay behind `LibPARI.PARI`, and the rest of the
+# hand-written surface stays qualified. A test locks this list, because
+# adding to it breaks every `using LibPARI` that already works.
+export Gen, pari, gp_eval, PariError
 
 import PARI_jll
 using DocStringExtensions
@@ -27,7 +35,9 @@ include("errors.jl")
 include("trap.jl")
 include("conversions.jl")
 include("numeric.jl")
+include("precision.jl")
 include("evaluator.jl")
+include("facade.jl")
 include("bindings.jl")
 include("mcp.jl")
 include("precompile.jl")
@@ -52,6 +62,29 @@ function __init__()
     # optional MCP extension loaded (no-op for normal use).
     _register_mcp_hint()
     return nothing
+end
+
+# The supported-but-unexported surface (M14, REQ-PUB-05). These names are
+# documented and stable, but reaching them qualified is deliberate: they
+# would be poor unqualified neighbours (`factor`, `isprime` are Primes.jl's
+# names; `PARI` is a very broad binding to claim).
+#
+# `public` is a Julia 1.11 keyword and does not PARSE on the 1.10 LTS floor
+# this package supports, so it cannot be written literally. Parsing it at
+# load time keeps 1.10 working. A plain run-time `if` is used rather than a
+# compile-time conditional: the condition is a Julia version, not a
+# platform, and the M9 audit in test/platform_tests.jl reserves
+# compile-time conditionals for platform code.
+if VERSION >= v"1.11"
+    eval(
+        Meta.parse(
+            "public PARI, PariObject, PariType, PariErr, PariConvertible, " *
+            "ConversionError, gen_convert, gentype, gen_from, " *
+            "protected_call, isexact, nbits2prec, default_precision, " *
+            "isprime, nextprime, prevprime, factor, factors, " *
+            "is_initialized, library_state, stack_size, serve_mcp",
+        ),
+    )
 end
 
 end # module LibPARI

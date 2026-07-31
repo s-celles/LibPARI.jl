@@ -27,12 +27,39 @@ _set_avma(av::UInt) = ccall((:set_avma, PARI_jll.libpari), Cvoid, (UInt,), av)
 """
 $(TYPEDEF)
 
+The supertype of every PARI object LibPARI exposes to Julia.
+
+`PariObject` exists so that `Gen` can name what it is. A `Gen` wraps *any*
+PARI `GEN` — an integer, a real, a matrix, a string, a closure — so it cannot
+honestly be a Julia `Number` (REQ-TYPE-01). Julia code that must accept a
+PARI object generically dispatches on `PariObject`.
+
+# Examples
+
+```jldoctest
+julia> using LibPARI
+
+julia> LibPARI.Gen <: LibPARI.PariObject
+true
+```
+"""
+abstract type PariObject end
+
+"""
+$(TYPEDEF)
+
 A Julia value wrapping one PARI object (a PARI `GEN`).
 
 `Gen` is a concrete, mutable type. Each `Gen` owns a private clone of its PARI
 object in PARI's persistent storage; a garbage-collection finalizer frees that
 clone exactly once. Every PARI object that LibPARI exposes to Julia is a
 `Gen`.
+
+`Gen` is a [`PariObject`](@ref), **not** a Julia `Number`: one concrete `Gen`
+wraps every PARI type, matrices, strings and closures included, so a `Number`
+supertype would be a false claim (REQ-TYPE-01). The arithmetic, equality and
+ordering that Base's `Number` fallbacks used to supply are declared
+explicitly on `Gen` instead — see `src/numeric.jl`.
 
 # Examples
 
@@ -43,7 +70,7 @@ julia> isconcretetype(LibPARI.Gen)
 true
 ```
 """
-mutable struct Gen <: Number
+mutable struct Gen <: PariObject
     ptr::Ptr{Int}
 
     function Gen(raw::Ptr{Int})

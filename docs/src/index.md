@@ -10,7 +10,7 @@ number-theory library.
 LibPARI embeds the PARI/GP C library in a Julia process and exposes it to
 Julia code in two complementary ways:
 
-- **Generated bindings** — over 1200 PARI functions, generated directly from
+- **Generated bindings** — nearly 1200 PARI functions, generated directly from
   PARI's own machine-readable function database (`pari.desc`), reachable
   through the `LibPARI.PARI` submodule. See [API reference](@ref).
 - **A hand-written core** — a [`Gen`](@ref) value type wrapping
@@ -20,9 +20,12 @@ Julia code in two complementary ways:
 
 ## What LibPARI gives you
 
-- **`Gen` is a Julia `Number`.** PARI objects are first-class Julia values:
-  build them from Julia integers, floats, and rationals, and use `+`, `-`,
-  `*`, `/`, `^`, and `==` directly.
+- **`Gen` is a [`PariObject`](@ref LibPARI.PariObject), not a Julia
+  `Number`.** One wrapper type covers every PARI object — matrices, strings
+  and closures included — so LibPARI declares the arithmetic explicitly
+  rather than claiming a `Number` supertype: build a `Gen` from Julia
+  integers, floats and rationals and use `+`, `-`, `*`, `/`, `^`, and `==`
+  directly, with a Julia number on either side.
 - **Exact arithmetic of arbitrary size.** PARI's bignum integers, rationals,
   and reals, with conversions back to Julia's `BigInt` and fixed-width
   integer types.
@@ -42,10 +45,16 @@ Julia code in two complementary ways:
 
 ## Status
 
-LibPARI is at version `0.15.0`. The hand-written core (lifecycle, `Gen`,
-error handling, conversions, the numeric API, and the GP evaluator) and the
-generated binding layer are complete; the library is platform-correct,
-parallel, and thread-safe.
+LibPARI is at version `0.16.0`, the first release of the pre-1.0 API
+redesign. The hand-written core (lifecycle, `Gen`, error handling,
+conversions, the numeric API, precision, the `pari` entry point and the GP
+evaluator) and the generated binding layer are complete; the library is
+platform-correct, parallel, and thread-safe.
+
+`0.16.0` carries breaking changes, two of which alter computed values — see
+the [changelog](https://github.com/s-celles/LibPARI.jl/blob/main/CHANGELOG.md)
+before upgrading. The API is still being reshaped for 1.0; `ROADMAP.md`
+Part II tracks what remains.
 
 Both `LibPARI` and `PARI_jll` are registered in the Julia General registry
 — a plain `Pkg.add("LibPARI")` installs everything on Linux, macOS, and

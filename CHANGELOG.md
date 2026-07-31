@@ -8,6 +8,29 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.16.0] - 2026-07-31
+
+The first release of the pre-1.0 API redesign: milestones M11–M14 of
+`ROADMAP.md` Part II, plus REQ-PREC-13. They are released together because
+none of them shipped separately; the roadmap's per-milestone version
+targets (0.16.0 … 0.19.0) were targets, not releases.
+
+**Read this before upgrading.** Two of the six breaking changes alter
+*computed values*, silently and for the better:
+
+- `Gen(::BigFloat)` no longer routes through `Cdouble`, so a `BigFloat`
+  argument keeps all its bits instead of collapsing to 53. Anything seeded
+  from a `BigFloat` changes value — the old values were wrong.
+- Every generated binding taking a precision argument now defaults to 128
+  bits rather than PARI's 64-bit minimum, so results are more accurate and
+  slightly larger. A caller passing `prec =` explicitly is unaffected.
+
+The other four are visible at compile time or as a clear error:
+`Gen` is no longer a `Number`; four names are now exported; an unsupported
+conversion raises `ConversionError` instead of a `MethodError` or a
+`StackOverflowError`; and the 47 undefined-behaviour `PARI.sd_*` bindings
+are gone.
+
 ### Added
 
 - **TagBot workflow** (`.github/workflows/TagBot.yml`) to automatically
@@ -15,6 +38,210 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   Julia General registry.
 - **CompatHelper workflow** (`.github/workflows/CompatHelper.yml`) to keep
   `[compat]` entries current via automated pull requests.
+
+### Changed
+
+- **BREAKING — `Gen` is a `PariObject`, not a Julia `Number`** (M11,
+  REQ-TYPE-01, superseding REQ-API-01). One concrete `Gen` wraps *every*
+  PARI object — matrices, strings and closures included — so the `Number`
+  supertype was a false claim: `gp_eval("[1,2;3,4]") isa Number` answered
+  `true`. The new `abstract type LibPARI.PariObject` names what a `Gen`
+  actually is. No shim is possible — a type's supertype is fixed at
+  definition — so code dispatching on `::Number` (LinearAlgebra methods
+  bounded by `T<:Number`, `x isa Number` guards) no longer accepts a `Gen`.
+- **Every mixed `Gen`/Julia-number operation is now an explicit method.**
+  `+ - * / ^ \`, `==`, `<`, `<=` and `isless` are generated from one
+  operator table over `(Gen, x)` and `(x, Gen)`, each building a `Gen` and
+  calling the `Gen`/`Gen` operator, so behaviour is unchanged for the
+  documented operand set — `Integer`, `AbstractFloat`, `Rational`,
+  `Complex` (REQ-TYPE-02, REQ-TYPE-03, REQ-TYPE-04). `isless` is new: it
+  previously existed only for `Gen`/`Gen`, so `sort(Any[Gen(2), 1])` raised
+  a `MethodError`.
+- **The `Number` conveniences are re-declared on `Gen`**: `broadcastable`
+  (as `Ref`, keeping a `Gen` a broadcast scalar), unary `+`, `\`, `float`,
+  `abs2`, `adjoint` and `transpose` (REQ-TYPE-05, REQ-TYPE-06). Anything
+  not listed — `widen`, `signbit`, `divrem`, `fma`, `angle` and the other
+  `Number` fallbacks — is a deliberate, documented loss. (`cmp` and
+  `muladd` keep working: Base defines them generically, over `isless` and
+  over `*`/`+`, not over `Number`.) `transpose`, `adjoint` and `\` are
+  **corrected** rather than merely re-declared: the `Number` fallbacks were
+  silently wrong for a `t_MAT`/`t_VEC`/`t_COL` — `transpose` returned the
+  value unchanged, `adjoint` conjugated without transposing, and `a \ b`
+  computed `b·a⁻¹`. Each now dispatches on the PARI type. `abs2` refuses a
+  container instead of answering elementwise.
+- **`promote_rule`/`convert` narrowed** from every `Number` to the same
+  enumerated operand set. They no longer drive arithmetic (the table does);
+  they remain so that `[Gen(1), 2]` types as a `Vector{Gen}`.
+- **BREAKING — one accepted-input set and one conversion entry point**
+  (M12, REQ-PROM-01/05). `LibPARI.PariConvertible` names the Julia types
+  LibPARI guarantees it can convert — `Integer`, `AbstractFloat`,
+  `Rational`, `Complex` — and `LibPARI.gen_convert(x)` is the single funnel
+  every constructor, `convert(Gen, x)` and mixed-operand operator goes
+  through, so one type is converted in exactly one way. `gen_convert(::Gen)`
+  returns its argument unchanged, never re-cloned. A downstream package adds
+  support for its own type by defining a `gen_convert` method for it — type
+  piracy on neither side.
+- **BREAKING — an unsupported value raises `LibPARI.ConversionError`**
+  (REQ-PROM-03), naming the offending type and the extension point, instead
+  of surfacing as a `MethodError` from inside a Base function the caller
+  never invoked. `Gen(π)` and `convert(Gen, π)` are the canonical cases: an
+  irrational has no exact PARI value and needs a precision LibPARI will not
+  pick silently.
+- **BREAKING — `Gen(Inf)`, `Gen(-Inf)` and `Gen(NaN)` raise `InexactError`**
+  (REQ-PROM-10), where they previously reached `dbltor` and surfaced as
+  `PariError(e_OVERFLOW)`. PARI's `t_INFINITY` exists but does not take part
+  in general arithmetic, so mapping onto it would produce values that fail
+  later, far from the conversion.
+
+- **BREAKING — the working precision is stated in bits, and defaults to
+  128** (M13, REQ-PREC-03/04). Every generated binding taking a `p` or `b`
+  prototype argument defaulted to `prec = 4`, commented "word precision".
+  Verified against PARI 2.17's headers (`pariinl.h`:
+  `prec2nbits(long x) { return x; }`), those arguments are **bit** counts,
+  so the old default asked for 4 bits and got PARI's 64-bit minimum — not a
+  deliberate choice. Bindings now default to LibPARI's working precision,
+  which is GP's own `realbitprecision` default of 128 bits, so an
+  expression agrees with `gp`. Results get more accurate and slightly
+  larger; a caller passing `prec =` explicitly is unaffected. The
+  undocumented `_DEFAULT_PREC = 4` constant is gone.
+- **BREAKING — `Gen(::BigFloat)` preserves the value exactly**
+  (REQ-PREC-08). It routed through `Cdouble`, so
+  `BigFloat(Gen(big"1.00000000000000000000000000000001")) == 1.0` — a
+  silent 30-digit loss. A wide float is now decomposed into its exact
+  integer significand and binary exponent and rebuilt at a precision that
+  holds every bit; no path from a `BigFloat` touches `Cdouble`. Values
+  seeded from a `BigFloat` change, because the old ones were wrong.
+
+- **BREAKING — LibPARI now exports four names** (M14, REQ-PUB-04):
+  `pari`, `Gen`, `gp_eval` and `PariError`. It previously exported nothing,
+  so `using LibPARI` next to a package exporting any of those four now
+  raises an ambiguous-binding error at first use. No shim can exist for a
+  new export; the mitigation is that the list is four names and a test
+  locks it. The generated bindings stay behind `LibPARI.PARI`, and
+  `isprime`/`factor` are deliberately **not** exported because they are
+  Primes.jl's names.
+
+### Added
+
+- **`pari(x)` — the entry point** (REQ-PUB-01/02). Converts any
+  [`PariConvertible`](@ref) value; `pari(g::Gen) === g`, returning the
+  argument rather than cloning it a second time. Documentation now leads
+  with `pari(x)` rather than `LibPARI.Gen(x)`.
+- **A small facade over the generated layer** (REQ-PUB-06/07/08), extending
+  Base only where PARI's operation *is* Julia's: `gcd`, `gcdx` (reordered
+  from PARI's `[u, v, d]` to Julia's `(d, u, v)`), `numerator`,
+  `denominator` and `factorial`, each with explicit mixed `Gen`/Julia
+  methods. Where PARI's answer means something else it is refused, not
+  relayed: `numerator`/`denominator` accept only `t_INT`/`t_FRAC`, because
+  PARI answers `denominator(x/2 + 1/3) == 1` in the polynomial domain; and
+  `factorial` validates a non-negative integer, because PARI's `mpfact`
+  does not. Unexported: `LibPARI.isprime`, `nextprime`, `prevprime`,
+  `factor` (PARI's 2-column `t_MAT`) and `factors` (a
+  `Vector{Pair{Gen,Gen}}`).
+- **The supported-but-unexported names are marked `public`** on Julia 1.11
+  and later (REQ-PUB-05) — `PARI`, `gentype`, `isexact`, `factors` and the
+  rest. The declaration is parsed at load time because `public` is a
+  keyword that does not parse on the 1.10 LTS floor.
+- **A getting-started section on the three levels of access**: the
+  idiomatic Julia surface (the layer promised stable at 1.0), the ~1200
+  generated `LibPARI.PARI` bindings, and `gp_eval` as the escape hatch.
+
+### Changed
+
+- **A complex `Gen` is built without the GP parser** (REQ-PUB-03).
+  `Gen(z::Complex)` was `Gen(real(z)) + Gen(imag(z)) * gp_eval("I")`, which
+  ran the GP parser on every complex conversion and tied a core constructor
+  to the evaluator. It now calls PARI's `gen_I` directly. Arithmetic is
+  kept rather than a raw `mkcomplex`, so a zero imaginary part still
+  normalises to the real type, as it does in GP. Values are unchanged.
+
+- **A bit-based precision API** (`docs/src/precision.md`):
+  `setprecision(Gen, bits)` as a nesting, unwinding scope;
+  `precision(Gen)` for the value in force; `precision(g::Gen)` for a real's
+  own accuracy, raising `ArgumentError` on an exact `Gen`;
+  `LibPARI.isexact`; `LibPARI.nbits2prec` for PARI's word rounding; and
+  `LibPARI.default_precision`. The scope is read in the **calling** task
+  and carried into the closure marshalled onto the PARI worker, so it
+  applies where the work runs (REQ-PREC-05/06). Two documented limits,
+  both pinned by tests: a task spawned inside a scope does not inherit it
+  (Julia 1.10 has no `ScopedValues`), and `gp_eval` follows PARI's
+  process-global `realprecision`, not the scope (REQ-PREC-12).
+- **`BigFloat(g; precision = bits)`** (REQ-PREC-07). Without the keyword
+  the conversion stays exact — the result carries PARI's own mantissa, at
+  whatever precision that takes.
+- **The typed outward conversions** (REQ-PROM-08): `Float16`, `Float32`,
+  `Rational{T}` and `Complex{T}` from a `Gen`, each raising `InexactError`
+  for a value outside the target type. All four were `MethodError`s.
+  `Rational(g)::Rational{BigInt}` and `Complex(g)::ComplexF64` keep their
+  return types. A `t_REAL` narrows through its full-precision `BigFloat`, so
+  the conversion rounds exactly once.
+- **`Bool(::Gen)` and `Integer(::Gen)`** as explicit methods. The integer
+  constructors are now enumerated over `Base.BitInteger`, `BigInt` and
+  `Bool` — the set LibPARI can validate; a third-party `Integer` subtype
+  still works through `T(BigInt(g))` but warns once, since LibPARI cannot
+  check that construction is exact (REQ-PROM-09).
+
+### Fixed
+
+- **The JuliaFormatter version is pinned to one minor series** in
+  `Project.toml`, `gen/Project.toml` and the CI `format` job, and
+  `src/bindings.jl` is regenerated with it. `src/bindings.jl` is *written*
+  by the `gen/` environment and *checked* by the root one; both declared
+  `JuliaFormatter = "1, 2"`, so each resolved whatever 2.x was current and
+  the two disagreed about the trailing `;` in a `let` header — 42 sites.
+  That turned `test/package/format_tests.jl` and the byte-identical
+  reproducibility gate (`test/generator_tests.jl`, NFR-04) red with no
+  source change, on CI as well as locally. The CI job also asked for
+  `version = "2"`, i.e. the newest release at run time, so the gate could
+  break on any JuliaFormatter publication. The binding count is unchanged
+  (1241) and two consecutive generator runs are byte-identical.
+- **An operand with no `Gen` constructor raises a catchable exception.**
+  `Gen(1) + π` recursed through `promote_type`/`convert` and died with a
+  `StackOverflowError`, which corrupts program state; it is now a plain
+  `MethodError` (REQ-TYPE-07).
+- **A `t_REAL` converts through PARI instead of parsing its printed form.**
+  `Float64` and `BigFloat` read PARI's own mantissa and exponent
+  (`mantissa_real`), so `Float64(Gen(1e-10))` and
+  `BigFloat(gp_eval("1.0*10^400"))` succeed; both previously raised
+  `ArgumentError: cannot parse …` because PARI prints a space before the
+  exponent (REQ-TYPE-08, a REQ-CONV-04 violation). A real too large for
+  `Float64` now converts to `Inf`.
+- **`hash` is total over every PARI type** (REQ-TYPE-09). It routed a
+  `t_REAL` through `Float64` and so threw on a large-exponent real, making
+  such a `Gen` unusable as a `Dict`/`Set` key; it now routes through
+  `BigFloat`, preserving `a == b ⟹ hash(a) == hash(b)`.
+
+### Documented
+
+- **`ROADMAP.md` gains Part II — the API redesign for 1.0.0.** The roadmap
+  is now split into Part I (M0–M10, delivered) and **Part II (M11–M21)**:
+  M11 honest type contract for `Gen` (`Gen <: PariObject`,
+  withdrawing `Gen <: Number`), M12 conversion and promotion contracts,
+  M13 precision-safe reals and a bit-based precision API, M14 `pari(x)`
+  plus a four-name export surface and a small facade, M15 generated-binding
+  argument ergonomics, M16 explicit GP sessions, M17 structured PARI
+  objects, M18 display contract, M21 documentation, migration and the
+  1.0.0 release. Each milestone carries its deliverables with requirement
+  ids, a **Breaking changes** table stating whether a deprecation shim is
+  possible, exit criteria, and open questions. Two interoperability
+  bridges are scheduled **before** 1.0, as optional package extensions on
+  the `ext/LibPARIMCPExt.jl` pattern: **M19** Symbolics.jl
+  (`to_symbolics` outward, `pari(x)` inward) and **M20** Giac.jl — each
+  gated on an investigation deliverable, since variable identity
+  (PARI variable numbers versus named symbols) and the Giac package's
+  actual exchange format decide both designs. The traceability table gains
+  the nine new requirement families and records that **REQ-API-01
+  (`Gen <: Number`) is superseded by REQ-TYPE-01**; the 0.7.0 and 0.14.0
+  entries below stand as historical record.
+- **`ROADMAP.md` marked up to date.** Every M0–M10 deliverable is now
+  ticked, the milestone summary carries a status column, and a
+  `Current status` section records the one deviation from the exit
+  criteria: the per-milestone tags `v0.1.0`–`v0.11.0` were never created
+  (only `v0.15.1` exists, now produced by TagBot). M9's "single global
+  lock" deliverable is annotated as superseded by the per-thread PARI
+  contexts of `0.13.0`, REQ-QA-08 as a true hard gate only from `0.15.0`,
+  and a new `Delivered beyond the roadmap` section lists the
+  `0.12.0`–`0.15.1` work.
 
 ## [0.15.1] - 2026-06-04
 
@@ -596,7 +823,8 @@ wrapper code exists. No PARI functionality is exposed yet.
   it is resolved from a local development build. Registering LibPARI is
   therefore deferred to a later milestone.
 
-[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.10.0...HEAD
+[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.16.0...HEAD
+[0.16.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.15.1...v0.16.0
 [0.10.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.9.0...v0.10.0
 [0.9.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.8.0...v0.9.0
 [0.8.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.7.0...v0.8.0
