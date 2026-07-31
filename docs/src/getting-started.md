@@ -88,7 +88,7 @@ LibPARI.factors(60)
 
 This layer is the one promised stable at 1.0.
 
-**2. The generated bindings.** Over 1200 PARI functions under
+**2. The generated bindings.** Nearly 1200 PARI functions under
 `LibPARI.PARI`, one per eligible entry in PARI's own function database, each
 carrying PARI's help text as its docstring:
 

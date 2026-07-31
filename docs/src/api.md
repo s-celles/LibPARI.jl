@@ -10,7 +10,7 @@ documents both.
 
 ## The generated bindings — `LibPARI.PARI`
 
-The `LibPARI.PARI` submodule holds over 1200 bindings, one per eligible
+The `LibPARI.PARI` submodule holds nearly 1200 bindings, one per eligible
 PARI/GP function, generated directly from PARI's own machine-readable
 function database (`pari.desc`). Each binding:
 

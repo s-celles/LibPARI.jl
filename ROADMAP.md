@@ -489,7 +489,7 @@ other and of `M12`–`M15`, and may be reordered freely after `M11`.
 |-----|--------------------------------------------|----------------|--------|
 | M11 | Honest type contract for `Gen`             | 0.16.0         | **done** (unreleased) |
 | M12 | Conversion & promotion contracts           | 0.17.0         | **done** (unreleased) |
-| M13 | Precision-safe reals & a bit-based precision API | 0.18.0    | **mostly done** (unreleased) |
+| M13 | Precision-safe reals & a bit-based precision API | 0.18.0    | **done** (unreleased) |
 | M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | **mostly done** (unreleased) |
 | M15 | Generated-binding argument ergonomics      | 0.20.0         | not started |
 | M16 | Explicit GP evaluation sessions            | 0.21.0         | not started |
@@ -826,7 +826,7 @@ PARI worker.
       `precreal`, **not** the scope; add `LibPARI.set_global_precision!`
       labelled global and thread-visible; test that a scope leaves
       `gp_eval("Pi")` unchanged. (REQ-PREC-12)
-- [ ] **BLOCKED on a decision — see below.** Generator: stop emitting the
+- [x] Generator: stop emitting the
       `Class: default` records whose empty
       `Prototype:` produces 0-argument bindings for C functions declared
       `(const char *, long)`; replace with throwing stubs. (REQ-PREC-13)
@@ -835,7 +835,7 @@ PARI worker.
         the binding never sets. **Confirm this reading of `pari.desc`
         before acting**; it is the single most dangerous claim in Part II.
 
-### REQ-PREC-13 — verified, and blocked on one decision
+### REQ-PREC-13 — resolved: option 1, the bindings are removed
 
 The defect is **confirmed** against the shipped headers, not merely
 suspected:
@@ -867,6 +867,14 @@ non-functional threshold silently is not one of them:
 3. **Emit throwing stubs.** The count survives and the undefined behaviour
    goes, but 47 entries of that count become deliberately unusable — a
    number that no longer means what it says.
+
+**Decision taken: option 1.** The 47 records are excluded by the generator,
+which now counts them in their own diagnostic category, and NFR-01's
+threshold is restated as `≥ 1190` (observed 1194) with the reason recorded
+in `test/acceptance_tests.jl`. The useful capability behind them — setting
+PARI's global precision — is exposed as the correctly-typed
+`LibPARI.set_global_precision!`, and the acceptance test asserts the unsafe
+names stay gone.
 
 **Breaking changes**
 
@@ -1650,6 +1658,7 @@ introduces its own families; they are not in `spec-ears.md`.
 | Documentation                     | REQ-DOC-01 … REQ-DOC-06    | M10       |
 | Packaging and release             | REQ-PKG-01 … REQ-PKG-05    | M0        |
 | Non-functional                    | NFR-01 … NFR-04            | M10 (acceptance) |
+| Non-functional — NFR-01 restated   | `≥ 1190`, was `≥ 1200`     | M13 (REQ-PREC-13) |
 | **Part II** — `Gen` type contract | REQ-TYPE-01 … REQ-TYPE-13  | M11       |
 | Conversion & promotion            | REQ-PROM-01 … REQ-PROM-11  | M12       |
 | Precision                         | REQ-PREC-01 … REQ-PREC-13  | M13       |

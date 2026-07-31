@@ -10,7 +10,7 @@ number-theory library.
 LibPARI embeds the PARI/GP C library in a Julia process and exposes it to
 Julia code in two complementary ways:
 
-- **Generated bindings** — over 1200 PARI functions, generated directly from
+- **Generated bindings** — nearly 1200 PARI functions, generated directly from
   PARI's own machine-readable function database (`pari.desc`), reachable
   through the `LibPARI.PARI` submodule. See [API reference](@ref).
 - **A hand-written core** — a [`Gen`](@ref) value type wrapping

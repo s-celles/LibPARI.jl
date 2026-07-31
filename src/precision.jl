@@ -272,3 +272,58 @@ function _wide_float_to_gen(x::BigFloat)
     end
     return PARI.gmul2n(_int_to_real(Gen(n), p), -k)
 end
+
+# --- PARI's process-global precision ---------------------------------------
+
+"""
+$(TYPEDSIGNATURES)
+
+Set PARI's **process-global** working precision, in bits — the default the
+GP interpreter reads.
+
+This is the setting [`gp_eval`](@ref) follows; the
+`setprecision(Gen, bits)` scope deliberately does not touch it. Unlike that
+scope it is global and shared by every thread and task in the process, so
+prefer the scope unless you specifically need to change what GP itself
+does.
+
+Returns the requested `bits`.
+
+This replaces the 47 zero-argument `sd_*` bindings the generator used to
+emit for PARI's `Class: default` records. Those called C functions declared
+`(const char *, long)` with no arguments set, which is undefined behaviour;
+they are no longer generated (REQ-PREC-13).
+
+# Examples
+
+```jldoctest
+julia> using LibPARI
+
+julia> old = LibPARI.set_global_precision!(256);
+
+julia> precision(LibPARI.gp_eval("Pi")) >= 256
+true
+
+julia> LibPARI.set_global_precision!(old);  # always restore: it is global
+
+```
+"""
+function set_global_precision!(bits::Integer)
+    bits > 0 || throw(ArgumentError("precision must be positive, got \$bits"))
+    previous = precision(gp_eval("Pi"))
+    protected_call() do
+        av = _avma()
+        key = Base.cconvert(Cstring, "realbitprecision")
+        val = Base.cconvert(Cstring, string(Int(bits)))
+        GC.@preserve key val ccall(
+            (:default0, PARI_jll.libpari),
+            Ptr{Int},
+            (Cstring, Cstring),
+            Base.unsafe_convert(Cstring, key),
+            Base.unsafe_convert(Cstring, val),
+        )
+        _set_avma(av)
+        return nothing
+    end
+    return previous
+end

@@ -4,7 +4,7 @@ A Julia wrapper for the [PARI/GP](https://pari.math.u-bordeaux.fr/)
 number-theory library.
 
 LibPARI embeds the PARI/GP C library in a Julia process and exposes it two
-ways: over 1200 functions generated directly from PARI's own machine-readable
+ways: nearly 1200 functions generated directly from PARI's own machine-readable
 function database (the `LibPARI.PARI` submodule), and a hand-written core —
 a `Gen` value type wrapping every PARI object, idiomatic numeric operators,
 conversions to and from Julia numbers, a GP expression evaluator, and safe

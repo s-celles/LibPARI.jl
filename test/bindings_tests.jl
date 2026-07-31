@@ -1,8 +1,14 @@
-# M4 — generated-binding contract. `LibPARI.PARI` exposes ≥ 1200 callable
+# M4 — generated-binding contract. `LibPARI.PARI` exposes ≥ 1190 callable
 # bindings that route through M3's `protected_call` ∘ M2's `gen_from` and
 # honour PARI's precision, optional, and output calling conventions.
+#
+# The threshold was 1200 through M12. M13 (REQ-PREC-13) removed the 47
+# `Class: default` records, whose empty `Prototype:` produced zero-argument
+# bindings for C functions declared `(const char *, long)` — undefined
+# behaviour when called. See the NFR-01 item in test/acceptance_tests.jl for
+# the full reasoning; the two thresholds must move together.
 
-@testitem "LibPARI.PARI exposes ≥ 1200 callable bindings; a sample returns a Gen" begin
+@testitem "LibPARI.PARI exposes ≥ 1190 callable bindings; a sample returns a Gen" begin
     using LibPARI
 
     bindings = filter(names(LibPARI.PARI; all = true)) do s
@@ -12,7 +18,7 @@
         isdefined(LibPARI.PARI, s) || return false
         getfield(LibPARI.PARI, s) isa Function
     end
-    @test length(bindings) >= 1200
+    @test length(bindings) >= 1190
 
     # SC-005 — a sampled simple binding invokes PARI and returns a `Gen`.
     libpari = LibPARI.PARI_jll.libpari

@@ -172,3 +172,32 @@ end
     inside = setprecision(() -> LibPARI.gp_eval("Pi"), LibPARI.Gen, 1024)
     @test precision(inside) == precision(outside)
 end
+
+# REQ-PREC-13 — the replacement for the 47 removed `sd_*` bindings.
+@testitem "REQ-PREC-13: the global precision has a correctly-typed setter" begin
+    using LibPARI
+
+    # The unsafe zero-argument bindings are gone: their C functions are
+    # declared `(const char *, long)`, so calling them with no arguments set
+    # was undefined behaviour.
+    for n in (:sd_realprecision, :sd_seriesprecision, :sd_parisize)
+        @test !isdefined(LibPARI.PARI, n)
+    end
+
+    # The capability behind them is reachable, correctly typed, and
+    # restores. It is process-global, so the test puts it back.
+    old = LibPARI.set_global_precision!(512)
+    try
+        @test precision(gp_eval("Pi")) >= 512
+        # The task-local scope stays independent of it.
+        @test precision(
+            setprecision(() -> LibPARI.PARI.mppi(), LibPARI.Gen, 128),
+        ) == 128
+    finally
+        LibPARI.set_global_precision!(old)
+    end
+    @test precision(gp_eval("Pi")) == old
+
+    @test_throws ArgumentError LibPARI.set_global_precision!(0)
+    @test_throws ArgumentError LibPARI.set_global_precision!(-64)
+end

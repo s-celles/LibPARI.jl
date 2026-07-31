@@ -468,11 +468,24 @@ function generate()
     records = parse_desc(descpath)
     emitted = Set{String}()
     bindings = String[]
-    n_omit = n_exclude = n_skip = n_dup = 0
+    n_omit = n_exclude = n_skip = n_dup = n_default = 0
     skips = String[]
 
     for rec in records
         haskey(rec, "C-Name") || (n_omit += 1; continue)
+        # `Class: default` records are GP's `default()` setters, not
+        # computational functions. Their `Prototype:` field is EMPTY, so a
+        # binding generated from it takes no arguments — while the C
+        # function behind it is declared `(const char *v, long flag)`
+        # (paridecl.h). Calling such a binding makes the C function read two
+        # argument registers the caller never set: undefined behaviour, not
+        # a catchable error. They are excluded, and reachable properly
+        # through `gp_eval("default(...)")` or
+        # `LibPARI.set_global_precision!` (REQ-PREC-13).
+        if strip(get(rec, "Class", "")) == "default"
+            n_default += 1
+            continue
+        end
         cname = strip(rec["C-Name"])
         fname = get(rec, "Function", cname)
         proto = strip(get(rec, "Prototype", ""))
@@ -531,6 +544,7 @@ function generate()
     println("  excluded (GP closures) .. ", n_exclude)
     println("  skipped (unrecognized) .. ", n_skip)
     println("  duplicate C-Name ........ ", n_dup)
+    println("  GP defaults (unsafe) .... ", n_default)
     println("  -> ", OUTFILE)
     if !isempty(skips)
         println("\nSkipped functions:")

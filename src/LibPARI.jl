@@ -5,7 +5,7 @@ A Julia wrapper for the PARI/GP number-theory library.
 
 Loading this module initializes the embedded PARI library once for the
 process and registers a clean shutdown at process exit. LibPARI exposes
-PARI/GP in two ways: over 1200 functions generated from PARI's own function
+PARI/GP in two ways: nearly 1200 functions generated from PARI's own function
 database, reachable through the `LibPARI.PARI` submodule, and a hand-written
 core — the `Gen` value type, idiomatic numeric operators, conversions to and
 from Julia numbers, the `gp_eval` expression evaluator, and safe library
