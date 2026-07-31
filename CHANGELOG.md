@@ -52,6 +52,18 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- **The JuliaFormatter version is pinned to one minor series** in
+  `Project.toml`, `gen/Project.toml` and the CI `format` job, and
+  `src/bindings.jl` is regenerated with it. `src/bindings.jl` is *written*
+  by the `gen/` environment and *checked* by the root one; both declared
+  `JuliaFormatter = "1, 2"`, so each resolved whatever 2.x was current and
+  the two disagreed about the trailing `;` in a `let` header — 42 sites.
+  That turned `test/package/format_tests.jl` and the byte-identical
+  reproducibility gate (`test/generator_tests.jl`, NFR-04) red with no
+  source change, on CI as well as locally. The CI job also asked for
+  `version = "2"`, i.e. the newest release at run time, so the gate could
+  break on any JuliaFormatter publication. The binding count is unchanged
+  (1241) and two consecutive generator runs are byte-identical.
 - **An operand with no `Gen` constructor raises a catchable exception.**
   `Gen(1) + π` recursed through `promote_type`/`convert` and died with a
   `StackOverflowError`, which corrupts program state; it is now a plain

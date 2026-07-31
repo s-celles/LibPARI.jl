@@ -4226,7 +4226,7 @@ end
 function eval_mnemonic(x1::LibPARI.Gen, x2::AbstractString)
     return LibPARI.protected_call() do
         Int(
-            let _cs1 = Base.cconvert(Cstring, x2);
+            let _cs1 = Base.cconvert(Cstring, x2)
                 GC.@preserve _cs1 LibPARI._trap_call(
                     Int,
                     cglobal((:eval_mnemonic, LibPARI.PARI_jll.libpari)),
@@ -4239,7 +4239,7 @@ function eval_mnemonic(x1::LibPARI.Gen, x2::AbstractString)
                     Int(0),
                     Int(0),
                     Int(0),
-                );
+                )
             end,
         )
     end
@@ -5620,7 +5620,7 @@ end
 "addhelp(sym,str): add/change help message for the symbol sym."
 function addhelp(x1::AbstractString, x2::AbstractString)
     LibPARI.protected_call() do
-        let _cs1 = Base.cconvert(Cstring, x1), _cs2 = Base.cconvert(Cstring, x2);
+        let _cs1 = Base.cconvert(Cstring, x1), _cs2 = Base.cconvert(Cstring, x2)
             GC.@preserve _cs1 _cs2 LibPARI._trap_call(
                 Cvoid,
                 cglobal((:addhelp, LibPARI.PARI_jll.libpari)),
@@ -5633,7 +5633,7 @@ function addhelp(x1::AbstractString, x2::AbstractString)
                 Int(0),
                 Int(0),
                 Int(0),
-            );
+            )
         end
     end
     return nothing
@@ -7043,7 +7043,7 @@ end
 "alias(newsym,sym): defines the symbol newsym as an alias for the symbol\nsym."
 function alias0(x1::AbstractString, x2::AbstractString)
     LibPARI.protected_call() do
-        let _cs1 = Base.cconvert(Cstring, x1), _cs2 = Base.cconvert(Cstring, x2);
+        let _cs1 = Base.cconvert(Cstring, x1), _cs2 = Base.cconvert(Cstring, x2)
             GC.@preserve _cs1 _cs2 LibPARI._trap_call(
                 Cvoid,
                 cglobal((:alias0, LibPARI.PARI_jll.libpari)),
@@ -7056,7 +7056,7 @@ function alias0(x1::AbstractString, x2::AbstractString)
                 Int(0),
                 Int(0),
                 Int(0),
-            );
+            )
         end
     end
     return nothing
@@ -11740,7 +11740,7 @@ end
 function gpextern(x1::AbstractString)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            let _cs1 = Base.cconvert(Cstring, x1);
+            let _cs1 = Base.cconvert(Cstring, x1)
                 GC.@preserve _cs1 LibPARI._trap_call(
                     Ptr{Int},
                     cglobal((:gpextern, LibPARI.PARI_jll.libpari)),
@@ -11753,7 +11753,7 @@ function gpextern(x1::AbstractString)
                     Int(0),
                     Int(0),
                     Int(0),
-                );
+                )
             end
         end
     end
@@ -11763,7 +11763,7 @@ end
 function externstr(x1::AbstractString)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            let _cs1 = Base.cconvert(Cstring, x1);
+            let _cs1 = Base.cconvert(Cstring, x1)
                 GC.@preserve _cs1 LibPARI._trap_call(
                     Ptr{Int},
                     cglobal((:externstr, LibPARI.PARI_jll.libpari)),
@@ -11776,7 +11776,7 @@ function externstr(x1::AbstractString)
                     Int(0),
                     Int(0),
                     Int(0),
-                );
+                )
             end
         end
     end
@@ -12382,7 +12382,7 @@ end
 function gp_fileextern(x1::AbstractString)
     return LibPARI.protected_call() do
         Int(
-            let _cs1 = Base.cconvert(Cstring, x1);
+            let _cs1 = Base.cconvert(Cstring, x1)
                 GC.@preserve _cs1 LibPARI._trap_call(
                     Int,
                     cglobal((:gp_fileextern, LibPARI.PARI_jll.libpari)),
@@ -12395,7 +12395,7 @@ function gp_fileextern(x1::AbstractString)
                     Int(0),
                     Int(0),
                     Int(0),
-                );
+                )
             end,
         )
     end
@@ -12426,7 +12426,7 @@ function gp_fileopen(x1::AbstractString; x2::AbstractString = "r")
     return LibPARI.protected_call() do
         Int(
             let _cs1 = Base.cconvert(Cstring, x1),
-                _cs2 = Base.cconvert(Cstring, x2);
+                _cs2 = Base.cconvert(Cstring, x2)
 
                 GC.@preserve _cs1 _cs2 LibPARI._trap_call(
                     Int,
@@ -12440,7 +12440,7 @@ function gp_fileopen(x1::AbstractString; x2::AbstractString = "r")
                     Int(0),
                     Int(0),
                     Int(0),
-                );
+                )
             end,
         )
     end
@@ -12491,7 +12491,7 @@ end
 "filewrite(n,s): write the string s to file attached to descriptor n,\nending with a newline. The file must have been opened with fileopen in\n\"w\" or \"a\" mode."
 function gp_filewrite(x1::Integer, x2::AbstractString)
     LibPARI.protected_call() do
-        let _cs1 = Base.cconvert(Cstring, x2);
+        let _cs1 = Base.cconvert(Cstring, x2)
             GC.@preserve _cs1 LibPARI._trap_call(
                 Cvoid,
                 cglobal((:gp_filewrite, LibPARI.PARI_jll.libpari)),
@@ -12504,7 +12504,7 @@ function gp_filewrite(x1::Integer, x2::AbstractString)
                 Int(0),
                 Int(0),
                 Int(0),
-            );
+            )
         end
     end
     return nothing
@@ -12513,7 +12513,7 @@ end
 "filewrite1(n,s): write the string s to file number n without ending with newline."
 function gp_filewrite1(x1::Integer, x2::AbstractString)
     LibPARI.protected_call() do
-        let _cs1 = Base.cconvert(Cstring, x2);
+        let _cs1 = Base.cconvert(Cstring, x2)
             GC.@preserve _cs1 LibPARI._trap_call(
                 Cvoid,
                 cglobal((:gp_filewrite1, LibPARI.PARI_jll.libpari)),
@@ -12526,7 +12526,7 @@ function gp_filewrite1(x1::Integer, x2::AbstractString)
                 Int(0),
                 Int(0),
                 Int(0),
-            );
+            )
         end
     end
     return nothing
@@ -13413,7 +13413,7 @@ end
 function gp_getenv(x1::AbstractString)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            let _cs1 = Base.cconvert(Cstring, x1);
+            let _cs1 = Base.cconvert(Cstring, x1)
                 GC.@preserve _cs1 LibPARI._trap_call(
                     Ptr{Int},
                     cglobal((:gp_getenv, LibPARI.PARI_jll.libpari)),
@@ -13426,7 +13426,7 @@ function gp_getenv(x1::AbstractString)
                     Int(0),
                     Int(0),
                     Int(0),
-                );
+                )
             end
         end
     end
@@ -14905,7 +14905,7 @@ function gpinstall(
         let _cs1 = Base.cconvert(Cstring, x1),
             _cs2 = Base.cconvert(Cstring, x2),
             _cs3 = Base.cconvert(Cstring, x3),
-            _cs4 = Base.cconvert(Cstring, x4);
+            _cs4 = Base.cconvert(Cstring, x4)
 
             GC.@preserve _cs1 _cs2 _cs3 _cs4 LibPARI._trap_call(
                 Cvoid,
@@ -14919,7 +14919,7 @@ function gpinstall(
                 Int(0),
                 Int(0),
                 Int(0),
-            );
+            )
         end
     end
     return nothing
@@ -15251,7 +15251,7 @@ end
 "kill(sym): restores the symbol sym to its ``undefined'' status and kill\nattached help messages."
 function kill0(x1::AbstractString)
     LibPARI.protected_call() do
-        let _cs1 = Base.cconvert(Cstring, x1);
+        let _cs1 = Base.cconvert(Cstring, x1)
             GC.@preserve _cs1 LibPARI._trap_call(
                 Cvoid,
                 cglobal((:kill0, LibPARI.PARI_jll.libpari)),
@@ -15264,7 +15264,7 @@ function kill0(x1::AbstractString)
                 Int(0),
                 Int(0),
                 Int(0),
-            );
+            )
         end
     end
     return nothing
@@ -21677,7 +21677,7 @@ end
 "plotstring(w,x,{flags=0}): draw in rectwindow w the string\ncorresponding to x. Bits 1 and 2 of flag regulate horizontal alignment: left\nif 0, right if 2, center if 1. Bits 4 and 8 regulate vertical alignment:\nbottom if 0, top if 8, v-center if 4. Can insert additional gap between\npoint and string: horizontal if bit 16 is set, vertical if bit 32 is set."
 function plotstring(x1::Integer, x2::AbstractString; x3::Integer = 0)
     LibPARI.protected_call() do
-        let _cs1 = Base.cconvert(Cstring, x2);
+        let _cs1 = Base.cconvert(Cstring, x2)
             GC.@preserve _cs1 LibPARI._trap_call(
                 Cvoid,
                 cglobal((:plotstring, LibPARI.PARI_jll.libpari)),
@@ -21690,7 +21690,7 @@ function plotstring(x1::Integer, x2::AbstractString; x3::Integer = 0)
                 Int(0),
                 Int(0),
                 Int(0),
-            );
+            )
         end
     end
     return nothing
@@ -23873,7 +23873,7 @@ end
 function gp_read_file(; x1::AbstractString = "")
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            let _cs1 = Base.cconvert(Cstring, x1);
+            let _cs1 = Base.cconvert(Cstring, x1)
                 GC.@preserve _cs1 LibPARI._trap_call(
                     Ptr{Int},
                     cglobal((:gp_read_file, LibPARI.PARI_jll.libpari)),
@@ -23886,7 +23886,7 @@ function gp_read_file(; x1::AbstractString = "")
                     Int(0),
                     Int(0),
                     Int(0),
-                );
+                )
             end
         end
     end
@@ -23896,7 +23896,7 @@ end
 function readstr(; x1::AbstractString = "")
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            let _cs1 = Base.cconvert(Cstring, x1);
+            let _cs1 = Base.cconvert(Cstring, x1)
                 GC.@preserve _cs1 LibPARI._trap_call(
                     Ptr{Int},
                     cglobal((:readstr, LibPARI.PARI_jll.libpari)),
@@ -23909,7 +23909,7 @@ function readstr(; x1::AbstractString = "")
                     Int(0),
                     Int(0),
                     Int(0),
-                );
+                )
             end
         end
     end
@@ -23919,7 +23919,7 @@ end
 function gp_readvec_file(; x1::AbstractString = "")
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            let _cs1 = Base.cconvert(Cstring, x1);
+            let _cs1 = Base.cconvert(Cstring, x1)
                 GC.@preserve _cs1 LibPARI._trap_call(
                     Ptr{Int},
                     cglobal((:gp_readvec_file, LibPARI.PARI_jll.libpari)),
@@ -23932,7 +23932,7 @@ function gp_readvec_file(; x1::AbstractString = "")
                     Int(0),
                     Int(0),
                     Int(0),
-                );
+                )
             end
         end
     end
@@ -25963,7 +25963,7 @@ end
 function gpsystem(x1::AbstractString)
     return LibPARI.protected_call() do
         Int(
-            let _cs1 = Base.cconvert(Cstring, x1);
+            let _cs1 = Base.cconvert(Cstring, x1)
                 GC.@preserve _cs1 LibPARI._trap_call(
                     Int,
                     cglobal((:gpsystem, LibPARI.PARI_jll.libpari)),
@@ -25976,7 +25976,7 @@ function gpsystem(x1::AbstractString)
                     Int(0),
                     Int(0),
                     Int(0),
-                );
+                )
             end,
         )
     end
@@ -26262,7 +26262,7 @@ end
 function varhigher(x1::AbstractString; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            let _cs1 = Base.cconvert(Cstring, x1);
+            let _cs1 = Base.cconvert(Cstring, x1)
                 GC.@preserve _cs1 LibPARI._trap_call(
                     Ptr{Int},
                     cglobal((:varhigher, LibPARI.PARI_jll.libpari)),
@@ -26275,7 +26275,7 @@ function varhigher(x1::AbstractString; x2::Integer = -1)
                     Int(0),
                     Int(0),
                     Int(0),
-                );
+                )
             end
         end
     end
@@ -26327,7 +26327,7 @@ end
 function varlower(x1::AbstractString; x2::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            let _cs1 = Base.cconvert(Cstring, x1);
+            let _cs1 = Base.cconvert(Cstring, x1)
                 GC.@preserve _cs1 LibPARI._trap_call(
                     Ptr{Int},
                     cglobal((:varlower, LibPARI.PARI_jll.libpari)),
@@ -26340,7 +26340,7 @@ function varlower(x1::AbstractString; x2::Integer = -1)
                     Int(0),
                     Int(0),
                     Int(0),
-                );
+                )
             end
         end
     end
@@ -26525,7 +26525,7 @@ end
 "whatnow(key): if key was present in GP version 1.39.15, gives\nthe new function name."
 function whatnow0(x1::AbstractString)
     LibPARI.protected_call() do
-        let _cs1 = Base.cconvert(Cstring, x1);
+        let _cs1 = Base.cconvert(Cstring, x1)
             GC.@preserve _cs1 LibPARI._trap_call(
                 Cvoid,
                 cglobal((:whatnow0, LibPARI.PARI_jll.libpari)),
@@ -26538,7 +26538,7 @@ function whatnow0(x1::AbstractString)
                 Int(0),
                 Int(0),
                 Int(0),
-            );
+            )
         end
     end
     return nothing
@@ -26547,7 +26547,7 @@ end
 "writebin(filename,{x}): write x as a binary object to file filename.\nIf x is omitted, write all session variables."
 function gpwritebin(x1::AbstractString; x2 = nothing)
     LibPARI.protected_call() do
-        let _cs1 = Base.cconvert(Cstring, x1);
+        let _cs1 = Base.cconvert(Cstring, x1)
             GC.@preserve _cs1 LibPARI._trap_call(
                 Cvoid,
                 cglobal((:gpwritebin, LibPARI.PARI_jll.libpari)),
@@ -26560,7 +26560,7 @@ function gpwritebin(x1::AbstractString; x2 = nothing)
                 Int(0),
                 Int(0),
                 Int(0),
-            );
+            )
         end
     end
     return nothing
