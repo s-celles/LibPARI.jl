@@ -19,6 +19,7 @@ using LibPARI
 using Symbolics
 
 const PT = LibPARI.PariType
+const SU = Symbolics.SymbolicUtils
 
 # --- PARI -> Symbolics -----------------------------------------------------
 
@@ -73,20 +74,19 @@ function _to_pari(e)
     if e isa Number
         return LibPARI.pari(e)
     end
-    # Symbolics 7 wraps numeric literals in a symbolic node that is neither
-    # a `Number` nor a symbol nor a call, so a walk over those three cases —
-    # which looks exhaustive — silently drops literals. `value` unwraps it.
-    # On Symbolics 6 a literal is already a plain `Number`, and `value` of a
-    # symbol returns the symbol, so this test is correct on both.
+    # A walk has three cases: call, symbol, constant. A numeric literal is a
+    # symbolic node — neither a `Number` nor a symbol nor a call — so the
+    # first two alone look exhaustive and silently drop it. This is
+    # deliberate in SymbolicUtils v4, and `isconst`/`unwrap_const` is the
+    # supported way to recognise and read one
+    # (JuliaSymbolics/SymbolicUtils.jl#1024, answered and closed).
     #
-    # The three cases only *look* exhaustive because TermInterface's
-    # protocol is incompletely implemented: `isexpr`, `head` and `children`
-    # are missing, so a node can report `iscall == true` and
-    # `isexpr == false` at once. Reported upstream as
-    # JuliaSymbolics/SymbolicUtils.jl#1023; see upstream-bugs.md.
-    v = Symbolics.value(e)
-    if v isa Number
-        return LibPARI.pari(v)
+    # TermInterface does not offer this case: it models expression nodes
+    # only, and its `isexpr`/`head`/`children` are unimplemented here anyway
+    # (JuliaSymbolics/SymbolicUtils.jl#1023, open). Hence the mix of a
+    # protocol predicate and two implementation ones.
+    if SU.isconst(e)
+        return LibPARI.pari(SU.unwrap_const(e))
     end
     if Symbolics.issym(e)
         return _pari_var(nameof(e))

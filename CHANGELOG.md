@@ -8,6 +8,19 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- The Symbolics.jl bridge now requires **Symbolics 7** (`compat` was
+  `"6, 7"`), and reads numeric literals through SymbolicUtils' official
+  `isconst`/`unwrap_const` instead of the `Symbolics.value(x) isa Number`
+  workaround the two-major range forced. Symbolics 7 wraps literals in a
+  symbolic node, so a walk that only tests for calls and symbols drops
+  them silently; this is deliberate upstream, and the pair above is the
+  supported way to read one
+  ([SymbolicUtils.jl#1024](https://github.com/JuliaSymbolics/SymbolicUtils.jl/issues/1024)).
+  This narrows the supported range: packages pinned to Symbolics 6 keep
+  LibPARI 0.17.0.
+
 ## [0.17.0] - 2026-07-31
 
 The second release of the API redesign: `ROADMAP.md` Part II milestones
