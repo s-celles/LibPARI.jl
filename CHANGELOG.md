@@ -10,6 +10,13 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- **`ModelContextProtocol` compat widened to `"0.4, 0.6"`** (was `"0.4"`),
+  so the optional MCP extension no longer holds a user's MCP two breaking
+  minors behind. CI resolved `ModelContextProtocol v0.6.1`, precompiled
+  `LibPARIMCPExt` against it and passed 1118/1118. Note the bound skips
+  0.5: CompatHelper adds the current version without ruling on the ones in
+  between, and 0.5.x is untested here rather than known-broken.
+
 - The Symbolics.jl bridge guards its numeric-literal case with
   SymbolicUtils' `is_literal_number` rather than `isconst`. Both are total
   predicates, so this is not a robustness fix; they assert different

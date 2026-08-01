@@ -29,7 +29,11 @@ jobs:
         run: import Pkg; Pkg.add("CompatHelper")
         shell: julia --color=yes {0}
       - name: "Run CompatHelper"
-        run: import CompatHelper; CompatHelper.main()
+        # `master_branch` targets `develop`, not the default branch. This
+        # repository follows git flow: `main` holds released versions, so a
+        # compat bump opened against it would have to be retargeted by hand
+        # before it could be merged anywhere useful.
+        run: import CompatHelper; CompatHelper.main(; master_branch = "develop")
         shell: julia --color=yes {0}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
