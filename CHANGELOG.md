@@ -8,6 +8,29 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.18.0] - 2026-08-01
+
+A single change, and it narrows what LibPARI installs alongside: the
+Symbolics.jl bridge now requires Symbolics 7. Nothing else moved, and
+nothing in the core API changed.
+
+Stay on `0.17.0` if you need Symbolics 6 — the bridge there is correct on
+both majors. If you use Giac.jl's `GiacLibPARIExt`, that package needs a
+compat bump before it can take this release.
+
+### Changed
+
+- The Symbolics.jl bridge now requires **Symbolics 7** (`compat` was
+  `"6, 7"`), and reads numeric literals through SymbolicUtils' official
+  `isconst`/`unwrap_const` instead of the `Symbolics.value(x) isa Number`
+  workaround the two-major range forced. Symbolics 7 wraps literals in a
+  symbolic node, so a walk that only tests for calls and symbols drops
+  them silently; this is deliberate upstream, and the pair above is the
+  supported way to read one
+  ([SymbolicUtils.jl#1024](https://github.com/JuliaSymbolics/SymbolicUtils.jl/issues/1024)).
+  This narrows the supported range: packages pinned to Symbolics 6 keep
+  LibPARI 0.17.0.
+
 ## [0.17.0] - 2026-07-31
 
 The second release of the API redesign: `ROADMAP.md` Part II milestones
@@ -948,7 +971,8 @@ wrapper code exists. No PARI functionality is exposed yet.
   it is resolved from a local development build. Registering LibPARI is
   therefore deferred to a later milestone.
 
-[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.17.0...HEAD
+[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.18.0...HEAD
+[0.18.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.17.0...v0.18.0
 [0.17.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.15.1...v0.16.0
 [0.10.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.9.0...v0.10.0

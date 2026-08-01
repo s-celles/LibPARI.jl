@@ -1,6 +1,6 @@
 name = "LibPARI"
 uuid = "75bc234d-eb99-4f80-8816-cb1dc773483e"
-version = "0.17.0"
+version = "0.18.0"
 authors = ["Sébastien Celles <s.celles@gmail.com>"]
 
 [deps]
@@ -23,7 +23,7 @@ JuliaFormatter = "~2.12"
 ModelContextProtocol = "0.4"
 PARI_jll = "2.17"
 PrecompileTools = "1"
-Symbolics = "6, 7"
+Symbolics = "7"
 TOML = "< 0.0.1, 1"
 Test = "< 0.0.1, 1"
 TestItemRunner = "1"

@@ -448,7 +448,7 @@ acceptance — the 0.11.0 release.
 # Part II — API redesign, from 0.16.0 onward
 
 M0–M10 built a *complete* wrapper. This second part makes it an *honest*
-one: it fixes the public contracts that cannot be changed after 1.0.
+one: it fixes the public contracts while `0.x` still allows fixing them.
 
 The two-layer architecture is kept as is — a hand-written Julia core and the
 generated `LibPARI.PARI` layer of 1241 bindings. Nothing here rewrites PARI,
@@ -503,7 +503,7 @@ never existed, and the remaining milestones will renumber the same way.
 | M17 | Structured PARI objects                    | 0.22.0         | **done** (unreleased) |
 | M18 | Display contract                           | 0.23.0         | **done** (unreleased) |
 | M19 | Symbolics.jl bridge (optional extension)   | 0.24.0         | **done** (unreleased) |
-| M20 | Giac.jl bridge (optional extension)        | 0.25.0         | not started |
+| M20 | Giac.jl bridge (optional extension)        | —              | **delegated** — shipped in Giac.jl as `GiacLibPARIExt` |
 | M21 | Documentation & release hygiene             | 0.x            | not started |
 
 ---
@@ -1462,8 +1462,9 @@ surface to the *extensions*, not to the core the release freezes.
 M13 (a documented precision policy for `t_REAL`), M14 (`pari(x)` as the
 single inward entry point), M17 (indexing, needed for `t_VEC`/`t_MAT`).
 
-The two are **not** symmetric in where they live: M19 must be hosted here,
-M20 probably should not. See *Which package owns which bridge* under M20.
+The two are **not** symmetric in where they live: M19 is hosted here, M20
+is not — it ships in Giac.jl. See *Which package owns which bridge* under
+M20.
 
 ---
 
@@ -1582,10 +1583,22 @@ and relies only on an exported function.
 
 ---
 
-## M20 — Giac.jl bridge
+## M20 — Giac.jl bridge — delegated to Giac.jl
 
-**Goal:** the same bridge against Giac, over whatever exchange the Julia
-Giac interface actually offers.
+**Status: not LibPARI work.** The bridge ships in Giac.jl as
+`ext/GiacLibPARIExt.jl`, with `LibPARI` as a weak dependency under
+`LibPARI = "0.17"`. Nothing is to be built here; the requirements below
+stay as the reference the other repository was written against, and as the
+record of why the bridge went there.
+
+**Consequence for releasing LibPARI.** The dependency now points *into*
+this package, so a breaking LibPARI release needs a matching compat bump in
+Giac.jl. That is the ordinary cost of being depended on, and it is exactly
+the direction the ownership decision below chose — the faster-moving
+package absorbs the churn.
+
+**Goal (as specified):** the same bridge against Giac, over whatever
+exchange the Julia Giac interface actually offers.
 
 **Depends on:** M19 (which establishes the bridge pattern, the mapping-table
 discipline and the extension layout).
@@ -1663,11 +1676,10 @@ the two bridges:
   third-party package that will not take a weak dependency on LibPARI. You
   host the bridges to packages that will not host them for you.
 - **M20 (Giac) should live in Giac.jl**, if that package is under the same
-  maintainer. LibPARI is heading for a frozen 1.0; hosting the bridge here
-  ties that release to a foreign API's breaking changes, and a break in
-  Giac.jl would redden LibPARI's CI at the worst moment. The dependency
-  should point from the faster-moving package to the frozen one, not the
-  reverse.
+  maintainer. Hosting the bridge here would tie this package's releases to
+  a foreign API's breaking changes, and a break in Giac.jl would redden
+  LibPARI's CI for a reason that is not LibPARI's. The dependency should
+  point from the faster-moving package to the slower one, not the reverse.
 
 The reasons to override that and host it here anyway: LibPARI is where the
 structural knowledge of a `GEN` lives (type tags, variable priorities,
