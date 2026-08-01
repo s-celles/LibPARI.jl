@@ -142,3 +142,41 @@ end
     Aqua.test_piracies(LibPARI)
     @test true
 end
+
+@testitem "REQ-SYM-03: a numeric literal converts in every position" begin
+    using LibPARI
+    using Symbolics
+    const SU = Symbolics.SymbolicUtils
+
+    @variables a b
+
+    # Symbolics 7 wraps a literal in a symbolic node, so each of these
+    # carries one somewhere a naive call/symbol walk would drop it: as a
+    # constant term, an exponent, a coefficient, a rational coefficient,
+    # and standing alone.
+    @test pari(a^2 + 1) == gp_eval("a^2 + 1")
+    @test pari(a^3) == gp_eval("a^3")
+    @test pari(2a + 3) == gp_eval("2*a + 3")
+    @test pari((3 // 4) * a - 1 // 2) == gp_eval("3/4*a - 1/2")
+    @test pari(Symbolics.Num(7)) == 7
+    @test pari(a * b + 5) == gp_eval("a*b + 5")
+
+    # The guard is `is_literal_number`, whose contract is the one the
+    # conversion relies on: it accepts ANY input and is true only when what
+    # `unwrap_const` yields is a `Number`. `isconst` would answer a
+    # different question — whether the node is a `Const` variant — and
+    # promises nothing about what it carries.
+    @test SU.is_literal_number(3)
+    @test SU.is_literal_number(3 // 4)
+    @test !SU.is_literal_number("abc")
+    @test !SU.is_literal_number(Symbolics.unwrap(a))
+    @test SU.is_literal_number(Symbolics.unwrap(Symbolics.Num(7)))
+
+    # `isconst` would answer a different question and is NOT interchangeable
+    # here: it is true for a `Const` node whatever the node carries, so it
+    # cannot stand in for "this is a number `pari` can take". Both
+    # predicates are total — SymbolicUtils gives every `is*` predicate an
+    # `(x) = false` fallback — so robustness is not what separates them.
+    @test !SU.isconst(3)
+    @test SU.is_literal_number(3)
+end

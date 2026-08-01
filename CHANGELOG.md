@@ -8,6 +8,17 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- The Symbolics.jl bridge guards its numeric-literal case with
+  SymbolicUtils' `is_literal_number` rather than `isconst`. Both are total
+  predicates, so this is not a robustness fix; they assert different
+  things. `isconst` says the node is a `Const` variant and promises
+  nothing about what it carries, while `is_literal_number(x)` is
+  `unwrap_const(x) isa Number` — the condition the conversion actually
+  depends on before handing the value to `pari`. Giac.jl's Symbolics
+  bridge guards the same way, so the two now agree.
+
 ## [0.18.0] - 2026-08-01
 
 A single change, and it narrows what LibPARI installs alongside: the
