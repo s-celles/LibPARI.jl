@@ -8,6 +8,20 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.18.1] - 2026-08-07
+
+### Changed
+
+- **`ModelContextProtocol` compat widened from `"0.4"` to `"0.4, 0.6"`.**
+  0.5 is skipped deliberately — nothing in this package touched the MCP
+  bridge between those releases, there was just no reason to certify a
+  version nobody asked for. Downstream packages pinned to `LibPARI = "0.17,
+  0.18"` while also allowing `ModelContextProtocol` 0.6 (Giac.jl's
+  `GiacLibPARIExt`, for one) could not resolve against the registered
+  0.18.0: its `[compat]` still capped MCP at 0.4, so any environment that
+  forced MCP to its latest compatible version had no valid `LibPARI`
+  version left to pick.
+
 ## [0.18.0] - 2026-08-01
 
 A single change, and it narrows what LibPARI installs alongside: the
