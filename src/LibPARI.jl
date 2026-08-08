@@ -83,7 +83,7 @@ if VERSION >= v"1.11"
             "ConversionError, GenArg, gen_convert, gentype, gen_from, " *
             "protected_call, isexact, nbits2prec, default_precision, " *
             "isprime, nextprime, prevprime, factor, factors, " *
-            "is_initialized, library_state, stack_size, serve_mcp",
+            "is_initialized, library_state, stack_size, nbthreads, serve_mcp",
         ),
     )
 end

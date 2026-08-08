@@ -118,7 +118,8 @@ first; an invalid value throws before PARI is initialized, leaving the state
 size is recorded, and `pari_close` is registered to run at process exit.
 
 Uses `pari_init_opts` (not plain `pari_init`) with `INIT_SIGm` cleared, so
-PARI leaves Julia's signal handlers intact (research.md D10).
+PARI leaves Julia's signal handlers intact (research.md D10), and pins
+`nbthreads` to 1 afterwards — see [`_pin_nbthreads!`](@ref).
 """
 function _init_libpari!(parisize::Integer, maxprime::Integer)
     _STATE[] == LibraryState.UNINITIALIZED || return nothing
@@ -133,10 +134,70 @@ function _init_libpari!(parisize::Integer, maxprime::Integer)
         maxprime,
         _INIT_OPTS,
     )
+    _pin_nbthreads!()
     _STACK_SIZE[] = size
     _STATE[] = LibraryState.INITIALIZED
     atexit(_close_libpari!)
     return nothing
+end
+
+# The value `nbthreads` is pinned to. 1 means "no parallel dispatch", which is
+# what `INIT_noIMTm` already intends; 0, which is what PARI is left holding
+# otherwise, means nothing coherent at all.
+const _NBTHREADS = 1
+
+"""
+Pin PARI's `nbthreads` to 1, immediately after `pari_init_opts`.
+
+`_INIT_OPTS` sets `INIT_noIMTm`, so PARI's pthread engine never starts. That
+is deliberate — LibPARI parallelises at the Julia level, one PARI context per
+OS thread, and PARI's own pthreads would conflict with the Julia runtime.
+
+But `INIT_noIMTm` alone leaves `nbthreads` at **0**, and PARI's parallel code
+paths do not read 0 as "serial": they dispatch into a worker pool that was
+never created, and dereference it. `qflll` reaches one of them
+(`ZM_flatter` → `FpM_ratlift_parallel`) on a large structured lattice, and the
+result is a `SIGSEGV` — not a PARI error, so [`protected_call`](@ref) never
+sees it, so it is not catchable and the process dies.
+
+`gp` itself never holds 0, because it always starts the engine, so
+`INIT_noIMTm` + `nbthreads == 0` is a combination PARI does not exercise.
+
+Set through `sd_nbthreads`, PARI's own setter for the `nbthreads` default,
+which is declared in `paridecl.h` — not by writing the `pari_mt_nbthreads`
+global directly.
+"""
+function _pin_nbthreads!()
+    ccall(
+        (:sd_nbthreads, PARI_jll.libpari),
+        Cstring,
+        (Cstring, Cint),
+        string(_NBTHREADS),
+        0,                 # d_SILENT: set it, print nothing
+    )
+    return nothing
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+PARI's `nbthreads` — the number of threads its own parallel dispatch will use.
+
+LibPARI pins this to 1 at initialization: PARI's threading engine is
+deliberately not started (`INIT_noIMTm`), and the value PARI is otherwise left
+holding, 0, makes its parallel code paths crash. See [`_pin_nbthreads!`](@ref).
+
+# Examples
+
+```jldoctest
+julia> using LibPARI
+
+julia> LibPARI.nbthreads()
+1
+```
+"""
+function nbthreads()
+    return Int(BigInt(gp_eval("default(nbthreads)")))
 end
 
 """

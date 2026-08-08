@@ -35,7 +35,16 @@ lifecycle:
 LibPARI.is_initialized()   # true
 LibPARI.library_state()    # LibraryState.INITIALIZED
 LibPARI.stack_size()       # PARI main-stack size, in bytes
+LibPARI.nbthreads()        # 1 — PARI's own parallel dispatch is off
 ```
+
+`nbthreads` is **1**, and pinned there deliberately. LibPARI starts PARI with
+`INIT_noIMTm`, so PARI's pthread engine never runs: parallelism happens at the
+Julia level instead, one PARI context per OS thread. But `INIT_noIMTm` on its
+own leaves the value at `0`, which PARI's parallel code paths do not read as
+"serial" — they dispatch into a worker pool that was never created. Pinning it
+to 1 makes those paths degrade to serial, which is what was intended all
+along.
 
 The PARI main-stack size defaults to 8 MiB. To change it, set the
 `LIBPARI_STACK_SIZE` environment variable (a byte count) **before** the
