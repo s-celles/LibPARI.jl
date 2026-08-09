@@ -193,4 +193,67 @@ using LibPARI
             @test speedup > 1.3
         end
     end
+
+    # --- ERROR RECOVERY on the `mt:` path ----------------------------------
+    #
+    # A PROBE, not a regression guard. It answers one question, on Windows,
+    # that nothing else in this suite reaches.
+    #
+    # PARI raises two very different kinds of error from a secondary context:
+    #
+    #   * ordinary mathematical ones — `1/0` gives `e_INV`. The testset above
+    #     raises 200 of those concurrently and they unwind correctly on every
+    #     platform, Windows included.
+    #
+    #   * `mt:`-class ones, raised by PARI's own multithreading policy when a
+    #     secondary context touches a GP variable: `mt: please use export(x)`.
+    #     These route through libpari's `mt_err_recover`.
+    #
+    # On Windows, recovering from the second kind has been observed to
+    # ACCESS-VIOLATE and take the whole process down, where Linux and macOS
+    # return the catchable `PariError`:
+    #
+    #     Exception: EXCEPTION_ACCESS_VIOLATION at 0x6c1b2b1d --
+    #         mt_err_recover at ...\bin\libpari.dll
+    #
+    # Measured in PARI-GP-Slate.jl CI, run 31245642231. If that is the same
+    # uninitialised multithreading state that made `qflll` crash — now pinned
+    # by `_pin_nbthreads!` — then this passes everywhere and the two were one
+    # bug. If it still dies on Windows, they are two, and this test is where
+    # the log stops.
+    #
+    # Either outcome is worth having in CI. Note `x^2 + 1` assigns nothing and
+    # reads nothing the caller set: `x` is a free polynomial variable, the most
+    # ordinary thing in GP.
+    @testset "an mt: error from a secondary context is catchable" begin
+        if nt == 1
+            @info "mt: probe skipped — needs more than one thread"
+            @test true
+        else
+            @info "probing mt_err_recover: if the log stops here, the " *
+                  "process died recovering from an `mt:` error"
+            flush(stdout)
+            flush(stderr)
+
+            outcomes = Vector{Any}(undef, 64)
+            Threads.@threads for i = 1:64
+                outcomes[i] = try
+                    LibPARI.gp_eval("x^2 + 1")
+                catch e
+                    e
+                end
+            end
+
+            errs = count(o -> o isa LibPARI.PariError, outcomes)
+            vals = count(o -> o isa LibPARI.Gen, outcomes)
+            @info "mt: probe survived" threads = nt caught = errs evaluated =
+                vals
+
+            # A task landing on the PRIMARY context evaluates normally; one on
+            # a secondary context raises. Both are correct. What is being
+            # tested is that the process is still alive to say so, and that
+            # nothing came back as some third thing.
+            @test errs + vals == 64
+        end
+    end
 end

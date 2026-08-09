@@ -8,6 +8,21 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- A concurrency **probe** for error recovery on PARI's `mt:` path, in
+  `test/concurrency_tests.jl`. Ordinary errors raised from a secondary context
+  (`1/0` → `e_INV`) already have coverage there and unwind correctly on every
+  platform. The `mt:` class — raised by PARI's own multithreading policy when a
+  secondary context touches a GP variable, and routed through libpari's
+  `mt_err_recover` — did not, and has been observed to access-violate on
+  Windows where Linux and macOS return the catchable `PariError`.
+
+  The probe answers whether that is the same uninitialised multithreading state
+  that `_pin_nbthreads!` now fixes. It lives in the multi-threaded CI step
+  because `Pkg.test()` runs with `JULIA_NUM_THREADS=1`, where every spawned
+  task lands on the primary context and the question cannot be asked.
+
 ## [0.18.2] - 2026-08-08
 
 ### Fixed
