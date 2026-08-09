@@ -8,6 +8,33 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.18.2] - 2026-08-08
+
+### Fixed
+
+- **PARI's `nbthreads` is no longer left at `0`, which made its parallel code
+  paths crash the process.** `_INIT_OPTS` sets `INIT_noIMTm`, so PARI's pthread
+  engine never starts — deliberate, since LibPARI parallelises at the Julia
+  level with one PARI context per OS thread. But `INIT_noIMTm` alone leaves
+  `nbthreads` at `0`, and PARI's parallel dispatch does not treat `0` as
+  "serial": it enters a worker pool that was never created and dereferences it.
+
+  `qflll` on a large structured lattice reaches one of those paths
+  (`ZM_flatter` → `FpM_ratlift_parallel`) and the result was a **`SIGSEGV`** —
+  not a PARI error, so `protected_call` never saw it, so it was not catchable
+  and the whole Julia process died. `gp` itself never holds `0`, so the
+  combination was untested territory in PARI.
+
+  `_init_libpari!` now pins `nbthreads` to `1` through PARI's own
+  `sd_nbthreads` setter, immediately after `pari_init_opts`. Reported from
+  [PARI-GP-Slate.jl](https://github.com/s-celles/PARI-GP-Slate.jl), whose
+  notebook 06 hit it while LLL-reducing a Coppersmith lattice.
+
+### Added
+
+- `LibPARI.nbthreads()` — reads PARI's `nbthreads`, so the setting above is
+  observable alongside `is_initialized`, `library_state` and `stack_size`.
+
 ## [0.18.1] - 2026-08-07
 
 ### Changed
