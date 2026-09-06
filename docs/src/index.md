@@ -2,6 +2,35 @@
 CurrentModule = LibPARI
 ```
 
+```@raw html
+---
+layout: home
+
+hero:
+  name: LibPARI.jl
+  text: A Julia wrapper for the PARI/GP number-theory library.
+  tagline: Exact arithmetic, PARI's bignums, and the whole of GP.
+  actions:
+    - theme: brand
+      text: Getting started
+      link: /getting-started/
+    - theme: alt
+      text: View on GitHub
+      link: https://github.com/s-celles/LibPARI.jl
+
+features:
+  - icon: 🔢
+    title: Exact arithmetic
+    details: PARI's bignum integers, rationals, and reals, with conversions back to Julia.
+  - icon: 💻
+    title: The whole of GP
+    details: Evaluate any GP-language expression, one string away.
+  - icon: 🛡️
+    title: A safe C boundary
+    details: Every PARI error becomes a catchable PariError. Parallel and thread-safe.
+---
+```
+
 # LibPARI.jl
 
 A Julia wrapper for the [PARI/GP](https://pari.math.u-bordeaux.fr/)

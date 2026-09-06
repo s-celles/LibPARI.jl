@@ -15,6 +15,7 @@
 
 using LibPARI
 using Documenter
+using DocumenterLandingPage
 
 # `using LibPARI` is the implicit preamble of every `jldoctest` block.
 DocMeta.setdocmeta!(LibPARI, :DocTestSetup, :(using LibPARI); recursive = true)
@@ -23,6 +24,7 @@ makedocs(;
     modules = [LibPARI],
     authors = "Sébastien Celles <s.celles@gmail.com>",
     sitename = "LibPARI.jl",
+    plugins = [LandingPage()],
     format = Documenter.HTML(;
         canonical = "https://s-celles.github.io/LibPARI.jl",
         edit_link = "main",
