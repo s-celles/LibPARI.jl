@@ -60,7 +60,7 @@ jobs:
       - uses: julia-actions/setup-julia@v2
         with:
           version: ${{ matrix.version }}
-      - uses: julia-actions/cache@v2
+      - uses: julia-actions/cache@v3
       - uses: julia-actions/julia-runtest@v1
       - name: Concurrency stress test (multi-threaded — M9 / REQ-PLT-03)
         # `shell: bash` keeps this step identical on the Windows runner.
@@ -90,7 +90,7 @@ jobs:
       - uses: julia-actions/setup-julia@v2
         with:
           version: '1'
-      - uses: julia-actions/cache@v2
+      - uses: julia-actions/cache@v3
       # No docs/Manifest.toml is committed: LibPARI is dev-resolved here.
       - name: Instantiate docs environment
         run: |
