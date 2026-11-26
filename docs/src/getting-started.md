@@ -58,10 +58,15 @@ shim which catches PARI errors safely on every thread; it is compiled when
 the package loads, with the first of `cc`, `gcc` or `clang` found on the
 `PATH`.
 
-Without a C compiler (often the case on Windows), LibPARI still works from
-any number of threads, but every PARI call runs on one context, one at a
-time: results and errors are the same, only the parallel speed-up is lost.
-Setting `LIBPARI_DISABLE_TRAP=1` before loading forces this mode.
+On Windows, a MinGW-w64 `gcc` on the `PATH` (from MSYS2, for example) is
+enough. Before relying on the shim, LibPARI checks that it really catches a
+PARI error; if that check fails, the shim is not used.
+
+Without a working shim (no C compiler is often the case on Windows), LibPARI
+still works from any number of threads, but every PARI call runs on one
+context, one at a time: results and errors are the same, only the parallel
+speed-up is lost. Setting `LIBPARI_DISABLE_TRAP=1` before loading forces
+this mode.
 
 ## A first tour
 

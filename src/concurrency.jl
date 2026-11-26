@@ -138,6 +138,13 @@ function _start_pari_worker_pool!(parisize::Integer)
     _PARI_WORKERS[] = workers
     wait(_PARI_READY[])          # PARI is initialized
 
+    # A shim that built and loaded must also catch: check it on the primary
+    # context before relying on it for secondary ones.
+    if _TRAP_AVAILABLE[] && !_run_on_primary(_trap_selftest)
+        _TRAP_AVAILABLE[] = false
+        _TRAP_STATUS[] = "loaded, but the self-test error was not caught by it"
+    end
+
     # Discover the default-pool thread ids (a `:static` loop runs iteration
     # i on thread i, so each body sees a distinct real `threadid()`).
     poolids = fill(0, Threads.nthreads())

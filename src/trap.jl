@@ -69,6 +69,9 @@ const _TRAP_MAXARGS = 8
 # time (the precompilation gotcha).
 const _TRAP_AVAILABLE = Ref{Bool}(false)
 const _TRAP_FN = Ref{Ptr{Cvoid}}(C_NULL)
+# Why the shim is, or is not, in use: `"loaded"`, or the reason it is not
+# (disabled, no compiler, the build or `dlopen` error, a failed self-test).
+const _TRAP_STATUS = Ref{String}("not initialized")
 
 # PARI's last error object for the current thread.
 _pari_err_last() = ccall((:pari_err_last, PARI_jll.libpari), Ptr{Int}, ())
@@ -79,37 +82,93 @@ const DISABLE_TRAP_ENV = "LIBPARI_DISABLE_TRAP"
 
 # Compile and load the trap shim. Best-effort — any failure (no C compiler,
 # a build error) leaves `_TRAP_AVAILABLE` false and the M3 callback fallback
-# in place; so does `LIBPARI_DISABLE_TRAP=1`. Called once from `__init__`,
-# before the worker pool starts: without the shim the pool starts no
-# secondary context (see `_start_pari_worker_pool!`).
+# in place; so does `LIBPARI_DISABLE_TRAP=1`. `_TRAP_STATUS` records why.
+# Called once from `__init__`, before the worker pool starts: without the
+# shim the pool starts no secondary context (see `_start_pari_worker_pool!`).
 function _compile_and_load_trap!()
     _TRAP_AVAILABLE[] = false
-    get(ENV, DISABLE_TRAP_ENV, "") == "1" && return nothing
-    try
-        cc = Sys.which("cc")
-        cc === nothing && (cc = Sys.which("gcc"))
-        cc === nothing && (cc = Sys.which("clang"))
-        cc === nothing && return nothing      # no compiler → M3 fallback
-        Libdl = Base.Libc.Libdl
-        art = PARI_jll.artifact_dir
-        inc = joinpath(art, "include")
-        libdir = joinpath(art, "lib")
-        csrc = tempname() * ".c"
-        clib = tempname() * "." * Libdl.dlext
-        write(csrc, _TRAP_C_SOURCE)
-        run(
-            pipeline(
-                `$cc -shared -fPIC -O2 -I$inc $csrc -o $clib -L$libdir -lpari`;
-                stdout = devnull,
-                stderr = devnull,
-            ),
-        )
-        _TRAP_FN[] = Libdl.dlsym(Libdl.dlopen(clib), :libpari_trap)
-        _TRAP_AVAILABLE[] = true
-    catch
-        _TRAP_AVAILABLE[] = false
+    if get(ENV, DISABLE_TRAP_ENV, "") == "1"
+        _TRAP_STATUS[] = "disabled by $(DISABLE_TRAP_ENV)=1"
+        return nothing
     end
+    cc = something(Sys.which("cc"), Sys.which("gcc"), Sys.which("clang"), "")
+    if isempty(cc)
+        _TRAP_STATUS[] = "no C compiler (cc, gcc, clang) on the PATH"
+        return nothing
+    end
+    Libdl = Base.Libc.Libdl
+    csrc = tempname() * ".c"
+    clib = tempname() * "." * Libdl.dlext
+    write(csrc, _TRAP_C_SOURCE)
+    failures = String[]
+    for cmd in _trap_build_cmds(cc, PARI_jll.artifact_dir, csrc, clib)
+        err = IOBuffer()
+        try
+            run(pipeline(cmd; stdout = devnull, stderr = err))
+            _TRAP_FN[] = Libdl.dlsym(Libdl.dlopen(clib), :libpari_trap)
+            _TRAP_AVAILABLE[] = true
+            _TRAP_STATUS[] = "loaded"
+            return nothing
+        catch e
+            msg = strip(String(take!(err)))
+            push!(failures, isempty(msg) ? sprint(showerror, e) : msg)
+        end
+    end
+    _TRAP_STATUS[] = "build or load failed: " * join(failures, " | ")
     return nothing
+end
+
+# The compiler commands to try, in order, building the shim against
+# PARI_jll's headers and library. One command line serves every platform:
+#
+# - `-L lib -L bin`: the import library is in `lib/` on Unix but in `bin/`
+#   on Windows (`libpari.dll.a`).
+# - `-shared-libgcc` first: on Windows libpari reaches its thread-locals
+#   (`iferr_env`, `avma`, ...) through MinGW's emulated TLS, imported from
+#   the shared `libgcc_s_seh-1.dll`; the shim must use that same runtime, or
+#   it would arm its own copy of `iferr_env`, which libpari never reads.
+#   Elsewhere the option is harmless. The second command, without it, is for
+#   a compiler that rejects it; a shim built against the wrong runtime is
+#   then caught by `_trap_selftest` and not used.
+function _trap_build_cmds(cc, art, csrc, clib)
+    inc = joinpath(art, "include")
+    lib = joinpath(art, "lib")
+    bin = joinpath(art, "bin")
+    base = `$cc -shared -fPIC -O2 -I$inc $csrc -o $clib -L$lib -L$bin -lpari`
+    return (`$base -shared-libgcc`, base)
+end
+
+"""
+Check, on the calling PARI context, that the loaded shim really catches a
+PARI error on its own path: evaluate `1/0` through it and expect the
+shim's `errnum`, not an exception thrown by the fallback callback (which is
+what a shim arming a different `iferr_env` than libpari's would produce).
+"""
+function _trap_selftest()
+    _TRAP_AVAILABLE[] || return false
+    expr = "1/0"
+    errnum = Ref{Int}(-1)
+    try
+        GC.@preserve expr ccall(
+            _TRAP_FN[],
+            Int,
+            (Ptr{Cvoid}, Int, Ptr{Int}, Int, Int, Int, Int, Int, Int, Int, Int),
+            cglobal((:gp_read_str, PARI_jll.libpari)),
+            1,
+            errnum,
+            reinterpret(Int, pointer(expr)),
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+        )
+    catch
+        return false            # reached the fallback callback instead
+    end
+    return errnum[] >= 0
 end
 
 # Reinterpret the shim's pointer-sized result to a binding's declared
