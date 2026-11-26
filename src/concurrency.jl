@@ -18,9 +18,11 @@
 # `Threads.maxthreadid()` — thread ids are not assumed to be `1:nthreads()`
 # (Julia thread pools).
 #
-# PARI's clone/block list is process-global (it is not part of a per-thread
-# context); `_CLONE_LOCK` serializes `gclone`/`gunclone` while the heavy
-# computation runs lock-free on each context's own stack.
+# PARI's clone/block list is THREAD-LOCAL (`cur_block`, `root_block` and
+# `next_block` are `THREAD` statics in libpari's init.c): a block must be
+# freed on the thread that created it. Every `gclone`/`gunclone` therefore
+# runs on the primary worker, so the primary's list is the only one used,
+# while the heavy computation runs on each context's own stack.
 
 # A unit of libpari work for a worker. `reply === nothing` is fire-and-forget
 # (used by `Gen` finalization, which must not block); otherwise the worker
@@ -142,7 +144,14 @@ function _start_pari_worker_pool!(parisize::Integer)
     Threads.@threads :static for i = 1:Threads.nthreads()
         poolids[i] = Threads.threadid()
     end
-    secondary = filter(t -> t != primary, poolids)
+    # Secondary contexts need the trap shim. Without it, `pari_err` reaches
+    # `mt_err_recover` before LibPARI's fallback callback, and on a context
+    # started by `pari_thread_start` — which PARI counts as a worker of its
+    # parallel engine — that dereferences PARI's NULL parallel state: any
+    # PARI error on a non-primary thread would kill the process. So without
+    # the shim no secondary context is started, and every thread's calls
+    # fall back to the primary worker (`_worker_slot`): serial, but safe.
+    secondary = _TRAP_AVAILABLE[] ? filter(t -> t != primary, poolids) : Int[]
 
     # Allocate a PARI context for each secondary thread. `pari_thread_alloc`
     # snapshots the *calling* thread's PARI global state, so it MUST run on
@@ -157,7 +166,7 @@ function _start_pari_worker_pool!(parisize::Integer)
     ready = Channel{Bool}(Inf)
     Threads.@threads :static for i = 1:Threads.nthreads()
         tid = Threads.threadid()
-        if tid != primary
+        if tid in secondary
             ch = Channel{_PariJob}(Inf)
             reqs[tid] = ch
             workers[tid] = @async _pari_secondary_loop(pts[tid], ch, ready)
@@ -243,9 +252,9 @@ end
 
 # Queue the clone `ptr` of a finalized `Gen` for the primary worker to
 # `gunclone`. Called from finalizers: takes only a spin lock, never blocks,
-# never switches tasks. PARI's clone/block list is process-global; freeing
+# never switches tasks. PARI's clone/block list is thread-local; freeing
 # every clone on the primary worker (which also makes every `gclone`, via
-# `_run_on_primary`) keeps the list touched by a single thread.
+# `_run_on_primary`) frees each block on the thread that created it.
 function _defer_gunclone(ptr::Ptr{Int})
     lock(_PENDING_LOCK)
     try

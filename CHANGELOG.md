@@ -15,6 +15,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   documentation sources by `docs/llms.jl` at every docs build and published
   at the site root: the first indexes the pages, the second concatenates
   them.
+- **`LIBPARI_DISABLE_TRAP=1`** skips the C trap shim at load, as if no C
+  compiler were available, so the fallback mode can be tested anywhere.
 
 ### Changed
 
@@ -34,6 +36,18 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   move to a new **About** page of the documentation.
 
 ### Fixed
+
+- **A PARI error on a non-primary thread no longer crashes the process when
+  the C trap shim is unavailable** (Windows CI, any machine without a C
+  compiler). `pari_err` calls PARI's `mt_err_recover` before LibPARI's
+  fallback callback, and PARI counts every context started by
+  `pari_thread_start` as a worker of its own parallel engine, so on such a
+  context `mt_err_recover` dereferenced PARI's NULL parallel state — for an
+  ordinary `1/0` as well as for an `mt:` error. Without the shim LibPARI now
+  starts no secondary context: every call runs on the primary context,
+  serially, and errors from any thread are catchable `PariError`s. The
+  concurrent-error tests, until now skipped where the shim is missing, run
+  everywhere, and the `mt:` probe of PR #9 is kept as a regression test.
 
 - **MCP `pari_help` finds a function by its GP name.** It looked the name up
   among the bindings only, which carry PARI's C-Name, so a GP name that

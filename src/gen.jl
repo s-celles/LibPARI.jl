@@ -75,8 +75,8 @@ mutable struct Gen <: PariObject
 
     function Gen(raw::Ptr{Int})
         raw == C_NULL && throw(ArgumentError("cannot wrap a null GEN"))
-        # `gclone` splices PARI's process-global clone list — run it on the
-        # primary worker so the list is only ever touched by one thread.
+        # `gclone` splices PARI's clone list, which is thread-local — run it
+        # on the primary worker, which also frees every clone.
         # `raw` lives on the producing worker's stack, which stays stable
         # (that worker is blocked awaiting this result).
         cloned = _run_on_primary(() -> _gclone(raw))::Ptr{Int}
@@ -95,8 +95,8 @@ end
 function _finalize!(g::Gen)
     if g.ptr != C_NULL
         if library_state() == LibraryState.INITIALIZED
-            # `gunclone` splices the process-global clone list, so the
-            # primary worker does it, the single thread that owns the list.
+            # `gunclone` must run on the thread that cloned — the primary
+            # worker, which owns the (thread-local) clone list.
             # A finalizer must not block or switch tasks: it only queues the
             # clone (see `_defer_gunclone`).
             _defer_gunclone(g.ptr)

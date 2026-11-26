@@ -73,10 +73,18 @@ const _TRAP_FN = Ref{Ptr{Cvoid}}(C_NULL)
 # PARI's last error object for the current thread.
 _pari_err_last() = ccall((:pari_err_last, PARI_jll.libpari), Ptr{Int}, ())
 
+# Environment variable that, set to `1`, skips the trap shim as if no C
+# compiler were available — so the fallback mode can be exercised anywhere.
+const DISABLE_TRAP_ENV = "LIBPARI_DISABLE_TRAP"
+
 # Compile and load the trap shim. Best-effort — any failure (no C compiler,
 # a build error) leaves `_TRAP_AVAILABLE` false and the M3 callback fallback
-# in place. Called once from `__init__`.
+# in place; so does `LIBPARI_DISABLE_TRAP=1`. Called once from `__init__`,
+# before the worker pool starts: without the shim the pool starts no
+# secondary context (see `_start_pari_worker_pool!`).
 function _compile_and_load_trap!()
+    _TRAP_AVAILABLE[] = false
+    get(ENV, DISABLE_TRAP_ENV, "") == "1" && return nothing
     try
         cc = Sys.which("cc")
         cc === nothing && (cc = Sys.which("gcc"))
