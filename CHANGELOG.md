@@ -8,6 +8,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.19.0] - 2026-11-26
+
 ### Added
 
 - **Bindings for functions new in PARI 2.19**, among them `primeisregular`,
@@ -1154,7 +1156,10 @@ wrapper code exists. No PARI functionality is exposed yet.
   it is resolved from a local development build. Registering LibPARI is
   therefore deferred to a later milestone.
 
-[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.18.0...HEAD
+[Unreleased]: https://github.com/s-celles/LibPARI.jl/compare/v0.19.0...HEAD
+[0.19.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.18.2...v0.19.0
+[0.18.2]: https://github.com/s-celles/LibPARI.jl/compare/v0.18.1...v0.18.2
+[0.18.1]: https://github.com/s-celles/LibPARI.jl/compare/v0.18.0...v0.18.1
 [0.18.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.17.0...v0.18.0
 [0.17.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.16.0...v0.17.0
 [0.16.0]: https://github.com/s-celles/LibPARI.jl/compare/v0.15.1...v0.16.0
