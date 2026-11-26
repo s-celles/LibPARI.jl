@@ -76,19 +76,20 @@ Julia code in two complementary ways:
 
 ## Status
 
-LibPARI is at version `0.18.0`. The hand-written core (lifecycle, `Gen`,
-error handling, conversions, the numeric API, precision, containers,
-display, the `pari` entry point and the GP evaluator) and the generated
-binding layer are complete; the library is platform-correct, parallel, and
-thread-safe.
+```@eval
+using Markdown, LibPARI
+Markdown.parse("LibPARI is at version `$(pkgversion(LibPARI))`.")
+```
 
-`0.18.0` narrows the optional Symbolics.jl bridge to Symbolics 7, and
-`0.17.0` before it carried breaking changes to the display contract and the
-generated bindings — see
+The hand-written core (lifecycle, `Gen`, error handling, conversions, the
+numeric API, precision, containers, display, the `pari` entry point and the
+GP evaluator) and the generated binding layer are complete; the library is
+platform-correct, parallel, and thread-safe.
+
+The API is still being reshaped and the package stays in `0.x`, so a minor
+release may break code: read
 the [changelog](https://github.com/s-celles/LibPARI.jl/blob/main/CHANGELOG.md)
-before upgrading. The API is still being reshaped and the package stays in
-`0.x`; `ROADMAP.md`
-Part II tracks what remains.
+before upgrading. `ROADMAP.md` Part II tracks what remains.
 
 Both `LibPARI` and `PARI_jll` are registered in the Julia General registry
 — a plain `Pkg.add("LibPARI")` installs everything on Linux, macOS, and

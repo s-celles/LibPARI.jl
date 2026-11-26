@@ -19,5 +19,5 @@ gp_eval("sum(k = 1, 100, k^2)")       # 338350
 **Documentation:** <https://s-celles.github.io/LibPARI.jl>
 
 LibPARI.jl is an independent project, not affiliated with the PARI Group. See
-[About](https://s-celles.github.io/LibPARI.jl/about/) for details, bug
+[About](https://s-celles.github.io/LibPARI.jl/dev/about/) for details, bug
 reporting, and development notes.
