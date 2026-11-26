@@ -24,6 +24,7 @@
 !CONTRIBUTORS.md
 !ROADMAP.md
 !SECURITY.md
+!justfile
 
 # Core project files
 !Project.toml
