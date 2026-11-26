@@ -17,6 +17,18 @@ using LibPARI
 using Documenter
 using DocumenterLandingPage
 
+include("llms.jl")
+
+const PAGES = [
+    "Home" => "index.md",
+    "Getting started" => "getting-started.md",
+    "API reference" => "api.md",
+    "Precision" => "precision.md",
+    "GP state and sessions" => "gp-state.md",
+    "MCP connector" => "mcp.md",
+    "About" => "about.md",
+]
+
 # `using LibPARI` is the implicit preamble of every `jldoctest` block.
 DocMeta.setdocmeta!(LibPARI, :DocTestSetup, :(using LibPARI); recursive = true)
 
@@ -30,15 +42,7 @@ makedocs(;
         edit_link = "main",
         assets = String[],
     ),
-    pages = [
-        "Home" => "index.md",
-        "Getting started" => "getting-started.md",
-        "API reference" => "api.md",
-        "Precision" => "precision.md",
-        "GP state and sessions" => "gp-state.md",
-        "MCP connector" => "mcp.md",
-        "About" => "about.md",
-    ],
+    pages = PAGES,
     doctest = true,
     # The ~1200 generated `LibPARI.PARI` bindings each carry PARI's `Help`
     # text as a docstring; they are documented in bulk on the API-reference
@@ -48,5 +52,8 @@ makedocs(;
     # is still rendered (via `@autodocs`) and doctested.
     checkdocs = :exports,
 )
+
+# llms.txt and llms-full.txt, published at the site root with the pages.
+generate_llms_txt(joinpath(@__DIR__, "build"), joinpath(@__DIR__, "src"), PAGES)
 
 deploydocs(; repo = "github.com/s-celles/LibPARI.jl", devbranch = "main")
