@@ -8,6 +8,7 @@
 - [Getting started](https://s-celles.github.io/LibPARI.jl/dev/getting-started/)
 - [API reference](https://s-celles.github.io/LibPARI.jl/dev/api/)
 - [Precision](https://s-celles.github.io/LibPARI.jl/dev/precision/)
+- [Parallelism](https://s-celles.github.io/LibPARI.jl/dev/parallelism/)
 - [GP state and sessions](https://s-celles.github.io/LibPARI.jl/dev/gp-state/)
 - [MCP connector](https://s-celles.github.io/LibPARI.jl/dev/mcp/)
 - [About](https://s-celles.github.io/LibPARI.jl/dev/about/)
