@@ -1033,15 +1033,24 @@ reviewed by the maintainer. The repository is tagged with the
 
 ## Development
 
-Run the test suite:
+The main entry points are recipes in the repository's `justfile` (run them
+with [`just`](https://just.systems); `just` alone lists them). Each runs what
+CI runs:
+
+| Recipe | What it does |
+|---|---|
+| `just test` | the test suite (`Pkg.test()`) |
+| `just test-threads` | the multi-threaded concurrency suite |
+| `just test-no-trap` | the same, without the C trap shim (serial fallback) |
+| `just docs` | this documentation, `llms.txt` and `llms-full.txt` (strict: any warning fails) |
+| `just format` / `just format-check` | JuliaFormatter, pinned as in CI |
+| `just generate` | regenerate `src/bindings.jl` from PARI's `pari.desc` |
+| `just check` | format check, tests, threaded suite and docs |
+
+Without `just`, the underlying commands are plain Julia, e.g.:
 
 ```sh
 julia --project=. -e 'using Pkg; Pkg.test()'
-```
-
-Build this documentation (the build is strict: any warning fails it):
-
-```sh
 julia --project=docs -e 'using Pkg; Pkg.develop(path = "."); Pkg.instantiate()'
 julia --project=docs docs/make.jl
 ```
