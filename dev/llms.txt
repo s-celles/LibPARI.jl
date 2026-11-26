@@ -1,0 +1,17 @@
+# LibPARI.jl
+
+> LibPARI.jl is a Julia wrapper for the PARI/GP number-theory library. It exposes a `Gen` value type wrapping every PARI object, idiomatic arithmetic and conversions, nearly 1200 bindings generated from PARI's `pari.desc` under `LibPARI.PARI`, and `gp_eval` for any GP-language expression.
+
+## Documentation
+
+- [LibPARI.jl](https://s-celles.github.io/LibPARI.jl/dev/)
+- [Getting started](https://s-celles.github.io/LibPARI.jl/dev/getting-started/)
+- [API reference](https://s-celles.github.io/LibPARI.jl/dev/api/)
+- [Precision](https://s-celles.github.io/LibPARI.jl/dev/precision/)
+- [GP state and sessions](https://s-celles.github.io/LibPARI.jl/dev/gp-state/)
+- [MCP connector](https://s-celles.github.io/LibPARI.jl/dev/mcp/)
+- [About](https://s-celles.github.io/LibPARI.jl/dev/about/)
+
+## Optional
+
+- [Full documentation in one file](https://s-celles.github.io/LibPARI.jl/dev/llms-full.txt)

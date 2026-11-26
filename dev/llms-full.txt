@@ -1,0 +1,953 @@
+# LibPARI.jl
+
+> LibPARI.jl is a Julia wrapper for the PARI/GP number-theory library. It exposes a `Gen` value type wrapping every PARI object, idiomatic arithmetic and conversions, nearly 1200 bindings generated from PARI's `pari.desc` under `LibPARI.PARI`, and `gp_eval` for any GP-language expression.
+
+
+---
+
+Source: https://s-celles.github.io/LibPARI.jl/dev/
+
+```@meta
+CurrentModule = LibPARI
+```
+
+```@raw html
+---
+layout: home
+
+hero:
+  name: LibPARI.jl
+  text: A Julia wrapper for the PARI/GP number-theory library.
+  tagline: Exact arithmetic, PARI's bignums, and the whole of GP.
+  actions:
+    - theme: brand
+      text: Getting started
+      link: /getting-started/
+    - theme: alt
+      text: View on GitHub
+      link: https://github.com/s-celles/LibPARI.jl
+
+features:
+  - icon: 🔢
+    title: Exact arithmetic
+    details: PARI's bignum integers, rationals, and reals, with conversions back to Julia.
+  - icon: 💻
+    title: The whole of GP
+    details: Evaluate any GP-language expression, one string away.
+  - icon: 🛡️
+    title: A safe C boundary
+    details: Every PARI error becomes a catchable PariError. Parallel and thread-safe.
+---
+```
+
+# LibPARI.jl
+
+A Julia wrapper for the [PARI/GP](https://pari.math.u-bordeaux.fr/)
+number-theory library.
+
+LibPARI embeds the PARI/GP C library in a Julia process and exposes it to
+Julia code in two complementary ways:
+
+- **Generated bindings** — nearly 1200 PARI functions, generated directly from
+  PARI's own machine-readable function database (`pari.desc`), reachable
+  through the `LibPARI.PARI` submodule. See [API reference](@ref).
+- **A hand-written core** — a [`Gen`](@ref) value type wrapping
+  every PARI object, idiomatic numeric operators, type conversions to and
+  from Julia numbers, a GP expression evaluator, and safe library lifecycle
+  and error handling.
+
+## What LibPARI gives you
+
+- **`Gen` is a [`PariObject`](@ref LibPARI.PariObject), not a Julia
+  `Number`.** One wrapper type covers every PARI object — matrices, strings
+  and closures included — so LibPARI declares the arithmetic explicitly
+  rather than claiming a `Number` supertype: build a `Gen` from Julia
+  integers, floats and rationals and use `+`, `-`, `*`, `/`, `^`, and `==`
+  directly, with a Julia number on either side.
+- **Exact arithmetic of arbitrary size.** PARI's bignum integers, rationals,
+  and reals, with conversions back to Julia's `BigInt` and fixed-width
+  integer types.
+- **The whole of GP, one string away.** [`gp_eval`](@ref)
+  evaluates any GP-language expression — the escape hatch for functions the
+  generated bindings do not cover.
+- **A safe C boundary.** Every PARI error becomes a catchable
+  [`PariError`](@ref); a PARI `longjmp` never unwinds past
+  Julia. PARI's transient stack is kept leak-free, and each `Gen` frees its
+  own storage.
+- **Parallel and thread-safe.** Each Julia OS thread gets its own PARI
+  context, so concurrent calls into the PARI library run in parallel on
+  multiple cores — and a PARI error raised on any thread, even
+  simultaneously from many, is caught safely as a [`PariError`](@ref). A
+  `Gen` may be collected on any thread: its finalizer only queues its
+  storage, which the primary PARI worker frees before its next job.
+- **Type-stable and precompiled** — built to SciML inference standards, with
+  a precompilation workload for a fast first call.
+
+## Status
+
+```@eval
+using Markdown, LibPARI
+Markdown.parse("LibPARI is at version `$(pkgversion(LibPARI))`.")
+```
+
+The hand-written core (lifecycle, `Gen`, error handling, conversions, the
+numeric API, precision, containers, display, the `pari` entry point and the
+GP evaluator) and the generated binding layer are complete; the library is
+platform-correct, parallel, and thread-safe.
+
+The API is still being reshaped and the package stays in `0.x`, so a minor
+release may break code: read
+the [changelog](https://github.com/s-celles/LibPARI.jl/blob/main/CHANGELOG.md)
+before upgrading. `ROADMAP.md` Part II tracks what remains.
+
+Both `LibPARI` and `PARI_jll` are registered in the Julia General registry
+— a plain `Pkg.add("LibPARI")` installs everything on Linux, macOS, and
+Windows. See [Getting started](@ref) for the install command.
+
+## Contents
+
+```@contents
+Pages = ["getting-started.md", "api.md"]
+Depth = 2
+```
+
+
+---
+
+Source: https://s-celles.github.io/LibPARI.jl/dev/getting-started/
+
+```@meta
+CurrentModule = LibPARI
+```
+
+# Getting started
+
+## Installation
+
+`LibPARI` is installable from the Julia General registry:
+
+```julia
+using Pkg
+Pkg.add("LibPARI")
+```
+
+The native PARI library is supplied by
+[`PARI_jll`](https://github.com/JuliaPackaging/Yggdrasil/tree/master/P/PARI),
+a registered binary build of PARI 2.17.3 for Linux, macOS, and Windows.
+`Pkg.add` resolves and installs it automatically — no system PARI is
+required.
+
+LibPARI requires Julia 1.10 (the long-term-support release) or later.
+
+## Loading the package
+
+```julia
+using LibPARI
+```
+
+Loading the module initializes the embedded PARI library exactly once for the
+process and registers a clean shutdown at process exit. You can observe the
+lifecycle:
+
+```julia
+LibPARI.is_initialized()   # true
+LibPARI.library_state()    # LibraryState.INITIALIZED
+LibPARI.stack_size()       # PARI main-stack size, in bytes
+LibPARI.nbthreads()        # 1 — PARI's own parallel dispatch is off
+```
+
+`nbthreads` is **1**, and pinned there deliberately. LibPARI starts PARI with
+`INIT_noIMTm`, so PARI's pthread engine never runs: parallelism happens at the
+Julia level instead, one PARI context per OS thread. But `INIT_noIMTm` on its
+own leaves the value at `0`, which PARI's parallel code paths do not read as
+"serial" — they dispatch into a worker pool that was never created. Pinning it
+to 1 makes those paths degrade to serial, which is what was intended all
+along.
+
+The PARI main-stack size defaults to 8 MiB. To change it, set the
+`LIBPARI_STACK_SIZE` environment variable (a byte count) **before** the
+package is loaded.
+
+## A first tour
+
+`using LibPARI` brings in exactly four names: [`pari`](@ref), [`Gen`](@ref),
+[`gp_eval`](@ref) and [`PariError`](@ref). Everything else stays qualified.
+
+[`pari`](@ref) converts a Julia value into a PARI one — a [`Gen`](@ref) —
+and the usual Julia operators work on it:
+
+```@repl tour
+using LibPARI
+a = pari(42)
+a * a + 1
+pari(2)^100
+```
+
+`pari` accepts integers of any magnitude, rationals, floats — including
+`BigFloat`, exactly — and complex numbers. Mixed arithmetic takes a Julia
+operand on either side:
+
+```@repl tour
+pari(3 // 4) + 1
+pari(2)^200 == big(2)^200
+pari(big"1.234567890123456789012345678901")
+```
+
+Convert back to a Julia value:
+
+```@repl tour
+BigInt(pari(2)^64)
+Int(pari(255))
+```
+
+## The three levels of access
+
+**1. Idiomatic Julia.** A small hand-written surface: the operators above,
+the conversions, and a short list of Base functions where PARI's operation
+*is* Julia's.
+
+```@repl tour
+gcd(pari(12), 18)
+factorial(pari(20))
+LibPARI.isprime(1009)
+LibPARI.factors(60)
+```
+
+This is the layer that changes most slowly, and the one the documentation
+leads with. LibPARI is in `0.x`: it can still change, and the changelog
+records every such change.
+
+**2. The generated bindings.** Nearly 1200 PARI functions under
+`LibPARI.PARI`, one per eligible entry in PARI's own function database, each
+carrying PARI's help text as its docstring:
+
+```@repl tour
+LibPARI.PARI.nextprime(pari(1000))
+LibPARI.PARI.eulerphi(pari(100))
+```
+
+Their names and calling conventions follow `pari.desc`, so they track PARI
+rather than Julia taste.
+
+**3. GP expressions.** [`gp_eval`](@ref) reaches anything the other two do
+not — in particular the functions taking a GP closure, which are not
+generated:
+
+```@repl tour
+gp_eval("sum(k = 1, 100, k^2)")
+```
+
+It is an escape hatch, not the recommended way to use LibPARI.
+
+## Handling errors
+
+A failing PARI call raises a catchable [`PariError`](@ref) carrying PARI's
+own message and an error category:
+
+```@repl tour
+try
+    gp_eval("1/0")
+catch e
+    e isa PariError
+end
+```
+
+## Next steps
+
+The [API reference](@ref) documents the hand-written public surface in full
+and explains how the generated `LibPARI.PARI` bindings are organized.
+
+
+---
+
+Source: https://s-celles.github.io/LibPARI.jl/dev/api/
+
+```@meta
+CurrentModule = LibPARI
+```
+
+# API reference
+
+LibPARI exposes PARI/GP to Julia through two layers: a large
+machine-generated binding layer, and a compact hand-written core. This page
+documents both.
+
+## The generated bindings — `LibPARI.PARI`
+
+The `LibPARI.PARI` submodule holds nearly 1200 bindings, one per eligible
+PARI/GP function, generated directly from PARI's own machine-readable
+function database (`pari.desc`). Each binding:
+
+- keeps PARI's function name (e.g. `LibPARI.PARI.nextprime`,
+  `LibPARI.PARI.factorial`, `LibPARI.PARI.isprime`);
+- carries PARI's own `Help` text as its docstring — query it with `?` at the
+  REPL, e.g. `?LibPARI.PARI.nextprime`;
+- takes and returns [`Gen`](@ref) values (or the scalar Julia type the
+  function's prototype calls for), and is type-stable;
+- routes through the same safe, leak-free, thread-safe call boundary as the
+  hand-written API.
+
+A few prototype conventions are worth knowing:
+
+- **Precision arguments** are supplied automatically; pass a `prec` keyword
+  to override the working precision.
+- **Optional arguments** are exposed as keyword arguments with PARI's
+  declared defaults.
+- **Output arguments** are returned alongside the primary result as a tuple.
+- Functions taking a **GP closure** argument are not generated — reach them
+  through [`gp_eval`](@ref) instead.
+
+Because the binding layer is generated, it is not enumerated symbol-by-symbol
+here; PARI's own [function reference](https://pari.math.u-bordeaux.fr/doc.html)
+is the authoritative index of what each function computes. The rest of this
+page documents the hand-written core in full.
+
+## Hand-written core
+
+```@index
+Pages = ["api.md"]
+```
+
+### Library lifecycle
+
+```@docs
+LibPARI.LibraryState
+```
+
+```@autodocs
+Modules = [LibPARI]
+Pages = ["lifecycle.jl"]
+```
+
+### The `Gen` value type
+
+```@autodocs
+Modules = [LibPARI]
+Pages = ["gen.jl"]
+```
+
+```@docs
+LibPARI.PariType
+```
+
+### Error handling
+
+```@docs
+LibPARI.PariErr
+```
+
+```@autodocs
+Modules = [LibPARI]
+Pages = ["errors.jl"]
+```
+
+### The entry point and the high-level facade
+
+`pari(x)` is the entry point; the rest of this section is the deliberately
+small facade over the generated layer. Every facade function documents the
+Julia and PARI inputs it accepts, its exact return type, and how it fails.
+
+```@autodocs
+Modules = [LibPARI]
+Pages = ["facade.jl"]
+```
+
+### PARI containers
+
+`Gen` is deliberately **not** an `AbstractArray` — one concrete type also
+wraps integers, strings and closures — so the relevant Base methods are
+defined directly and refuse the PARI types where they mean nothing. A
+`t_MAT` reports Julia's `(rows, columns)`, transposing PARI's column-major
+storage, and element access **clones**: every element owns its memory and
+outlives the container it came from.
+
+```@autodocs
+Modules = [LibPARI]
+Pages = ["containers.jl"]
+```
+
+### Type conversions
+
+LibPARI converts an *enumerated* set of Julia types, not every `Number`.
+The set is [`LibPARI.PariConvertible`](@ref) and the single entry point is
+[`LibPARI.gen_convert`](@ref); `Gen(x)`, `convert(Gen, x)` and every
+mixed-operand operator funnel through it, so one type is converted in
+exactly one way.
+
+**Into a `Gen`:**
+
+| Julia type | PARI type | Notes |
+|------------|-----------|-------|
+| `Bool` | `t_INT` | `0`/`1` — PARI has no boolean type, and `Bool <: Integer` |
+| `Int8` … `Int128`, `UInt8` … `UInt128` | `t_INT` | exact at every width |
+| `BigInt` | `t_INT` | exact, any magnitude |
+| `Rational{<:Integer}` | `t_FRAC` | reduced by PARI; an integral value normalises to `t_INT` |
+| `Float16`, `Float32`, `Float64` | `t_REAL` | exact |
+| `BigFloat` | `t_REAL` | exact — see [Precision](@ref) |
+| `Complex{T}`, `T` convertible | `t_COMPLEX` | a zero imaginary part normalises to the real type |
+
+Anything else — an `Irrational` such as `π`, a `Missing`, a foreign
+numeric type — raises [`LibPARI.ConversionError`](@ref), which names the
+offending type. A downstream package adds support for its own type by
+defining a `LibPARI.gen_convert` method for it, which is type piracy on
+neither side.
+
+`Inf`, `-Inf` and `NaN` raise `InexactError`: PARI's `t_INFINITY` exists
+but does not take part in general arithmetic, so mapping onto it would
+produce values that fail later, far from the conversion.
+
+**Out of a `Gen`:** `BigInt`, `Bool` and the fixed-width integer types
+(`InexactError` when the value is not an integer or does not fit);
+`Rational` and `Rational{T}`; `Float16`, `Float32`, `Float64` and
+`BigFloat`; `Complex` and `Complex{T}`. A `t_REAL` is decomposed with
+PARI's own mantissa and exponent rather than re-parsed from its printed
+form, so the conversion neither loses digits nor fails on a large
+exponent.
+
+```@autodocs
+Modules = [LibPARI]
+Pages = ["conversions.jl"]
+```
+
+### Numeric API
+
+`Gen` is a [`PariObject`](@ref LibPARI.PariObject), **not** a Julia
+`Number` — one concrete `Gen` wraps every PARI object, matrices and strings
+included. The numeric surface is therefore declared explicitly, not
+inherited: `+`, `-`, `*`, `/`, `^`, `\`, `==`, `<`, `<=` and `isless` have
+methods for `Gen`/`Gen` and for a `Gen` against a Julia `Integer`,
+`AbstractFloat`, `Rational` or `Complex`, in either operand order. `Gen`
+also carries the `zero`/`one` identities, the standard predicates
+(`iszero`, `isinteger`, `isfinite`, …), the elementary operations (`abs`,
+`sign`, `inv`, `conj`, `real`, `imag`), `hash`, `float`, `abs2`, `adjoint`,
+`transpose` and scalar broadcasting — so a `Gen` sorts and serves as a
+`Dict`/`Set` key interchangeably with an equal Julia number.
+
+Generic code bounded by `T<:Number` — parts of LinearAlgebra, other numeric
+packages — does **not** accept a `Gen`; dispatch on
+[`PariObject`](@ref LibPARI.PariObject), or convert. An operation that does
+not apply to a `Gen`'s underlying PARI type raises a catchable
+[`PariError`](@ref).
+
+```@autodocs
+Modules = [LibPARI]
+Pages = ["numeric.jl"]
+```
+
+### GP expression evaluator
+
+```@autodocs
+Modules = [LibPARI]
+Pages = ["evaluator.jl"]
+```
+
+### Module
+
+```@autodocs
+Modules = [LibPARI]
+Pages = ["LibPARI.jl"]
+```
+
+
+---
+
+Source: https://s-celles.github.io/LibPARI.jl/dev/precision/
+
+```@meta
+CurrentModule = LibPARI
+```
+
+# Precision
+
+PARI computes with reals to a **working precision**. LibPARI states that
+precision in **bits** everywhere on its own surface, and converts only at
+the `ccall` boundary.
+
+## The units
+
+PARI's own units are easy to misread, so they are pinned here against the
+headers shipped with `PARI_jll` (PARI 2.17):
+
+- A prototype `p` or `b` argument is a **bit count**. `pariinl.h` defines
+  `prec2nbits(long x) { return x; }` — the value is already in bits.
+- PARI allocates a `t_REAL` to a whole number of machine words, so a
+  request is rounded **up**: `nbits2prec(x) = ceil(x / 64) * 64` on a
+  64-bit platform.
+
+[`LibPARI.nbits2prec`](@ref) exposes that rounding:
+
+| requested bits | allocated bits |
+|----------------|----------------|
+| 1 | 64 |
+| 4 | 64 |
+| 64 | 64 |
+| 65 | 128 |
+| 128 | 128 |
+| 200 | 256 |
+
+!!! note "A historical mistake, now fixed"
+    Before version 0.18.0 every generated binding defaulted to `prec = 4`,
+    with a comment describing it as "word precision". It was in fact a
+    request for **4 bits**, which PARI rounded up to its 64-bit minimum —
+    not a deliberate choice. Bindings now default to LibPARI's working
+    precision.
+
+## The default
+
+[`LibPARI.default_precision`](@ref) is **128 bits**, which is GP's own
+`realbitprecision` default (about 38 decimal digits — the width PARI prints
+by default). Matching GP means the same expression gives the same answer in
+`gp` and in LibPARI.
+
+Tracking Julia's `precision(BigFloat)` (256 bits) was the alternative. It
+was rejected: it would make LibPARI disagree with the library it wraps.
+
+## Setting it
+
+```julia
+setprecision(LibPARI.Gen, 256) do
+    LibPARI.PARI.mppi()        # computed to 256 bits
+end
+```
+
+Scopes nest and unwind, including when the body throws:
+
+```julia
+setprecision(LibPARI.Gen, 256) do
+    setprecision(LibPARI.Gen, 512) do
+        precision(LibPARI.Gen)   # 512
+    end
+    precision(LibPARI.Gen)       # back to 256
+end
+```
+
+`precision(LibPARI.Gen)` reads the value in force;
+`precision(g::LibPARI.Gen)` reads the accuracy of a real value, and raises
+`ArgumentError` for an exact one — test with [`LibPARI.isexact`](@ref).
+
+## What the scope reaches, and what it does not
+
+| | follows `setprecision(Gen, …)` |
+|---|---|
+| generated bindings taking `p` or `b` | **yes** — it is their keyword default |
+| `Gen^Gen` and the hand-written numeric API | **yes** |
+| conversions into and out of a `Gen` | value-preserving, so unaffected |
+| [`gp_eval`](@ref) | **no** — see below |
+| a task spawned inside the scope | **no** — see below |
+
+**`gp_eval` follows PARI's process-global `realprecision`,** not the
+scope. The GP interpreter reads its own global default, which is shared by
+every thread in the process; LibPARI does not write it behind your back.
+Set it from GP itself if you need to:
+
+```julia
+LibPARI.gp_eval("default(realbitprecision, 512)")
+```
+
+**The scope is task-local.** It nests and unwinds correctly, and it does
+cross the hop onto LibPARI's PARI worker tasks — the precision is read in
+the *calling* task and carried into the closure that gets marshalled. But a
+task you spawn inside the scope does **not** inherit it:
+
+```julia
+setprecision(LibPARI.Gen, 512) do
+    fetch(Threads.@spawn precision(LibPARI.Gen))   # the default, not 512
+end
+```
+
+This is a limitation of the Julia 1.10 LTS floor, which has no
+`Base.ScopedValues`; a `ScopedValue` would be inherited. Set the precision
+inside the spawned task, or revisit when the compat floor moves to 1.11.
+
+## Precision and conversion
+
+`Gen(x)` preserves `x` exactly, whatever its width:
+
+```julia
+x = big"1.00000000000000000000000000000001"
+BigFloat(LibPARI.Gen(x)) == x        # true
+```
+
+A wide float is decomposed into its exact integer significand and binary
+exponent and rebuilt at a precision that holds every bit — nothing passes
+through `Cdouble`. An `IEEEFloat` takes PARI's `dbltor`, which is exact.
+
+Coming back, `BigFloat(g)` is exact by default: the result carries PARI's
+own mantissa, at whatever precision that takes, which may exceed the
+ambient `precision(BigFloat)`. Pass the keyword to round once to a chosen
+width instead:
+
+```julia
+BigFloat(g; precision = 256)
+```
+
+`Inf`, `-Inf` and `NaN` raise `InexactError`: PARI's `t_INFINITY` exists
+but does not take part in general arithmetic, so mapping onto it would
+produce values that fail later, far from the conversion.
+
+## Series precision
+
+A series precision (prototype code `P`) is a **number of terms**, not a bit
+count. It has its own default and is deliberately outside the precision
+scope.
+
+## Reference
+
+```@autodocs
+Modules = [LibPARI]
+Pages = ["precision.jl"]
+```
+
+
+---
+
+Source: https://s-celles.github.io/LibPARI.jl/dev/gp-state/
+
+```@meta
+CurrentModule = LibPARI
+```
+
+# GP state and sessions
+
+[`gp_eval`](@ref) evaluates GP code against a **persistent environment**:
+
+```julia
+gp_eval("x = 42")
+gp_eval("x + 1")     # 43
+```
+
+That environment has rules, and they are not the ones a "session" API would
+suggest. This page states them, and shows the one arrangement that gives
+real isolation.
+
+## One environment, one writer
+
+There is **one GP environment per process**, living in PARI's primary
+context. LibPARI runs one PARI context per Julia OS thread, and PARI treats
+every non-primary context as a *parallel section*. Its documentation of
+`export` is explicit: exported variables are "visible inside parallel
+sections … but cannot be modified inside a parallel section".
+
+Measured from a `Threads.@spawn`ed task:
+
+| From another task | Result |
+|-------------------|--------|
+| `gp_eval("2 + 2")` | works — pure evaluation is unrestricted |
+| `LibPARI.PARI.nextprime(1000)` | works — the generated layer is unrestricted |
+| reading an unexported variable | `PariError(e_MISC)`: `"mt: please use export(x)"` |
+| reading after `gp_eval("export(x)")` | works |
+| **any assignment** | `PariError(e_MISC)`: `"mt: attempt to change exported variable"` |
+
+**Confine GP variable work to one task.** Computation may happen anywhere.
+
+## Why there is no in-process `GPSession`
+
+Independent GP namespaces inside one process are not available, and the
+reason is PARI's design rather than a gap in LibPARI. Every route was
+investigated:
+
+| Route | Why it does not work |
+|-------|----------------------|
+| A PARI context per session (`pari_thread_*`) | Contexts are for parallel *computation*; a secondary context cannot write GP globals at all. |
+| Enumerate a session's variables | GP's `variables()` lists *polynomial* variables (`[x, y]`), not assignments. There is no public way to list what is bound. |
+| Detect new names with `is_entry` | An `entree` survives `kill`, so a name that was ever used stays "known" — bound and unbound are indistinguishable this way. |
+| Read `entree.valence` to tell them apart | The macros live in `paripriv.h`, a *private* header. LibPARI does not build on private layout. |
+| Inject values as text (`gp_eval("x = $v")`) | Lossy: a 512-bit real comes back at 128 bits, because PARI prints it at the current `realprecision`. |
+| Inject values with `changevalue`/`fetch_entry` | Exact, and verified working — but neither function is declared in any PARI header or documented. Building on an unpublished ABI is the same risk that made the `sd_*` bindings undefined behaviour. |
+
+An API named "session" that shares one namespace, cannot enumerate its own
+contents, and silently loses precision on injection would create more
+illusion than it dispels. LibPARI does not ship one.
+
+## Real isolation: one process per session
+
+For genuinely independent GP environments — a notebook backend, a service
+evaluating untrusted GP, or simply two computations that must not see each
+other's variables — give each session **its own process**. One PARI
+instance per process is complete isolation, and it relies on nothing
+internal.
+
+```julia
+using Distributed
+addprocs(2; exeflags = "--project=$(Base.active_project())")
+@everywhere using LibPARI
+
+# Each worker has its own PARI, hence its own GP environment.
+remotecall_fetch(() -> LibPARI.gp_eval("s = 111"), workers()[1])
+
+# Invisible from the other worker: `s` is still a free symbol there.
+remotecall_fetch(() -> string(LibPARI.gp_eval("s")), workers()[2])   # "s"
+
+# And it persists in the session that set it.
+remotecall_fetch(() -> string(LibPARI.gp_eval("s")), workers()[1])   # "111"
+```
+
+Unlike a thread, a worker process **may assign**: it owns its primary PARI
+context.
+
+```julia
+remotecall_fetch(workers()[2]) do
+    LibPARI.gp_eval("t = 7")
+    string(LibPARI.gp_eval("t * 2"))          # "14"
+end
+```
+
+What this costs, stated plainly:
+
+- one PARI stack per process (8 MiB by default, see `LIBPARI_STACK_SIZE`);
+- values cross process boundaries by serialisation, so a [`Gen`](@ref) must
+  be converted to a Julia value — `BigInt`, `String`, `Rational` — before it
+  is returned;
+- process start-up, including loading LibPARI in each worker.
+
+For anything short of true isolation, prefer the single environment and the
+threading rule above.
+
+
+---
+
+Source: https://s-celles.github.io/LibPARI.jl/dev/mcp/
+
+```@meta
+CurrentModule = LibPARI
+```
+
+# MCP connector
+
+LibPARI ships an optional **MCP (Model Context Protocol) connector** — a
+Julia package extension that exposes PARI/GP to AI assistants and agents.
+An MCP client can then run exact number theory through PARI — factorisation,
+primality testing, modular arithmetic, elliptic curves — instead of
+approximating or hallucinating it.
+
+## Optional by design
+
+The connector is a **package extension**. Its code, and its dependency
+`ModelContextProtocol`, exist in your process only if you deliberately load
+the MCP library. A project that depends on `LibPARI` alone installs no MCP
+stack, loads no connector code, and behaves exactly as without this feature.
+Installing LibPARI never installs `ModelContextProtocol`.
+
+## Setup
+
+Install the MCP server library once:
+
+```julia
+using Pkg
+Pkg.add("ModelContextProtocol")
+```
+
+## Running the server
+
+Loading `ModelContextProtocol` alongside `LibPARI` activates the connector.
+A one-line launcher script is the MCP server:
+
+```julia
+# libpari_mcp.jl
+using LibPARI
+using ModelContextProtocol      # activates the connector
+LibPARI.serve_mcp()             # serve over stdio (blocking)
+```
+
+Configure any MCP client (for example Claude Desktop) to run it as a server:
+
+```bash
+julia --project=. libpari_mcp.jl
+```
+
+## The tools
+
+The connector advertises three MCP tools:
+
+| Tool | Purpose | Example arguments |
+|------|---------|-------------------|
+| `pari_eval` | Evaluate a GP-language expression — reaches **every** PARI function | `{"expression": "factor(2^67-1)"}` |
+| `pari_functions` | List or search PARI's functions | `{"query": "prime"}` |
+| `pari_help` | Return a PARI function's help text | `{"name": "nextprime"}` |
+
+Because a GP expression can call any PARI function, `pari_eval` alone already
+exposes the whole of PARI; `pari_functions` and `pari_help` let an agent
+discover what to put in an expression.
+
+Every tool is robust: a malformed expression, an unknown function, or a PARI
+error (division by zero, a domain error) is returned to the client as a
+**structured error**, and the server keeps running.
+
+## Example prompts
+
+Once the connector is running and your MCP client is connected, just ask your
+AI assistant in plain English — it calls the PARI tools and reports the exact
+answer.
+
+!!! tip "Name LibPARI in your prompt"
+    If your MCP client also has other computer-algebra servers connected
+    (for example a Giac/Xcas server), **name LibPARI explicitly** so the
+    assistant routes the request to this server. Say "LibPARI" (the server
+    is registered as `libpari`), or name a tool directly — `pari_eval`,
+    `pari_functions`, or `pari_help`. The prompts below all do this.
+
+Try prompts like these, from simple to advanced:
+
+**Basic arithmetic**
+
+- "Using LibPARI, what is 2 to the power of 100?"
+- "With LibPARI, compute 100 factorial."
+- "Ask LibPARI for the greatest common divisor of 1071 and 462."
+
+**Primes**
+
+- "Using LibPARI, is 2^127 - 1 a prime number?"
+- "With LibPARI, what is the next prime after one billion?"
+- "Using LibPARI, how many prime numbers are there below one million?"
+
+**Factorisation & number theory**
+
+- "Using LibPARI, give me the prime factorisation of 2^67 - 1."
+- "With LibPARI, what is Euler's totient of 1000000?"
+- "Ask LibPARI for the sum of the divisors of 360."
+- "Using LibPARI, how many divisors does 720 have?"
+
+**Polynomials & symbolic**
+
+- "Using LibPARI, factor the polynomial x^4 - 1."
+- "With LibPARI, find the roots of x^3 - 2."
+
+**Modular & advanced**
+
+- "Using LibPARI, compute 2 raised to the power 1000000, modulo 1000000007."
+- "With LibPARI, what is the trace of Frobenius of the elliptic curve y^2 = x^3 + 1 at the prime 101?"
+
+**Exploring PARI**
+
+- "Using LibPARI, which PARI functions deal with elliptic curves?"
+- "With LibPARI, show me the help for the nextprime function."
+- "Use LibPARI's `pari_functions` tool to list what is available for primality testing."
+
+The assistant turns each request into a `pari_eval`, `pari_functions`, or
+`pari_help` call and answers with PARI's exact result. The next section shows
+the underlying tool calls.
+
+## Quick examples
+
+A tour of PARI through the connector, from simple to advanced — every result
+below is exact. Each row is a `pari_eval` call: the `expression` argument and
+the result the tool returns.
+
+### Start here — basic arithmetic
+
+| `expression` | Result |
+|---|---|
+| `2 + 2` | `4` |
+| `2^100` | `1267650600228229401496703205376` |
+| `10!` | `3628800` |
+| `1/3 + 1/6` | `1/2` (exact rationals) |
+| `gcd(1071, 462)` | `21` |
+
+### Primes
+
+| `expression` | Result |
+|---|---|
+| `isprime(97)` | `1` (true) |
+| `nextprime(1000)` | `1009` |
+| `primepi(1000)` | `168` (number of primes ≤ 1000) |
+| `isprime(2^127 - 1)` | `1` (the Mersenne prime M₁₂₇) |
+
+### Factorisation & number theory
+
+| `expression` | Result |
+|---|---|
+| `factor(360)` | `[2 3; 3 2; 5 1]` — rows are `[prime, exponent]`: 2³·3²·5 |
+| `eulerphi(100)` | `40` (Euler's totient) |
+| `sigma(12)` | `28` (sum of divisors) |
+| `binomial(20, 10)` | `184756` |
+| `factor(2^67 - 1)` | `[193707721 1; 761838257287 1]` (Cole's 1903 factorisation) |
+
+### Modular, symbolic & numeric
+
+| `expression` | Result |
+|---|---|
+| `sum(k=1, 100, k^2)` | `338350` (a GP-closure function) |
+| `lift(Mod(2, 1000000007)^1000000)` | `235042059` (modular exponentiation) |
+| `factor(x^4 - 1)` | factors `x - 1`, `x + 1`, `x^2 + 1` |
+| `polroots(x^3 - 2)` | `≈ 1.259921` (the real ∛2) and two complex conjugate roots |
+| `ellap(ellinit([0,1]), 101)` | `0` (trace of Frobenius — `0` ⇒ supersingular at 101) |
+
+### Discovery — `pari_functions` and `pari_help`
+
+| Tool | Arguments | Result |
+|---|---|---|
+| `pari_functions` | `{"query": "ellis"}` | `elliscm`, `ellisdivisible`, `ellisogeny`, `ellisoncurve`, … |
+| `pari_help` | `{"name": "nextprime"}` | `nextprime(x): smallest pseudoprime >= x.` |
+
+!!! note
+    `pari_eval` speaks the full GP language, so it reaches every PARI
+    function (`factor`, `sum`, …). `pari_functions` and `pari_help` introspect
+    the **generated binding layer**, whose names are PARI's C-level names — a
+    few GP names (such as `factor`) are not binding names there, even though
+    they work inside a `pari_eval` expression.
+
+## Entry point
+
+```@docs
+LibPARI.serve_mcp
+```
+
+
+---
+
+Source: https://s-celles.github.io/LibPARI.jl/dev/about/
+
+# About
+
+## Relationship to PARI/GP
+
+LibPARI.jl is an independent, community-maintained Julia interface to the
+[PARI/GP](https://pari.math.u-bordeaux.fr/) computer algebra system. It is
+not affiliated with, endorsed by, or maintained by the PARI Group or the
+PARI/GP development team.
+
+PARI/GP is developed by the PARI Group and distributed under the GNU General
+Public License. LibPARI only calls into the official PARI library, supplied
+by [`PARI_jll`](https://github.com/JuliaPackaging/Yggdrasil/tree/master/P/PARI),
+and does not modify it.
+
+Any errors in the Julia interface, the high-level API, or this documentation
+are the responsibility of LibPARI's maintainers, not of the PARI Group.
+
+## Reporting bugs
+
+- Bugs and feature requests about this Julia wrapper go to
+  [LibPARI's issue tracker](https://github.com/s-celles/LibPARI.jl/issues).
+- Bugs and feature requests about PARI/GP itself go to the
+  [official PARI/GP bug tracker](https://pari.math.u-bordeaux.fr/Bugs/) or
+  the [pari-users mailing list](https://pari.math.u-bordeaux.fr/lists-index.html).
+
+## AI assistance
+
+Substantial portions of this code were generated with AI assistance and
+reviewed by the maintainer. The repository is tagged with the
+[`ai-generated-code`](https://github.com/topics/ai-generated-code) topic.
+
+## Development
+
+Run the test suite:
+
+```sh
+julia --project=. -e 'using Pkg; Pkg.test()'
+```
+
+Build this documentation (the build is strict: any warning fails it):
+
+```sh
+julia --project=docs -e 'using Pkg; Pkg.develop(path = "."); Pkg.instantiate()'
+julia --project=docs docs/make.jl
+```
+
+Source code is formatted with JuliaFormatter to an 80-column margin, enforced
+in CI and by `pre-commit`.
+
+The project follows [Semantic Versioning](https://semver.org/). Notable
+changes are recorded in the
+[changelog](https://github.com/s-celles/LibPARI.jl/blob/main/CHANGELOG.md),
+and the implementation plan is in
+[`ROADMAP.md`](https://github.com/s-celles/LibPARI.jl/blob/main/ROADMAP.md).
