@@ -22,6 +22,11 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   "Status" section said `0.18.0` while the package was at `0.18.2`; it now
   prints `pkgversion(LibPARI)` at build time, so it cannot go stale again.
 
+- **JuliaFormatter pinned to `~2.14`** (was `~2.12`), in lock-step in the
+  root `[compat]`, the `gen/` environment and the CI format job. Under
+  2.14.12, `src/` and `test/` are already formatted and the regenerated
+  `src/bindings.jl` is byte-identical, so no source changes.
+
 - **The README is minimal.** It now holds only a one-line description,
   installation, a short example and links. The feature list already in the
   documentation home page stays there; the relationship to the PARI Group,
