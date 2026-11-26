@@ -143,8 +143,8 @@ expects a `GEN`: a [`Gen`](@ref), or any [`PariConvertible`](@ref) value.
 
 `PariConvertible` deliberately does **not** include `Gen` — it names the
 Julia types LibPARI converts *from*. `GenArg` is the union of both, and is
-what the generated layer dispatches on so that `PARI.nextprime(1000)` and
-`PARI.nextprime(pari(1000))` are the same call (REQ-ARG-01).
+what the generated layer dispatches on so that `PARI.nextprime0(1000)` and
+`PARI.nextprime0(pari(1000))` are the same call (REQ-ARG-01).
 """
 const GenArg = Union{Gen,PariConvertible}
 

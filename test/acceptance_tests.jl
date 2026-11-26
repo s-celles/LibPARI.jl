@@ -60,7 +60,7 @@ end
     n = 10_000
     for _ = 1:n
         g = LibPARI.Gen(rand(1:1_000_000_000))
-        h = LibPARI.PARI.nextprime(g)
+        h = LibPARI.PARI.nextprime0(g)
         @assert LibPARI.gentype(h) === LibPARI.PariType.T_INT
     end
 
@@ -82,11 +82,11 @@ end
     big = LibPARI.Gen(10)^300            # a ~300-digit PARI integer
 
     # Warm up so compilation is not counted.
-    LibPARI.PARI.nextprime(small)
-    LibPARI.PARI.nextprime(big)
+    LibPARI.PARI.nextprime0(small)
+    LibPARI.PARI.nextprime0(big)
 
-    a_small = @allocated LibPARI.PARI.nextprime(small)
-    a_big = @allocated LibPARI.PARI.nextprime(big)
+    a_small = @allocated LibPARI.PARI.nextprime0(small)
+    a_big = @allocated LibPARI.PARI.nextprime0(big)
 
     # The PARI value itself lives in the C-heap clone, NOT the Julia heap:
     # the per-call Julia allocation is identical for a tiny and a large
@@ -100,7 +100,7 @@ end
     # And it does not accumulate: N calls allocate ~N × the single-call
     # cost, never super-linearly.
     bulk = @allocated for _ = 1:1000
-        LibPARI.PARI.nextprime(small)
+        LibPARI.PARI.nextprime0(small)
     end
     @test bulk <= 1000 * 1024
 end

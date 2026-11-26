@@ -1,7 +1,7 @@
 # M13 — precision-safe reals and a bit-based precision API
 # (REQ-PREC-01 … REQ-PREC-12).
 #
-# Units, pinned against PARI 2.17's own headers: the `p` and `b` prototype
+# Units, pinned against PARI 2.19's own headers: the `p` and `b` prototype
 # arguments are BIT counts (`pariinl.h`: `prec2nbits(long x) { return x; }`),
 # and PARI allocates `nbits2prec(x) = ceil(x/64)*64` bits. The generator's
 # historical `prec = 4` therefore asked for 4 bits and got PARI's 64-bit

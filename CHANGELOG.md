@@ -10,6 +10,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **Bindings for functions new in PARI 2.19**, among them `primeisregular`,
+  `thetanull`, `elljacobi`, `ellcharpoly`, `fingerprint`, `galoisorder`,
+  `genus2charpoly`, `idealfromgens`, `matmodhnf`, the `hyperell*` family
+  (`hyperellauto`, `hyperellisisom`, `hyperellperiods`, the change-of-model
+  functions, …) and new quaternion-algebra functions (`algisquatalg`,
+  `algquattobasis`, `algskolemnoether`, `algmodpr*`, …).
 - **A `justfile`** with the main development entry points, each running what
   CI runs: `test`, `test-threads`, `test-no-trap`, `docs`, `format`,
   `format-check`, `generate`, `check` and `clean`. `docs/Project.toml` now
@@ -39,6 +45,31 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- **BREAKING — LibPARI now runs on PARI 2.19.** `PARI_jll` compat moves from
+  `"2.17"` to `"2.19"` (PARI 2.19.1), and `src/bindings.jl` is regenerated
+  from 2.19's `pari.desc`: 1235 bindings, up from 1194. The bindings keep
+  their naming rule — the C-Name of each `pari.desc` entry — so the entries
+  PARI 2.19 moved onto a new C function are renamed:
+
+  | GP function | binding up to 0.18 | binding from 0.19 |
+  |---|---|---|
+  | `nextprime` | `PARI.nextprime` | `PARI.nextprime0` |
+  | `polgraeffe` | `PARI.polgraeffe` | `PARI.polgraeffe0` |
+  | `elleisnum` | `PARI.elleisnum` | `PARI.elleisnum0` |
+  | `ellfromeqn` | `PARI.ellfromeqn` | `PARI.ellfromeqn0` |
+  | `ellchangepoint` | `PARI.ellchangepoint` | `PARI.ellchangepoint0` |
+  | `ellchangepointinv` | `PARI.ellchangepointinv` | `PARI.ellchangepointinv0` |
+  | `polsturm` | `PARI.sturmpart` | `PARI.RgX_sturmpart` (one optional argument fewer) |
+  | `listcreate` | `PARI.listcreate_gp` | removed — GP 2.19 dropped `listcreate` |
+
+  The renamed bindings also expose the GP function's optional arguments,
+  e.g. `PARI.nextprime0(1000; x2 = 5)` is the next prime ≡ 1 (mod 5). The
+  hand-written API is unaffected: `LibPARI.nextprime` keeps its name. The
+  precision units (`p` and `b` are bit counts) are unchanged in 2.19's
+  headers.
+- **The API reference states the naming rule correctly.** It claimed the
+  bindings keep PARI's GP names (`PARI.factorial`, `PARI.isprime`); they are
+  named after the C function (`PARI.mpfact`, `PARI.gisprime`).
 - **A `Gen` is cloned and freed on the PARI context that produced it**, no
   longer on the primary worker. PARI's clone list is thread-local, so LibPARI
   used to make and free every clone on the primary context: correct, but

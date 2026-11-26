@@ -25,7 +25,7 @@
     int_gen(n) = LibPARI.gen_from(
         () -> ccall((:stoi, libpari), Ptr{Int}, (Int,), Int(n)),
     )
-    g = LibPARI.PARI.nextprime(int_gen(1000))
+    g = LibPARI.PARI.nextprime0(int_gen(1000))
     @test g isa LibPARI.Gen
     @test LibPARI.gentype(g) === LibPARI.PariType.T_INT
 end

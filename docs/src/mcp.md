@@ -167,7 +167,7 @@ the result the tool returns.
 | Tool | Arguments | Result |
 |---|---|---|
 | `pari_functions` | `{"query": "ellis"}` | `elliscm`, `ellisdivisible`, `ellisogeny`, `ellisoncurve`, … |
-| `pari_help` | `{"name": "nextprime"}` | `nextprime(x): smallest pseudoprime >= x.` |
+| `pari_help` | `{"name": "nextprime"}` | `nextprime(x,{q}): smallest pseudoprime >= x. …` |
 
 !!! note
     `pari_eval` speaks the full GP language, so it reaches every PARI

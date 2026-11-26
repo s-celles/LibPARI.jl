@@ -3,7 +3,7 @@
 # Included by src/LibPARI.jl after numeric.jl, before evaluator.jl.
 # ---------------------------------------------------------------------------
 #
-# UNITS. PARI 2.17's `p` and `b` prototype arguments are **bit** counts, not
+# UNITS. PARI 2.19's `p` and `b` prototype arguments are **bit** counts, not
 # word counts: `pariinl.h` defines `prec2nbits(long x) { return x; }`. PARI
 # then allocates
 #

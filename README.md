@@ -12,7 +12,7 @@ Pkg.add("LibPARI")
 using LibPARI
 
 pari(2)^100                           # 1267650600228229401496703205376
-LibPARI.PARI.nextprime(pari(1000))    # 1009
+LibPARI.PARI.nextprime0(pari(1000))    # 1009
 gp_eval("sum(k = 1, 100, k^2)")       # 338350
 ```
 

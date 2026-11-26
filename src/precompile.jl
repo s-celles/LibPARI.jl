@@ -41,7 +41,7 @@
         gp_eval("2 + 2")
 
         # One generated binding (M4) of each return convention.
-        PARI.nextprime(a)          # Gen-returning
+        PARI.nextprime0(a)          # Gen-returning
         PARI.getabstime()          # scalar-returning
         PARI.setrand(Gen(1))       # void-returning
         PARI.issquareall(Gen(49))  # output-argument

@@ -28,7 +28,7 @@ Measured from a `Threads.@spawn`ed task:
 | From another task | Result |
 |-------------------|--------|
 | `gp_eval("2 + 2")` | works — pure evaluation is unrestricted |
-| `LibPARI.PARI.nextprime(1000)` | works — the generated layer is unrestricted |
+| `LibPARI.PARI.nextprime0(1000)` | works — the generated layer is unrestricted |
 | reading an unexported variable | `PariError(e_MISC)`: `"mt: please use export(x)"` |
 | reading after `gp_eval("export(x)")` | works |
 | **any assignment** | `PariError(e_MISC)`: `"mt: attempt to change exported variable"` |

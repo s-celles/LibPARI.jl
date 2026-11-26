@@ -15,7 +15,7 @@ Pkg.add("LibPARI")
 
 The native PARI library is supplied by
 [`PARI_jll`](https://github.com/JuliaPackaging/Yggdrasil/tree/master/P/PARI),
-a registered binary build of PARI 2.17.3 for Linux, macOS, and Windows.
+a registered binary build of PARI 2.19.1 for Linux, macOS, and Windows.
 `Pkg.add` resolves and installs it automatically — no system PARI is
 required.
 
@@ -110,7 +110,7 @@ records every such change.
 carrying PARI's help text as its docstring:
 
 ```@repl tour
-LibPARI.PARI.nextprime(pari(1000))
+LibPARI.PARI.nextprime0(pari(1000))
 LibPARI.PARI.eulerphi(pari(100))
 ```
 
