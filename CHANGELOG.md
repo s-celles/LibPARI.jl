@@ -37,6 +37,16 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- **The C trap shim can build on Windows.** It was linked against
+  `PARI_jll`'s `lib/` only, but on Windows the import library
+  `libpari.dll.a` is in `bin/`; the shim now searches both, and is built
+  with `-shared-libgcc` first so that on Windows it uses the same
+  emulated-TLS runtime (`libgcc_s_seh-1.dll`) as libpari — with a static
+  libgcc it would arm its own copy of PARI's `iferr_env`. A shim that
+  builds and loads is now also self-tested on the primary context (it must
+  catch `1/0` on its own path) before secondary contexts rely on it, and the
+  reason it is or is not in use is kept instead of being swallowed.
+
 - **A PARI error on a non-primary thread no longer crashes the process when
   the C trap shim is unavailable** (Windows CI, any machine without a C
   compiler). `pari_err` calls PARI's `mt_err_recover` before LibPARI's

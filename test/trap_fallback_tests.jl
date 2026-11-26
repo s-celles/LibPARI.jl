@@ -47,3 +47,41 @@
     @test errs == "64"
     @test vals == "64"
 end
+
+@testitem "the trap shim reports its status" begin
+    using LibPARI
+
+    status = LibPARI._TRAP_STATUS[]
+    @info "trap shim status" available = LibPARI._TRAP_AVAILABLE[] status
+    if LibPARI._TRAP_AVAILABLE[]
+        @test status == "loaded"
+    else
+        @test !isempty(status) && status != "loaded"
+    end
+
+    # Disabling it says so, instead of failing silently.
+    project = pkgdir(LibPARI)
+    code = "using LibPARI; print(LibPARI._TRAP_STATUS[])"
+    cmd = addenv(
+        `$(Base.julia_cmd()) --project=$(project) --startup-file=no -e $(code)`,
+        "LIBPARI_DISABLE_TRAP" => "1",
+    )
+    @test occursin("LIBPARI_DISABLE_TRAP", read(cmd, String))
+end
+
+@testitem "a C compiler on the PATH yields a working trap shim" begin
+    using LibPARI
+
+    compiler = findfirst(!isnothing, Sys.which.(["cc", "gcc", "clang"]))
+    if compiler === nothing
+        @info "no C compiler on the PATH: the trap shim cannot be built here"
+        @test !LibPARI._TRAP_AVAILABLE[]
+    else
+        # Built, loaded, and actually catching: the self-test raises a PARI
+        # error through the shim and checks the shim's own path caught it
+        # (a shim whose `iferr_env` is not libpari's — e.g. a separate
+        # thread-local runtime — would let the error reach the fallback).
+        @test LibPARI._TRAP_AVAILABLE[]
+        @test LibPARI._run_on_primary(LibPARI._trap_selftest)
+    end
+end
