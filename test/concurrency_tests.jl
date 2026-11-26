@@ -103,6 +103,9 @@ using LibPARI
             GC.gc()
         end
         @test BigInt(LibPARI.Gen(13)) == 13   # library still healthy
+        # Each clone is freed by the worker of the context that made it, at
+        # that worker's next job; `_drain_all!` runs one on every worker.
+        LibPARI._drain_all!()
         @test LibPARI._pending_unclones() == 0
     end
 

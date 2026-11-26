@@ -72,15 +72,20 @@ true
 """
 mutable struct Gen <: PariObject
     ptr::Ptr{Int}
+    # The worker slot (thread id) of the PARI context holding the clone.
+    # PARI's clone list is thread-local, so the clone must be freed there.
+    owner::Int
 
     function Gen(raw::Ptr{Int})
         raw == C_NULL && throw(ArgumentError("cannot wrap a null GEN"))
-        # `gclone` splices PARI's clone list, which is thread-local — run it
-        # on the primary worker, which also frees every clone.
-        # `raw` lives on the producing worker's stack, which stays stable
-        # (that worker is blocked awaiting this result).
-        cloned = _run_on_primary(() -> _gclone(raw))::Ptr{Int}
-        g = new(cloned)
+        # Clone on the calling thread's PARI context — the one that produced
+        # `raw` when called from `gen_from` — and remember it: that context's
+        # worker frees the clone (see `_defer_gunclone`). No round trip to the
+        # primary worker, so a busy primary holds up no other thread.
+        cloned, owner = _run_on_pari(
+            () -> (_gclone(raw), _current_owner()),
+        )::Tuple{Ptr{Int},Int}
+        g = new(cloned, owner)
         finalizer(_finalize!, g)
         return g
     end
@@ -95,11 +100,11 @@ end
 function _finalize!(g::Gen)
     if g.ptr != C_NULL
         if library_state() == LibraryState.INITIALIZED
-            # `gunclone` must run on the thread that cloned — the primary
-            # worker, which owns the (thread-local) clone list.
-            # A finalizer must not block or switch tasks: it only queues the
-            # clone (see `_defer_gunclone`).
-            _defer_gunclone(g.ptr)
+            # `gunclone` must run on the context that cloned, whose worker
+            # owns the (thread-local) clone list. A finalizer must not block
+            # or switch tasks: it only queues the clone for that worker (see
+            # `_defer_gunclone`).
+            _defer_gunclone(g.ptr, g.owner)
         end
         g.ptr = C_NULL
     end

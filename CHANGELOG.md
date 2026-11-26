@@ -20,6 +20,20 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- **A `Gen` is cloned and freed on the PARI context that produced it**, no
+  longer on the primary worker. PARI's clone list is thread-local, so LibPARI
+  used to make and free every clone on the primary context: correct, but
+  every `Gen` built on any thread waited for the primary worker, and a busy
+  primary stalled all the others (200 `Gen`s on another thread took 2.85 s
+  while the primary ran a 3 s job; now they do not wait). A `Gen` now records
+  its owning context (`Gen.owner`) and its finalizer queues the clone for
+  that context's worker, which frees it before its next job; past 1024
+  queued clones, callers wake idle owners with an empty job. Measured on 6
+  cores: the multi-threaded `factor` benchmark of `concurrency_tests.jl`
+  went from ×1.0–1.5 to ×2.0, and 30 s of `Gen` churn on three threads while
+  the primary runs PARI parallel sections built 971 000 `Gen`s instead of
+  1 200. `Gen` gains a second field (`owner`); it stays concrete, mutable and
+  unparameterised (REQ-MEM-02).
 - **The documentation home page reads the version from the package.** The
   "Status" section said `0.18.0` while the package was at `0.18.2`; it now
   prints `pkgversion(LibPARI)` at build time, so it cannot go stale again.
