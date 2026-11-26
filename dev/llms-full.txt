@@ -168,6 +168,19 @@ The PARI main-stack size defaults to 8 MiB. To change it, set the
 `LIBPARI_STACK_SIZE` environment variable (a byte count) **before** the
 package is loaded.
 
+### Threads and the C compiler
+
+With several Julia threads, LibPARI gives each thread its own PARI context,
+so calls from different threads run in parallel. That relies on a small C
+shim which catches PARI errors safely on every thread; it is compiled when
+the package loads, with the first of `cc`, `gcc` or `clang` found on the
+`PATH`.
+
+Without a C compiler (often the case on Windows), LibPARI still works from
+any number of threads, but every PARI call runs on one context, one at a
+time: results and errors are the same, only the parallel speed-up is lost.
+Setting `LIBPARI_DISABLE_TRAP=1` before loading forces this mode.
+
 ## A first tour
 
 `using LibPARI` brings in exactly four names: [`pari`](@ref), [`Gen`](@ref),
