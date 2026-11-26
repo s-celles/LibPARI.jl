@@ -33,7 +33,7 @@ end
     using LibPARI
 
     via_gp = LibPARI.gp_eval("nextprime(1000)")
-    via_binding = LibPARI.PARI.nextprime(LibPARI.Gen(1000))
+    via_binding = LibPARI.PARI.nextprime0(LibPARI.Gen(1000))
     @test via_gp == via_binding
 end
 
@@ -85,7 +85,7 @@ end
 
     # Pure evaluation and the generated layer work from any task.
     @test fetch(Threads.@spawn LibPARI.gp_eval("2 + 2")) == 4
-    @test fetch(Threads.@spawn LibPARI.PARI.nextprime(1000)) == 1009
+    @test fetch(Threads.@spawn LibPARI.PARI.nextprime0(1000)) == 1009
 
     # This test is only meaningful with a second thread to spawn onto.
     if Threads.nthreads() > 1

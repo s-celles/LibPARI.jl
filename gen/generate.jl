@@ -18,7 +18,7 @@ const OUTFILE = joinpath(REPO, "src", "bindings.jl")
 
 # Defaults a binding supplies when the caller gives no precision.
 #
-# UNITS (verified against PARI 2.17's headers): prototype codes `p` and `b`
+# UNITS (verified against PARI 2.19's headers): prototype codes `p` and `b`
 # are BIT counts — `pariinl.h` defines `prec2nbits(long x) { return x; }` —
 # and PARI rounds a `p` request up to a whole number of machine words. The
 # previous `DEFAULT_PREC = 4`, commented "word precision", therefore asked

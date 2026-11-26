@@ -377,15 +377,16 @@ function gmodulo(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
 end
 
 "O(p^e): p-adic or power series zero with precision given by e."
-function ggrando()
+function ggrando(x1::LibPARI.GenArg; x2::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
-            LibPARI._trap_call(
+            _g1 = LibPARI.gen_convert(x1)
+            GC.@preserve _g1 LibPARI._trap_call(
                 Ptr{Int},
                 cglobal((:ggrando, LibPARI.PARI_jll.libpari)),
-                0,
-                Int(0),
-                Int(0),
+                2,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                Int(x2),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -2701,6 +2702,39 @@ function ZM_sqr_worker(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
     end
 end
 
+"worker for ZXQXQ_minpoly"
+function ZXQXQ_minpoly_worker(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg,
+    x3::LibPARI.GenArg,
+    x4::LibPARI.GenArg,
+    x5::LibPARI.GenArg,
+    x6::Integer,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            _g3 = LibPARI.gen_convert(x3)
+            _g4 = LibPARI.gen_convert(x4)
+            _g5 = LibPARI.gen_convert(x5)
+            GC.@preserve _g1 _g2 _g3 _g4 _g5 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:ZXQXQ_minpoly_worker, LibPARI.PARI_jll.libpari)),
+                6,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(Int, Ptr{Int}(_g3.ptr)),
+                reinterpret(Int, Ptr{Int}(_g4.ptr)),
+                reinterpret(Int, Ptr{Int}(_g5.ptr)),
+                Int(x6),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
 "worker for ZXQX_composedsum"
 function ZXQX_composedsum_worker(
     x1::LibPARI.GenArg,
@@ -2768,21 +2802,53 @@ function ZXQ_minpoly_worker(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg,
     x3::LibPARI.GenArg,
-    x4::Integer,
+    x4::LibPARI.GenArg,
+    x5::Integer,
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
             _g1 = LibPARI.gen_convert(x1)
             _g2 = LibPARI.gen_convert(x2)
             _g3 = LibPARI.gen_convert(x3)
-            GC.@preserve _g1 _g2 _g3 LibPARI._trap_call(
+            _g4 = LibPARI.gen_convert(x4)
+            GC.@preserve _g1 _g2 _g3 _g4 LibPARI._trap_call(
                 Ptr{Int},
                 cglobal((:ZXQ_minpoly_worker, LibPARI.PARI_jll.libpari)),
+                5,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(Int, Ptr{Int}(_g3.ptr)),
+                reinterpret(Int, Ptr{Int}(_g4.ptr)),
+                Int(x5),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"worker for ZXX_resultant"
+function ZXX_resultant_worker(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg,
+    x3::LibPARI.GenArg,
+    x4::LibPARI.GenArg,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            _g3 = LibPARI.gen_convert(x3)
+            _g4 = LibPARI.gen_convert(x4)
+            GC.@preserve _g1 _g2 _g3 _g4 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:ZXX_resultant_worker, LibPARI.PARI_jll.libpari)),
                 4,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 reinterpret(Int, Ptr{Int}(_g3.ptr)),
-                Int(x4),
+                reinterpret(Int, Ptr{Int}(_g4.ptr)),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -2940,7 +3006,7 @@ function ZabM_inv_worker(
     end
 end
 
-"x[a..b,c..d] = [x[a,c],  x[a+1,c],  ...,x[b,c];\nx[a,c+1],x[a+1,c+1],...,x[b,c+1];\n...       ...          ...\nx[a,d],  x[a+1,d]  ,...,x[b,d]]"
+"x[a..b,c..d] = [x[a,  c], x[a,  c+1], ..., x[a,  d];\nx[a+1,c], x[a+1,c+1], ..., x[a+1,d];\n...      ...              ...\nx[b,  c], x[b,  c+1], ..., x[b,  d]]"
 function matslice0(
     x1::LibPARI.GenArg;
     x2::Integer = 0,
@@ -2968,7 +3034,7 @@ function matslice0(
     end
 end
 
-"x[a..b] = [x[a],x[a+1],...,x[b]]"
+"x[a..b] = [x[a], x[a+1], ..., x[b]]"
 function vecslice0(x1::LibPARI.GenArg, x3::Integer; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -3192,6 +3258,40 @@ function aprcl_step6_worker(
                 Int(0),
                 Int(0),
                 Int(0),
+            )
+        end
+    end
+end
+
+"worker for bnfinit"
+function bnfinit_FP_worker(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg,
+    x3::LibPARI.GenArg,
+    x4::Integer,
+    x5::LibPARI.GenArg,
+    x6::Integer,
+    x7::Integer,
+    x8::Integer,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            _g3 = LibPARI.gen_convert(x3)
+            _g5 = LibPARI.gen_convert(x5)
+            GC.@preserve _g1 _g2 _g3 _g5 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:bnfinit_FP_worker, LibPARI.PARI_jll.libpari)),
+                8,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(Int, Ptr{Int}(_g3.ptr)),
+                Int(x4),
+                reinterpret(Int, Ptr{Int}(_g5.ptr)),
+                Int(x6),
+                Int(x7),
+                reinterpret(Int, UInt(x8)),
             )
         end
     end
@@ -3539,6 +3639,29 @@ function ellQ_factorback_worker(
     end
 end
 
+"ellan worker"
+function ellapQ_zv_worker(x1::LibPARI.GenArg, x2::Integer, x3::LibPARI.GenArg)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g3 = LibPARI.gen_convert(x3)
+            GC.@preserve _g1 _g3 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:ellapQ_zv_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                Int(x2),
+                reinterpret(Int, Ptr{Int}(_g3.ptr)),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
 "Convert a mnemonic string to a flag."
 function eval_mnemonic(x1::LibPARI.GenArg, x2::AbstractString)
     return LibPARI.protected_call() do
@@ -3601,6 +3724,34 @@ function factor_Aurifeuille_prime(x1::LibPARI.GenArg, x2::Integer)
                 Int(x2),
                 Int(0),
                 Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"worker for heegnersum"
+function heegnersum_worker(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg,
+    x3::Integer,
+    x4::Integer,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:heegnersum_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                Int(x3),
+                Int(x4),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -3735,6 +3886,36 @@ function lfuninit_worker(
                 _g7.ptr,
                 _g8.ptr,
                 _g9.ptr,
+            )
+        end
+    end
+end
+
+"worker for nfinit (multiplication table)"
+function nf_multable_worker(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg,
+    x3::LibPARI.GenArg,
+    x4::LibPARI.GenArg,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            _g3 = LibPARI.gen_convert(x3)
+            _g4 = LibPARI.gen_convert(x4)
+            GC.@preserve _g1 _g2 _g3 _g4 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:nf_multable_worker, LibPARI.PARI_jll.libpari)),
+                4,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(Int, Ptr{Int}(_g3.ptr)),
+                reinterpret(Int, Ptr{Int}(_g4.ptr)),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
             )
         end
     end
@@ -4464,6 +4645,37 @@ function nflist_V4_worker(
     end
 end
 
+"_nfroots_worker"
+function nfroots_worker(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg,
+    x3::LibPARI.GenArg,
+    x4::LibPARI.GenArg,
+    x5::Integer,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            _g3 = LibPARI.gen_convert(x3)
+            _g4 = LibPARI.gen_convert(x4)
+            GC.@preserve _g1 _g2 _g3 _g4 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:nfroots_worker, LibPARI.PARI_jll.libpari)),
+                5,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(Int, Ptr{Int}(_g3.ptr)),
+                reinterpret(Int, Ptr{Int}(_g4.ptr)),
+                Int(x5),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
 "used for parallel chinese"
 function nxMV_polint_center_tree_worker(
     x1::LibPARI.GenArg,
@@ -4557,6 +4769,34 @@ function parfor_worker(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"_parmatrix_worker(i,j,C): evaluate the closure C on i,j"
+function parmatrix_worker(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg,
+    x3::LibPARI.GenArg,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            _g3 = LibPARI.gen_convert(x3)
+            GC.@preserve _g1 _g2 _g3 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:parmatrix_worker, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(Int, Ptr{Int}(_g3.ptr)),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -5415,6 +5655,29 @@ function algbasistoalg(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
     end
 end
 
+"algbasistoquat(al,x): transforms the column vector x on the integral basis\nof al into a quaternion x expressed on the basis (1,i,j,ij)."
+function algbasistoquat(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:algbasistoquat, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
 "algcenter(al): center of the algebra al."
 function algcenter(x1::LibPARI.GenArg)
     return LibPARI.protected_call() do
@@ -5511,7 +5774,7 @@ function algdegree(x1::LibPARI.GenArg)
     end
 end
 
-"algdep(z,k,{flag=0}): algebraic relations up to degree k of z, using\nlindep([1,z,...,z^(k-1)], flag)."
+"algdep(z,k,{flag=0}): algebraic relations up to degree k of z, using\nlindep([1,z,...,z^k], flag)."
 function algdep0(x1::LibPARI.GenArg, x2::Integer; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -5632,6 +5895,52 @@ function algdivr(
                 ),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 reinterpret(Int, Ptr{Int}(_g3.ptr)),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"algeichlerbasis(al,N): basis of Eichler order of level N in al."
+function algeichlerbasis(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:algeichlerbasis, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"algeltfromnf(al,x): returns x as an element of al, where x belongs to the\ncenter of al, a number field."
+function algeltfromnf(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:algeltfromnf, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                Int(0),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -5854,6 +6163,70 @@ function alginvbasis(x1::LibPARI.GenArg)
     end
 end
 
+"alginvol({al},{x}): element s(x) where s is the involution stored in al\n(Hamilton quaternions if omitted)."
+function alginvol(;
+    x1::Union{Nothing,LibPARI.GenArg} = nothing,
+    x2::Union{Nothing,LibPARI.GenArg} = nothing,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = x1 === nothing ? nothing : LibPARI.gen_convert(x1)
+            _g2 = x2 === nothing ? nothing : LibPARI.gen_convert(x2)
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:alginvol, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(
+                    Int,
+                    Ptr{Int}((_g1 === nothing ? C_NULL : _g1.ptr)),
+                ),
+                reinterpret(
+                    Int,
+                    Ptr{Int}((_g2 === nothing ? C_NULL : _g2.ptr)),
+                ),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"algisassociative(mt,{p=0}): true (1) if the multiplication table mt is\nsuitable for algtableinit(mt,p), false (0) otherwise."
+function algisassociative(
+    x1::LibPARI.GenArg;
+    x2::Union{Nothing,LibPARI.GenArg} = nothing,
+)
+    return LibPARI.protected_call() do
+        _g1 = LibPARI.gen_convert(x1)
+        _g2 = x2 === nothing ? nothing : LibPARI.gen_convert(x2)
+        av = LibPARI._avma()
+        r = Int(
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
+                Cint,
+                cglobal((:algisassociative, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(
+                    Int,
+                    Ptr{Int}((_g2 === nothing ? C_NULL : _g2.ptr)),
+                ),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        )
+        LibPARI._set_avma(av)
+        return r
+    end
+end
+
 "algiscommutative(al): test whether the algebra al is commutative."
 function algiscommutative(x1::LibPARI.GenArg)
     return LibPARI.protected_call() do
@@ -5973,6 +6346,62 @@ function algisinv(
     end
 end
 
+"algisisom(al,al2,{pl}): tests whether the central simple algebras al and\nal2 are isomorphic. If pl is set, test isomorphism locally at the place pl\ninstead."
+function algisisom(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg;
+    x3::Union{Nothing,LibPARI.GenArg} = nothing,
+)
+    return LibPARI.protected_call() do
+        _g1 = LibPARI.gen_convert(x1)
+        _g2 = LibPARI.gen_convert(x2)
+        _g3 = x3 === nothing ? nothing : LibPARI.gen_convert(x3)
+        av = LibPARI._avma()
+        r = Int(
+            GC.@preserve _g1 _g2 _g3 LibPARI._trap_call(
+                Cint,
+                cglobal((:algisisom, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(
+                    Int,
+                    Ptr{Int}((_g3 === nothing ? C_NULL : _g3.ptr)),
+                ),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        )
+        LibPARI._set_avma(av)
+        return r
+    end
+end
+
+"algisquatalg(al): returns [a,b] if al was constructed as the quaternion\nalgebra (a,b)_F, and 0 otherwise."
+function algisquatalg(x1::LibPARI.GenArg)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            GC.@preserve _g1 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:algisquatalg, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
 "algisramified(al,{pl}): tests whether the central simple algebra al is\nramified, i.e. not isomorphic to a matrix ring over its center. If pl is set,\nit should be a prime ideal of the center or an integer between 1 and r1+r2, and\nin that case tests whether al is locally ramified at the place pl instead."
 function algisramified(
     x1::LibPARI.GenArg;
@@ -6087,7 +6516,7 @@ function algissplit(
     end
 end
 
-"alglatadd(al,lat1,lat2,{&ptinter}): the sum of the lattices lat1\nand lat2. If ptinter is present, set it to the intersection of the lattices."
+"alglatadd(al,lat1,lat2,{&ptinter}): the sum of the lattices lat1\nand lat2. If ptinter is present, sets it to the intersection of the lattices."
 function alglatadd(x1::LibPARI.GenArg, x2::LibPARI.GenArg, x3::LibPARI.GenArg)
     return LibPARI.protected_call() do
         _g1 = LibPARI.gen_convert(x1)
@@ -6165,6 +6594,37 @@ function alglatelement(
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 reinterpret(Int, Ptr{Int}(_g3.ptr)),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"alglathnf(al,m,{d=0}): the lattice generated by the columns of m, assuming\nthat this lattice contains d times the integral basis of al."
+function alglathnf(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg;
+    x3::Union{Nothing,LibPARI.GenArg} = nothing,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            _g3 = x3 === nothing ? nothing : LibPARI.gen_convert(x3)
+            GC.@preserve _g1 _g2 _g3 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:alglathnf, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(
+                    Int,
+                    Ptr{Int}((_g3 === nothing ? C_NULL : _g3.ptr)),
+                ),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -6361,6 +6821,81 @@ function algmakeintegral(x1::LibPARI.GenArg; x2::Integer = 0)
     end
 end
 
+"algmodpr(al,x,modP): image of x in al under the reduction map stored in modP, cf\nalgmodprinit."
+function algmodpr(x1::LibPARI.GenArg, x2::LibPARI.GenArg, x3::LibPARI.GenArg)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            _g3 = LibPARI.gen_convert(x3)
+            GC.@preserve _g1 _g2 _g3 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:algmodpr, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(Int, Ptr{Int}(_g3.ptr)),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"algmodprinit(al,pr,{v}): initialises a reduction mod pr map."
+function algmodprinit(x1::LibPARI.GenArg, x2::LibPARI.GenArg; x3::Integer = -1)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:algmodprinit, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                Int(x3),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"algmodprlift(al,x,modP): a preimage of x under the reduction map stored in\nmodP, cf algmodprinit."
+function algmodprlift(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg,
+    x3::LibPARI.GenArg,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            _g3 = LibPARI.gen_convert(x3)
+            GC.@preserve _g1 _g2 _g3 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:algmodprlift, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(Int, Ptr{Int}(_g3.ptr)),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
 "algmul({al},x,y): element x*y in al (Hamilton quaternions if omitted)."
 function algmul(
     x2::LibPARI.GenArg,
@@ -6429,6 +6964,31 @@ function algneg(x2::LibPARI.GenArg; x1::Union{Nothing,LibPARI.GenArg} = nothing)
                     Ptr{Int}((_g1 === nothing ? C_NULL : _g1.ptr)),
                 ),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"algnewprec(al): returns a copy of the algebra structure al using the\ncurrent (usually larger) precision."
+function algnewprec(
+    x1::LibPARI.GenArg;
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            GC.@preserve _g1 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:algnewprec, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -6513,6 +7073,29 @@ function algprimesubalg(x1::LibPARI.GenArg)
                 1,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"algquattobasis(al,x): transforms the quaternion x expressed on the basis\n(1,i,j,ij) to a column vector on the integral basis of the quaternion algebra al."
+function algquattobasis(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:algquattobasis, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -6654,6 +7237,34 @@ function algsimpledec(x1::LibPARI.GenArg; x2::Integer = 0)
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 Int(x2),
                 Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"algskolemnoether(al,a,fa): inner automorphism of central simple algebra\nal that induces a -> fa."
+function algskolemnoether(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg,
+    x3::LibPARI.GenArg,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            _g3 = LibPARI.gen_convert(x3)
+            GC.@preserve _g1 _g2 _g3 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:algskolemnoether, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(Int, Ptr{Int}(_g3.ptr)),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -7397,7 +8008,7 @@ end
 function besseljzero(
     x1::LibPARI.GenArg;
     x2::Integer = 1,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -7408,7 +8019,7 @@ function besseljzero(
                 3,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 Int(x2),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -7477,7 +8088,7 @@ end
 function besselyzero(
     x1::LibPARI.GenArg;
     x2::Integer = 1,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -7488,7 +8099,7 @@ function besselyzero(
                 3,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 Int(x2),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -7952,7 +8563,7 @@ function bnfinit0(
     end
 end
 
-"bnfisintnorm(bnf,x,{flag=0}): compute a complete system of solutions (modulo\nunits of positive norm) of the absolute norm equation N(a)=x, where a\nbelongs to the maximal order of big number field bnf (if bnf is not\ncertified, this depends on GRH). If (optional) flag is set, allow returning\nsolutions in factored form."
+"bnfisintnorm(bnf,b,{flag=0}): computes a complete system of solutions (modulo\nunits of positive norm) of the absolute norm equation N(a)=b, where a\nbelongs to the maximal order of big number field bnf (if bnf is not\ncertified, this depends on GRH). If (optional) flag is set, allows returning\nsolutions in factored form."
 function bnfisintnorm0(x1::LibPARI.GenArg, x2::LibPARI.GenArg; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -8080,7 +8691,7 @@ function bnfisunit0(
     end
 end
 
-"bnflog(bnf,l): let bnf be attached to a number field F and let l be\na prime number. Return the logarithmic l-class group Cl~_F."
+"bnflog(bnf,l): let bnf be attached to a number field F and let l be\na prime number. Return the subgroup of degree 0 classes in the\nlogarithmic l-class group Cl~_F."
 function bnflog(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -9905,7 +10516,7 @@ end
 function ellL1(
     x1::LibPARI.GenArg;
     x2::Integer = 0,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -9916,7 +10527,7 @@ function ellL1(
                 3,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 Int(x2),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -10000,7 +10611,7 @@ end
 function ellanalyticrank(
     x1::LibPARI.GenArg;
     x2::Union{Nothing,LibPARI.GenArg} = nothing,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -10015,7 +10626,7 @@ function ellanalyticrank(
                     Int,
                     Ptr{Int}((_g2 === nothing ? C_NULL : _g2.ptr)),
                 ),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -10026,7 +10637,7 @@ function ellanalyticrank(
     end
 end
 
-"ellap(E,{p}): given an elliptic curve E defined over\na finite field Fq, return the trace of Frobenius a_p = q+1-#E(Fq); for other\nfields of definition K, p must define a finite residue field,\n(p prime for K = Qp or Q; p a maximal ideal for K a number field),\nreturn the order of the (nonsingular) reduction of E."
+"ellap(E,{p}): given an elliptic curve E defined over\na finite field Fq, return the trace of Frobenius a_p = q+1-#E(Fq); for other\nfields of definition K, p must define a finite residue field,\n(p prime for K = Qp or Q; p a maximal ideal for K a number field)."
 function ellap(x1::LibPARI.GenArg; x2::Union{Nothing,LibPARI.GenArg} = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -10106,7 +10717,7 @@ function ellbsd(
     end
 end
 
-"ellcard(E,{p}): given an elliptic curve E defined over\na finite field Fq, return the order of the group E(Fq); for other fields\nof definition K, p must define a finite residue field,\n(p prime for K = Qp or Q; p a maximal ideal for K a number field),\nreturn the order of the (nonsingular) reduction of E."
+"ellcard(E,{p}): given an elliptic curve E defined over\na finite field Fq, return the order of the group E(Fq); for other fields\nof definition K, p must define a finite residue field,\n(p prime for K = Qp or Q; p a maximal ideal for K a number field)."
 function ellcard(
     x1::LibPARI.GenArg;
     x2::Union{Nothing,LibPARI.GenArg} = nothing,
@@ -10125,6 +10736,34 @@ function ellcard(
                     Ptr{Int}((_g2 === nothing ? C_NULL : _g2.ptr)),
                 ),
                 Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"ellchangecompose(E,v,w): composes the transformations given\nby v=[u,r,s,t] and w=[U,R,S,T]."
+function ellchangecompose(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg,
+    x3::LibPARI.GenArg,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            _g3 = LibPARI.gen_convert(x3)
+            GC.@preserve _g1 _g2 _g3 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:ellchangecompose, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(Int, Ptr{Int}(_g3.ptr)),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -10158,15 +10797,15 @@ function ellchangecurve(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
     end
 end
 
-"ellchangepoint(x,v): change data on point or vector of points x on an\nelliptic curve according to v=[u,r,s,t]."
-function ellchangepoint(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
+"ellchangeinvert(E,v): inverts the transformations given\nby v=[u,r,s,t]."
+function ellchangeinvert(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
             _g1 = LibPARI.gen_convert(x1)
             _g2 = LibPARI.gen_convert(x2)
             GC.@preserve _g1 _g2 LibPARI._trap_call(
                 Ptr{Int},
-                cglobal((:ellchangepoint, LibPARI.PARI_jll.libpari)),
+                cglobal((:ellchangeinvert, LibPARI.PARI_jll.libpari)),
                 2,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
@@ -10181,18 +10820,86 @@ function ellchangepoint(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
     end
 end
 
-"ellchangepointinv(x,v): change data on point or vector of points x on an\nelliptic curve according to v=[u,r,s,t], inverse of ellchangepoint."
-function ellchangepointinv(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
+"ellchangepoint(E,x,v): change data on point or vector of points x on an\nelliptic curve according to v=[u,r,s,t]."
+function ellchangepoint0(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg;
+    x3::Union{Nothing,LibPARI.GenArg} = nothing,
+)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
             _g1 = LibPARI.gen_convert(x1)
             _g2 = LibPARI.gen_convert(x2)
-            GC.@preserve _g1 _g2 LibPARI._trap_call(
+            _g3 = x3 === nothing ? nothing : LibPARI.gen_convert(x3)
+            GC.@preserve _g1 _g2 _g3 LibPARI._trap_call(
                 Ptr{Int},
-                cglobal((:ellchangepointinv, LibPARI.PARI_jll.libpari)),
-                2,
+                cglobal((:ellchangepoint0, LibPARI.PARI_jll.libpari)),
+                3,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(
+                    Int,
+                    Ptr{Int}((_g3 === nothing ? C_NULL : _g3.ptr)),
+                ),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"ellchangepointinv(E,x,v): change data on point or vector of points x on an\nelliptic curve according to v=[u,r,s,t], inverse of ellchangepoint."
+function ellchangepointinv0(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg;
+    x3::Union{Nothing,LibPARI.GenArg} = nothing,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            _g3 = x3 === nothing ? nothing : LibPARI.gen_convert(x3)
+            GC.@preserve _g1 _g2 _g3 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:ellchangepointinv0, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(
+                    Int,
+                    Ptr{Int}((_g3 === nothing ? C_NULL : _g3.ptr)),
+                ),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"ellcharpoly(E, {p}): given an elliptic curve E defined over\na finite field Fq, return the characteristic polynomial of the Frobenius\nacting on the curve, for other fields of definition K, p must define a finite\nresidue field, (p prime for K = Qp or Q; p a maximal ideal for K a number\nfield), return the characteristic polynomial of the Frobenius acting on the\nPicard group of the reduction of E."
+function ellcharpoly(
+    x1::LibPARI.GenArg;
+    x2::Union{Nothing,LibPARI.GenArg} = nothing,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = x2 === nothing ? nothing : LibPARI.gen_convert(x2)
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:ellcharpoly, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(
+                    Int,
+                    Ptr{Int}((_g2 === nothing ? C_NULL : _g2.ptr)),
+                ),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -10248,24 +10955,24 @@ function elldivpol(x1::LibPARI.GenArg, x2::Integer; x3::Integer = -1)
     end
 end
 
-"elleisnum(w,k,{flag=0}): k being an even positive integer, computes the\nnumerical value of the Eisenstein series of weight k at the lattice\nw, as given by ellperiods. When flag is nonzero and k=4 or 6, this gives the\nelliptic invariants g2 or g3 with the correct normalization."
-function elleisnum(
+"elleisnum(w,k): k being an even positive integer, computes the\nnumerical value of the Eisenstein series of weight k at the lattice\nw, as given by ellperiods."
+function elleisnum0(
     x1::LibPARI.GenArg,
-    x2::Integer;
-    x3::Integer = 0,
+    x2::LibPARI.GenArg;
     prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
             _g1 = LibPARI.gen_convert(x1)
-            GC.@preserve _g1 LibPARI._trap_call(
+            _g2 = LibPARI.gen_convert(x2)
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
                 Ptr{Int},
-                cglobal((:elleisnum, LibPARI.PARI_jll.libpari)),
-                4,
+                cglobal((:elleisnum0, LibPARI.PARI_jll.libpari)),
+                3,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
-                Int(x2),
-                Int(x3),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 prec,
+                Int(0),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -10430,17 +11137,24 @@ function ellformalw(
     end
 end
 
-"ellfromeqn(P): given a genus 1 plane curve, defined by the affine\nequation f(x,y) = 0, return the coefficients [a1,a2,a3,a4,a6] of a\nWeierstrass equation for its Jacobian.\nThis allows to recover a Weierstrass model for an elliptic curve given by a\ngeneral plane cubic or by a binary quartic or biquadratic model."
-function ellfromeqn(x1::LibPARI.GenArg)
+"ellfromeqn(f,{P}): given a genus 1 plane curve, defined by the affine\nequation f(x,y) = 0, return the coefficients [a1,a2,a3,a4,a6] of a\nWeierstrass equation for its Jacobian.\nThis allows to recover a Weierstrass model for an elliptic curve given by a\ngeneral plane cubic or by a binary quartic or biquadratic model.\n\nIf a binary quartic or biquadratic model is given, and if a point P is given,\nalso return the image of P by the map from the curve to its Jacobian."
+function ellfromeqn0(
+    x1::LibPARI.GenArg;
+    x2::Union{Nothing,LibPARI.GenArg} = nothing,
+)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
             _g1 = LibPARI.gen_convert(x1)
-            GC.@preserve _g1 LibPARI._trap_call(
+            _g2 = x2 === nothing ? nothing : LibPARI.gen_convert(x2)
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
                 Ptr{Int},
-                cglobal((:ellfromeqn, LibPARI.PARI_jll.libpari)),
-                1,
+                cglobal((:ellfromeqn0, LibPARI.PARI_jll.libpari)),
+                2,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
-                Int(0),
+                reinterpret(
+                    Int,
+                    Ptr{Int}((_g2 === nothing ? C_NULL : _g2.ptr)),
+                ),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -10530,6 +11244,40 @@ function ellheegner(x1::LibPARI.GenArg)
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 Int(0),
                 Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"ellheegnertwist(E,{D=1},{s=1}): return a rational nontorsion point on the\ntwist by D of the elliptic curve E assumed to be of rank 1."
+function ellheegnertwist(
+    x1::LibPARI.GenArg;
+    x2::Union{Nothing,LibPARI.GenArg} = nothing,
+    x3::Union{Nothing,LibPARI.GenArg} = nothing,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = x2 === nothing ? nothing : LibPARI.gen_convert(x2)
+            _g3 = x3 === nothing ? nothing : LibPARI.gen_convert(x3)
+            GC.@preserve _g1 _g2 _g3 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:ellheegnertwist, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(
+                    Int,
+                    Ptr{Int}((_g2 === nothing ? C_NULL : _g2.ptr)),
+                ),
+                reinterpret(
+                    Int,
+                    Ptr{Int}((_g3 === nothing ? C_NULL : _g3.ptr)),
+                ),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -10936,7 +11684,34 @@ function jell(
     end
 end
 
-"elllocalred(E,{p}): E being an elliptic curve, returns\n[f,kod,[u,r,s,t],c], where f is the conductor's exponent, kod is the Kodaira\ntype for E at p, [u,r,s,t] is the change of variable needed to make E\nminimal at p, and c is the local Tamagawa number c_p."
+"elljacobi(z,k): returns the vector of the three Jacobi elliptic functions\n[sn(z,k),cn(z,k),dn(z,k)]."
+function elljacobi(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg;
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:elljacobi, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                prec,
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"elllocalred(E,{p}): E being an elliptic curve, returns\n[f,kod,[u,r,s,t],c], where f is the conductor's exponent, kod is the Kodaira\ntype for E at p, [u,r,s,t] is the change of variables needed to make E\nminimal at p, and c is the local Tamagawa number c_p."
 function elllocalred(
     x1::LibPARI.GenArg;
     x2::Union{Nothing,LibPARI.GenArg} = nothing,
@@ -11030,17 +11805,17 @@ function elllseries(
     end
 end
 
-"ellmaninconstant(E): let E be an elliptic curve over Q given by\nellinit or a rational isogeny class given by ellisomat. Return the\nManin constant of the curve, see ellweilcurve.\nThe algorithm is slow but unconditional."
-function ellmaninconstant(x1::LibPARI.GenArg)
+"ellmaninconstant(E,{fl=0}): let E be an elliptic curve over Q given by\nellinit or a rational isogeny class given by ellisomat. Return the\nManin constant of the curve (resp. the Manin constants of the isogeny class).\nIf fl=0, the algorithm is slow but unconditional. If fl=1, use Cremona table or\nWatkins conjecture."
+function ellmaninconstant(x1::LibPARI.GenArg; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
             _g1 = LibPARI.gen_convert(x1)
             GC.@preserve _g1 LibPARI._trap_call(
                 Ptr{Int},
                 cglobal((:ellmaninconstant, LibPARI.PARI_jll.libpari)),
-                1,
+                2,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
-                Int(0),
+                Int(x2),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -11100,7 +11875,7 @@ function ellminimalmodel(x1::LibPARI.GenArg)
     end
 end
 
-"ellminimaltwist(E,{flag=0}): E being an elliptic curve defined over Q,\nreturn a discriminant D such that the twist of E by D is minimal among all\npossible quadratic twists, i.e., if flag=0, its minimal model has minimal\ndiscriminant, or if flag=1, it has minimal conductor."
+"ellminimaltwist(E,{flag=0}): Let E  be an elliptic curve defined over Q,\nreturn a fundamental discriminant D such that the twist of E by D is minimal\namong all possible quadratic twists. If flag = 0, minimal means having the\nsmallest minimal discriminant, if flag = 1, minimal means having the smallest\nconductor."
 function ellminimaltwist0(x1::LibPARI.GenArg; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -11627,7 +12402,7 @@ function ellrankinit(
     end
 end
 
-"ellratpoints(E,h,{flag=0}): E being an rational model of an\nelliptic curve, return a vector containing the affine rational points on the curve\nof naive height less than h.\nIf fl=1, stop as soon as a point is found."
+"ellratpoints(E,h,{flag=0}): E being a rational model of an\nelliptic curve, return a vector containing the affine rational points on the curve\nof naive height less than h.\nIf fl=1, stop as soon as a point is found."
 function ellratpoints(x1::LibPARI.GenArg, x2::LibPARI.GenArg; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -11682,7 +12457,7 @@ function ellrootno(
     end
 end
 
-"ellsaturation(E,V,B): let E be an elliptic curve over Q\nand V be a vector of independent rational points on E of infinite order that\ngenerate a subgroup G of E(Q) of finite index.\nReturn a new set W of the same length that generate a subgroup H of\nE(Q) containing G and such that [E(Q):H] is not divisible by any prime\nnumber less than B."
+"ellsaturation(E,V,B): let E be an elliptic curve over Q\nand V be a vector of independent rational points on E of infinite order that\ngenerate a subgroup G of E(Q) of finite index.\nReturn a new set W of the same length that generates a subgroup H of\nE(Q) containing G and such that [E(Q):H] is not divisible by any prime\nnumber less than B."
 function ellsaturation(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg,
@@ -12026,7 +12801,7 @@ function ellxn(x1::LibPARI.GenArg, x2::Integer; x3::Integer = -1)
     end
 end
 
-"ellzeta(w,{z='x}): computes the value at z of the Weierstrass Zeta\nfunction attached to the lattice w, as given by ellperiods(,1)."
+"ellzeta(w,{z='x}): computes the value at z of the Weierstrass zeta\nfunction attached to the lattice w, as given by ellperiods(,1)."
 function ellzeta(
     x1::LibPARI.GenArg;
     x2::Union{Nothing,LibPARI.GenArg} = nothing,
@@ -13120,18 +13895,20 @@ function gp_fileclose(x1::Integer)
     return nothing
 end
 
-"fileextern(str): execute shell command str and returns a file\ndescriptor attached to the command output as if it were read from a file."
-function gp_fileextern(x1::AbstractString)
+"fileextern(str, {mode=\"r\"}): execute shell command str and returns a file\ndescriptor attached to the command output as if it were read from a file\n(mode \"r\") or to the command input (mode \"w\")."
+function gp_fileextern(x1::AbstractString; x2::AbstractString = "r")
     return LibPARI.protected_call() do
         av = LibPARI._avma()
         r = Int(
-            let _cs1 = Base.cconvert(Cstring, x1)
-                GC.@preserve _cs1 LibPARI._trap_call(
+            let _cs1 = Base.cconvert(Cstring, x1),
+                _cs2 = Base.cconvert(Cstring, x2)
+
+                GC.@preserve _cs1 _cs2 LibPARI._trap_call(
                     Int,
                     cglobal((:gp_fileextern, LibPARI.PARI_jll.libpari)),
-                    1,
+                    2,
                     reinterpret(Int, Base.unsafe_convert(Cstring, _cs1)),
-                    Int(0),
+                    reinterpret(Int, Base.unsafe_convert(Cstring, _cs2)),
                     Int(0),
                     Int(0),
                     Int(0),
@@ -13170,7 +13947,7 @@ function gp_fileflush0(; x1::Union{Nothing,LibPARI.GenArg} = nothing)
     return nothing
 end
 
-"fileopen(path,mode): open the file pointed to by 'path' and return a\nfile descriptor which can be used with other file functions.\nThe mode is \"r\" (default, read), \"w\" (write, truncate), \"a\" (write, append)."
+"fileopen(path,{mode=\"r\"}): open the file pointed to by 'path' and return a\nfile descriptor which can be used with other file functions.\nThe mode is \"r\" (default, read), \"w\" (write, truncate), \"a\" (write, append)."
 function gp_fileopen(x1::AbstractString; x2::AbstractString = "r")
     return LibPARI.protected_call() do
         av = LibPARI._avma()
@@ -13288,6 +14065,28 @@ function gp_filewrite1(x1::Integer, x2::AbstractString)
         return nothing
     end
     return nothing
+end
+
+"fingerprint(x, {b = 64}): return a b-bit fingerprint of x."
+function fingerprint(x1::LibPARI.GenArg; x2::Integer = 64)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            GC.@preserve _g1 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:fingerprint, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                Int(x2),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
 end
 
 "floor(x): floor of x = largest integer <= x."
@@ -13498,7 +14297,7 @@ function galoisexport(x1::LibPARI.GenArg; x2::Integer = 0)
     end
 end
 
-"galoisfixedfield(gal,perm,{flag},{v=y}): gal being a Galois group as\noutput by galoisinit and perm a subgroup, an element of gal.group or a vector\nof such elements, return [P,x] such that P is a polynomial defining the fixed\nfield of gal[1] by the subgroup generated by perm, and x is a root of P in gal\nexpressed as a polmod in gal.pol. If flag is 1 return only P. If flag is 2\nreturn [P,x,F] where F is the factorization of gal.pol over the field\ndefined by P, where the variable v stands for a root of P."
+"galoisfixedfield(gal,H,{flag},{v=y}): gal being a Galois group as\noutput by galoisinit and H a subgroup, an element of gal.group or a vector\nof such elements, return [P,x] such that P is a polynomial defining the fixed\nfield of gal[1] by the subgroup generated by H, and x is a root of P in gal\nexpressed as a polmod in gal.pol. If flag is 1 return only P. If flag is 2\nreturn [P,x,F] where F is the factorization of gal.pol over the field\ndefined by P, where the variable v stands for a root of P."
 function galoisfixedfield(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
@@ -13688,6 +14487,31 @@ function galoisisnormal(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
     end
 end
 
+"galoisorder(gal): gal being output by galoisinit or by galoissubgroups\nreturn the order of the underlying group."
+function galoisorder(x1::LibPARI.GenArg)
+    return LibPARI.protected_call() do
+        _g1 = LibPARI.gen_convert(x1)
+        av = LibPARI._avma()
+        r = Int(
+            GC.@preserve _g1 LibPARI._trap_call(
+                Int,
+                cglobal((:galoisorder, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        )
+        LibPARI._set_avma(av)
+        return r
+    end
+end
+
 "galoispermtopol(gal,perm): gal being a Galois group as output by\ngaloisinit and perm a element of gal.group, return the polynomial defining\nthe corresponding Galois automorphism."
 function galoispermtopol(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
     return LibPARI.protected_call() do
@@ -13839,7 +14663,7 @@ function gammamellininv(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
     x3::Integer = 0,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -13852,7 +14676,7 @@ function gammamellininv(
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 Int(x3),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -13866,7 +14690,7 @@ end
 function gammamellininvinit(
     x1::LibPARI.GenArg;
     x2::Integer = 0,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -13877,7 +14701,7 @@ function gammamellininvinit(
                 3,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 Int(x2),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -13914,7 +14738,7 @@ function ggcd0(x1::LibPARI.GenArg; x2::Union{Nothing,LibPARI.GenArg} = nothing)
     end
 end
 
-"gcharalgebraic(gc,{type}): returns a matrix whose columns form a basis of\nthe algebraic Grossencharacters in gc. If type is specified as a vector of\ninteger exponents [p,q] for each complex place, returns a vector containing\nan algebraic character of that infinity type (or the empty vector if such a\ncharacter does not exist)."
+"gcharalgebraic(gc,{typ}): returns a matrix whose columns form a basis of\nthe algebraic Grossencharacters in gc. If typ is specified as a vector of\ninteger exponents [p,q] for each complex place, returns a vector containing\nan algebraic character of that infinity type (or the empty vector if such a\ncharacter does not exist)."
 function gcharalgebraic(
     x1::LibPARI.GenArg;
     x2::Union{Nothing,LibPARI.GenArg} = nothing,
@@ -14074,7 +14898,7 @@ function gcharinit(
     end
 end
 
-"gcharisalgebraic(gc,chi,{&type}): returns 1 if chi is an algebraic (type A0)\ncharacter. If type is present, it is set to the infinity type [p,q] of chi."
+"gcharisalgebraic(gc,chi,{&typ}): returns 1 if chi is an algebraic (type A0)\ncharacter. If typ is present, it is set to the infinity type [p,q] of chi."
 function gcharisalgebraic(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
     return LibPARI.protected_call() do
         _g1 = LibPARI.gen_convert(x1)
@@ -14175,6 +14999,29 @@ function gcharnewprec(
                 2,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 prec,
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"genus2charpoly(C, p): C being a genus-2 curve, returns the characteristic\npolynomial of the action of the Frobenius on the Picard group of C at p."
+function genus2charpoly(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:genus2charpoly, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -14327,7 +15174,9 @@ function getheap()
 end
 
 "getlocalbitprec(): returns the current dynamic bit precision."
-function getlocalbitprec(; bitprec::Integer = LibPARI.precision(LibPARI.Gen))
+function getlocalbitprec(;
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
+)
     return LibPARI.protected_call() do
         av = LibPARI._avma()
         r = Int(
@@ -14335,7 +15184,7 @@ function getlocalbitprec(; bitprec::Integer = LibPARI.precision(LibPARI.Gen))
                 Int,
                 cglobal((:getlocalbitprec, LibPARI.PARI_jll.libpari)),
                 1,
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -14832,7 +15681,64 @@ function hilbert(
     end
 end
 
-"hyperellchangecurve(C,m): C being a nonsingular\nhyperelliptic model of a curve, apply the change of coordinate\ngiven by m.\nC can be given either by a squarefree polynomial P such that\nC:y^2=P(x) or by a vector [P,Q] such that C:y^2+Q(x)*y=P(x) and Q^2+4P is\nsquarefree."
+"hyperellauto(C,{nf}): C being a hyperelliptic curve given by a Weierstrass\nequation, either over the rationals or over the number field nf if given,\nreturn the group of automorphisms of C as a vector of changes of\ncoordinates of the form [e, [a,b;c,d], H]."
+function hyperellauto(
+    x1::LibPARI.GenArg;
+    x2::Union{Nothing,LibPARI.GenArg} = nothing,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = x2 === nothing ? nothing : LibPARI.gen_convert(x2)
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:hyperellauto, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(
+                    Int,
+                    Ptr{Int}((_g2 === nothing ? C_NULL : _g2.ptr)),
+                ),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"hyperellchangecompose(C,m1, m2): C being a hyperelliptic curve given by a\nWeierstrass equation, compose the change of coordinates given by m1 and m2.\nC can be given either by a squarefree polynomial P such that C:y^2=P(x) or by\na vector [P,Q] such that C:y^2+Q(x)*y=P(x) and Q^2+4P is squarefree."
+function hyperellchangecompose(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg,
+    x3::LibPARI.GenArg,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            _g3 = LibPARI.gen_convert(x3)
+            GC.@preserve _g1 _g2 _g3 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:hyperellchangecompose, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(Int, Ptr{Int}(_g3.ptr)),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"hyperellchangecurve(C,m): C being a hyperelliptic curve given by a\nWeierstrass equation, apply the change of coordinates given by m. C can be\ngiven either by a squarefree polynomial P such that\nC:y^2=P(x) or by a vector [P,Q] such that C:y^2+Q(x)*y=P(x) and Q^2+4P is\nsquarefree."
 function hyperellchangecurve(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -14845,6 +15751,85 @@ function hyperellchangecurve(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"hyperellchangeinvert(C,m): C being a hyperelliptic curve given by\na Weierstrass equation, invert the change of coordinates given by m.\nC can be given either by a squarefree polynomial P such that\nC:y^2=P(x) or by a vector [P,Q] such that C:y^2+Q(x)*y=P(x) and Q^2+4P is\nsquarefree."
+function hyperellchangeinvert(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:hyperellchangeinvert, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"hyperellchangepoint(C,p,m): C being a hyperelliptic curve given by a\nWeierstrass equation, apply the change of coordinates given by m to the point p\nof C. C can be given either by a squarefree polynomial P such that\nC:y^2=P(x) or by a vector [P,Q] such that C:y^2+Q(x)*y=P(x) and Q^2+4P is\nsquarefree."
+function hyperellchangepoint(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg,
+    x3::LibPARI.GenArg,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            _g3 = LibPARI.gen_convert(x3)
+            GC.@preserve _g1 _g2 _g3 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:hyperellchangepoint, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(Int, Ptr{Int}(_g3.ptr)),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"hyperellchangepointinv(C,p,m): C being a hyperelliptic curve given by a\nWeierstrass equation, apply the reverse of the change of coordinates given by m\nto the point p. C can be given either by a squarefree polynomial P such that\nC:y^2=P(x) or by a vector [P,Q] such that C:y^2+Q(x)*y=P(x) and Q^2+4P is\nsquarefree."
+function hyperellchangepointinv(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg,
+    x3::LibPARI.GenArg,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            _g3 = LibPARI.gen_convert(x3)
+            GC.@preserve _g1 _g2 _g3 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:hyperellchangepointinv, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(Int, Ptr{Int}(_g3.ptr)),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -14899,6 +15884,60 @@ function hyperelldisc(x1::LibPARI.GenArg)
     end
 end
 
+"hyperellextremalmodels(C,p): C being a hyperelliptic curve given by an\nintegral Weierstrass equation, compute a maximal chain of minimal Weierstrass\nmodels at p. Return a vector [n, V] where n is the length of the chain of\nminimal Weierstrass models at p, and V is vector of length 1 or 2 containing\nthe extremal models of the chain."
+function hyperellextremalmodels(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:hyperellextremalmodels, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"hyperellisisom(C1, C2, {nf}): C1 and C2 being two hyperelliptic curve given by Weierstrass\nequations, either over the rationals or over the number field nf if given,\nreturn the list of isomorphisms from C1 to C2 as changes of coordinates of the\nform [e, [a,b;c,d], H]."
+function hyperellisisom(
+    x1::LibPARI.GenArg,
+    x2::LibPARI.GenArg;
+    x3::Union{Nothing,LibPARI.GenArg} = nothing,
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            _g3 = x3 === nothing ? nothing : LibPARI.gen_convert(x3)
+            GC.@preserve _g1 _g2 _g3 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:hyperellisisom, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(
+                    Int,
+                    Ptr{Int}((_g3 === nothing ? C_NULL : _g3.ptr)),
+                ),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
 "hyperellisoncurve(X,p): X being a nonsingular hyperelliptic model of a curve,\ntest whether the point p is on the curve.\nX can be given either by a squarefree polynomial P such that\nX:y^2=P(x) or by a vector [P,Q] such that X:y^2+Q(x)*y=P(x) and Q^2+4P is\nsquarefree."
 function hyperellisoncurve(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
     return LibPARI.protected_call() do
@@ -14925,7 +15964,7 @@ function hyperellisoncurve(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
     end
 end
 
-"hyperellminimaldisc(C,{pr}): C being a nonsingular integral\nhyperelliptic model of a curve, return the minimal discrminant of an integral\nmodel of C.  If pr is given, it must be a list of primes and the discriminant\nis then only garanteed minimal at the elements of pr.\nC can be given either by a squarefree polynomial P such that\nC:y^2=P(x) or by a vector [P,Q] such that C:y^2+Q(x)*y=P(x) and Q^2+4P is\nsquarefree."
+"hyperellminimaldisc(C,{pr}): C being a hyperelliptic curve given by an\nintegral Weierstrass equation, return the minimal discrminant of an integral\nmodel of C.  If pr is given, it must be a list of primes and the discriminant\nis then only guaranteed minimal at the elements of pr.\nC can be given either by a squarefree polynomial P such that\nC:y^2=P(x) or by a vector [P,Q] such that C:y^2+Q(x)*y=P(x) and Q^2+4P is\nsquarefree."
 function hyperellminimaldisc(
     x1::LibPARI.GenArg;
     x2::Union{Nothing,LibPARI.GenArg} = nothing,
@@ -14954,7 +15993,7 @@ function hyperellminimaldisc(
     end
 end
 
-"hyperellminimalmodel(C,{&m},{pr}): C being a nonsingular integral\nhyperelliptic model of a curve, return an integral model of C with minimal\ndiscriminant. If pr is given, it must be a list of primes and the model is\nthen only garanteed minimal at the elements of pr.\nC can be given either by a squarefree polynomial P such that\nC:y^2=P(x) or by a vector [P,Q] such that C:y^2+Q(x)*y=P(x) and Q^2+4P is\nsquarefree."
+"hyperellminimalmodel(C,{&m},{pr}): C being a hyperelliptic curve given by\nan integral Weierstrass equation, return an integral model of C with minimal\ndiscriminant. If pr is given, it must be a list of primes and the model is\nthen only guaranteed minimal at the elements of pr.\nC can be given either by a squarefree polynomial P such that\nC:y^2=P(x) or by a vector [P,Q] such that C:y^2+Q(x)*y=P(x) and Q^2+4P is\nsquarefree."
 function hyperellminimalmodel(
     x1::LibPARI.GenArg;
     x2::Union{Nothing,LibPARI.GenArg} = nothing,
@@ -14984,7 +16023,7 @@ function hyperellminimalmodel(
     end
 end
 
-"hyperellordinate(H,x): y-coordinates corresponding to x-ordinate x on\nhyperelliptic curve H."
+"hyperellordinate(H,x): y-coordinates corresponding to x-coordinate x on\nhyperelliptic curve H.\nH can be given either by a squarefree polynomial P such that\nH:y^2=P(x) or by a vector [P,Q] such that H:y^2+Q(x)*y=P(x) and Q^2+4P is\nsquarefree."
 function hyperellordinate(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -15034,7 +16073,33 @@ function hyperellpadicfrobenius0(
     end
 end
 
-"hyperellratpoints(X,h,{flag=0}): X being a nonsingular hyperelliptic\ncurve given by an rational model, return a vector containing the affine\nrational points on the curve of naive height less than h.\nIf fl=1, stop as soon as a point is found.\nX can be given either by a squarefree polynomial P such that\nX:y^2=P(x) or by a vector [P,Q] such that X:y^2+Q(x)y=P(x) and Q^2+4P is\nsquarefree."
+"hyperellperiods(X,{flag}): X being a nonsingular hyperelliptic curve\ndefined over the complex numbers, return a period matrix. X can be given\neither by a squarefree polynomial P such that X:y^2=P(x) or by a\nvector [P,Q] such that X:y^2+Q(x)*y=P(x) and Q^2+4P is squarefree.\nIf flag=0 (default), return a reduced period matrix in Siegel space.\nIf flag=1, return the big period matrix of size (g x 2g),\nIf flag=2, return the BSD period."
+function hyperellperiods(
+    x1::LibPARI.GenArg;
+    x2::Integer = 0,
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            GC.@preserve _g1 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:hyperellperiods, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                Int(x2),
+                prec,
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"hyperellratpoints(X,h,{flag=0}): X being a nonsingular hyperelliptic\ncurve given by a rational model, return a vector containing the affine\nrational points on the curve of naive height less than h.\nIf fl=1, stop as soon as a point is found.\nX can be given either by a squarefree polynomial P such that\nX:y^2=P(x) or by a vector [P,Q] such that X:y^2+Q(x)y=P(x) and Q^2+4P is\nsquarefree."
 function hyperellratpoints(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
@@ -15389,6 +16454,29 @@ function idealfrobenius(
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 reinterpret(Int, Ptr{Int}(_g3.ptr)),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"idealfromgens(nf,v): hermite normal form of the (fractional) ideal of the number\nfield nf generated as Z_K module by the components of the vector which must belong to\nnf."
+function idealfromgens(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = LibPARI.gen_convert(x2)
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:idealfromgens, LibPARI.PARI_jll.libpari)),
+                2,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                Int(0),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -16653,7 +17741,7 @@ function lfun0(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
     x3::Integer = 0,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -16666,7 +17754,7 @@ function lfun0(
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 Int(x3),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -16708,7 +17796,7 @@ function lfunartin(
     x2::LibPARI.GenArg,
     x3::LibPARI.GenArg,
     x4::Integer;
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -16723,7 +17811,7 @@ function lfunartin(
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 reinterpret(Int, Ptr{Int}(_g3.ptr)),
                 Int(x4),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -16736,7 +17824,7 @@ end
 function lfuncheckfeq(
     x1::LibPARI.GenArg;
     x2::Union{Nothing,LibPARI.GenArg} = nothing,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         _g1 = LibPARI.gen_convert(x1)
@@ -16752,7 +17840,7 @@ function lfuncheckfeq(
                     Int,
                     Ptr{Int}((_g2 === nothing ? C_NULL : _g2.ptr)),
                 ),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -16791,7 +17879,7 @@ end
 function lfundiv(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -16803,7 +17891,7 @@ function lfundiv(
                 3,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -16817,7 +17905,7 @@ end
 "lfundual(L): creates the Ldata structure (without\ninitialization) corresponding to the dual L-function of L."
 function lfundual(
     x1::LibPARI.GenArg;
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -16827,7 +17915,7 @@ function lfundual(
                 cglobal((:lfundual, LibPARI.PARI_jll.libpari)),
                 2,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -16914,7 +18002,7 @@ end
 function lfunhardy(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -16926,7 +18014,7 @@ function lfunhardy(
                 3,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -16942,7 +18030,7 @@ function lfunhgm(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
     x3::Union{Nothing,LibPARI.GenArg} = nothing,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -16959,7 +18047,7 @@ function lfunhgm(
                     Int,
                     Ptr{Int}((_g3 === nothing ? C_NULL : _g3.ptr)),
                 ),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -16974,7 +18062,7 @@ function lfuninit0(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
     x3::Integer = 0,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -16987,7 +18075,7 @@ function lfuninit0(
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 Int(x3),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -17002,7 +18090,7 @@ function lfunlambda0(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
     x3::Integer = 0,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -17015,7 +18103,7 @@ function lfunlambda0(
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 Int(x3),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -17029,7 +18117,7 @@ end
 function lfunmf(
     x1::LibPARI.GenArg;
     x2::Union{Nothing,LibPARI.GenArg} = nothing,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -17044,7 +18132,7 @@ function lfunmf(
                     Int,
                     Ptr{Int}((_g2 === nothing ? C_NULL : _g2.ptr)),
                 ),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -17058,7 +18146,7 @@ end
 "lfunmfspec(L): L corresponding to a modular eigenform, returns\n[vo,ve,om,op] in even weight, where vo (resp., ve) is the vector of odd\n(resp., even) periods, and om and op the corresponding real numbers\nomega^- and omega^+. Returns [v,om] in odd weight."
 function lfunmfspec(
     x1::LibPARI.GenArg;
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -17068,7 +18156,7 @@ function lfunmfspec(
                 cglobal((:lfunmfspec, LibPARI.PARI_jll.libpari)),
                 2,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -17084,7 +18172,7 @@ end
 function lfunmul(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -17096,7 +18184,7 @@ function lfunmul(
                 3,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -17111,7 +18199,7 @@ end
 function lfunorderzero(
     x1::LibPARI.GenArg;
     x2::Integer = -1,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         _g1 = LibPARI.gen_convert(x1)
@@ -17123,7 +18211,7 @@ function lfunorderzero(
                 3,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 Int(x2),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -17189,7 +18277,7 @@ end
 "lfunrootres(data): given the Ldata attached to an L-function (or the\noutput of lfunthetainit), compute the root number and the\nresidues. In the present implementation, if the polar part is not already\nknown completely, at most a single pole is allowed.\nThe output is a 3-component vector\n[[[a_1, r_1],...,[a_n, r_n],[[b_1, R_1],...[b_m,R_m]]~, w], where r_i is the\npolar part of L(s) at a_i, R_i is is the polar part of Lambda(s) at b_i,\nor [0,0,r] if there is no pole, and r is the root number."
 function lfunrootres(
     x1::LibPARI.GenArg;
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -17199,7 +18287,7 @@ function lfunrootres(
                 cglobal((:lfunrootres, LibPARI.PARI_jll.libpari)),
                 2,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -17216,7 +18304,7 @@ function lfunshift(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
     x3::Integer = 0,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -17229,7 +18317,7 @@ function lfunshift(
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 Int(x3),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -17266,7 +18354,7 @@ function lfuntheta(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
     x3::Integer = 0,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -17279,7 +18367,7 @@ function lfuntheta(
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 Int(x3),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -17293,7 +18381,7 @@ end
 function lfuntwist(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -17305,7 +18393,7 @@ function lfuntwist(
                 3,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -17321,7 +18409,7 @@ function lfunzeros(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
     x3::Integer = 8,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -17334,7 +18422,7 @@ function lfunzeros(
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 Int(x3),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -17484,27 +18572,6 @@ function lindep0(x1::LibPARI.GenArg; x2::Integer = 0)
     end
 end
 
-"listcreate({n}): this function is obsolete, use List()."
-function listcreate_gp(; x1::Integer = 0)
-    return LibPARI.protected_call() do
-        LibPARI.gen_from() do
-            LibPARI._trap_call(
-                Ptr{Int},
-                cglobal((:listcreate_gp, LibPARI.PARI_jll.libpari)),
-                1,
-                Int(x1),
-                Int(0),
-                Int(0),
-                Int(0),
-                Int(0),
-                Int(0),
-                Int(0),
-                Int(0),
-            )
-        end
-    end
-end
-
 "lngamma(x): logarithm of the gamma function of x."
 function glngamma(
     x1::LibPARI.GenArg;
@@ -17554,7 +18621,7 @@ function localbitprec(x1::LibPARI.GenArg)
     return nothing
 end
 
-"localprec(p): set the real precision to p in the dynamic scope\nand return p."
+"localprec(p): set the real precision to p in the dynamic scope"
 function localprec(x1::LibPARI.GenArg)
     LibPARI.protected_call() do
         _g1 = LibPARI.gen_convert(x1)
@@ -18296,7 +19363,7 @@ function isdiagonal(x1::LibPARI.GenArg)
     end
 end
 
-"matker(x,{flag=0}): basis of the kernel of the matrix x. flag is\noptional, and may be set to 0: default; nonzero: x is known to have\nintegral entries."
+"matker(x,{flag}): basis of the kernel of the matrix x; flag is\nobsolete, ignore it."
 function matker0(x1::LibPARI.GenArg; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -18350,6 +19417,33 @@ function matkermod(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
         r = GC.@preserve _g1 _g2 LibPARI._trap_call(
             Ptr{Int},
             cglobal((:matkermod, LibPARI.PARI_jll.libpari)),
+            3,
+            reinterpret(Int, Ptr{Int}(_g1.ptr)),
+            reinterpret(Int, Ptr{Int}(_g2.ptr)),
+            reinterpret(Int, Base.unsafe_convert(Ptr{Ptr{Int}}, out1)),
+            Int(0),
+            Int(0),
+            Int(0),
+            Int(0),
+            Int(0),
+        )
+        primary = LibPARI.Gen(r)
+        o1 = LibPARI.Gen(out1[])
+        LibPARI._set_avma(av)
+        return (primary, o1)
+    end
+end
+
+"matmodhnf(A,H, {&Q}): reduce the column vector or matrix A modulo the HNF\nmatrix H (integral, square, with positive diagonal elements). If Q is\npresent, set it to the matrix such that A = H*Q + R, where R is the reduction."
+function matmodhnf(x1::LibPARI.GenArg, x2::LibPARI.GenArg)
+    return LibPARI.protected_call() do
+        _g1 = LibPARI.gen_convert(x1)
+        _g2 = LibPARI.gen_convert(x2)
+        out1 = Ref{Ptr{Int}}(C_NULL)
+        av = LibPARI._avma()
+        r = GC.@preserve _g1 _g2 LibPARI._trap_call(
+            Ptr{Int},
+            cglobal((:matmodhnf, LibPARI.PARI_jll.libpari)),
             3,
             reinterpret(Int, Ptr{Int}(_g1.ptr)),
             reinterpret(Int, Ptr{Int}(_g2.ptr)),
@@ -18511,7 +19605,7 @@ function rank(x1::LibPARI.GenArg)
     end
 end
 
-"matreduce(m): reduce the factorization matrix m to canonical form\n(sorted first row with unique elements)\nmatrix."
+"matreduce(m): reduce the factorization matrix m to canonical form\n(sorted first column with unique elements) matrix."
 function matreduce(x1::LibPARI.GenArg)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -18767,7 +19861,7 @@ function mfEk(x1::Integer)
     end
 end
 
-"mfTheta({psi=1}): the unary theta function corresponding to the primitive\nDirichlet character psi, hence of weight 1/2 if psi is even, of weight 3/2\nif psi is odd."
+"mfTheta({Psi=1}): the unary theta function corresponding to the primitive\nDirichlet character Psi, hence of weight 1/2 if Psi is even, of weight 3/2\nif Psi is odd."
 function mfTheta(; x1::Union{Nothing,LibPARI.GenArg} = nothing)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -19079,7 +20173,7 @@ function mfcuspval(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg,
     x3::LibPARI.GenArg;
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -19093,7 +20187,7 @@ function mfcuspval(
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 reinterpret(Int, Ptr{Int}(_g3.ptr)),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -19363,7 +20457,7 @@ function mfeval(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg,
     x3::LibPARI.GenArg;
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -19377,7 +20471,7 @@ function mfeval(
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 reinterpret(Int, Ptr{Int}(_g3.ptr)),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -19478,7 +20572,7 @@ function mffromlfun(
     end
 end
 
-"mffromqf(Q,{P}): Q being an even positive definite quadratic form\nand P a homogeneous spherical polynomial for Q, computes a 3-component vector\n[mf,F,coeffs], where F is the theta function corresponding to (Q, P), mf is\nthe corresponding space of modular forms from mfinit, and coeffs are the\ncoefficients of F on mfbasis(mf)."
+"mffromqf(Q,{P = 1}): Q being an even positive definite quadratic form\nand P a homogeneous spherical polynomial for Q, computes a 3-component vector\n[mf,F,coeffs], where F is the theta function corresponding to (Q, P), mf is\nthe corresponding space of modular forms from mfinit, and coeffs are the\ncoefficients of F on mfbasis(mf)."
 function mffromqf(
     x1::LibPARI.GenArg;
     x2::Union{Nothing,LibPARI.GenArg} = nothing,
@@ -19534,7 +20628,7 @@ function mfgaloisprojrep(
     end
 end
 
-"mfgaloistype(NK,{F}): NK being either [N,1,CHI] or an mf\noutput by mfinit in weight 1 , gives the vector of\ntypes of Galois representations attached to each cuspidal eigenform,\nunless the eigenform F is specified, in which case only for F.\nTypes A_4, S_4, A_5 are represented by minus their cardinality -12, -24,\nor -60, and type D_n is represented by its cardinality, the integer 2*n."
+"mfgaloistype(NK,{F}): NK being either [N,1,CHI] or an mf\noutput by mfinit in weight 1, gives the vector of\ntypes of Galois representations attached to each cuspidal eigenform,\nunless the eigenform F is specified, in which case only for F.\nTypes A_4, S_4, A_5 are represented by minus their cardinality -12, -24,\nor -60, and type D_n is represented by its cardinality, the integer 2*n."
 function mfgaloistype(
     x1::LibPARI.GenArg;
     x2::Union{Nothing,LibPARI.GenArg} = nothing,
@@ -19794,7 +20888,7 @@ end
 "mfmanin(FS): Given the modular symbol FS associated to an eigenform F\nby mfsymbol(mf,F), computes the odd and even special polynomials as well as\nthe odd and even periods om- and om+ as a vector [[P-,P+],[om-,om+,r]],\nwhere r = imag(om+*conj(om-))/<F,F>.\nIf F has several embeddings into C, give the vector of results corresponding\nto each embedding."
 function mfmanin(
     x1::LibPARI.GenArg;
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -19804,7 +20898,7 @@ function mfmanin(
                 cglobal((:mfmanin, LibPARI.PARI_jll.libpari)),
                 2,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -19888,7 +20982,7 @@ function mfperiodpol(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
     x3::Integer = 0,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -19901,7 +20995,7 @@ function mfperiodpol(
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 Int(x3),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -20028,7 +21122,7 @@ function mfshift(x1::LibPARI.GenArg, x2::Integer)
     end
 end
 
-"mfshimura(mf,F,{D=1}): F being a modular form of\nhalf-integral weight k >= 3/2 and D a positive squarefree integer,\ncomputes the Shimura lift G of weight 2k-1 corresponding to D. This function\nreturns [mf2,G,v], where mf2 is a modular form space containing G, and v the\nvector of coefficients of G on mf."
+"mfshimura(mf,F,{D=1}): F being a modular form of\nhalf-integral weight k >= 3/2 and D either a positive squarefree integer\nor a fundamental discriminant of sign (-1)^{k-1/2},\ncomputes the Shimura lift G of weight 2k-1 corresponding to D. This function\nreturns [mf2,G,v], where mf2 is a modular form space containing G, and v the\nvector of coefficients of G on mf."
 function mfshimura(x1::LibPARI.GenArg, x2::LibPARI.GenArg; x3::Integer = 1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -20169,7 +21263,7 @@ end
 function mfsymbol(
     x1::LibPARI.GenArg;
     x2::Union{Nothing,LibPARI.GenArg} = nothing,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -20184,7 +21278,7 @@ function mfsymbol(
                     Int,
                     Ptr{Int}((_g2 === nothing ? C_NULL : _g2.ptr)),
                 ),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -20200,7 +21294,7 @@ function mfsymboleval(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
     x3::Union{Nothing,LibPARI.GenArg} = nothing,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -20217,7 +21311,7 @@ function mfsymboleval(
                     Int,
                     Ptr{Int}((_g3 === nothing ? C_NULL : _g3.ptr)),
                 ),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -21235,17 +22329,24 @@ function next0(; x1::Integer = 1)
     end
 end
 
-"nextprime(x): smallest pseudoprime >= x."
-function nextprime(x1::LibPARI.GenArg)
+"nextprime(x,{q}): smallest pseudoprime >= x.\nIf q is an integer, return the smallest pseudoprime p >= x such that p = 1 mod q;\nif q is an intmod, return the smallest pseudoprime >= x in the given congruence class."
+function nextprime0(
+    x1::LibPARI.GenArg;
+    x2::Union{Nothing,LibPARI.GenArg} = nothing,
+)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
             _g1 = LibPARI.gen_convert(x1)
-            GC.@preserve _g1 LibPARI._trap_call(
+            _g2 = x2 === nothing ? nothing : LibPARI.gen_convert(x2)
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
                 Ptr{Int},
-                cglobal((:nextprime, LibPARI.PARI_jll.libpari)),
-                1,
+                cglobal((:nextprime0, LibPARI.PARI_jll.libpari)),
+                2,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
-                Int(0),
+                reinterpret(
+                    Int,
+                    Ptr{Int}((_g2 === nothing ? C_NULL : _g2.ptr)),
+                ),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -22350,7 +23451,7 @@ function nfkermodpr(x1::LibPARI.GenArg, x2::LibPARI.GenArg, x3::LibPARI.GenArg)
     end
 end
 
-"nfmodpr(nf,x,pr): map x to the residue field mod pr."
+"nfmodpr(nf,x,pr): maps x to the residue field mod pr."
 function nfmodpr(x1::LibPARI.GenArg, x2::LibPARI.GenArg, x3::LibPARI.GenArg)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -22374,7 +23475,7 @@ function nfmodpr(x1::LibPARI.GenArg, x2::LibPARI.GenArg, x3::LibPARI.GenArg)
     end
 end
 
-"nfmodprinit(nf,pr,{v=variable(nf.pol)}): transform the prime ideal pr\ninto modpr format necessary for all operations mod pr in the number field nf.\nVariable v is used to display finite field elements (see ffgen)."
+"nfmodprinit(nf,pr,{v=variable(nf.pol)}): transforms the prime ideal pr\ninto modpr format necessary for all operations mod pr in the number field nf.\nVariable v is used to display finite field elements (see ffgen)."
 function nfmodprinit0(x1::LibPARI.GenArg, x2::LibPARI.GenArg; x3::Integer = -1)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -22669,7 +23770,7 @@ function nfsubfieldsmax(x1::LibPARI.GenArg; x2::Integer = 0)
     end
 end
 
-"nfweilheight(nf, v): return the absolute Weil height of the vector v seen\nas an element of the projective space over the number field nf given by nfinit."
+"nfweilheight(nf, v): returns the absolute Weil height of the vector v seen\nas an element of the projective space over the number field nf given by nfinit."
 function nfweilheight(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
@@ -24085,17 +25186,17 @@ function polgalois(
     end
 end
 
-"polgraeffe(f): returns the Graeffe transform g of f, such that\ng(x^2) = f(x)f(-x)."
-function polgraeffe(x1::LibPARI.GenArg)
+"polgraeffe(f,{d=2}): returns the Graeffe transform g of f, such that\ng(x^2) = f(x)f(-x). If d > 0 is given, return g such that\ng(x^d) = prod(i=0, d-1, f(x*y^i)) mod y^d-1"
+function polgraeffe0(x1::LibPARI.GenArg; x2::Integer = 2)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
             _g1 = LibPARI.gen_convert(x1)
             GC.@preserve _g1 LibPARI._trap_call(
                 Ptr{Int},
-                cglobal((:polgraeffe, LibPARI.PARI_jll.libpari)),
-                1,
+                cglobal((:polgraeffe0, LibPARI.PARI_jll.libpari)),
+                2,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
-                Int(0),
+                Int(x2),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -24313,25 +25414,17 @@ function polrecip(x1::LibPARI.GenArg)
 end
 
 "polred(T,{flag=0}): deprecated, use polredbest. Reduction of the\npolynomial T (gives minimal polynomials only). The following binary digits of\n(optional) flag are significant 1: partial reduction, 2: gives also elements."
-function polred0(
-    x1::LibPARI.GenArg;
-    x2::Integer = 0,
-    x3::Union{Nothing,LibPARI.GenArg} = nothing,
-)
+function polred0(x1::LibPARI.GenArg; x2::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
             _g1 = LibPARI.gen_convert(x1)
-            _g3 = x3 === nothing ? nothing : LibPARI.gen_convert(x3)
-            GC.@preserve _g1 _g3 LibPARI._trap_call(
+            GC.@preserve _g1 LibPARI._trap_call(
                 Ptr{Int},
                 cglobal((:polred0, LibPARI.PARI_jll.libpari)),
-                3,
+                2,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 Int(x2),
-                reinterpret(
-                    Int,
-                    Ptr{Int}((_g3 === nothing ? C_NULL : _g3.ptr)),
-                ),
+                Int(0),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -24579,30 +25672,25 @@ function realroots(
 end
 
 "polsturm(T,{ab}): number of distinct real roots of the polynomial\nT (in the interval ab = [a,b] if present)."
-function sturmpart(
+function RgX_sturmpart(
     x1::LibPARI.GenArg;
     x2::Union{Nothing,LibPARI.GenArg} = nothing,
-    x3::Union{Nothing,LibPARI.GenArg} = nothing,
 )
     return LibPARI.protected_call() do
         _g1 = LibPARI.gen_convert(x1)
         _g2 = x2 === nothing ? nothing : LibPARI.gen_convert(x2)
-        _g3 = x3 === nothing ? nothing : LibPARI.gen_convert(x3)
         av = LibPARI._avma()
         r = Int(
-            GC.@preserve _g1 _g2 _g3 LibPARI._trap_call(
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
                 Int,
-                cglobal((:sturmpart, LibPARI.PARI_jll.libpari)),
-                3,
+                cglobal((:RgX_sturmpart, LibPARI.PARI_jll.libpari)),
+                2,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(
                     Int,
                     Ptr{Int}((_g2 === nothing ? C_NULL : _g2.ptr)),
                 ),
-                reinterpret(
-                    Int,
-                    Ptr{Int}((_g3 === nothing ? C_NULL : _g3.ptr)),
-                ),
+                Int(0),
                 Int(0),
                 Int(0),
                 Int(0),
@@ -24729,7 +25817,7 @@ function polchebyshev1(x1::Integer; x2::Integer = -1)
     end
 end
 
-"polteichmuller(T,p,r): return the polynomial whose roots (resp. leading\ncoef) are the Teichmuller lift of the roots (resp. leading coef) of T, to\np-adic precision r."
+"polteichmuller(T,p,r): return the polynomial whose roots (resp. leading\ncoef) are the Teichmuller lift of the roots (resp. leading coef) of the\nirreducible polynomial T in Fp[X], to p-adic precision r."
 function polteichmuller(x1::LibPARI.GenArg, x2::Integer, x3::Integer)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -25047,6 +26135,30 @@ function primecertisvalid(x1::LibPARI.GenArg)
                 Int(0),
                 Int(0),
             )
+        )
+        LibPARI._set_avma(av)
+        return r
+    end
+end
+
+"primeisregular(p): true(1) if p is regular, false(0) otherwise.\np must be prime."
+function primeisregular(x1::Integer)
+    return LibPARI.protected_call() do
+        av = LibPARI._avma()
+        r = Int(
+            LibPARI._trap_call(
+                Int,
+                cglobal((:primeisregular, LibPARI.PARI_jll.libpari)),
+                1,
+                reinterpret(Int, UInt(x1)),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            ),
         )
         LibPARI._set_avma(av)
         return r
@@ -25601,7 +26713,7 @@ function qfbsolve(x1::LibPARI.GenArg, x2::LibPARI.GenArg; x3::Integer = 0)
     end
 end
 
-"qfcholesky(q): given a square symmetric matrix M, return R such that\nR~*R = M, or [] if there is no solution."
+"qfcholesky(M): given a square symmetric matrix M, returns R the upper\ntriangular matrix such that R~*R = M, or [] if there is no solution (eventually\ndue to insufficient precision)."
 function qfcholesky(
     x1::LibPARI.GenArg;
     prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
@@ -27223,7 +28335,7 @@ function rnfisnorm(x1::LibPARI.GenArg, x2::LibPARI.GenArg; x3::Integer = 0)
     end
 end
 
-"rnfisnorminit(pol,polrel,{flag=2}): let K be defined by a root of pol,\nL/K the extension defined by polrel. Compute technical data needed by\nrnfisnorm to solve norm equations Nx = a, for x in L, and a in K. If flag=0,\ndo not care whether L/K is Galois or not; if flag = 1, assume L/K is Galois;\nif flag = 2, determine whether L/K is Galois."
+"rnfisnorminit(pol,polrel,{flag=2}): let K be defined by a root of pol,\nL/K the extension defined by polrel. Computes technical data needed by\nrnfisnorm to solve norm equations Nx = a, for x in L, and a in K. If flag=0,\ndoes not care whether L/K is Galois or not; if flag = 1, assumes L/K is Galois;\nif flag = 2, determines whether L/K is Galois."
 function rnfisnorminit(x1::LibPARI.GenArg, x2::LibPARI.GenArg; x3::Integer = 2)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -28424,7 +29536,7 @@ function subcycloiwasawa(
     end
 end
 
-"subcyclopclgp(fH,p,{flag=0}): Let F be the abelian\nnumber field contained in Q(zeta_f) corresponding to the subgroup H of\n(Z/fZ)^*. Returns the minus part of Iwasawa polynomials attached to the\nideal class group of F."
+"subcyclopclgp(fH,p,{flag=0}): Let F be the abelian\nnumber field contained in Q(zeta_f) corresponding to the subgroup H of\n(Z/fZ)^* and let p be a prime not dividing 2[F:Q]. Computes the p-Sylow\nsubgroup of the ideal class group of F."
 function subcyclopclgp(x1::LibPARI.GenArg, x2::LibPARI.GenArg; x3::Integer = 0)
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -28873,22 +29985,57 @@ function teichmuller(
     end
 end
 
-"theta(q,z): Jacobi sine theta-function."
+"theta(a,b,{flag}): Jacobi theta-functions. If flag is omitted, let (q,z) =\n(a,b) and return theta(q,z), the Jacobi sine theta function. Otherwise, let\n(z, tau) = (a,b) and return one variable\nRiemann-Jacobi theta functions depending on flag: theta_{0,0} = theta_3,\ntheta_{0,1} = theta_4, theta_{1,0} = theta_2, or theta_{1,1} = -theta_1.\nIf flag=0, return all four theta_{i,j} for 0<=i,j<=1."
 function theta(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
+    x3::Union{Nothing,LibPARI.GenArg} = nothing,
     prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
             _g1 = LibPARI.gen_convert(x1)
             _g2 = LibPARI.gen_convert(x2)
-            GC.@preserve _g1 _g2 LibPARI._trap_call(
+            _g3 = x3 === nothing ? nothing : LibPARI.gen_convert(x3)
+            GC.@preserve _g1 _g2 _g3 LibPARI._trap_call(
                 Ptr{Int},
                 cglobal((:theta, LibPARI.PARI_jll.libpari)),
-                3,
+                4,
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
+                reinterpret(
+                    Int,
+                    Ptr{Int}((_g3 === nothing ? C_NULL : _g3.ptr)),
+                ),
+                prec,
+                Int(0),
+                Int(0),
+                Int(0),
+                Int(0),
+            )
+        end
+    end
+end
+
+"thetanull(tau,{flag=0}): Jacobi Thetanullwerte: if flag is not 1 or\n[1,1], same as theta(0, tau, flag). Otherwise, (d/dz)theta(z,tau,flag) at z=0.\nIf flag = 0 or omitted, vector of all four."
+function thetanull(
+    x1::LibPARI.GenArg;
+    x2::Union{Nothing,LibPARI.GenArg} = nothing,
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
+)
+    return LibPARI.protected_call() do
+        LibPARI.gen_from() do
+            _g1 = LibPARI.gen_convert(x1)
+            _g2 = x2 === nothing ? nothing : LibPARI.gen_convert(x2)
+            GC.@preserve _g1 _g2 LibPARI._trap_call(
+                Ptr{Int},
+                cglobal((:thetanull, LibPARI.PARI_jll.libpari)),
+                3,
+                reinterpret(Int, Ptr{Int}(_g1.ptr)),
+                reinterpret(
+                    Int,
+                    Ptr{Int}((_g2 === nothing ? C_NULL : _g2.ptr)),
+                ),
                 prec,
                 Int(0),
                 Int(0),
@@ -29491,12 +30638,12 @@ function gzeta(
     end
 end
 
-"zetahurwitz(s,x,{der=0}): Hurwitz zeta function at s, x, with s not 1 and\nx not a negative or zero integer. s can be a scalar, polynomial, rational\nfunction, or power series. If der>0, compute the der'th derivative with\nrespect to s."
+"zetahurwitz(s,x,{der=0}): Hurwitz zeta function at s, x, with s not 1 and\nx not a negative or zero integer. s can be a scalar, polynomial, rational\nfunction, or power series. If s is not p-adic, compute the\nder'th derivative with respect to s, otherwise compute Hurwitz\nzeta for the der'th power of the Teichmuller character."
 function zetahurwitz(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
     x3::Integer = 0,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -29509,7 +30656,7 @@ function zetahurwitz(
                 reinterpret(Int, Ptr{Int}(_g1.ptr)),
                 reinterpret(Int, Ptr{Int}(_g2.ptr)),
                 Int(x3),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),
@@ -29696,7 +30843,7 @@ function znchargauss(
     x1::LibPARI.GenArg,
     x2::LibPARI.GenArg;
     x3::Union{Nothing,LibPARI.GenArg} = nothing,
-    bitprec::Integer = LibPARI.precision(LibPARI.Gen),
+    prec::Integer = LibPARI.nbits2prec(LibPARI.precision(LibPARI.Gen)),
 )
     return LibPARI.protected_call() do
         LibPARI.gen_from() do
@@ -29713,7 +30860,7 @@ function znchargauss(
                     Int,
                     Ptr{Int}((_g3 === nothing ? C_NULL : _g3.ptr)),
                 ),
-                bitprec,
+                prec,
                 Int(0),
                 Int(0),
                 Int(0),

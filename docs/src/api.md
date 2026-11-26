@@ -14,10 +14,16 @@ The `LibPARI.PARI` submodule holds nearly 1200 bindings, one per eligible
 PARI/GP function, generated directly from PARI's own machine-readable
 function database (`pari.desc`). Each binding:
 
-- keeps PARI's function name (e.g. `LibPARI.PARI.nextprime`,
-  `LibPARI.PARI.factorial`, `LibPARI.PARI.isprime`);
-- carries PARI's own `Help` text as its docstring — query it with `?` at the
-  REPL, e.g. `?LibPARI.PARI.nextprime`;
+- is named after the C function behind it — the `C-Name` field of
+  `pari.desc` — which often differs from the GP name: GP `nextprime` is
+  `LibPARI.PARI.nextprime0`, `isprime` is `LibPARI.PARI.gisprime`,
+  `factorial` is `LibPARI.PARI.mpfact`. These names follow PARI, so a PARI
+  release that moves a function onto a new C entry point renames its
+  binding (PARI 2.19 did so for six functions; see the changelog). The
+  hand-written functions such as [`LibPARI.nextprime`](@ref
+  LibPARI.nextprime) keep their names;
+- carries PARI's own `Help` text as its docstring, which starts with the GP
+  name — query it with `?` at the REPL, e.g. `?LibPARI.PARI.nextprime0`;
 - takes and returns [`Gen`](@ref) values (or the scalar Julia type the
   function's prototype calls for), and is type-stable;
 - routes through the same safe, leak-free, thread-safe call boundary as the

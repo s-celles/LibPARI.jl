@@ -38,7 +38,7 @@ using LibPARI
             a = LibPARI.Gen(i)
             b = a * a + LibPARI.Gen(1)                  # i^2 + 1
             c = LibPARI.gp_eval("$(i) + 1")             # i + 1
-            d = LibPARI.PARI.nextprime(LibPARI.Gen(i))  # a generated binding
+            d = LibPARI.PARI.nextprime0(LibPARI.Gen(i))  # a generated binding
             types_ok[i] = LibPARI.gentype(d) === LibPARI.PariType.T_INT
             sums[i] = BigInt(b) + BigInt(c)
         end
@@ -149,7 +149,7 @@ using LibPARI
                     if iseven(i)
                         LibPARI.gp_eval("1/0")                 # error
                     else
-                        d = LibPARI.PARI.nextprime(LibPARI.Gen(10_000 + i))
+                        d = LibPARI.PARI.nextprime0(LibPARI.Gen(10_000 + i))
                         LibPARI.gentype(d) === LibPARI.PariType.T_INT &&
                             Threads.atomic_add!(ok, 1)
                     end

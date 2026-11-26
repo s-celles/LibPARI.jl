@@ -8,7 +8,7 @@
     g = LibPARI.Gen(1000)
 
     # Gen-returning binding.
-    @test (@inferred LibPARI.PARI.nextprime(g)) isa LibPARI.Gen
+    @test (@inferred LibPARI.PARI.nextprime0(g)) isa LibPARI.Gen
     # Scalar-returning binding.
     @test (@inferred LibPARI.PARI.getabstime()) isa Int
     # Void-returning binding.

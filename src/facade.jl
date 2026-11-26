@@ -224,7 +224,7 @@ it is a proven prime.
 """
 function nextprime(n::Gen)
     _require_type(:nextprime, n, (PariType.T_INT, PariType.T_REAL))
-    return PARI.nextprime(n)
+    return PARI.nextprime0(n)
 end
 
 """

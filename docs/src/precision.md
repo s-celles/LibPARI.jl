@@ -11,7 +11,7 @@ the `ccall` boundary.
 ## The units
 
 PARI's own units are easy to misread, so they are pinned here against the
-headers shipped with `PARI_jll` (PARI 2.17):
+headers shipped with `PARI_jll` (PARI 2.19):
 
 - A prototype `p` or `b` argument is a **bit count**. `pariinl.h` defines
   `prec2nbits(long x) { return x; }` — the value is already in bits.

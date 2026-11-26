@@ -121,10 +121,10 @@ end
     @test !isempty(strip(help))
 
     # A client asks by GP name. When the binding carries a different C-Name
-    # (GP `isprime` is `PARI.gisprime`, GP `factor` is `PARI.factor0`), the
-    # help is still found, through the GP signature that opens PARI's help
-    # text.
-    for gp in ("isprime", "factor")
+    # (GP `isprime` is `PARI.gisprime`, GP `factor` is `PARI.factor0`, GP
+    # `nextprime` is `PARI.nextprime0` since PARI 2.19), the help is still
+    # found, through the GP signature that opens PARI's help text.
+    for gp in ("isprime", "factor", "nextprime")
         h = ext._help_handler(Dict{String,Any}("name" => gp))
         @test h isa AbstractString
         @test startswith(h, gp * "(")
