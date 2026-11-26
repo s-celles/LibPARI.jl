@@ -20,9 +20,9 @@
 #
 # PARI's clone/block list is THREAD-LOCAL (`cur_block`, `root_block` and
 # `next_block` are `THREAD` statics in libpari's init.c): a block must be
-# freed on the thread that created it. Every `gclone`/`gunclone` therefore
-# runs on the primary worker, so the primary's list is the only one used,
-# while the heavy computation runs on each context's own stack.
+# freed on the thread that created it. A `Gen` is cloned on the context that
+# produced it and records it (`Gen.owner`); its clone is freed by that
+# context's worker, from a per-context queue (`_defer_gunclone`).
 
 # A unit of libpari work for a worker. `reply === nothing` is fire-and-forget
 # (used by `Gen` finalization, which must not block); otherwise the worker
@@ -41,25 +41,34 @@ const _PARI_WORKERS = Ref{Vector{Union{Task,Nothing}}}()
 const _PARI_PRIMARY = Ref{Int}(0)        # threadid of the primary worker
 const _PARI_READY = Ref{Base.Event}()    # primary "PARI is up" signal
 
-# Clones of finalized `Gen`s, waiting for the primary worker to `gunclone`
+# Clones of finalized `Gen`s, one queue per owning context (indexed like
+# `_PARI_WORKERS`), each waiting for that context's worker to `gunclone`
 # them. A finalizer must neither block nor switch tasks — Julia forbids a task
 # switch inside a finalizer, and `put!` on a `Channel` waits (yields) whenever
 # the channel's lock is held — so `Gen` finalization only pushes the pointer
 # here, under a spin lock (which never yields, so finalizers may take it).
-# The primary worker frees the queue before each job it runs
-# (`_drain_unclones!`). Nothing allocates while the lock is held except the
-# `push!` in `_defer_gunclone`, which runs in a finalizer, where the
-# collector does not run finalizers again.
-const _PENDING_UNCLONES = Ref{Vector{Ptr{Int}}}(Ptr{Int}[])
+# Each worker frees its queue before each job it runs (`_drain_unclones!`).
+# Nothing allocates while the lock is held except the `push!` in
+# `_defer_gunclone`, which runs in a finalizer, where the collector does not
+# run finalizers again. `_PENDING_COUNT` is the total over all queues.
+const _PENDING_UNCLONES = Ref{Vector{Vector{Ptr{Int}}}}(Vector{Ptr{Int}}[])
 const _PENDING_LOCK = Threads.SpinLock()
 const _PENDING_COUNT = Threads.Atomic{Int}(0)
+
+# Above this many queued clones, a caller nudges the owning workers (an empty
+# job, which drains their queue): an idle thread's clones would otherwise wait
+# for that thread's next PARI call.
+const _NUDGE_THRESHOLD = 1024
+# Per-context "already nudged, not drained yet" flags, under `_PENDING_LOCK`,
+# so a busy worker is sent one empty job, not one per caller.
+const _NUDGED = Ref{Vector{Bool}}(Bool[])
 
 # The shared job loop: serve `chan` one job at a time. `invokelatest` — the
 # worker task's world age is frozen at its creation, but jobs carry closures
 # defined later in caller code, which must run in the latest world.
-function _serve(chan::Channel{_PariJob}; primary::Bool = false)
+function _serve(chan::Channel{_PariJob}, slot::Int)
     for job in chan
-        primary && _drain_unclones!()
+        _drain_unclones!(slot)
         if job.reply === nothing
             try
                 Base.invokelatest(job.work)   # fire-and-forget (a `gunclone`)
@@ -86,7 +95,7 @@ function _pari_primary_loop(parisize::Integer, chan::Channel{_PariJob})
     finally
         notify(_PARI_READY[])   # release `__init__`, success or not
     end
-    _serve(chan; primary = true)
+    _serve(chan, Threads.threadid())
     return nothing
 end
 
@@ -99,7 +108,7 @@ function _pari_secondary_loop(
 )
     ccall((:pari_thread_start, PARI_jll.libpari), Ptr{Int}, (Ptr{Cvoid},), pt)
     put!(ready, true)
-    _serve(chan)
+    _serve(chan, Threads.threadid())
     ccall((:pari_thread_close, PARI_jll.libpari), Cvoid, ())
     return nothing
 end
@@ -131,6 +140,8 @@ function _start_pari_worker_pool!(parisize::Integer)
     # The primary worker — sticky (`@async`) to the thread `__init__` runs on.
     primary = Threads.threadid()
     _PARI_PRIMARY[] = primary
+    _PENDING_UNCLONES[] = [Ptr{Int}[] for _ = 1:maxN]
+    _NUDGED[] = fill(false, maxN)
     reqs[primary] = Channel{_PariJob}(Inf)
     workers[primary] =
         @async _pari_primary_loop(parisize, reqs[primary]::Channel{_PariJob})
@@ -189,6 +200,12 @@ end
     return _PARI_PRIMARY[]
 end
 
+# The slot of the PARI context the calling code runs on — the owner of any
+# clone it makes. Inside a worker job that is the worker's own thread.
+@inline _current_owner() =
+    isassigned(_PARI_WORKERS) ? _worker_slot(Threads.threadid()) :
+    _PARI_PRIMARY[]
+
 # Run `f` on the PARI worker for the calling thread and return its result.
 # Reached from arbitrary Julia threads; calls from different threads land on
 # different workers and run in parallel. Runs `f` directly — no marshalling —
@@ -203,6 +220,7 @@ function _run_on_pari(f::F) where {F}
     if worker === nothing || current_task() === worker || istaskdone(worker)
         return f()
     end
+    _PENDING_COUNT[] > _NUDGE_THRESHOLD && _nudge_owners!(slot)
     reply = Channel{Tuple{Bool,Any}}(1)
     put!(_PARI_REQUESTS[][slot]::Channel{_PariJob}, _PariJob(f, reply))
     ok, payload = take!(reply)
@@ -230,56 +248,107 @@ end
 
 # Run `f` on the **primary** worker specifically — used for `pari_close`,
 # which must run on the context `pari_init` created.
-function _run_on_primary(f)
+_run_on_primary(f) = _run_on_slot(f, _PARI_PRIMARY[])
+
+# Run `f` on the worker of context `slot` and return its result; directly
+# when there is no pool yet, when already on that worker, or when it has no
+# live worker. A direct run first frees the clones that context owns, as the
+# worker would before a job.
+function _run_on_slot(f, slot::Int)
     if !isassigned(_PARI_WORKERS)
-        _drain_unclones!()
+        _drain_unclones!(slot)
         return f()
     end
-    primary = _PARI_WORKERS[][_PARI_PRIMARY[]]
-    if primary === nothing || current_task() === primary || istaskdone(primary)
-        _drain_unclones!()
+    workers = _PARI_WORKERS[]
+    worker = 1 <= slot <= length(workers) ? workers[slot] : nothing
+    if worker === nothing || current_task() === worker || istaskdone(worker)
+        _drain_unclones!(slot)
         return f()
     end
     reply = Channel{Tuple{Bool,Any}}(1)
-    put!(
-        _PARI_REQUESTS[][_PARI_PRIMARY[]]::Channel{_PariJob},
-        _PariJob(f, reply),
-    )
+    put!(_PARI_REQUESTS[][slot]::Channel{_PariJob}, _PariJob(f, reply))
     ok, payload = take!(reply)
     ok || throw(payload)
     return payload
 end
 
-# Queue the clone `ptr` of a finalized `Gen` for the primary worker to
-# `gunclone`. Called from finalizers: takes only a spin lock, never blocks,
-# never switches tasks. PARI's clone/block list is thread-local; freeing
-# every clone on the primary worker (which also makes every `gclone`, via
-# `_run_on_primary`) frees each block on the thread that created it.
-function _defer_gunclone(ptr::Ptr{Int})
+# Have every worker free the clones it owns, and wait for it (tests,
+# diagnostics, before measuring PARI's heap).
+function _drain_all!()
+    if !isassigned(_PARI_WORKERS)
+        _drain_unclones!(_PARI_PRIMARY[])
+        return nothing
+    end
+    for slot in eachindex(_PARI_WORKERS[])
+        _PARI_WORKERS[][slot] === nothing || _run_on_slot(() -> nothing, slot)
+    end
+    return nothing
+end
+
+# Queue the clone `ptr` of a finalized `Gen` for its owning context's worker
+# to `gunclone`. Called from finalizers: takes only a spin lock, never blocks,
+# never switches tasks. An owner without a queue (none started yet) falls
+# back to the primary's.
+function _defer_gunclone(ptr::Ptr{Int}, owner::Int)
     lock(_PENDING_LOCK)
     try
-        push!(_PENDING_UNCLONES[], ptr)
-        Threads.atomic_add!(_PENDING_COUNT, 1)
+        queues = _PENDING_UNCLONES[]
+        slot = 1 <= owner <= length(queues) ? owner : _PARI_PRIMARY[]
+        if 1 <= slot <= length(queues)
+            push!(queues[slot], ptr)
+            Threads.atomic_add!(_PENDING_COUNT, 1)
+        end
     finally
         unlock(_PENDING_LOCK)
     end
     return nothing
 end
 
-# On the primary worker (or with no pool yet): `gunclone` the queued clones.
-# The batch is swapped out under the spin lock without allocating in it, and
-# freed outside it. After `pari_close` the clones are already gone with PARI's
-# memory, so they are dropped rather than freed twice.
-function _drain_unclones!()
+# On the worker of context `slot` (or with no pool yet): `gunclone` the clones
+# that context owns. The batch is swapped out under the spin lock without
+# allocating in it, and freed outside it. After `pari_close` the clones are
+# already gone with PARI's memory, so they are dropped rather than freed twice.
+function _drain_unclones!(slot::Int)
     _PENDING_COUNT[] == 0 && return nothing
+    queues = _PENDING_UNCLONES[]
+    1 <= slot <= length(queues) || return nothing
+    isempty(queues[slot]) && return nothing
     fresh = Ptr{Int}[]
     lock(_PENDING_LOCK)
-    batch = _PENDING_UNCLONES[]
-    _PENDING_UNCLONES[] = fresh
-    _PENDING_COUNT[] = 0
+    batch = queues[slot]
+    queues[slot] = fresh
+    _NUDGED[][slot] = false
+    Threads.atomic_sub!(_PENDING_COUNT, length(batch))
     unlock(_PENDING_LOCK)
     if library_state() == LibraryState.INITIALIZED
         foreach(_gunclone, batch)
+    end
+    return nothing
+end
+
+# Wake every other worker that has clones queued, with an empty job: a worker
+# drains its queue before each job. Called from ordinary (non-finalizer) code,
+# where `put!` is allowed, once enough clones are pending.
+function _nudge_owners!(self::Int)
+    queues = _PENDING_UNCLONES[]
+    workers = _PARI_WORKERS[]
+    reqs = _PARI_REQUESTS[]
+    pending = falses(length(queues))
+    nudged = _NUDGED[]
+    lock(_PENDING_LOCK)
+    for i in eachindex(queues)
+        if i != self && !isempty(queues[i]) && !nudged[i]
+            pending[i] = nudged[i] = true
+        end
+    end
+    unlock(_PENDING_LOCK)
+    for i in eachindex(queues)
+        if pending[i] &&
+           i <= length(workers) &&
+           workers[i] !== nothing &&
+           !istaskdone(workers[i]::Task)
+            put!(reqs[i]::Channel{_PariJob}, _PariJob(() -> nothing, nothing))
+        end
     end
     return nothing
 end

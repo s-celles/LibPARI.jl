@@ -11,11 +11,13 @@
     @test LibPARI.Gen <: LibPARI.PariObject
     @test !(LibPARI.Gen <: Number)
 
-    # REQ-MEM-02 is unchanged: concrete, mutable, single-field and
-    # unparameterised — no `Gen{T}` per PARI type tag.
+    # REQ-MEM-02 is unchanged: concrete, mutable and unparameterised — no
+    # `Gen{T}` per PARI type tag. Two concrete fields: the clone, and the
+    # PARI context that owns it (clone lists are per context).
     @test isconcretetype(LibPARI.Gen)
     @test ismutabletype(LibPARI.Gen)
-    @test fieldcount(LibPARI.Gen) == 1
+    @test fieldnames(LibPARI.Gen) == (:ptr, :owner)
+    @test fieldtypes(LibPARI.Gen) == (Ptr{Int}, Int)
     @test !(LibPARI.Gen isa UnionAll)
 end
 

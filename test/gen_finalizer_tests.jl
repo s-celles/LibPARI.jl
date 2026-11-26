@@ -39,20 +39,25 @@
     @test !occursin("error in running finalizer", err)
     @test isempty(err)
     @test g.ptr == C_NULL
-    # The queued clone is freed by the next call that reaches the primary
-    # worker, and the library stays healthy.
+    # The queued clone is freed by the next call that reaches its owning
+    # worker (`g` was built here, on the primary), and the library stays
+    # healthy.
     @test BigInt(LibPARI.Gen(7)) == 7
     @test LibPARI._pending_unclones() == 0
 end
 
-@testitem "clones of collected Gens are freed by the primary worker" begin
+@testitem "clones of collected Gens are freed by their owning worker" begin
     using LibPARI
     for _ = 1:3
         gens = [LibPARI.Gen(big(10)^30 + i) for i = 1:500]
+        @test all(g -> g.owner == gens[1].owner, gens)   # one context made them
         @test BigInt(gens[end]) == big(10)^30 + 500
         gens = nothing
         GC.gc()
-        @test BigInt(LibPARI.Gen(11)) == 11   # drains the queue
+        # The next call on the owning context drains its queue; other
+        # contexts drain theirs at their next job (`_drain_all!` waits).
+        @test BigInt(LibPARI.Gen(11)) == 11
+        LibPARI._drain_all!()
         @test LibPARI._pending_unclones() == 0
     end
 end
