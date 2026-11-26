@@ -120,6 +120,21 @@ end
     @test help isa AbstractString
     @test !isempty(strip(help))
 
+    # A client asks by GP name. When the binding carries a different C-Name
+    # (GP `isprime` is `PARI.gisprime`, GP `factor` is `PARI.factor0`), the
+    # help is still found, through the GP signature that opens PARI's help
+    # text.
+    for gp in ("isprime", "factor")
+        h = ext._help_handler(Dict{String,Any}("name" => gp))
+        @test h isa AbstractString
+        @test startswith(h, gp * "(")
+    end
+    # The binding name keeps working too.
+    @test startswith(
+        ext._help_handler(Dict{String,Any}("name" => "gisprime")),
+        "isprime(",
+    )
+
     unknown =
         ext._help_handler(Dict{String,Any}("name" => "no_such_pari_function"))
     @test unknown isa ModelContextProtocol.CallToolResult
