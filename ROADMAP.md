@@ -24,32 +24,35 @@ not derived from `spec-ears.md` but introduces its own requirement families.
   *every* milestone rather than waiting for a dedicated phase.
 - Status legend: `[ ]` not started · `[~]` in progress · `[x]` done.
 
-## Current status (2026-07-31, package version 0.16.0)
+## Current status (2026-11-26, package version 0.18.2)
 
 **Part I (M0–M10) is complete.** Every deliverable shipped, in milestone
 order, in releases `0.1.0` … `0.11.0`; the work that followed
 (`0.12.0` … `0.15.1`) is listed under
 [Delivered beyond Part I](#delivered-beyond-part-i-0120--0151).
 
-**Part II (M11–M21) is in progress.** M11, M12, M13 and most of M14
-shipped together as **`0.16.0`** (2026-07-31). M15–M21 are not started;
-M14 keeps three deliverables open (modular arithmetic, the polynomial
-facade, the optional Primes.jl extension). M13 keeps one deliverable
-open — REQ-PREC-13, which collides with NFR-01; see the milestone. It is the
-API redesign that must land
-while the API can still change: an honest type contract for `Gen`,
-precise conversion and
-promotion rules, precision-safe reals, `pari(x)`, ergonomic generated
-bindings, explicit GP state, idiomatic access to structured PARI objects,
-and — as optional extensions — the Symbolics.jl and Giac.jl bridges.
+**Part II (M11–M21) is mostly delivered.** M11, M12, M13 and most of M14
+shipped as **`0.16.0`** (2026-07-31); M15, M17, M18, M19, the rest of M14
+(the modular and polynomial facade) and the M16 documentation shipped as
+**`0.17.0`** (2026-07-31); `0.18.0` … `0.18.2` narrowed the Symbolics bridge
+to Symbolics 7, widened the MCP compat and fixed PARI's `nbthreads`. M16
+closed without a session API (see the milestone); M20 is delegated to
+Giac.jl; M21 is not started.
+
+**Since `0.18.2`** (unreleased on `main`, plus PARI 2.19 in review): the
+multi-threading work listed under
+[Delivered beyond the Part II plan](#delivered-beyond-the-part-ii-plan-unreleased)
+— error safety without the C trap shim, the shim on Windows, per-context
+clones, PARI's own parallel engine — and the move to PARI 2.19.
 
 One deviation from the exit criteria, recorded here rather than silently
 ticked: the per-milestone tags `v0.1.0` … `v0.11.0` were **never created**.
 Tagging was deferred milestone after milestone (the suite was not reliably
 green until M9/M10), and once the package was registered in the General
 registry the repository switched to TagBot, which tags from registry
-merges. The only tag in the repository is `v0.15.1`. Each milestone's
-release is therefore identified by its `CHANGELOG.md` entry, not by a tag.
+merges. Tags exist from `v0.15.1` on (`v0.17.0` … `v0.18.2` by TagBot;
+`v0.16.0` was not tagged). Earlier milestones' releases are identified by
+their `CHANGELOG.md` entry, not by a tag.
 
 # Part I — building the wrapper (M0–M10, delivered)
 
@@ -119,7 +122,7 @@ REQ-QA-04, REQ-QA-05, REQ-QA-06, REQ-PLT-02.
 - `JuliaFormatter` reports no diff; pre-commit hooks pass locally.
 - Tag `v0.1.0` — **not created**; the release is identified by its
   `CHANGELOG.md` [0.1.0] entry (2026-05-20). See
-  [Current status](#current-status-2026-07-30-package-version-0151).
+  [Current status](#current-status-2026-11-26-package-version-0182).
 
 ---
 
@@ -153,7 +156,7 @@ shuts down cleanly.
   failure path.
 - Tag `v0.2.0` — **not created**; the release is identified by its
   `CHANGELOG.md` [0.2.0] entry (2026-05-20). See
-  [Current status](#current-status-2026-07-30-package-version-0151).
+  [Current status](#current-status-2026-11-26-package-version-0182).
 
 ---
 
@@ -188,7 +191,7 @@ leak-free stack discipline.
   and no heap growth (early evidence toward NFR-02).
 - Tag `v0.3.0` — **not created**; the release is identified by its
   `CHANGELOG.md` [0.3.0] entry (2026-05-20). See
-  [Current status](#current-status-2026-07-30-package-version-0151).
+  [Current status](#current-status-2026-11-26-package-version-0182).
 
 ---
 
@@ -218,7 +221,7 @@ error becomes a Julia exception.
   message, category, and stack consistency afterwards.
 - Tag `v0.4.0` — **not created**; the release is identified by its
   `CHANGELOG.md` [0.4.0] entry (2026-05-20). See
-  [Current status](#current-status-2026-07-30-package-version-0151).
+  [Current status](#current-status-2026-11-26-package-version-0182).
 
 ---
 
@@ -261,7 +264,7 @@ error becomes a Julia exception.
 - Generated binding count recorded toward NFR-01 (≥ 1200 functions).
 - Tag `v0.5.0` — **not created**; the release is identified by its
   `CHANGELOG.md` [0.5.0] entry (2026-05-20). See
-  [Current status](#current-status-2026-07-30-package-version-0151).
+  [Current status](#current-status-2026-11-26-package-version-0182).
 
 ---
 
@@ -286,7 +289,7 @@ error becomes a Julia exception.
 - Round-trip and lossy-conversion tests pass.
 - Tag `v0.6.0` — **not created**; the release is identified by its
   `CHANGELOG.md` [0.6.0] entry (2026-05-20). See
-  [Current status](#current-status-2026-07-30-package-version-0151).
+  [Current status](#current-status-2026-11-26-package-version-0182).
 
 ---
 
@@ -313,7 +316,7 @@ error becomes a Julia exception.
 - Arithmetic, promotion, comparison, and display tests pass.
 - Tag `v0.7.0` — **not created**; the release is identified by its
   `CHANGELOG.md` [0.7.0] entry (2026-05-20). See
-  [Current status](#current-status-2026-07-30-package-version-0151).
+  [Current status](#current-status-2026-11-26-package-version-0182).
 
 ---
 
@@ -338,7 +341,7 @@ error becomes a Julia exception.
   GP-closure-argument function unreachable via bindings.
 - Tag `v0.8.0` — **not created**; the release is identified by its
   `CHANGELOG.md` [0.8.0] entry (2026-05-20). See
-  [Current status](#current-status-2026-07-30-package-version-0151).
+  [Current status](#current-status-2026-11-26-package-version-0182).
 
 ---
 
@@ -364,7 +367,7 @@ error becomes a Julia exception.
 - Inference tests (e.g. `@inferred`) pass across the public surface.
 - Tag `v0.9.0` — **not created**; the release is identified by its
   `CHANGELOG.md` [0.9.0] entry (2026-05-20). See
-  [Current status](#current-status-2026-07-30-package-version-0151).
+  [Current status](#current-status-2026-11-26-package-version-0182).
 
 ---
 
@@ -395,7 +398,7 @@ multi-threaded Julia.
   `--threads=auto` CI step on all three OSes.
 - Tag `v0.10.0` — **not created**; the release is identified by its
   `CHANGELOG.md` [0.10.0] entry (2026-05-20). See
-  [Current status](#current-status-2026-07-30-package-version-0151).
+  [Current status](#current-status-2026-11-26-package-version-0182).
 
 ---
 
@@ -497,12 +500,12 @@ never existed, and the remaining milestones will renumber the same way.
 | M11 | Honest type contract for `Gen`             | 0.16.0         | **released** in `0.16.0` |
 | M12 | Conversion & promotion contracts           | 0.17.0         | **released** in `0.16.0` |
 | M13 | Precision-safe reals & a bit-based precision API | 0.18.0    | **released** in `0.16.0` |
-| M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | **released** in `0.16.0`; facade completed since |
-| M15 | Generated-binding argument ergonomics      | 0.20.0         | **done** (unreleased) |
-| M16 | Explicit GP evaluation sessions            | 0.21.0         | **closed** — no session API; process isolation documented |
-| M17 | Structured PARI objects                    | 0.22.0         | **done** (unreleased) |
-| M18 | Display contract                           | 0.23.0         | **done** (unreleased) |
-| M19 | Symbolics.jl bridge (optional extension)   | 0.24.0         | **done** (unreleased) |
+| M14 | `pari(x)`, the public surface, and a small facade | 0.19.0  | **released** in `0.16.0`; facade completed in `0.17.0` |
+| M15 | Generated-binding argument ergonomics      | 0.20.0         | **released** in `0.17.0` |
+| M16 | Explicit GP evaluation sessions            | 0.21.0         | **closed** — no session API; process isolation documented (`0.17.0`) |
+| M17 | Structured PARI objects                    | 0.22.0         | **released** in `0.17.0` |
+| M18 | Display contract                           | 0.23.0         | **released** in `0.17.0` |
+| M19 | Symbolics.jl bridge (optional extension)   | 0.24.0         | **released** in `0.17.0`; Symbolics 7 only since `0.18.0` |
 | M20 | Giac.jl bridge (optional extension)        | —              | **delegated** — shipped in Giac.jl as `GiacLibPARIExt` |
 | M21 | Documentation & release hygiene             | 0.x            | not started |
 
@@ -1868,3 +1871,53 @@ Work shipped after M10, not part of the M0–M10 plan:
       became hard gates.
 - [x] `0.15.1` — cold-runner fix for the three generator subprocess test
       items; TagBot and CompatHelper workflows added.
+
+## Delivered beyond the Part II plan (unreleased)
+
+Work merged on `main` after `0.18.2`, not part of the M11–M21 plan. See the
+`CHANGELOG.md` *Unreleased* section for the details and measurements.
+
+- [x] **`Gen` finalizers never switch tasks** (#19): a finalizer only queues
+      its clone; the owning worker frees it.
+- [x] **Errors on non-primary threads are safe without the C trap shim**
+      (#25). PARI counts every context started by `pari_thread_start` as a
+      worker of its own parallel engine, and its `mt_err_recover`
+      dereferences a NULL parallel state on such a context when no
+      `iferr_env` is armed. Without the shim, LibPARI now starts no
+      secondary context (serial, safe); `LIBPARI_DISABLE_TRAP=1` forces that
+      mode. This was the Windows crash probed in #9.
+- [x] **The trap shim builds on Windows** and is self-tested before use
+      (#26): import library in `bin/`, `-shared-libgcc` for MinGW's
+      emulated TLS, system headers before `pari.h`. Windows with a MinGW
+      `gcc` now gets one PARI context per thread.
+- [x] **Per-context clones** (#27): a `Gen` is cloned and freed on the PARI
+      context that produced it (`Gen.owner`), no longer on the primary,
+      which stalled every other thread (×2.0 multi-threaded speedup on 6
+      cores, up from ×1.0–1.5).
+- [x] **PARI's own parallel engine** (#28): `set_nbthreads!`, primary
+      context only, shim required, the engine reset after an error inside a
+      parallel section; new *Parallelism* documentation page.
+- [x] Release hygiene along the way: `llms.txt`/`llms-full.txt` (#21), a
+      minimal README (#20), JuliaFormatter `~2.14` in lock-step (#22), MCP
+      `pari_help` by GP name (#23).
+
+### In review
+
+- [~] **PARI 2.19** (#24, breaking, for `0.19.0`): bindings regenerated from
+      2.19.1's `pari.desc` (six renamed to their new C entry points);
+      `PARI_jll = "~200.1900"`. PARI_jll now maps upstream X.Y.Z to
+      X00.Y00.Z00, as FLINT_jll does, because PARI breaks its ABI between
+      minor releases (JuliaPackaging/Yggdrasil#15813).
+
+### Open follow-ups
+
+- [ ] Ship the trap shim prebuilt (a small JLL), so Windows users without a
+      C compiler get per-thread contexts and the parallel engine.
+- [ ] Report upstream to PARI: `mt_err_recover` assumes a non-NULL parallel
+      state on any thread started with `pari_thread_start`; `pari_CATCH`
+      leaves a parallel section open after an error inside it.
+- [ ] Giac.jl and LibPARI `0.19` share one `PARI_jll`: a GIAC_jll built
+      against `~200.1900.100` is needed before both load together
+      (Giac.jl's `GiacLibPARIExt`).
+- [ ] CompatHelper #18 (DocStringExtensions 0.10) waits for Symbolics to
+      allow it.
