@@ -66,26 +66,44 @@ end
 @testitem "the engine runs a parallel section on extra OS threads" begin
     using LibPARI
     # Counting OS threads needs /proc; elsewhere the tests above cover
-    # correctness.
-    if LibPARI._TRAP_AVAILABLE[] && Sys.islinux()
+    # correctness. The count is sampled from another Julia thread while the
+    # primary runs the section, so this runs in a child with 3 threads (the
+    # test process may have only one, the primary's).
+    if Sys.islinux()
+        project = pkgdir(LibPARI)
+        code = """
+        using LibPARI
+        const L = LibPARI
+        L._TRAP_AVAILABLE[] || (print("no-trap"); exit(0))
         ostasks() = length(readdir("/proc/self/task"))
+        primary = L._PARI_PRIMARY[]
+        L.set_nbthreads!(4)
+        before = ostasks()
+        peak = Threads.Atomic{Int}(before)
         work = "parapply(n -> #factor(2^150 + 2*n + 1)[,1], [1..32])"
-        LibPARI.set_nbthreads!(4)
-        try
-            before = ostasks()
-            peak = Threads.Atomic{Int}(before)
-            done = Threads.Atomic{Bool}(false)
-            sampler = Threads.@spawn while !done[]
+        section = @async L.gp_eval(work)       # runs on the primary context
+        Threads.@threads :static for i = 1:Threads.nthreads()
+            Threads.threadid() == primary && continue
+            while !istaskdone(section)
                 Threads.atomic_max!(peak, ostasks())
                 sleep(0.002)
             end
-            gp_eval(work)
-            done[] = true
-            wait(sampler)
-            @test peak[] >= before + 3       # PARI's worker pthreads
-            @test ostasks() <= before + 1    # and they are gone again
-        finally
-            LibPARI.set_nbthreads!(1)
+        end
+        wait(section)
+        print(before, ",", peak[], ",", ostasks())
+        """
+        out = strip(
+            read(
+                `$(Base.julia_cmd()) --project=$(project) --startup-file=no --threads=3 -e $(code)`,
+                String,
+            ),
+        )
+        if out == "no-trap"
+            @test true
+        else
+            before, peak, after = parse.(Int, split(out, ","))
+            @test peak >= before + 3     # PARI's worker pthreads
+            @test after <= before + 1    # and they are gone again
         end
     else
         @test true
