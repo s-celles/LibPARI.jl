@@ -8,7 +8,19 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- **`llms.txt` and `llms-full.txt`**, following the
+  [llmstxt.org](https://llmstxt.org) convention, are generated from the
+  documentation sources by `docs/llms.jl` at every docs build and published
+  at the site root: the first indexes the pages, the second concatenates
+  them.
+
 ### Changed
+
+- **The documentation home page reads the version from the package.** The
+  "Status" section said `0.18.0` while the package was at `0.18.2`; it now
+  prints `pkgversion(LibPARI)` at build time, so it cannot go stale again.
 
 - **The README is minimal.** It now holds only a one-line description,
   installation, a short example and links. The feature list already in the
