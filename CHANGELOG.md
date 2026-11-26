@@ -10,6 +10,13 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **A `justfile`** with the main development entry points, each running what
+  CI runs: `test`, `test-threads`, `test-no-trap`, `docs`, `format`,
+  `format-check`, `generate`, `check` and `clean`. `docs/Project.toml` now
+  declares `[sources] LibPARI = {path = ".."}`, which `Pkg.develop(path =
+  ".")` writes anyway on Julia 1.11+, so building the docs no longer leaves
+  the file modified.
+
 - **`LibPARI.set_nbthreads!(n)` turns on PARI's own parallel engine.**
   `PARI_jll` is built with PARI's `pthread` engine, which LibPARI keeps off
   (`nbthreads() == 1`). With `n > 1`, PARI runs its parallel GP functions
