@@ -169,7 +169,8 @@ end
     # `public` needs Julia 1.11; on the 1.10 LTS floor the declaration is
     # skipped, so this only asserts what the running version can express.
     if VERSION >= v"1.11"
-        for n in (:PARI, :gentype, :isexact, :nbits2prec, :factors)
+        for n in
+            (:PARI, :gentype, :isexact, :nbits2prec, :factors, :set_nbthreads!)
             @test Base.ispublic(LibPARI, n)
             @test !Base.isexported(LibPARI, n)
         end

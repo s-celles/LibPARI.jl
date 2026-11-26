@@ -238,4 +238,59 @@ using LibPARI
         @test errs + vals == 64
         LibPARI._TRAP_AVAILABLE[] || @test vals == 64   # all on the primary
     end
+
+    # --- PARI'S OWN PARALLEL ENGINE (`set_nbthreads!`) ----------------------
+    #
+    # The primary context runs parallel sections — some failing, which PARI
+    # leaves open and LibPARI must close — while every other thread computes
+    # and fails on its own context. Errors on those contexts must not touch
+    # the primary's section (resetting it would cancel live PARI workers).
+    @testset "PARI parallel sections alongside work on other threads" begin
+        if LibPARI._TRAP_AVAILABLE[] && nt > 1
+            LibPARI.set_nbthreads!(4)
+            try
+                stop = Threads.Atomic{Bool}(false)
+                ok = Threads.Atomic{Int}(0)
+                bad = Threads.Atomic{Int}(0)
+                others = [
+                    Threads.@spawn begin
+                        while !stop[]
+                            try
+                                LibPARI.gp_eval(
+                                    rand(Bool) ? "1/0" : "factor(2^90+7)",
+                                )
+                                Threads.atomic_add!(ok, 1)
+                            catch e
+                                e isa LibPARI.PariError || rethrow()
+                                Threads.atomic_add!(bad, 1)
+                            end
+                        end
+                    end for _ = 1:(nt-1)
+                ]
+                work = "parapply(n -> #factor(2^120 + 2*n + 1)[,1], [1..24])"
+                expected = LibPARI.gp_eval(replace(work, "parapply" => "apply"))
+                right = 0
+                for i = 1:30
+                    if i % 3 == 0
+                        try
+                            LibPARI.gp_eval("parapply(n -> 1/(n - 3), [1..8])")
+                        catch e
+                            e isa LibPARI.PariError || rethrow()
+                        end
+                    else
+                        right += LibPARI.gp_eval(work) == expected
+                    end
+                end
+                stop[] = true
+                foreach(wait, others)
+                @test right == 20
+                @test ok[] > 0 && bad[] > 0
+                @test !LibPARI._mt_is_parallel()
+            finally
+                LibPARI.set_nbthreads!(1)
+            end
+        else
+            @test true
+        end
+    end
 end

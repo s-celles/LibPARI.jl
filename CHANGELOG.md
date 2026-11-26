@@ -10,6 +10,18 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **`LibPARI.set_nbthreads!(n)` turns on PARI's own parallel engine.**
+  `PARI_jll` is built with PARI's `pthread` engine, which LibPARI keeps off
+  (`nbthreads() == 1`). With `n > 1`, PARI runs its parallel GP functions
+  (`parapply`, `parsum`, …) and its internally parallel algorithms (APRCL,
+  ECPP, multimodular linear algebra, `bnfinit`, L-functions, …) on worker
+  threads; measured on 6 cores, 2.3–3.6× faster on an APRCL proof, a 160×160
+  `matdet` and a `parapply`. Only calls on the primary context (Julia's main
+  task) use it. It requires the C trap shim, and refuses otherwise. A PARI
+  error inside a parallel section, which PARI leaves open, now closes it
+  (`mt_queue_reset`), so the next parallel call is parallel again. New
+  documentation page: *Parallelism*.
+
 - **`llms.txt` and `llms-full.txt`**, following the
   [llmstxt.org](https://llmstxt.org) convention, are generated from the
   documentation sources by `docs/llms.jl` at every docs build and published

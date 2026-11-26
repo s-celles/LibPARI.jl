@@ -24,6 +24,7 @@ const PAGES = [
     "Getting started" => "getting-started.md",
     "API reference" => "api.md",
     "Precision" => "precision.md",
+    "Parallelism" => "parallelism.md",
     "GP state and sessions" => "gp-state.md",
     "MCP connector" => "mcp.md",
     "About" => "about.md",
