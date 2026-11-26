@@ -186,6 +186,7 @@ PARI's `nbthreads` — the number of threads its own parallel dispatch will use.
 LibPARI pins this to 1 at initialization: PARI's threading engine is
 deliberately not started (`INIT_noIMTm`), and the value PARI is otherwise left
 holding, 0, makes its parallel code paths crash. See [`_pin_nbthreads!`](@ref).
+[`set_nbthreads!`](@ref) raises it to let PARI parallelize.
 
 # Examples
 
@@ -198,6 +199,66 @@ julia> LibPARI.nbthreads()
 """
 function nbthreads()
     return Int(BigInt(gp_eval("default(nbthreads)")))
+end
+
+"""
+$(TYPEDSIGNATURES)
+
+Let PARI's own parallel engine use up to `n` threads, and return the previous
+setting. `n = 1` (the default) turns it off again.
+
+With `n > 1`, PARI runs its parallel GP functions (`parapply`, `parsum`,
+`parfor`, `parvector`, …) and its internally parallel algorithms (APRCL and
+ECPP primality proofs, multimodular linear algebra, `bnfinit`, L-functions,
+…) on worker threads it starts for each parallel section and stops at its
+end. Results are the same as with `n = 1`.
+
+Only calls that run on the **primary** PARI context use it: those made from
+the task that loaded LibPARI (Julia's main task) — PARI treats the context
+of every other Julia thread as one of its own workers, which do not nest, so
+calls from there run serially. Each worker thread gets a PARI stack of the
+size of the main one (see `LIBPARI_STACK_SIZE`). A PARI error inside a
+parallel section is raised as a [`PariError`](@ref) and the engine is reset,
+ready for the next call.
+
+Requires LibPARI's C trap shim (see the *Parallelism* page); without it this
+throws for `n > 1`.
+
+# Examples
+
+```jldoctest
+julia> using LibPARI
+
+julia> old = LibPARI.set_nbthreads!(4); LibPARI.nbthreads()
+4
+
+julia> gp_eval("parsum(k = 1, 100, k^2)")
+338350
+
+julia> LibPARI.set_nbthreads!(old)
+4
+```
+"""
+function set_nbthreads!(n::Integer)
+    n >= 1 || throw(ArgumentError("nbthreads must be at least 1, got $(n)"))
+    if n > 1 && !_TRAP_AVAILABLE[]
+        error(
+            "PARI's parallel engine needs LibPARI's C trap shim, which is " *
+            "not in use here: $(_TRAP_STATUS[]). See the Parallelism page " *
+            "of the documentation.",
+        )
+    end
+    old = nbthreads()
+    _run_on_primary(
+        () -> ccall(
+            (:sd_nbthreads, PARI_jll.libpari),
+            Cstring,
+            (Cstring, Cint),
+            string(n),
+            0,                 # d_SILENT
+        ),
+    )
+    return old
 end
 
 """

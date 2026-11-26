@@ -175,6 +175,25 @@ function _trap_selftest()
     return errnum[] >= 0
 end
 
+# PARI's parallel engine (see `set_nbthreads!`) is open: a parallel section
+# is running, or was left open.
+_mt_is_parallel() = ccall((:mt_is_parallel, PARI_jll.libpari), Cint, ()) != 0
+
+# After a PARI error caught on the primary context, close the parallel
+# section PARI may have left open: an error raised inside a section reaches
+# the caller through `pari_err`, and `pari_CATCH` does not reset PARI's
+# parallel state, so its worker threads would stay up and every later
+# parallel call would silently run serially. Only the primary context opens
+# sections (the others count as PARI workers), and it runs one job at a time,
+# so a section still open after its own error is that call's, and stale. On
+# any other context it would be the primary's running section: left alone.
+function _close_parallel_section!()
+    Threads.threadid() == _PARI_PRIMARY[] || return nothing
+    _mt_is_parallel() || return nothing
+    ccall((:mt_queue_reset, PARI_jll.libpari), Cvoid, ())
+    return nothing
+end
+
 # Reinterpret the shim's pointer-sized result to a binding's declared
 # return type. `R` is a compile-time type parameter, so the branch folds
 # away — the boundary stays type-stable.
@@ -243,9 +262,9 @@ function _trap_call(
         if errnum[] >= 0
             # Read PARI's message while the error object is still live,
             # before `protected_call` resets `avma`.
-            throw(
-                PariError(_err_message(_pari_err_last()), _category(errnum[])),
-            )
+            err = PariError(_err_message(_pari_err_last()), _category(errnum[]))
+            _close_parallel_section!()
+            throw(err)
         end
         return _trap_reinterpret(R, r)
     else

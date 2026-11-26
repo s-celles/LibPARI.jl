@@ -43,30 +43,18 @@ LibPARI.nbthreads()        # 1 — PARI's own parallel dispatch is off
 Julia level instead, one PARI context per OS thread. But `INIT_noIMTm` on its
 own leaves the value at `0`, which PARI's parallel code paths do not read as
 "serial" — they dispatch into a worker pool that was never created. Pinning it
-to 1 makes those paths degrade to serial, which is what was intended all
-along.
+to 1 makes those paths degrade to serial. [`LibPARI.set_nbthreads!`](@ref)
+turns PARI's engine on; see [Parallelism](@ref).
 
 The PARI main-stack size defaults to 8 MiB. To change it, set the
 `LIBPARI_STACK_SIZE` environment variable (a byte count) **before** the
 package is loaded.
 
-### Threads and the C compiler
+### Threads
 
-With several Julia threads, LibPARI gives each thread its own PARI context,
-so calls from different threads run in parallel. That relies on a small C
-shim which catches PARI errors safely on every thread; it is compiled when
-the package loads, with the first of `cc`, `gcc` or `clang` found on the
-`PATH`.
-
-On Windows, a MinGW-w64 `gcc` on the `PATH` (from MSYS2, for example) is
-enough. Before relying on the shim, LibPARI checks that it really catches a
-PARI error; if that check fails, the shim is not used.
-
-Without a working shim (no C compiler is often the case on Windows), LibPARI
-still works from any number of threads, but every PARI call runs on one
-context, one at a time: results and errors are the same, only the parallel
-speed-up is lost. Setting `LIBPARI_DISABLE_TRAP=1` before loading forces
-this mode.
+LibPARI gives each Julia thread its own PARI context, so calls from several
+threads run in parallel; with no C compiler available they run one at a
+time instead. See [Parallelism](@ref).
 
 ## A first tour
 
