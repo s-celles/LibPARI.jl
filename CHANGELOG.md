@@ -18,6 +18,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- **MCP `pari_help` finds a function by its GP name.** It looked the name up
+  among the bindings only, which carry PARI's C-Name, so a GP name that
+  differs failed: `isprime` (binding `gisprime`), `factor` (`factor0`). A
+  name that is not a binding is now matched through the GP signature opening
+  PARI's help text; binding names keep working.
+
 - **A `Gen` finalizer no longer switches tasks.** Finalization handed the
   `gunclone` to the primary PARI worker with `put!` on its request channel,
   and `put!` waits (yields) whenever the channel's lock is held by another

@@ -84,18 +84,33 @@ function _functions_handler(args)
     end
 end
 
+_is_binding(sym::Symbol) =
+    isdefined(LibPARI.PARI, sym) && getfield(LibPARI.PARI, sym) isa Function
+
+# The binding behind GP function `name`. Bindings are named after the C
+# function (GP `isprime` is `PARI.gisprime`, GP `factor` is `PARI.factor0`),
+# so a GP name that is not itself a binding is matched through PARI's help
+# text, which opens with the GP signature `name(...)`. Returns `nothing`
+# when no binding matches.
+function _binding_for(name::AbstractString)
+    sym = Symbol(name)
+    _is_binding(sym) && return sym
+    prefix = name * "("
+    for s in _pari_function_names()
+        help = _binding_docstring(LibPARI.PARI, s)
+        help !== nothing && startswith(help, prefix) && return s
+    end
+    return nothing
+end
+
 function _help_handler(args)
     name = args isa AbstractDict ? get(args, "name", nothing) : nothing
     name isa AbstractString ||
         return _tool_error("`pari_help` requires a string parameter `name`.")
     try
-        sym = Symbol(name)
-        if !(
-            isdefined(LibPARI.PARI, sym) &&
-            getfield(LibPARI.PARI, sym) isa Function
-        )
+        sym = _binding_for(String(name))
+        sym === nothing &&
             return _tool_error("PARI has no function named `$(name)`.")
-        end
         help = _binding_docstring(LibPARI.PARI, sym)
         return help === nothing ? "PARI function `$(name)` has no help text." :
                help
