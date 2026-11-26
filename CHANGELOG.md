@@ -46,7 +46,12 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - **BREAKING — LibPARI now runs on PARI 2.19.** `PARI_jll` compat moves from
-  `"2.17"` to `"2.19"` (PARI 2.19.1), and `src/bindings.jl` is regenerated
+  `"2.17"` to `"~200.1900"`: PARI 2.19.1, registered as `PARI_jll`
+  200.1900.100. PARI breaks its ABI between minor releases, so its JLL
+  version is decoupled from upstream (X.Y.Z → X00.Y00.Z00, as for
+  FLINT_jll) and LibPARI depends on it with a `~` range; this also keeps
+  LibPARI ≤ 0.18 (compat `"2.17"`) off the new library. `src/bindings.jl` is
+  regenerated
   from 2.19's `pari.desc`: 1235 bindings, up from 1194. The bindings keep
   their naming rule — the C-Name of each `pari.desc` entry — so the entries
   PARI 2.19 moved onto a new C function are renamed:
