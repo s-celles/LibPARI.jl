@@ -80,6 +80,32 @@ using LibPARI
         @test BigInt(LibPARI.Gen(7)) == 7   # library still healthy
     end
 
+    @testset "Gens collected on other threads while PARI is busy" begin
+        # Finalizers run on whichever thread collects garbage, while other
+        # threads queue jobs on the primary worker: a finalizer that waits
+        # for the request channel's lock would switch tasks inside the GC
+        # ("task switch not allowed from inside gc finalizer") and corrupt
+        # the scheduler. Each finalizer must only queue its clone.
+        for round = 1:5
+            busy = Threads.@spawn for i = 1:400
+                @assert BigInt(LibPARI.Gen(big(2)^100 + i)) == big(2)^100 + i
+            end
+            churn = [Threads.@spawn begin
+                for i = 1:200
+                    g = LibPARI.Gen(big(10)^30 + i)
+                    BigInt(g)
+                end
+                GC.gc(false)
+            end for _ = 1:max(nt, 2)]
+            GC.gc()
+            wait(busy)
+            foreach(wait, churn)
+            GC.gc()
+        end
+        @test BigInt(LibPARI.Gen(13)) == 13   # library still healthy
+        @test LibPARI._pending_unclones() == 0
+    end
+
     # --- CONCURRENT ERRORS (feature 014) ----------------------------------
     #
     # Concurrency-safe PARI error handling requires the C trap shim

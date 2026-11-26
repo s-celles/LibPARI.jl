@@ -68,7 +68,9 @@ Julia code in two complementary ways:
 - **Parallel and thread-safe.** Each Julia OS thread gets its own PARI
   context, so concurrent calls into the PARI library run in parallel on
   multiple cores — and a PARI error raised on any thread, even
-  simultaneously from many, is caught safely as a [`PariError`](@ref).
+  simultaneously from many, is caught safely as a [`PariError`](@ref). A
+  `Gen` may be collected on any thread: its finalizer only queues its
+  storage, which the primary PARI worker frees before its next job.
 - **Type-stable and precompiled** — built to SciML inference standards, with
   a precompilation workload for a fast first call.
 

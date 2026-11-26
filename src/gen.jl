@@ -95,10 +95,11 @@ end
 function _finalize!(g::Gen)
     if g.ptr != C_NULL
         if library_state() == LibraryState.INITIALIZED
-            ptr = g.ptr
-            # `gunclone` splices the process-global clone list — funnel it
-            # to the primary worker, the single thread that owns the list.
-            _enqueue_on_primary(() -> _gunclone(ptr))
+            # `gunclone` splices the process-global clone list, so the
+            # primary worker does it, the single thread that owns the list.
+            # A finalizer must not block or switch tasks: it only queues the
+            # clone (see `_defer_gunclone`).
+            _defer_gunclone(g.ptr)
         end
         g.ptr = C_NULL
     end

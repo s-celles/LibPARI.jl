@@ -8,6 +8,21 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- **A `Gen` finalizer no longer switches tasks.** Finalization handed the
+  `gunclone` to the primary PARI worker with `put!` on its request channel,
+  and `put!` waits (yields) whenever the channel's lock is held by another
+  task, e.g. a concurrent `libpari` call. Julia forbids a task switch inside
+  a finalizer: with several threads, collecting `Gen`s while other threads
+  called PARI printed `task switch not allowed from inside gc finalizer`,
+  then `schedule: Task not runnable`, left the scheduler corrupted and
+  crashed or hung the process. The finalizer now only pushes the clone onto a
+  queue guarded by a spin lock, which never yields; the primary worker frees
+  the queue before each job it runs, and in direct calls to
+  `_run_on_primary`. Clones of collected `Gen`s are therefore freed at the
+  next call that reaches the primary worker, not at once.
+
 ## [0.18.2] - 2026-08-08
 
 ### Fixed

@@ -39,11 +39,25 @@ const _PARI_WORKERS = Ref{Vector{Union{Task,Nothing}}}()
 const _PARI_PRIMARY = Ref{Int}(0)        # threadid of the primary worker
 const _PARI_READY = Ref{Base.Event}()    # primary "PARI is up" signal
 
+# Clones of finalized `Gen`s, waiting for the primary worker to `gunclone`
+# them. A finalizer must neither block nor switch tasks — Julia forbids a task
+# switch inside a finalizer, and `put!` on a `Channel` waits (yields) whenever
+# the channel's lock is held — so `Gen` finalization only pushes the pointer
+# here, under a spin lock (which never yields, so finalizers may take it).
+# The primary worker frees the queue before each job it runs
+# (`_drain_unclones!`). Nothing allocates while the lock is held except the
+# `push!` in `_defer_gunclone`, which runs in a finalizer, where the
+# collector does not run finalizers again.
+const _PENDING_UNCLONES = Ref{Vector{Ptr{Int}}}(Ptr{Int}[])
+const _PENDING_LOCK = Threads.SpinLock()
+const _PENDING_COUNT = Threads.Atomic{Int}(0)
+
 # The shared job loop: serve `chan` one job at a time. `invokelatest` — the
 # worker task's world age is frozen at its creation, but jobs carry closures
 # defined later in caller code, which must run in the latest world.
-function _serve(chan::Channel{_PariJob})
+function _serve(chan::Channel{_PariJob}; primary::Bool = false)
     for job in chan
+        primary && _drain_unclones!()
         if job.reply === nothing
             try
                 Base.invokelatest(job.work)   # fire-and-forget (a `gunclone`)
@@ -70,7 +84,7 @@ function _pari_primary_loop(parisize::Integer, chan::Channel{_PariJob})
     finally
         notify(_PARI_READY[])   # release `__init__`, success or not
     end
-    _serve(chan)
+    _serve(chan; primary = true)
     return nothing
 end
 
@@ -209,10 +223,12 @@ end
 # which must run on the context `pari_init` created.
 function _run_on_primary(f)
     if !isassigned(_PARI_WORKERS)
+        _drain_unclones!()
         return f()
     end
     primary = _PARI_WORKERS[][_PARI_PRIMARY[]]
     if primary === nothing || current_task() === primary || istaskdone(primary)
+        _drain_unclones!()
         return f()
     end
     reply = Channel{Tuple{Bool,Any}}(1)
@@ -225,24 +241,39 @@ function _run_on_primary(f)
     return payload
 end
 
-# Enqueue `f` on the **primary** worker without awaiting a result —
-# fire-and-forget, for `Gen` finalization. PARI's clone/block list is
-# process-global; routing every `gunclone` (and `gclone`, via
-# `_run_on_primary`) onto one worker keeps the list touched by a single
-# thread, with no lock and no cross-thread block-list race.
-function _enqueue_on_primary(f)
-    if !isassigned(_PARI_WORKERS)
-        f()
-        return nothing
-    end
-    primary = _PARI_WORKERS[][_PARI_PRIMARY[]]
-    if primary === nothing || current_task() === primary || istaskdone(primary)
-        f()
-    else
-        put!(
-            _PARI_REQUESTS[][_PARI_PRIMARY[]]::Channel{_PariJob},
-            _PariJob(f, nothing),
-        )
+# Queue the clone `ptr` of a finalized `Gen` for the primary worker to
+# `gunclone`. Called from finalizers: takes only a spin lock, never blocks,
+# never switches tasks. PARI's clone/block list is process-global; freeing
+# every clone on the primary worker (which also makes every `gclone`, via
+# `_run_on_primary`) keeps the list touched by a single thread.
+function _defer_gunclone(ptr::Ptr{Int})
+    lock(_PENDING_LOCK)
+    try
+        push!(_PENDING_UNCLONES[], ptr)
+        Threads.atomic_add!(_PENDING_COUNT, 1)
+    finally
+        unlock(_PENDING_LOCK)
     end
     return nothing
 end
+
+# On the primary worker (or with no pool yet): `gunclone` the queued clones.
+# The batch is swapped out under the spin lock without allocating in it, and
+# freed outside it. After `pari_close` the clones are already gone with PARI's
+# memory, so they are dropped rather than freed twice.
+function _drain_unclones!()
+    _PENDING_COUNT[] == 0 && return nothing
+    fresh = Ptr{Int}[]
+    lock(_PENDING_LOCK)
+    batch = _PENDING_UNCLONES[]
+    _PENDING_UNCLONES[] = fresh
+    _PENDING_COUNT[] = 0
+    unlock(_PENDING_LOCK)
+    if library_state() == LibraryState.INITIALIZED
+        foreach(_gunclone, batch)
+    end
+    return nothing
+end
+
+# Number of clones queued for freeing (for tests and diagnostics).
+_pending_unclones() = _PENDING_COUNT[]
