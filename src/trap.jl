@@ -24,9 +24,13 @@
 # pointer-sized intent explicit. The Julia side marshals these as `Int`,
 # never `Clong`: Julia's `Clong` is only 32-bit on Windows and would
 # truncate `GEN` pointers.
+#
+# `<stdint.h>` comes BEFORE `<pari/pari.h>`: on Windows 64-bit `parigen.h`
+# does `#define long long long`, which turns any `long long` a system header
+# included afterwards into `long long long` — a compile error.
 const _TRAP_C_SOURCE = """
-#include <pari/pari.h>
 #include <stdint.h>
+#include <pari/pari.h>
 intptr_t
 libpari_trap(void *fn, long n, long *errnum,
              long a0, long a1, long a2, long a3,

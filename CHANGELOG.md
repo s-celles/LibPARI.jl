@@ -39,7 +39,10 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 - **The C trap shim can build on Windows.** It was linked against
   `PARI_jll`'s `lib/` only, but on Windows the import library
-  `libpari.dll.a` is in `bin/`; the shim now searches both, and is built
+  `libpari.dll.a` is in `bin/`; and it included `<stdint.h>` after
+  `<pari/pari.h>`, whose `#define long long long` on Windows 64-bit breaks
+  any later system header. The shim now includes system headers first,
+  searches both directories, and is built
   with `-shared-libgcc` first so that on Windows it uses the same
   emulated-TLS runtime (`libgcc_s_seh-1.dll`) as libpari — with a static
   libgcc it would arm its own copy of PARI's `iferr_env`. A shim that
