@@ -8,6 +8,14 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- **The README is minimal.** It now holds only a one-line description,
+  installation, a short example and links. The feature list already in the
+  documentation home page stays there; the relationship to the PARI Group,
+  bug-reporting channels, the AI-assistance notice and the development notes
+  move to a new **About** page of the documentation.
+
 ### Fixed
 
 - **A `Gen` finalizer no longer switches tasks.** Finalization handed the

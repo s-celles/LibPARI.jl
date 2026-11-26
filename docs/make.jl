@@ -37,6 +37,7 @@ makedocs(;
         "Precision" => "precision.md",
         "GP state and sessions" => "gp-state.md",
         "MCP connector" => "mcp.md",
+        "About" => "about.md",
     ],
     doctest = true,
     # The ~1200 generated `LibPARI.PARI` bindings each carry PARI's `Help`
