@@ -882,9 +882,12 @@ the result the tool returns.
 !!! note
     `pari_eval` speaks the full GP language, so it reaches every PARI
     function (`factor`, `sum`, …). `pari_functions` and `pari_help` introspect
-    the **generated binding layer**, whose names are PARI's C-level names — a
-    few GP names (such as `factor`) are not binding names there, even though
-    they work inside a `pari_eval` expression.
+    the **generated binding layer**, whose names are PARI's C-level names:
+    `pari_functions` lists `gisprime` and `factor0`, not `isprime` and
+    `factor`. `pari_help` accepts either form — a GP name that is not a
+    binding name is matched through the GP signature opening PARI's help
+    text. Functions taking a GP closure (`sum`, …) have no binding, so
+    neither tool sees them, even though they work inside `pari_eval`.
 
 ## Entry point
 
