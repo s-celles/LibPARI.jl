@@ -23,7 +23,7 @@
 # from the commit below, to compile the shim at load when the prebuilt one is
 # missing or unusable. They are read here, at precompilation; a change to
 # either triggers recompilation of the package.
-const _TRAP_UPSTREAM = "s-celles/libpari-trap fc456c2e3035a47808a7fa1e6ded5e5049f63ae4"
+const _TRAP_UPSTREAM = "s-celles/libpari-trap ca56b0927b278c3c4970b650b471f890016a2913"
 const _TRAP_C_FILE = joinpath(@__DIR__, "libpari_trap", "libpari_trap.c")
 const _TRAP_H_FILE = joinpath(@__DIR__, "libpari_trap", "libpari_trap.h")
 include_dependency(_TRAP_C_FILE)

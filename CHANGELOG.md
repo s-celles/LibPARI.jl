@@ -20,7 +20,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **The shim is its own project,
   [libpari-trap](https://github.com/s-celles/libpari-trap)**
   (GPL-2.0-or-later), which PARI_jll builds. LibPARI vendors its
-  `libpari_trap.h` and `libpari_trap.c` in `src/libpari_trap/` for the
+  `libpari_trap.h` and `libpari_trap.c` (libpari-trap 0.1.0) in
+  `src/libpari_trap/` for the
   compile-at-load fallback, replacing `src/libpari_trap.c`. Same binary
   interface (ABI version 1); its arguments are now `intptr_t` and its
   constants named (`LIBPARI_TRAP_NARGS_*`, `LIBPARI_TRAP_OK`).
