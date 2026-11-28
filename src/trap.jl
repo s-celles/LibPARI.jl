@@ -17,54 +17,17 @@
 # M3's callback (single-threaded-safe). See `upstream-bugs.md` for the
 # request to ship this trap in PARI itself.
 
-# The shim — a generic-arity trampoline. Every argument is passed as a
-# `long` — PARI's word type, which `pari.h` redefines to `long long`
-# (64-bit) on Windows 64-bit / LLP64, so it is pointer-sized on every
-# platform here. The return is `intptr_t` (identical width) to make the
-# pointer-sized intent explicit. The Julia side marshals these as `Int`,
-# never `Clong`: Julia's `Clong` is only 32-bit on Windows and would
-# truncate `GEN` pointers.
-#
-# `<stdint.h>` comes BEFORE `<pari/pari.h>`: on Windows 64-bit `parigen.h`
-# does `#define long long long`, which turns any `long long` a system header
-# included afterwards into `long long long` — a compile error.
-const _TRAP_C_SOURCE = """
-#include <stdint.h>
-#include <pari/pari.h>
-intptr_t
-libpari_trap(void *fn, long n, long *errnum,
-             long a0, long a1, long a2, long a3,
-             long a4, long a5, long a6, long a7)
-{
-  intptr_t r = 0;
-  pari_CATCH(CATCH_ALL)
-  {
-    *errnum = err_get_num(pari_err_last());
-  }
-  pari_TRY
-  {
-    switch (n)
-    {
-      case 0: r = ((intptr_t(*)(void))fn)(); break;
-      case 1: r = ((intptr_t(*)(long))fn)(a0); break;
-      case 2: r = ((intptr_t(*)(long,long))fn)(a0,a1); break;
-      case 3: r = ((intptr_t(*)(long,long,long))fn)(a0,a1,a2); break;
-      case 4: r = ((intptr_t(*)(long,long,long,long))fn)(a0,a1,a2,a3); break;
-      case 5: r = ((intptr_t(*)(long,long,long,long,long))fn)
-                  (a0,a1,a2,a3,a4); break;
-      case 6: r = ((intptr_t(*)(long,long,long,long,long,long))fn)
-                  (a0,a1,a2,a3,a4,a5); break;
-      case 7: r = ((intptr_t(*)(long,long,long,long,long,long,long))fn)
-                  (a0,a1,a2,a3,a4,a5,a6); break;
-      case 8: r = ((intptr_t(*)(long,long,long,long,long,long,long,long))fn)
-                  (a0,a1,a2,a3,a4,a5,a6,a7); break;
-    }
-    *errnum = -1;
-  }
-  pari_ENDCATCH
-  return r;
-}
-"""
+# The shim's source is `src/libpari_trap.c` (it documents the calling
+# convention). It is read here, at precompilation, and compiled at load when
+# a C compiler is available; a prebuilt build of the same file can be used
+# instead. A change to the file triggers recompilation of the package.
+const _TRAP_C_FILE = joinpath(@__DIR__, "libpari_trap.c")
+include_dependency(_TRAP_C_FILE)
+const _TRAP_C_SOURCE = read(_TRAP_C_FILE, String)
+
+# Version of the shim's calling convention, which the shim reports through
+# `libpari_trap_abi_version()`. Bump it together with the C file.
+const _TRAP_ABI = 1
 
 # The shim's argument-count ceiling (the `switch` extent above).
 const _TRAP_MAXARGS = 8
@@ -73,6 +36,7 @@ const _TRAP_MAXARGS = 8
 # time (the precompilation gotcha).
 const _TRAP_AVAILABLE = Ref{Bool}(false)
 const _TRAP_FN = Ref{Ptr{Cvoid}}(C_NULL)
+const _TRAP_LIB = Ref{Ptr{Cvoid}}(C_NULL)   # the loaded shim library
 # Why the shim is, or is not, in use: `"loaded"`, or the reason it is not
 # (disabled, no compiler, the build or `dlopen` error, a failed self-test).
 const _TRAP_STATUS = Ref{String}("not initialized")
@@ -109,10 +73,8 @@ function _compile_and_load_trap!()
         err = IOBuffer()
         try
             run(pipeline(cmd; stdout = devnull, stderr = err))
-            _TRAP_FN[] = Libdl.dlsym(Libdl.dlopen(clib), :libpari_trap)
-            _TRAP_AVAILABLE[] = true
-            _TRAP_STATUS[] = "loaded"
-            return nothing
+            _use_trap_library!(Libdl.dlopen(clib), "loaded") && return nothing
+            push!(failures, _TRAP_STATUS[])
         catch e
             msg = strip(String(take!(err)))
             push!(failures, isempty(msg) ? sprint(showerror, e) : msg)
@@ -140,6 +102,28 @@ function _trap_build_cmds(cc, art, csrc, clib)
     bin = joinpath(art, "bin")
     base = `$cc -shared -fPIC -O2 -I$inc $csrc -o $clib -L$lib -L$bin -lpari`
     return (`$base -shared-libgcc`, base)
+end
+
+# The ABI version a shim library reports (0 if it has no version symbol).
+function _trap_abi_version(lib::Ptr{Cvoid})
+    sym = Base.Libc.Libdl.dlsym_e(lib, :libpari_trap_abi_version)
+    sym == C_NULL && return 0
+    return Int(ccall(sym, Cint, ()))
+end
+
+# Adopt the shim in `lib` if it reports the ABI version this LibPARI expects;
+# record `status` on success, the mismatch otherwise. Returns success.
+function _use_trap_library!(lib::Ptr{Cvoid}, status::AbstractString)
+    abi = _trap_abi_version(lib)
+    if abi != _TRAP_ABI
+        _TRAP_STATUS[] = "shim ABI version $(abi), expected $(_TRAP_ABI)"
+        return false
+    end
+    _TRAP_LIB[] = lib
+    _TRAP_FN[] = Base.Libc.Libdl.dlsym(lib, :libpari_trap)
+    _TRAP_AVAILABLE[] = true
+    _TRAP_STATUS[] = String(status)
+    return true
 end
 
 """
