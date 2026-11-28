@@ -8,8 +8,9 @@
  * the PARI function pointer directly, so a PARI error longjmps back across
  * C frames only, and its error number is returned in `*errnum` (-1 if none).
  *
- * LibPARI.jl compiles this file at load when a C compiler is available, and
- * it is also built ahead of time (LibPARITrap_jll) from this same file.
+ * LibPARI.jl compiles this file at load when a C compiler is available; a
+ * copy is also built ahead of time as PARI_jll's `libpari_trap` product
+ * (Yggdrasil P/PARI/bundled/libpari_trap.c), for systems without one.
  *
  * Every argument is passed as a `long`: PARI's word type, which pari.h
  * redefines to `long long` (64-bit) on Windows 64-bit / LLP64, so it is
