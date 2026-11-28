@@ -53,8 +53,8 @@ package is loaded.
 ### Threads
 
 LibPARI gives each Julia thread its own PARI context, so calls from several
-threads run in parallel; with no C compiler available they run one at a
-time instead. See [Parallelism](@ref).
+threads run in parallel. The small C shim this needs ships prebuilt with
+`PARI_jll`, so no C compiler is required. See [Parallelism](@ref).
 
 ## A first tour
 

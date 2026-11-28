@@ -32,10 +32,20 @@ context that built it, which frees it once the `Gen` is garbage-collected.
 ### The C trap shim
 
 Catching PARI errors safely on every thread relies on a small C shim,
-compiled when the package loads with the first of `cc`, `gcc` or `clang`
-found on the `PATH`. On Windows, a MinGW-w64 `gcc` (from MSYS2, for
-example) is enough. Before relying on the shim, LibPARI checks that it really
-catches a PARI error; if that check fails, the shim is not used.
+[libpari-trap](https://github.com/s-celles/libpari-trap). LibPARI finds it,
+in this order:
+
+1. **Prebuilt, in `PARI_jll`** (its `libpari_trap` product): nothing to
+   install, on every platform `PARI_jll` supports, Windows included.
+2. **Compiled when the package loads**, with the first of `cc`, `gcc` or
+   `clang` found on the `PATH` — if the prebuilt one is missing or unusable.
+   LibPARI vendors libpari-trap's two files for this, in `src/libpari_trap/`.
+   Setting `LIBPARI_TRAP_COMPILE=1` before loading compiles them even when
+   the prebuilt one is there.
+
+Either way, LibPARI uses the shim only if it reports the calling convention
+this LibPARI expects, and checks that it really catches a PARI error before
+relying on it. `LibPARI._TRAP_STATUS[]` says why a shim is or is not in use.
 
 Without a working shim, LibPARI still works from any number of threads, but
 every PARI call runs on one context, one at a time: results and errors are

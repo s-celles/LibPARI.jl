@@ -17,16 +17,23 @@
 # M3's callback (single-threaded-safe). See `upstream-bugs.md` for the
 # request to ship this trap in PARI itself.
 
-# The shim's source is `src/libpari_trap.c` (it documents the calling
-# convention). It is read here, at precompilation, and compiled at load when
-# a C compiler is available; a prebuilt build of the same file can be used
-# instead. A change to the file triggers recompilation of the package.
-const _TRAP_C_FILE = joinpath(@__DIR__, "libpari_trap.c")
+# The shim is libpari-trap (https://github.com/s-celles/libpari-trap,
+# GPL-2.0-or-later), which PARI_jll also ships prebuilt as its
+# `libpari_trap` product. Its two files are vendored in src/libpari_trap/,
+# from the commit below, to compile the shim at load when the prebuilt one is
+# missing or unusable. They are read here, at precompilation; a change to
+# either triggers recompilation of the package.
+const _TRAP_UPSTREAM = "s-celles/libpari-trap ca56b0927b278c3c4970b650b471f890016a2913"
+const _TRAP_C_FILE = joinpath(@__DIR__, "libpari_trap", "libpari_trap.c")
+const _TRAP_H_FILE = joinpath(@__DIR__, "libpari_trap", "libpari_trap.h")
 include_dependency(_TRAP_C_FILE)
+include_dependency(_TRAP_H_FILE)
 const _TRAP_C_SOURCE = read(_TRAP_C_FILE, String)
+const _TRAP_H_SOURCE = read(_TRAP_H_FILE, String)
 
 # Version of the shim's calling convention, which the shim reports through
-# `libpari_trap_abi_version()`. Bump it together with the C file.
+# `libpari_trap_abi_version()`: `LIBPARI_TRAP_ABI_VERSION` in the vendored
+# libpari_trap.h (a test checks they agree).
 const _TRAP_ABI = 1
 
 # The shim's argument-count ceiling (the `switch` extent above).
@@ -48,32 +55,83 @@ _pari_err_last() = ccall((:pari_err_last, PARI_jll.libpari), Ptr{Int}, ())
 # compiler were available — so the fallback mode can be exercised anywhere.
 const DISABLE_TRAP_ENV = "LIBPARI_DISABLE_TRAP"
 
-# Compile and load the trap shim. Best-effort — any failure (no C compiler,
-# a build error) leaves `_TRAP_AVAILABLE` false and the M3 callback fallback
-# in place; so does `LIBPARI_DISABLE_TRAP=1`. `_TRAP_STATUS` records why.
+# Environment variable that, set to `1`, compiles the shim at load even when
+# PARI_jll ships one prebuilt — e.g. to test the vendored sources.
+const COMPILE_TRAP_ENV = "LIBPARI_TRAP_COMPILE"
+
+# Where the shim in use came from: `:prebuilt` (PARI_jll's `libpari_trap`
+# product), `:compiled` (at load) or `:none`.
+const _TRAP_ORIGIN = Ref{Symbol}(:none)
+
+# Load the trap shim. Best-effort — any failure leaves `_TRAP_AVAILABLE`
+# false and the M3 callback fallback in place; so does
+# `LIBPARI_DISABLE_TRAP=1`. `_TRAP_STATUS` records why. In order:
+#
+# 1. PARI_jll's prebuilt `libpari_trap` (from PARI_jll 200.1900.101), unless
+#    `LIBPARI_TRAP_COMPILE=1`: no C compiler needed;
+# 2. compiling the vendored src/libpari_trap/ with `cc`, `gcc` or `clang`
+#    from the PATH.
+#
 # Called once from `__init__`, before the worker pool starts: without the
-# shim the pool starts no secondary context (see `_start_pari_worker_pool!`).
+# shim the pool starts no secondary context (see `_start_pari_worker_pool!`),
+# which also self-tests the shim on the primary context first.
 function _compile_and_load_trap!()
     _TRAP_AVAILABLE[] = false
+    _TRAP_ORIGIN[] = :none
     if get(ENV, DISABLE_TRAP_ENV, "") == "1"
         _TRAP_STATUS[] = "disabled by $(DISABLE_TRAP_ENV)=1"
         return nothing
     end
+    reasons = String[]
+    if get(ENV, COMPILE_TRAP_ENV, "") != "1"
+        _load_prebuilt_trap!() && return nothing
+        push!(reasons, "prebuilt: " * _TRAP_STATUS[])
+    end
+    _compile_trap!() && return nothing
+    _TRAP_STATUS[] = join(push!(reasons, _TRAP_STATUS[]), "; ")
+    return nothing
+end
+
+# Use PARI_jll's prebuilt shim, the `libpari_trap` product. Returns success.
+function _load_prebuilt_trap!()
+    if !isdefined(PARI_jll, :libpari_trap_path)
+        _TRAP_STATUS[] = "PARI_jll ships no libpari_trap (it needs >= 200.1900.101)"
+        return false
+    end
+    lib = try
+        Base.Libc.Libdl.dlopen(getfield(PARI_jll, :libpari_trap_path))
+    catch e
+        _TRAP_STATUS[] =
+            "cannot load PARI_jll's libpari_trap: " * sprint(showerror, e)
+        return false
+    end
+    _use_trap_library!(lib, "loaded") || return false
+    _TRAP_ORIGIN[] = :prebuilt
+    return true
+end
+
+# Compile the vendored src/libpari_trap/ and load it. Returns success.
+function _compile_trap!()
     cc = something(Sys.which("cc"), Sys.which("gcc"), Sys.which("clang"), "")
     if isempty(cc)
         _TRAP_STATUS[] = "no C compiler (cc, gcc, clang) on the PATH"
-        return nothing
+        return false
     end
     Libdl = Base.Libc.Libdl
-    csrc = tempname() * ".c"
-    clib = tempname() * "." * Libdl.dlext
+    srcdir = mktempdir()
+    csrc = joinpath(srcdir, "libpari_trap.c")
     write(csrc, _TRAP_C_SOURCE)
+    write(joinpath(srcdir, "libpari_trap.h"), _TRAP_H_SOURCE)
+    clib = tempname() * "." * Libdl.dlext
     failures = String[]
     for cmd in _trap_build_cmds(cc, PARI_jll.artifact_dir, csrc, clib)
         err = IOBuffer()
         try
             run(pipeline(cmd; stdout = devnull, stderr = err))
-            _use_trap_library!(Libdl.dlopen(clib), "loaded") && return nothing
+            if _use_trap_library!(Libdl.dlopen(clib), "loaded")
+                _TRAP_ORIGIN[] = :compiled
+                return true
+            end
             push!(failures, _TRAP_STATUS[])
         catch e
             msg = strip(String(take!(err)))
@@ -81,7 +139,7 @@ function _compile_and_load_trap!()
         end
     end
     _TRAP_STATUS[] = "build or load failed: " * join(failures, " | ")
-    return nothing
+    return false
 end
 
 # The compiler commands to try, in order, building the shim against
@@ -100,7 +158,8 @@ function _trap_build_cmds(cc, art, csrc, clib)
     inc = joinpath(art, "include")
     lib = joinpath(art, "lib")
     bin = joinpath(art, "bin")
-    base = `$cc -shared -fPIC -O2 -I$inc $csrc -o $clib -L$lib -L$bin -lpari`
+    here = dirname(csrc)                 # where libpari_trap.h is
+    base = `$cc -shared -fPIC -O2 -I$here -I$inc $csrc -o $clib -L$lib -L$bin -lpari`
     return (`$base -shared-libgcc`, base)
 end
 

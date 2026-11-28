@@ -151,9 +151,21 @@ function _start_pari_worker_pool!(parisize::Integer)
 
     # A shim that built and loaded must also catch: check it on the primary
     # context before relying on it for secondary ones.
+    # A prebuilt shim that fails is replaced by one compiled here, if any.
     if _TRAP_AVAILABLE[] && !_run_on_primary(_trap_selftest)
+        failed = _TRAP_ORIGIN[]
         _TRAP_AVAILABLE[] = false
-        _TRAP_STATUS[] = "loaded, but the self-test error was not caught by it"
+        _TRAP_ORIGIN[] = :none
+        _TRAP_STATUS[] = "$(failed) shim loaded, but the self-test error was not caught by it"
+        if failed === :prebuilt
+            reason = _TRAP_STATUS[]
+            ok = _compile_trap!() && _run_on_primary(_trap_selftest)
+            if !ok
+                _TRAP_AVAILABLE[] = false
+                _TRAP_ORIGIN[] = :none
+                _TRAP_STATUS[] = reason * "; " * _TRAP_STATUS[]
+            end
+        end
     end
 
     # Discover the default-pool thread ids (a `:static` loop runs iteration
