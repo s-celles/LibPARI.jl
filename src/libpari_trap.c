@@ -1,3 +1,4 @@
+/* SPDX-License-Identifier: GPL-2.0-or-later */
 /*
  * libpari_trap: LibPARI.jl's concurrency-safe PARI error trap.
  *
@@ -26,6 +27,9 @@
  * Bump it whenever libpari_trap's signature or behaviour changes, together
  * with `_TRAP_ABI` in src/trap.jl: LibPARI.jl uses only a shim whose version
  * matches, so a prebuilt shim from another release is never misused.
+ *
+ * Licence: GPL-2.0-or-later, the same as PARI's, so that PARI_jll can ship
+ * a copy of this file. (The rest of LibPARI.jl is GPL-3.0.)
  */
 #include <stdint.h>
 #include <pari/pari.h>
