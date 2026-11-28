@@ -8,8 +8,20 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- **The C trap shim ships prebuilt in `PARI_jll`** (its `libpari_trap`
+  product, from `PARI_jll` 200.1900.101), and LibPARI uses it first: a
+  machine without a C compiler, typically Windows, now gets one PARI context
+  per Julia thread and PARI's parallel engine. Compiling the shim at load
+  remains the fallback, also used if the prebuilt one fails its ABI check
+  or self-test; `LIBPARI_TRAP_COMPILE=1` compiles it at load anyway, for work
+  on `src/libpari_trap.c`. `LibPARI._TRAP_ORIGIN[]` tells which is in use.
+
 ### Changed
 
+- **`PARI_jll` compat is `"~200.1900.101"`** (was `"~200.1900"`): the first
+  build that ships the shim. Same PARI 2.19.1 library.
 - **The C trap shim's source is a C file, `src/libpari_trap.c`**, instead of
   a string in `src/trap.jl`, so that a prebuilt shim (planned as a
   `PARI_jll` product) can be built from the same source. The shim now also exports `libpari_trap_abi_version()`, and

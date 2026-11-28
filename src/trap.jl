@@ -48,21 +48,66 @@ _pari_err_last() = ccall((:pari_err_last, PARI_jll.libpari), Ptr{Int}, ())
 # compiler were available — so the fallback mode can be exercised anywhere.
 const DISABLE_TRAP_ENV = "LIBPARI_DISABLE_TRAP"
 
-# Compile and load the trap shim. Best-effort — any failure (no C compiler,
-# a build error) leaves `_TRAP_AVAILABLE` false and the M3 callback fallback
-# in place; so does `LIBPARI_DISABLE_TRAP=1`. `_TRAP_STATUS` records why.
+# Environment variable that, set to `1`, compiles the shim at load even when
+# PARI_jll ships one prebuilt — for work on src/libpari_trap.c itself.
+const COMPILE_TRAP_ENV = "LIBPARI_TRAP_COMPILE"
+
+# Where the shim in use came from: `:prebuilt` (PARI_jll's `libpari_trap`
+# product), `:compiled` (at load) or `:none`.
+const _TRAP_ORIGIN = Ref{Symbol}(:none)
+
+# Load the trap shim. Best-effort — any failure leaves `_TRAP_AVAILABLE`
+# false and the M3 callback fallback in place; so does
+# `LIBPARI_DISABLE_TRAP=1`. `_TRAP_STATUS` records why. In order:
+#
+# 1. PARI_jll's prebuilt `libpari_trap` (from PARI_jll 200.1900.101), unless
+#    `LIBPARI_TRAP_COMPILE=1`: no C compiler needed;
+# 2. compiling src/libpari_trap.c with `cc`, `gcc` or `clang` from the PATH.
+#
 # Called once from `__init__`, before the worker pool starts: without the
-# shim the pool starts no secondary context (see `_start_pari_worker_pool!`).
+# shim the pool starts no secondary context (see `_start_pari_worker_pool!`),
+# which also self-tests the shim on the primary context first.
 function _compile_and_load_trap!()
     _TRAP_AVAILABLE[] = false
+    _TRAP_ORIGIN[] = :none
     if get(ENV, DISABLE_TRAP_ENV, "") == "1"
         _TRAP_STATUS[] = "disabled by $(DISABLE_TRAP_ENV)=1"
         return nothing
     end
+    reasons = String[]
+    if get(ENV, COMPILE_TRAP_ENV, "") != "1"
+        _load_prebuilt_trap!() && return nothing
+        push!(reasons, "prebuilt: " * _TRAP_STATUS[])
+    end
+    _compile_trap!() && return nothing
+    _TRAP_STATUS[] = join(push!(reasons, _TRAP_STATUS[]), "; ")
+    return nothing
+end
+
+# Use PARI_jll's prebuilt shim, the `libpari_trap` product. Returns success.
+function _load_prebuilt_trap!()
+    if !isdefined(PARI_jll, :libpari_trap_path)
+        _TRAP_STATUS[] = "PARI_jll ships no libpari_trap (it needs >= 200.1900.101)"
+        return false
+    end
+    lib = try
+        Base.Libc.Libdl.dlopen(getfield(PARI_jll, :libpari_trap_path))
+    catch e
+        _TRAP_STATUS[] =
+            "cannot load PARI_jll's libpari_trap: " * sprint(showerror, e)
+        return false
+    end
+    _use_trap_library!(lib, "loaded") || return false
+    _TRAP_ORIGIN[] = :prebuilt
+    return true
+end
+
+# Compile src/libpari_trap.c and load it. Returns success.
+function _compile_trap!()
     cc = something(Sys.which("cc"), Sys.which("gcc"), Sys.which("clang"), "")
     if isempty(cc)
         _TRAP_STATUS[] = "no C compiler (cc, gcc, clang) on the PATH"
-        return nothing
+        return false
     end
     Libdl = Base.Libc.Libdl
     csrc = tempname() * ".c"
@@ -73,7 +118,10 @@ function _compile_and_load_trap!()
         err = IOBuffer()
         try
             run(pipeline(cmd; stdout = devnull, stderr = err))
-            _use_trap_library!(Libdl.dlopen(clib), "loaded") && return nothing
+            if _use_trap_library!(Libdl.dlopen(clib), "loaded")
+                _TRAP_ORIGIN[] = :compiled
+                return true
+            end
             push!(failures, _TRAP_STATUS[])
         catch e
             msg = strip(String(take!(err)))
@@ -81,7 +129,7 @@ function _compile_and_load_trap!()
         end
     end
     _TRAP_STATUS[] = "build or load failed: " * join(failures, " | ")
-    return nothing
+    return false
 end
 
 # The compiler commands to try, in order, building the shim against
