@@ -15,7 +15,9 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `PARI_jll` product) can be built from the same source. The shim now also exports `libpari_trap_abi_version()`, and
   LibPARI uses only a shim reporting the version it expects (`_TRAP_ABI`,
   1), so a shim from another release is never called with the wrong
-  convention. No behaviour change otherwise.
+  convention. The file is licensed GPL-2.0-or-later, PARI's own licence, so
+  that `PARI_jll` can ship a copy; the rest of LibPARI stays GPL-3.0. No
+  behaviour change otherwise.
 
 ## [0.19.0] - 2026-11-26
 
