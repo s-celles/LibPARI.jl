@@ -11,8 +11,8 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Changed
 
 - **The C trap shim's source is a C file, `src/libpari_trap.c`**, instead of
-  a string in `src/trap.jl`, so that a prebuilt shim can be built from the
-  same source. The shim now also exports `libpari_trap_abi_version()`, and
+  a string in `src/trap.jl`, so that a prebuilt shim (planned as a
+  `PARI_jll` product) can be built from the same source. The shim now also exports `libpari_trap_abi_version()`, and
   LibPARI uses only a shim reporting the version it expects (`_TRAP_ABI`,
   1), so a shim from another release is never called with the wrong
   convention. No behaviour change otherwise.
