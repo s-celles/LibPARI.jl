@@ -13,6 +13,8 @@
     @test LibPARI._TRAP_C_SOURCE == src
     @test occursin("libpari_trap(void *fn, long n, long *errnum", src)
     @test occursin("libpari_trap_abi_version(void)", src)
+    # PARI_jll ships a copy, so the file carries PARI's own licence.
+    @test occursin("SPDX-License-Identifier: GPL-2.0-or-later", src)
     # On Windows 64-bit `parigen.h` does `#define long long long`, so system
     # headers must come first.
     @test findfirst("#include <stdint.h>", src).start <
