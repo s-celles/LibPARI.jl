@@ -15,21 +15,21 @@ adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   machine without a C compiler, typically Windows, now gets one PARI context
   per Julia thread and PARI's parallel engine. Compiling the shim at load
   remains the fallback, also used if the prebuilt one fails its ABI check
-  or self-test; `LIBPARI_TRAP_COMPILE=1` compiles it at load anyway, for work
-  on `src/libpari_trap.c`. `LibPARI._TRAP_ORIGIN[]` tells which is in use.
+  or self-test; `LIBPARI_TRAP_COMPILE=1` compiles it at load anyway.
+  `LibPARI._TRAP_ORIGIN[]` tells which is in use.
+- **The shim is its own project,
+  [libpari-trap](https://github.com/s-celles/libpari-trap)**
+  (GPL-2.0-or-later), which PARI_jll builds. LibPARI vendors its
+  `libpari_trap.h` and `libpari_trap.c` in `src/libpari_trap/` for the
+  compile-at-load fallback, replacing `src/libpari_trap.c`. Same binary
+  interface (ABI version 1); its arguments are now `intptr_t` and its
+  constants named (`LIBPARI_TRAP_NARGS_*`, `LIBPARI_TRAP_OK`).
 
 ### Changed
 
 - **`PARI_jll` compat is `"~200.1900.101"`** (was `"~200.1900"`): the first
   build that ships the shim. Same PARI 2.19.1 library.
-- **The C trap shim's source is a C file, `src/libpari_trap.c`**, instead of
-  a string in `src/trap.jl`, so that a prebuilt shim (planned as a
-  `PARI_jll` product) can be built from the same source. The shim now also exports `libpari_trap_abi_version()`, and
-  LibPARI uses only a shim reporting the version it expects (`_TRAP_ABI`,
-  1), so a shim from another release is never called with the wrong
-  convention. The file is licensed GPL-2.0-or-later, PARI's own licence, so
-  that `PARI_jll` can ship a copy; the rest of LibPARI stays GPL-3.0. No
-  behaviour change otherwise.
+
 
 ## [0.19.0] - 2026-11-26
 

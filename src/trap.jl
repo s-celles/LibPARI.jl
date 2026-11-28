@@ -17,16 +17,23 @@
 # M3's callback (single-threaded-safe). See `upstream-bugs.md` for the
 # request to ship this trap in PARI itself.
 
-# The shim's source is `src/libpari_trap.c` (it documents the calling
-# convention). It is read here, at precompilation, and compiled at load when
-# a C compiler is available; a prebuilt build of the same file can be used
-# instead. A change to the file triggers recompilation of the package.
-const _TRAP_C_FILE = joinpath(@__DIR__, "libpari_trap.c")
+# The shim is libpari-trap (https://github.com/s-celles/libpari-trap,
+# GPL-2.0-or-later), which PARI_jll also ships prebuilt as its
+# `libpari_trap` product. Its two files are vendored in src/libpari_trap/,
+# from the commit below, to compile the shim at load when the prebuilt one is
+# missing or unusable. They are read here, at precompilation; a change to
+# either triggers recompilation of the package.
+const _TRAP_UPSTREAM = "s-celles/libpari-trap fc456c2e3035a47808a7fa1e6ded5e5049f63ae4"
+const _TRAP_C_FILE = joinpath(@__DIR__, "libpari_trap", "libpari_trap.c")
+const _TRAP_H_FILE = joinpath(@__DIR__, "libpari_trap", "libpari_trap.h")
 include_dependency(_TRAP_C_FILE)
+include_dependency(_TRAP_H_FILE)
 const _TRAP_C_SOURCE = read(_TRAP_C_FILE, String)
+const _TRAP_H_SOURCE = read(_TRAP_H_FILE, String)
 
 # Version of the shim's calling convention, which the shim reports through
-# `libpari_trap_abi_version()`. Bump it together with the C file.
+# `libpari_trap_abi_version()`: `LIBPARI_TRAP_ABI_VERSION` in the vendored
+# libpari_trap.h (a test checks they agree).
 const _TRAP_ABI = 1
 
 # The shim's argument-count ceiling (the `switch` extent above).
@@ -49,7 +56,7 @@ _pari_err_last() = ccall((:pari_err_last, PARI_jll.libpari), Ptr{Int}, ())
 const DISABLE_TRAP_ENV = "LIBPARI_DISABLE_TRAP"
 
 # Environment variable that, set to `1`, compiles the shim at load even when
-# PARI_jll ships one prebuilt — for work on src/libpari_trap.c itself.
+# PARI_jll ships one prebuilt — e.g. to test the vendored sources.
 const COMPILE_TRAP_ENV = "LIBPARI_TRAP_COMPILE"
 
 # Where the shim in use came from: `:prebuilt` (PARI_jll's `libpari_trap`
@@ -62,7 +69,8 @@ const _TRAP_ORIGIN = Ref{Symbol}(:none)
 #
 # 1. PARI_jll's prebuilt `libpari_trap` (from PARI_jll 200.1900.101), unless
 #    `LIBPARI_TRAP_COMPILE=1`: no C compiler needed;
-# 2. compiling src/libpari_trap.c with `cc`, `gcc` or `clang` from the PATH.
+# 2. compiling the vendored src/libpari_trap/ with `cc`, `gcc` or `clang`
+#    from the PATH.
 #
 # Called once from `__init__`, before the worker pool starts: without the
 # shim the pool starts no secondary context (see `_start_pari_worker_pool!`),
@@ -102,7 +110,7 @@ function _load_prebuilt_trap!()
     return true
 end
 
-# Compile src/libpari_trap.c and load it. Returns success.
+# Compile the vendored src/libpari_trap/ and load it. Returns success.
 function _compile_trap!()
     cc = something(Sys.which("cc"), Sys.which("gcc"), Sys.which("clang"), "")
     if isempty(cc)
@@ -110,9 +118,11 @@ function _compile_trap!()
         return false
     end
     Libdl = Base.Libc.Libdl
-    csrc = tempname() * ".c"
-    clib = tempname() * "." * Libdl.dlext
+    srcdir = mktempdir()
+    csrc = joinpath(srcdir, "libpari_trap.c")
     write(csrc, _TRAP_C_SOURCE)
+    write(joinpath(srcdir, "libpari_trap.h"), _TRAP_H_SOURCE)
+    clib = tempname() * "." * Libdl.dlext
     failures = String[]
     for cmd in _trap_build_cmds(cc, PARI_jll.artifact_dir, csrc, clib)
         err = IOBuffer()
@@ -148,7 +158,8 @@ function _trap_build_cmds(cc, art, csrc, clib)
     inc = joinpath(art, "include")
     lib = joinpath(art, "lib")
     bin = joinpath(art, "bin")
-    base = `$cc -shared -fPIC -O2 -I$inc $csrc -o $clib -L$lib -L$bin -lpari`
+    here = dirname(csrc)                 # where libpari_trap.h is
+    base = `$cc -shared -fPIC -O2 -I$here -I$inc $csrc -o $clib -L$lib -L$bin -lpari`
     return (`$base -shared-libgcc`, base)
 end
 

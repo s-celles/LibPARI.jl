@@ -32,14 +32,16 @@ context that built it, which frees it once the `Gen` is garbage-collected.
 ### The C trap shim
 
 Catching PARI errors safely on every thread relies on a small C shim,
-`src/libpari_trap.c`. LibPARI finds it, in this order:
+[libpari-trap](https://github.com/s-celles/libpari-trap). LibPARI finds it,
+in this order:
 
 1. **Prebuilt, in `PARI_jll`** (its `libpari_trap` product): nothing to
    install, on every platform `PARI_jll` supports, Windows included.
 2. **Compiled when the package loads**, with the first of `cc`, `gcc` or
    `clang` found on the `PATH` — if the prebuilt one is missing or unusable.
-   Setting `LIBPARI_TRAP_COMPILE=1` before loading compiles it even when the
-   prebuilt one is there, for work on the C file itself.
+   LibPARI vendors libpari-trap's two files for this, in `src/libpari_trap/`.
+   Setting `LIBPARI_TRAP_COMPILE=1` before loading compiles them even when
+   the prebuilt one is there.
 
 Either way, LibPARI uses the shim only if it reports the calling convention
 this LibPARI expects, and checks that it really catches a PARI error before

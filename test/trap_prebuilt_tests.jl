@@ -1,5 +1,5 @@
 # The prebuilt trap shim. PARI_jll (from 200.1900.101) ships the shim as its
-# `libpari_trap` product, built from a copy of src/libpari_trap.c. LibPARI
+# `libpari_trap` product, built from s-celles/libpari-trap. LibPARI
 # uses it in preference to compiling the shim at load, so a machine without a
 # C compiler (typically Windows) still gets one PARI context per thread and
 # PARI's parallel engine. `LIBPARI_TRAP_COMPILE=1` compiles at load instead
